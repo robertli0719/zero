@@ -5,11 +5,11 @@
 这套代码是基于SSH框架 Spring4 + Struts2 + Hibernate4
 
 目前包括的小工具有
-AES
-Luhn
-MD5
-
-由于时间关系，今天先放这么多，
-未来一周会继续添加更多
-2016-08-22
-Robert Li
+AES<br>
+Luhn<br>
+MD5<br>
+<br>
+由于时间关系，今天先放这么多，<br>
+未来一周会继续添加更多<br><br>
+2016-08-22<br>
+Robert Li<br>
