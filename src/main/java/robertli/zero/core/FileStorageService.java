@@ -1,5 +1,7 @@
 package robertli.zero.core;
 
+import java.io.IOException;
+
 /**
  * This interface is designed for implementing file storage service.<br>
  * The file storage service can be based on S3, EBS, local file system, or any
@@ -19,6 +21,7 @@ public interface FileStorageService {
      *
      * @param uuid the identification of file
      * @return the file if found. null if not found
+     * @throws java.io.IOException
      */
     public byte[] read(String uuid);
 
@@ -28,13 +31,15 @@ public interface FileStorageService {
      *
      * @param uuid the identification of file
      * @param data the data of file
+     * @throws java.io.IOException
      */
-    public void write(String uuid, byte[] data);
+    public void write(String uuid, byte[] data) throws IOException;
 
     /**
      * Delete an existing file.<br>
      *
      * @param uuid the identification of file
+     * @throws java.io.IOException
      */
     public void delete(String uuid);
 }
