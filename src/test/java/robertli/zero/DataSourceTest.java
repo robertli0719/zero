@@ -20,7 +20,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class DataSourceTest {
 
-    public static void test() {
+    public static void testDataSource() {
         ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
 
         DataSource dataSource = (DataSource) context.getBean("dataSource");
@@ -38,6 +38,6 @@ public class DataSourceTest {
     }
 
     public static void main(String args[]) {
-        test();
+        testDataSource();
     }
 }
