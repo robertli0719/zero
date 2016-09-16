@@ -1,4 +1,4 @@
-package robertli.zero.core;
+package robertli.zero.service;
 
 /**
  * Web site can use this service to send email to users.

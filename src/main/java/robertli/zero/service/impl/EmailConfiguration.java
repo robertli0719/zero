@@ -1,4 +1,4 @@
-package robertli.zero.core.impl;
+package robertli.zero.service.impl;
 
 /**
  * This class is designed for instantiating EmailServiceImpl

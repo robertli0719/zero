@@ -1,4 +1,4 @@
-package robertli.zero.core.impl;
+package robertli.zero.service.impl;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import robertli.zero.core.FileStorageService;
+import robertli.zero.service.FileStorageService;
 
 /**
  * This interface is designed for implementing file storage service.<br>

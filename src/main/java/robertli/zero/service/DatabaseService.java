@@ -1,4 +1,4 @@
-package robertli.zero.core;
+package robertli.zero.service;
 
 import org.hibernate.SessionFactory;
 

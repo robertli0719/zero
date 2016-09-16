@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+    
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location">
+            <!--配置文件存放于系统外可使生产端与测试端数据库不同-->
+            <!--<value>file://~/database.properties</value>-->
+            <value>classpath:database.properties</value>
+        </property>
+    </bean>
+    
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="${jdbc.driverClassName}" />
+        <property name="jdbcUrl" value="${jdbc.url}" />
+        <property name="user" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+        <property name="maxPoolSize" value="30" />
+        <property name="minPoolSize" value="1" />
+        <property name="initialPoolSize" value="3" />
+    </bean>
+
+<!--    <bean id="mySessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="mappingResources">
+            <list>
+                <value>product.hbm.xml</value>
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <value>
+                hibernate.dialect=org.hibernate.dialect.HSQLDialect
+            </value>
+        </property>
+    </bean>-->
+
+    <context:annotation-config/>        
+    <context:component-scan base-package="robertli.zero.*"/>
+    <aop:aspectj-autoproxy/>
+    
+    <aop:config>
+<!--        
+        <aop:pointcut id="transfer" expression="execution(* robertli.temp.service.UserService.transfer(..))"/>
+        <aop:pointcut id="withinService" expression="within(robertli.temp.service.*)"/>
+        <aop:pointcut id="pt1" expression="within(robertli.temp.service.*)"/>
+        
+        <aop:aspect ref="testAspect">
+            <aop:around pointcut-ref="transfer" method="watch" />
+            <aop:before pointcut-ref="withinService" method="test"  />
+        </aop:aspect>
+        
+        <aop:aspect ref="test2Aspect">
+            <aop:around pointcut-ref="transfer" method="watch" />
+            <aop:before pointcut-ref="withinService" method="test"  />
+            <aop:after-returning method="">
+        </aop:aspect>-->
+        
+        <!--        <aop:aspect ref="logAspect">
+            <aop:before pointcut-ref="transfer" method="fun"  />
+        </aop:aspect>-->
+        
+    </aop:config>
+    
+</beans>
+
+

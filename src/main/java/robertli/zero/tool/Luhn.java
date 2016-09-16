@@ -59,7 +59,8 @@ public class Luhn {
 
     public static void main(String args[]) {
         boolean result = Luhn.verify(4519011328206481L);
-        System.out.println(result);
+        long v=Luhn.appendCheckDigit(451901132820448L);
+        System.out.println(v);
     }
 
 }

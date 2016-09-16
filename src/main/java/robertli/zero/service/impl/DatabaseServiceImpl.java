@@ -1,4 +1,4 @@
-package robertli.zero.core.impl;
+package robertli.zero.service.impl;
 
 import java.util.List;
 import java.util.Set;
@@ -7,7 +7,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 import org.reflections.Reflections;
-import robertli.zero.core.DatabaseService;
+import robertli.zero.service.DatabaseService;
 
 /**
  * This interface is designed for implementing database service.<br>

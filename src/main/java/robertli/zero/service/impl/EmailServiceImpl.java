@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package robertli.zero.core.impl;
+package robertli.zero.service.impl;
 
 import java.util.List;
 import java.util.Properties;
@@ -16,8 +16,8 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import robertli.zero.core.EmailMessage;
-import robertli.zero.core.EmailService;
+import robertli.zero.service.EmailMessage;
+import robertli.zero.service.EmailService;
 
 /**
  * Web site can use this service to send email to users.<br>
