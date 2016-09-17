@@ -3,11 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package robertli.zero;
+package robertli.zero.service;
 
-import javax.sql.DataSource;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -15,15 +12,12 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  *
  * @author Robert Li
  */
-public class HibernateTest {
+public class UserServiceTest {
 
-    public static void test() {
+    private static void test() {
         ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
-
-        SessionFactory sessionFactory = (SessionFactory) context.getBean("sessionFactory");
-        Session session = sessionFactory.openSession();
-        
-        session.close();
+        UserService userService = (UserService) context.getBean("userService");
+        userService.test();
     }
 
     public static void main(String args[]) {

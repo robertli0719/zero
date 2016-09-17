@@ -3,67 +3,24 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd
         http://www.springframework.org/schema/aop
-        http://www.springframework.org/schema/aop/spring-aop.xsd">
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd"
+>
     
-    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location">
-            <!--配置文件存放于系统外可使生产端与测试端数据库不同-->
-            <!--<value>file://~/database.properties</value>-->
-            <value>classpath:database.properties</value>
-        </property>
-    </bean>
-    
-    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
-        <property name="driverClass" value="${jdbc.driverClassName}" />
-        <property name="jdbcUrl" value="${jdbc.url}" />
-        <property name="user" value="${jdbc.username}" />
-        <property name="password" value="${jdbc.password}" />
-        <property name="maxPoolSize" value="30" />
-        <property name="minPoolSize" value="1" />
-        <property name="initialPoolSize" value="3" />
-    </bean>
-
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
-        <property name="annotatedClasses">
-            <list>
-                <value>robertli.zero.entity.User</value>
-            </list>
-        </property>
-        <property name="hibernateProperties">
-            <props>
-                <prop key="hibernate.connection.useUnicode">true</prop>
-                <prop key="hibernate.connection.characterEncoding">UTF-8</prop>
-                <prop key="hibernate.connection.charSet">UTF-8</prop>
-                <!-- SQL dialect -->
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-                
-                <!--Enable Hibernate's automatic session context management  -->
-                <prop key="hibernate.current_session_context_class">thread</prop>
-                
-                <!-- Disable the second-level cache  -->
-                <prop key="hibernate.cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</prop>
-                
-                <!-- Echo all executed SQL to stdout -->
-                <prop key="hibernate.show_sql">false</prop>
-                
-                <!-- Drop and re-create the database schema on startup -->
-                <prop key="hibernate.hbm2ddl.auto">update</prop>
-            </props>
-            
-        </property>
-    </bean>
-
-    <context:annotation-config/>        
+    <context:annotation-config/>
     <context:component-scan base-package="robertli.zero.*"/>
     <aop:aspectj-autoproxy/>
-    
+    <import resource="spring-database.xml"/>
+    <import resource="spring-transaction.xml"/>
+            
     <aop:config>
 <!--        
         <aop:pointcut id="transfer" expression="execution(* robertli.temp.service.UserService.transfer(..))"/>
