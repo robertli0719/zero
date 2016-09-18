@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package robertli.zero.service.impl;
+package robertli.zero.core.impl;
 
 import java.util.List;
 import java.util.Properties;
@@ -16,8 +16,8 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import robertli.zero.service.EmailMessage;
-import robertli.zero.service.EmailService;
+import robertli.zero.core.EmailMessage;
+import robertli.zero.core.EmailSender;
 
 /**
  * Web site can use this service to send email to users.<br>
@@ -25,35 +25,42 @@ import robertli.zero.service.EmailService;
  * reference:<br>
  * http://www.oracle.com/technetwork/java/javamail/faq-135477.html
  *
- * @version 1.0.1 2016-08-22
+ * @version 1.0.2 2016-09-17
  * @author Robert Li
  */
-public class EmailServiceImpl implements EmailService {
+public final class EmailSenderImpl implements EmailSender {
 
-    private final String HOST;
-    private final String FROM;
-    private final String USERNAME;
-    private final String PASSWORD;
-    private final int PORT;
-    private final boolean DEBUG;
-    private final Session session;
+    private String host;
+    private String from;
+    private String username;
+    private String password;
+    private int port;
 
-    public EmailServiceImpl(EmailConfiguration cfg) {
-        HOST = cfg.getHost();
-        FROM = cfg.getFrom();
-        USERNAME = cfg.getUsername();
-        PASSWORD = cfg.getPassword();
-        PORT = cfg.getPort();
-        DEBUG = cfg.isDebug();
-        session = getSession();
-        session.setDebug(DEBUG);
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
     }
 
     private Session getSession() {
         Properties props = new Properties();
         props.put("mail.transport.protocol", "smtp");
-        props.put("mail.smtp.host", HOST);
-        props.put("mail.smtp.port", PORT);
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.port", port);
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.starttls.required", "true");
@@ -75,21 +82,21 @@ public class EmailServiceImpl implements EmailService {
         boolean fail = false;
         String subject = emailMessage.getSubject();
         String content = emailMessage.getContent();
-        MimeMessage msg = new MimeMessage(session);
+        MimeMessage msg = new MimeMessage(getSession());
 
         Transport transport = null;
         try {
-            msg.setFrom(new InternetAddress(FROM));
+            msg.setFrom(new InternetAddress(from));
             InternetAddress recipientList[] = getRecipientList(emailMessage);
             msg.setRecipients(Message.RecipientType.TO, recipientList);
             msg.setSubject(subject);
             msg.setContent(content, "text/html;charset=UTF-8");
-            transport = session.getTransport();
-            transport.connect(HOST, USERNAME, PASSWORD);
+            transport = getSession().getTransport();
+            transport.connect(host, username, password);
             transport.sendMessage(msg, msg.getAllRecipients());
-            Logger.getLogger(EmailServiceImpl.class.getName()).log(Level.INFO, "SMTP send out:{0}", emailMessage.getUUID());
+            Logger.getLogger(EmailSenderImpl.class.getName()).log(Level.INFO, "SMTP send out:{0}", emailMessage.getUUID());
         } catch (Exception ex) {
-            Logger.getLogger(EmailServiceImpl.class.getName()).log(Level.SEVERE, "SMTP send fail", ex);
+            Logger.getLogger(EmailSenderImpl.class.getName()).log(Level.SEVERE, "SMTP send fail", ex);
             fail = true;
         } finally {
             try {

@@ -1,4 +1,4 @@
-package robertli.zero.service;
+package robertli.zero.core;
 
 import java.io.IOException;
 
@@ -14,7 +14,7 @@ import java.io.IOException;
  * @version 1.0 2016-08-16
  * @author Robert Li
  */
-public interface FileStorageService {
+public interface FileManager {
 
     /**
      * Read a file from the file system. If the file is not found, return null.

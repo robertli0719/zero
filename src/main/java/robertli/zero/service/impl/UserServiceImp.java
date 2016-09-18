@@ -5,8 +5,11 @@
  */
 package robertli.zero.service.impl;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import robertli.zero.dao.UserDao;
 import robertli.zero.entity.User;
 import robertli.zero.service.UserService;
@@ -30,6 +33,8 @@ public class UserServiceImp implements UserService {
 
     @Override
     public void test() {
+        System.out.println("access....");
+
         User user = new User();
         user.setName("AA");
         userDao.save(user);

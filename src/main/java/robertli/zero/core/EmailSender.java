@@ -1,12 +1,12 @@
-package robertli.zero.service;
+package robertli.zero.core;
 
 /**
  * Web site can use this service to send email to users.
  *
- * @version 1.0 2016-08-20
+ * @version 1.1 2016-09-17
  * @author Robert Li
  */
-public interface EmailService {
+public interface EmailSender {
 
     /**
      * Send an email out, return the sending result after sending.
@@ -14,7 +14,7 @@ public interface EmailService {
      * @param emailMessage the email which will be send out.
      * @return true if sending fail
      */
-    public abstract boolean sendWithBlocking(EmailMessage emailMessage);
+    public boolean sendWithBlocking(EmailMessage emailMessage);
 
     /**
      * Send an email out using a new Thread, so that the current thread will not
@@ -22,7 +22,7 @@ public interface EmailService {
      *
      * @param emailMessage the email which will be send out.
      */
-    public abstract void send(EmailMessage emailMessage);
+    public void send(EmailMessage emailMessage);
 
     /**
      * Send an email out using a new Thread, so that the current thread will not
@@ -32,7 +32,7 @@ public interface EmailService {
      * @param emailMessage the email which will be send out.
      * @param callback
      */
-    public abstract void send(EmailMessage emailMessage, SenderCallbacker callback);
+    public void send(EmailMessage emailMessage, SenderCallbacker callback);
 
     public interface SenderCallbacker {
 

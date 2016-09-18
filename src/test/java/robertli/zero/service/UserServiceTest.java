@@ -14,13 +14,31 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class UserServiceTest {
 
-    private static void test() {
+    private static void test() throws Exception {
         ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
         UserService userService = (UserService) context.getBean("userService");
-        userService.test();
+        Thread arr[] = new Thread[100];
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        userService.test();
+                    } catch (Exception ex) {
+                        //Logger.getLogger(UserServiceTest.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            };
+        }
+        for (Thread th : arr) {
+            th.start();
+        }
+        for (Thread th : arr) {
+            th.join();
+        }
     }
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws Exception {
         test();
     }
 }

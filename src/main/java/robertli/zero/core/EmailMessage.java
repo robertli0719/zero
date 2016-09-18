@@ -1,4 +1,4 @@
-package robertli.zero.service;
+package robertli.zero.core;
 
 import java.util.List;
 

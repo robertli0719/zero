@@ -18,8 +18,29 @@
     <context:annotation-config/>
     <context:component-scan base-package="robertli.zero.*"/>
     <aop:aspectj-autoproxy/>
+    
+    <!-- database.properties can be save at out of the app -->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location">
+            <!--<value>file://~/app.properties</value>-->
+            <value>classpath:app.properties</value>
+        </property>
+    </bean>
+    
     <import resource="spring-database.xml"/>
     <import resource="spring-transaction.xml"/>
+    
+    <bean id="emailSender" class="robertli.zero.core.impl.EmailSenderImpl">
+        <property name="host" value="${email.host}" />
+        <property name="from" value="${email.from}" />
+        <property name="username" value="${email.username}" />
+        <property name="password" value="${email.password}" />
+        <property name="port" value="${email.port}" />
+    </bean>
+    
+    <bean id="fileManager" class="robertli.zero.core.impl.FileManagerImpl">
+        <property name="basePath" value="${file_storage.basepath}"/>
+    </bean>
             
     <aop:config>
 <!--        

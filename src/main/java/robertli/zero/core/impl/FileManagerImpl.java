@@ -1,4 +1,4 @@
-package robertli.zero.service.impl;
+package robertli.zero.core.impl;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import robertli.zero.service.FileStorageService;
+import robertli.zero.core.FileManager;
 
 /**
  * This interface is designed for implementing file storage service.<br>
@@ -18,20 +18,20 @@ import robertli.zero.service.FileStorageService;
  * new file. User is not allowed to update a file after write. After
  * implementing delete, the file may not be delete at once.
  *
- * @version 1.0 2016-08-22
+ * @version 1.0 2016-09-17
  * @author Robert Li
  */
-public class FileStorageServiceImpl implements FileStorageService {
+public final class FileManagerImpl implements FileManager {
 
-    private final String BASE_PATH;
+    private String basePath;
 
-    public FileStorageServiceImpl(String basePath) {
-        BASE_PATH = basePath;
+    public void setBasePath(String basePath) {
+        this.basePath = basePath;
     }
-
+    
     @Override
     public byte[] read(String uuid) {
-        String path = BASE_PATH + "/" + uuid;
+        String path = basePath + "/" + uuid;
         byte[] result = null;
         try {
             DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(path)));
@@ -48,7 +48,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 
     @Override
     public void write(String uuid, byte[] data) throws IOException {
-        String path = BASE_PATH + "/" + uuid;
+        String path = basePath + "/" + uuid;
         DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(path)));
         out.write(data);
         out.flush();
@@ -57,7 +57,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 
     @Override
     public void delete(String uuid) {
-        String path = BASE_PATH + "/" + uuid;
+        String path = basePath + "/" + uuid;
         File fe = new File(path);
         if (fe.isFile() == false) {
             return;
