@@ -5,13 +5,12 @@
  */
 package robertli.zero.service.impl;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import robertli.zero.dao.UserDao;
 import robertli.zero.entity.User;
+import robertli.zero.entity.UserRegister;
 import robertli.zero.service.UserService;
 
 /**
@@ -25,10 +24,23 @@ public class UserServiceImp implements UserService {
     private UserDao userDao;
 
     @Override
-    public void addUser(String name) {
-        User user = new User();
-        user.setName(name);
-        userDao.save(user);
+    public User getCurrentUser(String sessionId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public UserLoginResult login(String sessionId, String auth, String password) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public UserLogoffResult logoff(String sessionId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public UserRegisterResult register(UserRegister register, String passwordAgain) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -44,6 +56,7 @@ public class UserServiceImp implements UserService {
         user = new User();
         user.setName("BB");
         userDao.save(user);
+        TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        System.out.println("rollback hehehehe......");
     }
-
 }

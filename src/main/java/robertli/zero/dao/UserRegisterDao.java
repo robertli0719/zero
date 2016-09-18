@@ -5,12 +5,12 @@
  */
 package robertli.zero.dao;
 
-import robertli.zero.entity.User;
+import robertli.zero.entity.UserRegister;
 
 /**
  *
  * @author Robert Li
  */
-public interface UserDao extends GenericDao<User, Integer> {
+public interface UserRegisterDao extends GenericDao<UserRegister, Integer> {
 
 }
