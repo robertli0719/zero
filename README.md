@@ -1,13 +1,18 @@
 # Zero Java Framework 1.0-SNAPSHOT
 
-我想把我写过的可复用的Java代码整理出来，然后开放给其他写Java Web Application的小伙伴们。
+为了缩短创建一个新项目的搭建时间，我想把我写过的可复用的Java代码整理出来，然后开放给其他写Java Web Application的小伙伴们。
 
-我的设计目标是要造一个开源项目，让所有想基于SSH框架搭建项目的人直接clone后开工做事，而避免每次不必要的重复配置工作。
+##我的设计目标
+* 让开发者将主要精力用于业务逻辑，而不是软件架构和功能实现
+* 联合大家伙共同商议出公认最优化的Java SSH架构和编程约定
+* 多项目共享同一软件架构和编程约定，实现代码复用
 
-这套代码是基于SSH框架 Spring4 + Struts2 + Hibernate4
+##当前结构
+* 这套代码是基于SSH框架 Spring4 + Struts2 + Hibernate4
+* 基于Maven自动下载Jar包。
+* 具体到实际项目的相关信息，集中存放在了配置文件之中，可供使用者修改
+* 基于Spring的依赖注入，使得各方可以方面的更换实现
 
-程序会基于Maven自动下载所有需要的Jar包，只需要修改上自己的数据库链接信息就可以执行。
-使用者可以很方便的基于Netbeans或其他IDE将我系统中的包robertli.zero更换为其自身网站的相关包名，用全文查找的方式顺便修改所有配置文件中的robertli.zero到自己的包名。
 
 ## 使用指南
 
@@ -27,7 +32,7 @@
 
 ## 编程指南
 ### 添加新JSP页面
-当想添加 http://yourdomain.com/Xxx 页面时
+当想添加 http://yourdomain.com/Xxx 页面时（Struts2 约定优于配置）
 
 1. 在robertli.zero.action包下创建XxxAction.java
 2. 在WEB-INF/default下添加Xxx.jsp
@@ -42,10 +47,25 @@
 3. 向YyyAction放入需要的若干function
 4. 访问http://yourdomain.com/json/Yyy!funName 得到运行结果
 
+### 建立数据库entity
+当ER图画好后，按如下方式快速建立数据库（纯Hibernate知识）
+
+1. 在robertli.zero.entity包下创建实体类，类名和数据库表名对应
+2. 在class前添加@Entity
+3. 考虑到MySQL在windows上不支持大写表名称，添加@Table(name="your_table_name")以保障未来迁移数据库时的一致性
+4. 添加private成员，每一行对应数据库一个列
+5. 用Netbeans快捷键自动生成全部getter setter
+6. 在用于primary key的字段的setter前添加@Id，必要时添加@GeneratedValue实现自增
+7. 通过@ManyToOne设置外键关系，必要时对应添加@OneToMany
+8. 必要时通过@Column对列的非空、唯一、默认值进行具体设置
+9. 必要时通过@Index追加索引以优化性能
+10. 在Test包中随便执行一个会读写数据库的Service，Hibernate会自动扫描entity包下所有class并自动创建好所有的数据库表。
+
 ## 其他功能项
 ### 目前支持的小组件
 * 邮件发送器 emailSender
 * 文件管理器 fileManager
+* URL抓取服务 WebService
 
 （所有小组件全可通过Spring依赖注入到需要的地方）
 
@@ -62,5 +82,5 @@ email: li.liufv@gmail.com
 wechat: robertli0719
 [Github: https://github.com/robertli0719/zero](https://github.com/robertli0719/zero)
 
-2016-09-17
+2016-09-18
 Robert Li
