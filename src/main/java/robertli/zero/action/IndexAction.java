@@ -6,6 +6,8 @@
 package robertli.zero.action;
 
 import com.opensymphony.xwork2.ActionSupport;
+import javax.servlet.http.HttpServletRequest;
+import org.apache.struts2.ServletActionContext;
 
 /**
  *
@@ -15,6 +17,9 @@ public class IndexAction extends ActionSupport {
 
     @Override
     public String execute() {
+        HttpServletRequest request = ServletActionContext.getRequest();
+        String sessionId = request.getSession().getId();        
+        System.out.println("sessionId:" + sessionId);
         System.out.println("IndexAction execute..");
         return SUCCESS;
     }

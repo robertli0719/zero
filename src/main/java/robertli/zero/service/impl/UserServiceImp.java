@@ -59,4 +59,9 @@ public class UserServiceImp implements UserService {
         TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         System.out.println("rollback hehehehe......");
     }
+
+    @Override
+    public UserLoginResult loginByGoogle(String sessionId, String googleIdToken) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

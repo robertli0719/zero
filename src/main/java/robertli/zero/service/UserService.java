@@ -32,6 +32,8 @@ public interface UserService {
      */
     public UserLoginResult login(String sessionId, String auth, String password);
 
+    public UserLoginResult loginByGoogle(String sessionId, String googleIdToken);
+
     public enum UserLogoffResult {
         SUCCESS
     }
