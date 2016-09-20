@@ -7,6 +7,7 @@ package robertli.zero.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Component;
 import robertli.zero.core.EmailMessage;
@@ -25,7 +26,7 @@ public class UserEmailBuilderImpl implements UserEmailBuilder {
         return new EmailMessage() {
             @Override
             public String getUUID() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                return UUID.randomUUID().toString();
             }
 
             @Override
@@ -43,7 +44,7 @@ public class UserEmailBuilderImpl implements UserEmailBuilder {
             @Override
             public String getContent() {
                 String content = "<p>welcome to register " + domain + "</p>";
-                content += "<a href=\"" + domain + "\\UserRegister?verifiedCode=" + verifiedCode + "\">";
+                content += "<a href=\"" + domain + "/UserRegister!verify?verifiedCode=" + verifiedCode + "\">";
                 content += "verifiedCode:" + verifiedCode;
                 content += "</a>";
                 return content;
@@ -53,7 +54,33 @@ public class UserEmailBuilderImpl implements UserEmailBuilder {
 
     @Override
     public EmailMessage buildPasswordResetTokenEmail(String email, String name, String token) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String domain = webConfiguration.getDomain();
+        return new EmailMessage() {
+            @Override
+            public String getUUID() {
+                return UUID.randomUUID().toString();
+            }
+
+            @Override
+            public List<String> getEmailList() {
+                List<String> emailList = new ArrayList<>(1);
+                emailList.add(email);
+                return emailList;
+            }
+
+            @Override
+            public String getSubject() {
+                return "Password reset request";
+            }
+
+            @Override
+            public String getContent() {
+                String content = "<p>Hello " + name + "</p>";
+                content += "<a href=\"" + domain + "\\UserResetPassword?token=" + token + "\">";
+                content += "click me for reset your password</a>";
+                return content;
+            }
+        };
     }
 
 }

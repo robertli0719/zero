@@ -165,6 +165,7 @@ public class UserRegisterServiceImpl implements UserRegisterService {
         userDao.save(user);
         UserAuth userAuth = new UserAuth();
         userAuth.setAuthId(register.getAuthId());
+        userAuth.setLabel(register.getAuthLabel());
         userAuth.setType(register.getAuthType());
         userAuth.setUser(user);
         userAuthDao.save(userAuth);

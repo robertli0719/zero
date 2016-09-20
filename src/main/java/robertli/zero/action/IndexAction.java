@@ -6,32 +6,41 @@
 package robertli.zero.action;
 
 import com.opensymphony.xwork2.ActionSupport;
-import javax.servlet.http.HttpServletRequest;
-import org.apache.struts2.ServletActionContext;
+import robertli.zero.entity.User;
+import robertli.zero.struts2.SessionIdAware;
+import robertli.zero.struts2.UserAware;
 
 /**
  *
  * @author Robert Li
  */
-public class IndexAction extends ActionSupport {
+public class IndexAction extends ActionSupport implements SessionIdAware, UserAware {
 
     private int n;
-    
+    private String sessionId;
+    private User user;
+
     @Override
     public String execute() {
-        HttpServletRequest request = ServletActionContext.getRequest();
-        String sessionId = request.getSession().getId();
         System.out.println("sessionId:" + sessionId);
+        System.out.println("current user:" + user);
         System.out.println("IndexAction execute..");
-        if (1 + 1 == n) {
-            throw new RuntimeException();
-        }
+
         return SUCCESS;
     }
 
     public void setN(int n) {
         this.n = n;
     }
-    
-    
+
+    @Override
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    @Override
+    public void setUser(User user) {
+        this.user = user;
+    }
+
 }

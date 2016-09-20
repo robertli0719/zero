@@ -25,7 +25,8 @@
     <!--Transaction Advice-->
     <tx:advice id="txAdvice" transaction-manager="txManager">
         <tx:attributes>
-            <tx:method name="get*" read-only="true"/>
+            <!-- sometimes we should clear due data when get*, so we can't read-only -->
+            <!--<tx:method name="get*" read-only="true"/>-->
             <tx:method name="*"/>
         </tx:attributes>
     </tx:advice>

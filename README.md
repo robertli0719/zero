@@ -62,10 +62,13 @@
 10. 在Test包中随便执行一个会读写数据库的Service，Hibernate会自动扫描entity包下所有class并自动创建好所有的数据库表。
 
 ## 其他功能项
+### 目前正在开发中的功能组件
+* 用户注册、登陆、登出、找回密码（发邮件要求重设）
 ### 目前支持的小组件
 * 邮件发送器 emailSender
 * 文件管理器 fileManager
 * URL抓取服务 WebService
+* 随机字串生成器 RandomCodeCreater
 
 （所有小组件全可通过Spring依赖注入到需要的地方）
 
@@ -82,5 +85,5 @@ email: li.liufv@gmail.com
 wechat: robertli0719
 [Github: https://github.com/robertli0719/zero](https://github.com/robertli0719/zero)
 
-2016-09-18
+2016-09-19
 Robert Li

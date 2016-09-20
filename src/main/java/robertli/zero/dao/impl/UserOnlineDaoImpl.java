@@ -30,6 +30,9 @@ public class UserOnlineDaoImpl extends GenericHibernateDao<UserOnline, String> i
         Query query = session.createQuery("delete from UserOnline where lastActiveDate<=:endDate");
         query.setParameter("endDate", endDate);
         query.executeUpdate();
+//        Query query = session.createQuery("delete from UserOnline where lastActiveDate<=:endDate");
+//        query.setParameter("endDate", endDate);
+//        query.executeUpdate();
     }
 
 }
