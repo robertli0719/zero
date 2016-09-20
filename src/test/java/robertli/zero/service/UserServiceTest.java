@@ -14,6 +14,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class UserServiceTest {
 
+        
     private static void test() throws Exception {
         ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
         UserService userService = (UserService) context.getBean("userService");
@@ -23,7 +24,6 @@ public class UserServiceTest {
                 @Override
                 public void run() {
                     try {
-                        userService.test();
                     } catch (Exception ex) {
                         //Logger.getLogger(UserServiceTest.class.getName()).log(Level.SEVERE, null, ex);
                     }

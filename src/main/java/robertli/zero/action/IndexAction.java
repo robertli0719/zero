@@ -15,12 +15,23 @@ import org.apache.struts2.ServletActionContext;
  */
 public class IndexAction extends ActionSupport {
 
+    private int n;
+    
     @Override
     public String execute() {
         HttpServletRequest request = ServletActionContext.getRequest();
-        String sessionId = request.getSession().getId();        
+        String sessionId = request.getSession().getId();
         System.out.println("sessionId:" + sessionId);
         System.out.println("IndexAction execute..");
+        if (1 + 1 == n) {
+            throw new RuntimeException();
+        }
         return SUCCESS;
     }
+
+    public void setN(int n) {
+        this.n = n;
+    }
+    
+    
 }

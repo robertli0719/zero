@@ -9,41 +9,63 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import org.hibernate.annotations.Index;
 
 /**
- * When user create an account, we save the data in this table before we
- * validate the email.
+ * This is a Hibernate entity class which is mapped to a relevant database
+ * table<br>
  *
- * @version 1.0 2016-09-18
+ * Each line is a user who has submit sign up application but has not be
+ * validated.
+ *
+ * @comment authLabel is for showing authId. ex: email address can include point
+ * @version 1.02 2016-09-19
  * @author Robert Li
  */
 @Entity
 @Table(name = "users_register")
 public class UserRegister implements Serializable {
 
-    private int id;
+    private String authId;
+    private String authLabel;
+    private String authType;
     private String name;
     private String password;
     private String passwordSalt;
-    private String email;
-    private String activationKey;
-    private Date createdDate;
+    private String verifiedCode;
+    private Date signDate;
 
     @Id
-    @GeneratedValue
-    public int getId() {
-        return id;
+    public String getAuthId() {
+        return authId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setAuthId(String authId) {
+        this.authId = authId;
     }
 
+    @Column(nullable = false)
+    public String getAuthLabel() {
+        return authLabel;
+    }
+
+    public void setAuthLabel(String authLabel) {
+        this.authLabel = authLabel;
+    }
+
+    @Column(nullable = false)
+    public String getAuthType() {
+        return authType;
+    }
+
+    public void setAuthType(String authType) {
+        this.authType = authType;
+    }
+
+    @Column(nullable = false)
     public String getName() {
         return name;
     }
@@ -52,6 +74,7 @@ public class UserRegister implements Serializable {
         this.name = name;
     }
 
+    @Column(nullable = false)
     public String getPassword() {
         return password;
     }
@@ -60,6 +83,7 @@ public class UserRegister implements Serializable {
         this.password = password;
     }
 
+    @Column(nullable = false)
     public String getPasswordSalt() {
         return passwordSalt;
     }
@@ -68,32 +92,25 @@ public class UserRegister implements Serializable {
         this.passwordSalt = passwordSalt;
     }
 
-    public String getEmail() {
-        return email;
+    @Column(nullable = false)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    @Index(name = "sign_date")
+    public Date getSignDate() {
+        return signDate;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setSignDate(Date signDate) {
+        this.signDate = signDate;
     }
 
     @Column(nullable = false, unique = true)
-    public String getActivationKey() {
-        return activationKey;
+    @Index(name = "verified_code")
+    public String getVerifiedCode() {
+        return verifiedCode;
     }
 
-    public void setActivationKey(String activationKey) {
-        this.activationKey = activationKey;
-    }
-
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    @Column(nullable = false)
-    @Index(name = "createdDate")
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
+    public void setVerifiedCode(String verifiedCode) {
+        this.verifiedCode = verifiedCode;
     }
 
 }

@@ -1,20 +1,26 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package robertli.zero.entity;
 
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import org.hibernate.annotations.Index;
 
 /**
+ * This is a Hibernate entity class which is mapped to a relevant database
+ * table.<br>
  *
+ * Each user can use more than one way to login the system, such as email,
+ * telephone, WeChat，GoogleAuth and so on. No matter the way users using, users
+ * always type two fields to login. One is authId, and the other is password.
+ * When the user use email to login, the userAuthId is the email address. When
+ * the user use telephone to login, the userAuthId is the phone number.
+ *
+ * @comment authId can be email, phone, and any account name for login
+ * @comment label is for showing. ex: email address can include point
+ * @version 1.02 2016-09-19
  * @author Robert Li
  */
 @Entity
@@ -22,6 +28,7 @@ import org.hibernate.annotations.Index;
 public class UserAuth implements Serializable {
 
     private String authId;
+    private String label;
     private String type;
     private User user;
 
@@ -35,7 +42,15 @@ public class UserAuth implements Serializable {
     }
 
     @Column(nullable = false)
-    @Index(name = "type")
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    @Column(nullable = false)
     public String getType() {
         return type;
     }
@@ -45,6 +60,7 @@ public class UserAuth implements Serializable {
     }
 
     @ManyToOne
+    @JoinColumn(nullable = false)
     public User getUser() {
         return user;
     }

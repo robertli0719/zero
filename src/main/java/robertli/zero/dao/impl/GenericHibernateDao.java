@@ -54,6 +54,11 @@ public class GenericHibernateDao<T extends Serializable, PK extends Serializable
     }
 
     @Override
+    public boolean isExist(PK id) {
+        return get(id) != null;
+    }
+
+    @Override
     public void save(T entity) {
         getSession().save(entity);
     }

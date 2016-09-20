@@ -16,6 +16,8 @@ public interface GenericDao<T extends Serializable, PK extends Serializable> {
 
     public T getForUpdate(PK id);
 
+    public boolean isExist(PK id);
+
     public void save(T entity);
 
     public void saveOrUpdate(T entity);

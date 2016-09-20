@@ -1,18 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package robertli.zero.entity;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
+ * This is a Hibernate entity class which is mapped to a relevant database
+ * table.<br>
  *
+ * Each line of this table is a signed user.
+ *
+ * @version 1.02 2016-09-19
  * @author Robert Li
  */
 @Entity
@@ -20,9 +21,10 @@ import javax.persistence.Table;
 public class User implements Serializable {
 
     private int id;
-    private String name;
     private String password;
     private String passwordSalt;
+    private String name;
+    private String telephone;
 
     @Id
     @GeneratedValue
@@ -34,14 +36,7 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
+    @Column(nullable = false)
     public String getPassword() {
         return password;
     }
@@ -50,12 +45,30 @@ public class User implements Serializable {
         this.password = password;
     }
 
+    @Column(nullable = false)
     public String getPasswordSalt() {
         return passwordSalt;
     }
 
     public void setPasswordSalt(String passwordSalt) {
         this.passwordSalt = passwordSalt;
+    }
+
+    @Column(nullable = false)
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
     }
 
 }

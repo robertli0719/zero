@@ -12,38 +12,24 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
-import robertli.zero.dao.UserRegisterDao;
-import robertli.zero.entity.UserRegister;
+import robertli.zero.dao.UserOnlineDao;
+import robertli.zero.entity.UserOnline;
 
-/**
- *
- * @author Robert Li
- */
-@Component("userRegisterDao")
-public class UserRegisterDaoImpl extends GenericHibernateDao<UserRegister, String> implements UserRegisterDao {
+@Component("userOnlineDao")
+public class UserOnlineDaoImpl extends GenericHibernateDao<UserOnline, String> implements UserOnlineDao {
 
     @Resource
     private SessionFactory sessionFactory;
 
     @Override
-    public void clear(int lifeMinute) {
+    public void clear(final int lifeMinute) {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.MINUTE, -lifeMinute);
         Date endDate = cal.getTime();
-
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("delete from UserRegister where signDate<=:endDate");
+        Query query = session.createQuery("delete from UserOnline where lastActiveDate<=:endDate");
         query.setParameter("endDate", endDate);
         query.executeUpdate();
-    }
-
-    @Override
-    public UserRegister getByVerifiedCode(String code) {
-        Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from UserRegister where verifiedCode=:verifiedCode");
-        query.setMaxResults(1);
-        query.setString("verifiedCode", code);
-        return (UserRegister) query.uniqueResult();
     }
 
 }

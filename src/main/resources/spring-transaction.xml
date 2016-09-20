@@ -35,5 +35,7 @@
         <aop:pointcut id="daoOperation" expression="execution(public * robertli.zero.dao..*.*(..))"/>
         
         <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceOperation"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="daoOperation"/>
+        
     </aop:config>
 </beans>

@@ -8,14 +8,15 @@
 
         <default-action-ref name="error" />
 
+        <global-results>
+            <result name="error">/WEB-INF/error/500.jsp</result>
+        </global-results>
+       
         <global-exception-mappings>
             <exception-mapping exception="java.lang.Exception" result="error"/>
+            <exception-mapping exception="java.lang.RuntimeException" result="error"/>
         </global-exception-mappings>
         
-        <action name="error">
-            <result>/WEB-INF/common/500.html</result>
-        </action>
-                        
         <action name="" class="robertli.zero.action.IndexAction">
             <interceptor-ref name="defaultStack"/>            
             <result name="success"> /WEB-INF/default/Index.jsp</result>
