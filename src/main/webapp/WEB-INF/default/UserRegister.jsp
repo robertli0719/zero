@@ -14,7 +14,9 @@
     </head>
     <body>
         <h1>Please check your email to validate your account</h1>
-        <p>the validate email has been sent to <s:property value="email"/></p>
+        <p>the validate email has been sent to <s:property value="email"/></p>        
         <a href="UserRegister!sendVerifyEmail?email=<s:property value="email"/>">send it again</a>
+        <s:actionerror/>
+
     </body>
 </html>

@@ -1,9 +1,3 @@
-<%-- 
-    Document   : Index
-    Created on : Sep 15, 2016, 5:59:38 PM
-    Author     : Robert Li
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="s" uri="/struts-tags"  %>
 <!DOCTYPE html>
@@ -13,7 +7,8 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
-        <jsp:include page="user_panel.jsp"/>
+        <h1>User Register Verification</h1>
+        <p><s:property value="result"/></p>
+        <a href="Index">Back to Index</a>
     </body>
 </html>

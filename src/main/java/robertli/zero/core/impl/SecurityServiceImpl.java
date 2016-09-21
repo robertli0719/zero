@@ -45,6 +45,11 @@ public class SecurityServiceImpl implements SecurityService {
         password = MD5.count(password + salt);
         String serverSalt = appConfiguration.getMd5Salt();
         password = MD5.count(password + serverSalt);
+        if (salt.length() < 32) {
+            throw new RuntimeException("the salt length is not enough");
+        } else if (serverSalt.length() < 32) {
+            throw new RuntimeException("the serverSalt length is not enough");
+        }
         return password;
     }
 

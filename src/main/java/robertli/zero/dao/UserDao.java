@@ -13,4 +13,5 @@ import robertli.zero.entity.User;
  */
 public interface UserDao extends GenericDao<User, Integer> {
 
+    public User saveUser(String name, String password, String passwordSalt);
 }

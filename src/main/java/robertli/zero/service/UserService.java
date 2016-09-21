@@ -42,6 +42,30 @@ public interface UserService {
      */
     public UserLoginResult login(String sessionId, String userAuthId, String orginealPassword);
 
+    public enum UserLoginByGoogleResult {
+        SUCCESS,
+        USER_LOGINED,
+        NO_VERIFIED_EMAIL,
+        FAIL
+    }
+
+    /**
+     * user can login directly by Google account: <br />
+     * https://developers.google.com/identity/sign-in/web/backend-auth
+     * <br />
+     * Only the users who have verified email within their Google account can
+     * use Google to login our system. (I think almost all the Google account
+     * have verified email). If the email has registered in our system before,
+     * we just login using this email. If the email never register before, the
+     * system will help he or she to uses this email to register automatically
+     * with a random password and login using the email.
+     *
+     * @param sessionId the identification of a web browser session.
+     * @param token an ID token get from Google identity.
+     * @return UserLoginByGoogleResult
+     */
+    public UserLoginByGoogleResult loginByGoogle(String sessionId, String token);
+
     /**
      * Login users use this function to logout the system.
      *

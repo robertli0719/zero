@@ -5,6 +5,7 @@
  */
 package robertli.zero.dao;
 
+import robertli.zero.entity.User;
 import robertli.zero.entity.UserOnline;
 
 /**
@@ -20,4 +21,5 @@ public interface UserOnlineDao extends GenericDao<UserOnline, String> {
      */
     public void clear(final int lifeMinute);
 
+    public void saveUserOnline(String sessionId, User user);
 }

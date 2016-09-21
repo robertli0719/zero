@@ -9,7 +9,6 @@ import com.opensymphony.xwork2.ActionSupport;
 import javax.annotation.Resource;
 import robertli.zero.service.UserRegisterService;
 import robertli.zero.service.UserRegisterService.UserRegisterResult;
-import robertli.zero.service.UserService;
 
 /**
  *
@@ -26,11 +25,6 @@ public class UserRegisterAction extends ActionSupport {
 
     @Resource
     private UserRegisterService userRegisterService;
-
-    public String verify() {
-        userRegisterService.verifiyRegister(verifiedCode);
-        return SUCCESS;
-    }
 
     public String sendVerifyEmail() {
         userRegisterService.sendRegisterVerificationEmail(email);

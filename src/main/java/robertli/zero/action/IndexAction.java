@@ -14,33 +14,23 @@ import robertli.zero.struts2.UserAware;
  *
  * @author Robert Li
  */
-public class IndexAction extends ActionSupport implements SessionIdAware, UserAware {
+public class IndexAction extends ActionSupport implements UserAware {
 
-    private int n;
-    private String sessionId;
     private User user;
 
     @Override
     public String execute() {
-        System.out.println("sessionId:" + sessionId);
-        System.out.println("current user:" + user);
         System.out.println("IndexAction execute..");
-
         return SUCCESS;
-    }
-
-    public void setN(int n) {
-        this.n = n;
-    }
-
-    @Override
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
     }
 
     @Override
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public User getUser() {
+        return user;
     }
 
 }

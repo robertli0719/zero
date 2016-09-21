@@ -44,6 +44,7 @@
     
     <bean id="appConfiguration" class="robertli.zero.core.impl.AppConfigurationImpl">
         <property name="md5Salt" value="${app.md5_salt}"/>
+        <property name="timeZone" value="${app.time_zone}"/>
     </bean>
     
     <bean id="webConfiguration" class="robertli.zero.core.impl.WebConfigurationImpl">

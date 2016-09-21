@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import robertli.zero.core.EmailMessage;
 import robertli.zero.core.EmailSender;
 import robertli.zero.core.RandomCodeCreater;
+import robertli.zero.core.SecurityService;
 import robertli.zero.dao.UserAuthDao;
 import robertli.zero.dao.UserPasswordResetTokenDao;
 import robertli.zero.entity.User;
@@ -51,6 +52,9 @@ public class UserPasswordResetServiceImpl implements UserPasswordResetService {
     private UserEmailBuilder userEmailBuilder;
 
     @Resource
+    private SecurityService securityService;
+
+    @Resource
     private EmailSender emailSender;
 
     @Resource
@@ -72,9 +76,9 @@ public class UserPasswordResetServiceImpl implements UserPasswordResetService {
         return null;
     }
 
-    private boolean sendPasswordResetTokenEmail(String email, String name, String token) {
+    private void sendPasswordResetTokenEmail(String email, String name, String token) {
         EmailMessage message = userEmailBuilder.buildPasswordResetTokenEmail(email, name, token);
-        return emailSender.sendWithBlocking(message);
+        emailSender.sendWithBlocking(message);
     }
 
     @Override
@@ -90,16 +94,32 @@ public class UserPasswordResetServiceImpl implements UserPasswordResetService {
         }
         UserAuth userAuth = userAuthDao.get(email);
         String name = userAuth.getLabel();
-        boolean sendFail = sendPasswordResetTokenEmail(email, name, code);
-        if (sendFail) {
-            return CreatePasswordResetTokenResult.SMS_SEND_FAIL;
-        }
+        sendPasswordResetTokenEmail(email, name, code);
         return CreatePasswordResetTokenResult.SUCCESS;
     }
 
     @Override
     public ResetPasswordResult resetPassword(String tokenCode, String orginealPassword, String passwordAgain) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (orginealPassword == null || orginealPassword.length() < 8) {
+            return ResetPasswordResult.PASSWORD_SHORTER_THAN_8;
+        } else if (orginealPassword.equals(passwordAgain) == false) {
+            return ResetPasswordResult.PASSWORD_AGAIN_ERROR;
+        }
+        try {
+            userPasswordResetTokenDao.clear(TOKEN_LIFE_MINUTE);
+            UserPasswordResetToken token = userPasswordResetTokenDao.get(tokenCode);
+            if (token == null) {
+                return ResetPasswordResult.CODE_WORING;
+            }
+            final String passwordSalt = securityService.createPasswordSalt();
+            final String password = securityService.uglifyPassoword(orginealPassword, passwordSalt);
+
+            token.getUser().setPassword(password);
+            token.getUser().setPasswordSalt(passwordSalt);
+            return ResetPasswordResult.SUCCESS;
+        } catch (RuntimeException re) {
+            return ResetPasswordResult.DATABASE_EXCEPTION;
+        }
     }
 
 }

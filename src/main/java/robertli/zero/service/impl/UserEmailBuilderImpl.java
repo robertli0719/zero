@@ -44,7 +44,7 @@ public class UserEmailBuilderImpl implements UserEmailBuilder {
             @Override
             public String getContent() {
                 String content = "<p>welcome to register " + domain + "</p>";
-                content += "<a href=\"" + domain + "/UserRegister!verify?verifiedCode=" + verifiedCode + "\">";
+                content += "<a href=\"" + domain + "/UserRegisterVerify?code=" + verifiedCode + "\">";
                 content += "verifiedCode:" + verifiedCode;
                 content += "</a>";
                 return content;
@@ -76,7 +76,7 @@ public class UserEmailBuilderImpl implements UserEmailBuilder {
             @Override
             public String getContent() {
                 String content = "<p>Hello " + name + "</p>";
-                content += "<a href=\"" + domain + "\\UserResetPassword?token=" + token + "\">";
+                content += "<a href=\"" + domain + "/UserPasswordReset!input?token=" + token + "\">";
                 content += "click me for reset your password</a>";
                 return content;
             }

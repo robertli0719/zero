@@ -39,7 +39,7 @@
             </result>
             <result name="index" type="redirect">
                 Index
-            </result>            
+            </result>
         </action>
     </package>
 </struts>

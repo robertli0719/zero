@@ -16,7 +16,6 @@ import robertli.zero.dao.UserAuthDao;
 import robertli.zero.dao.UserDao;
 import robertli.zero.dao.UserRegisterDao;
 import robertli.zero.entity.User;
-import robertli.zero.entity.UserAuth;
 import robertli.zero.entity.UserRegister;
 import robertli.zero.service.UserEmailBuilder;
 import robertli.zero.service.UserRegisterService;
@@ -98,7 +97,8 @@ public class UserRegisterServiceImpl implements UserRegisterService {
     }
 
     @Override
-    public boolean sendRegisterVerificationEmail(String authId) {
+    public boolean sendRegisterVerificationEmail(String email) {
+        String authId = ValidationTool.preprocessEmail(email);
         UserRegister register = userRegisterDao.get(authId);
         if (register == null) {
             return true;
@@ -158,17 +158,15 @@ public class UserRegisterServiceImpl implements UserRegisterService {
     }
 
     private void createNewUser(UserRegister register) {
-        User user = new User();
-        user.setName(register.getName());
-        user.setPassword(register.getPassword());
-        user.setPasswordSalt(register.getPasswordSalt());
-        userDao.save(user);
-        UserAuth userAuth = new UserAuth();
-        userAuth.setAuthId(register.getAuthId());
-        userAuth.setLabel(register.getAuthLabel());
-        userAuth.setType(register.getAuthType());
-        userAuth.setUser(user);
-        userAuthDao.save(userAuth);
+        String name = register.getName();
+        String password = register.getPassword();
+        String passwordSalt = register.getPasswordSalt();
+        User user = userDao.saveUser(name, password, passwordSalt);
+
+        String authId = register.getAuthId();
+        String label = register.getAuthLabel();
+        String type = register.getAuthType();
+        userAuthDao.saveUserAuth(authId, label, type, user);
     }
 
     @Override

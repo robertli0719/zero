@@ -5,6 +5,8 @@
  */
 package robertli.zero.dao.impl;
 
+import javax.annotation.Resource;
+import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
 import robertli.zero.dao.UserDao;
 import robertli.zero.entity.User;
@@ -15,5 +17,15 @@ import robertli.zero.entity.User;
  */
 @Component("userDao")
 public class UserDaoImpl extends GenericHibernateDao<User, Integer> implements UserDao {
+
+    @Override
+    public User saveUser(String name, String password, String passwordSalt) {
+        User user = new User();
+        user.setName(name);
+        user.setPassword(password);
+        user.setPasswordSalt(passwordSalt);
+        save(user);
+        return user;
+    }
 
 }

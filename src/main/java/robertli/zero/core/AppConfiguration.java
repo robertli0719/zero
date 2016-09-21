@@ -17,4 +17,6 @@ public interface AppConfiguration {
 
     public String getMd5Salt();
 
+    public String getTimeZone();
+
 }
