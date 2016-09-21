@@ -7,15 +7,17 @@ package robertli.zero.action;
 
 import com.opensymphony.xwork2.ActionSupport;
 import javax.annotation.Resource;
+import robertli.zero.entity.User;
 import robertli.zero.service.UserService;
 import robertli.zero.service.UserService.UserLoginResult;
 import robertli.zero.struts2.SessionIdAware;
+import robertli.zero.struts2.UserAware;
 
 /**
  *
  * @author Robert Li
  */
-public class UserLoginAction extends ActionSupport implements SessionIdAware {
+public class UserLoginAction extends ActionSupport implements SessionIdAware, UserAware {
 
     @Resource
     private UserService userService;
@@ -23,6 +25,7 @@ public class UserLoginAction extends ActionSupport implements SessionIdAware {
     private String authId;
     private String password;
     private String sessionId;
+    private User user;
 
     @Override
     public String execute() {
@@ -64,6 +67,15 @@ public class UserLoginAction extends ActionSupport implements SessionIdAware {
     @Override
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
+    }
+
+    @Override
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
     }
 
 }

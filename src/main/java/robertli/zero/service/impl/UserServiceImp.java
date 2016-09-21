@@ -115,7 +115,6 @@ public class UserServiceImp implements UserService {
         final String password = securityService.uglifyPassoword(orginealPassword, passwordSalt);
 
         User user = userDao.saveUser(name, password, passwordSalt);
-        userAuthDao.saveUserAuth(userAuthId, email, "google", user);
         userAuthDao.saveUserAuth(userAuthId, email, "email", user);
         return user;
     }

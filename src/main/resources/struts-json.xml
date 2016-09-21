@@ -6,6 +6,10 @@
 <struts>
     <package name="json" namespace="/json" extends="json-default">
 
+        <interceptors>
+            <interceptor name="zeroCommonInterceptor" class="robertli.zero.struts2.ZeroCommonInterceptor" />
+        </interceptors>
+        
         <default-action-ref name="error" />
 
         <global-exception-mappings>
@@ -18,6 +22,7 @@
 
         <action name="*" class="robertli.zero.action.json.{1}Action">
             <interceptor-ref name="defaultStack"/>
+            <interceptor-ref name="zeroCommonInterceptor"/>
             
             <result name="success" type="json">
                 <param name="excludeProperties">

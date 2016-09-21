@@ -63,8 +63,12 @@
 
 ## 其他功能项
 
-### 目前正在开发中的功能组件
-* 用户注册、登陆、登出、找回密码（发邮件要求重设）
+### 目前支持的功能组件
+* 用户注册
+* 用户登陆
+* 用户通过Google登陆
+* 用户登出
+* 用户找回密码（发邮件要求用户重设）
 
 ### 目前支持的小组件
 * 邮件发送器 emailSender
@@ -87,5 +91,5 @@ email: li.liufv@gmail.com
 wechat: robertli0719
 [Github: https://github.com/robertli0719/zero](https://github.com/robertli0719/zero)
 
-2016-09-19
+2016-09-20
 Robert Li
