@@ -1,0 +1,65 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package robertli.zero.entity;
+
+import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import org.hibernate.annotations.Index;
+
+/**
+ * This is a Hibernate entity class which is mapped to a relevant database
+ * table.<br>
+ *
+ * Each line of this table is an permission for an administrator of the system.
+ *
+ * @version 1.0 2016-09-21
+ * @author Robert Li
+ */
+@Entity
+@Table(name = "admins_permission")
+@org.hibernate.annotations.Table(appliesTo = "admins_permission", indexes = {
+    @Index(name = "combine_index", columnNames = {"admin_username", "name"})
+})
+public class AdminPermission implements Serializable {
+
+    private int id;
+    private Admin admin;
+    private String name;
+
+    @Id
+    @GeneratedValue
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @ManyToOne
+    public Admin getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Admin admin) {
+        this.admin = admin;
+    }
+
+    @Column(nullable = false)
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+}
