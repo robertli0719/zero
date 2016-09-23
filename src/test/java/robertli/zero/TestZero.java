@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
-import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import robertli.zero.entity.TestRecode;
@@ -199,7 +198,6 @@ public class TestZero {
         assertTrue(hasException);
     }
 
-    @Test
     public void testSpringTransaction() {
         System.out.println("Start Test Spring Transaction");
 
