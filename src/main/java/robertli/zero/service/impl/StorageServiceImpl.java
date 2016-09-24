@@ -1,15 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package robertli.zero.service.impl;
 
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Component;
 import robertli.zero.core.FileManager;
@@ -25,6 +18,8 @@ import robertli.zero.service.StorageService;
 @Component("storageService")
 public class StorageServiceImpl implements StorageService {
 
+    private static final int TEMP_FILE_LIFE_MINUTE = 60 * 24;
+
     @Resource
     private FileManager fileManager;
 
@@ -33,32 +28,39 @@ public class StorageServiceImpl implements StorageService {
 
     @Override
     public FileRecord getFileRecord(String uuid) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return fileRecordDao.get(uuid);
     }
 
     @Override
     public byte[] get(String uuid) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        getFileRecord(uuid).setLastAccessDate(new Date());
+        return fileManager.read(uuid);
     }
 
     @Override
     public String register(String name, String type) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        FileRecord fileRecord = fileRecordDao.saveFileRecord(name, type);
+        return fileRecord.getUuid();
     }
 
     @Override
-    public void store(String uuid, byte[] data) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void store(String uuid, byte[] data) throws IOException {
+        fileManager.write(uuid, data);
     }
 
     @Override
     public void delete(String uuid) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        fileRecordDao.get(uuid).setTemp(true);
     }
 
     @Override
     public void clean() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<FileRecord> fileRecordList = fileRecordDao.listOverdueFileRecord(TEMP_FILE_LIFE_MINUTE);
+        for (FileRecord fileRecord : fileRecordList) {
+            String uuid = fileRecord.getUuid();
+            fileManager.delete(uuid);
+            fileRecordDao.delete(fileRecord);
+        }
     }
 
 }

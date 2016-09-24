@@ -19,7 +19,8 @@ public interface FileRecordDao extends GenericDao<FileRecord, String> {
     /**
      * list the FileRecord which has been mark removed.
      *
+     * @param lifeMinute
      * @return List of FileRecord
      */
-    public List<FileRecord> listRemovedFile();
+    public List<FileRecord> listOverdueFileRecord(final int lifeMinute);
 }

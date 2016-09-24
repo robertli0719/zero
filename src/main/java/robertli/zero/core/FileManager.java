@@ -39,7 +39,6 @@ public interface FileManager {
      * Delete an existing file.<br>
      *
      * @param uuid the identification of file
-     * @throws java.io.IOException
      */
     public void delete(String uuid);
 }

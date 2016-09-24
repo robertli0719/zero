@@ -5,10 +5,12 @@
  */
 package robertli.zero.dao.impl;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import javax.annotation.Resource;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
@@ -33,6 +35,7 @@ public class FileRecordDaoImpl extends GenericHibernateDao<FileRecord, String> i
         fileRecord.setUuid(uuid);
         fileRecord.setName(name);
         fileRecord.setType(type);
+        fileRecord.setTemp(true);
         fileRecord.setCreatedDate(now);
         fileRecord.setLastAccessDate(now);
         save(fileRecord);
@@ -40,9 +43,14 @@ public class FileRecordDaoImpl extends GenericHibernateDao<FileRecord, String> i
     }
 
     @Override
-    public List<FileRecord> listRemovedFile() {
+    public List<FileRecord> listOverdueFileRecord(final int lifeMinute) {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MINUTE, -lifeMinute);
+        Date endDate = cal.getTime();
         Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("from FileRecord where removed=true").list();
+        Query query = session.createQuery("from FileRecord where createdDate<=:endDate and temp=true");
+        query.setParameter("endDate", endDate);
+        return query.list();
     }
 
 }

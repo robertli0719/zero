@@ -1,6 +1,6 @@
 <%-- 
-    Document   : Index
-    Created on : Sep 15, 2016, 5:59:38 PM
+    Document   : FileUploadDemo
+    Created on : Sep 24, 2016, 2:16:26 AM
     Author     : Robert Li
 --%>
 
@@ -13,11 +13,10 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
-        <jsp:include page="user_panel.jsp"/>
-        <div>
-            <h3>Demo</h3>
-            <a href="FileUploadDemo">File Upload Demo</a>
-        </div>
+        <h1>File Upload Demo</h1>
+        <s:form action="FileUploadDemo" method="post" enctype="multipart/form-data">
+            <s:file name="fe" label="File"/>
+            <s:submit />
+        </s:form>
     </body>
 </html>

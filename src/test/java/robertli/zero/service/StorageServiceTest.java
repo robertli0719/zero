@@ -5,6 +5,7 @@
  */
 package robertli.zero.service;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.logging.Level;
@@ -43,7 +44,7 @@ public class StorageServiceTest {
         return "bin";
     }
 
-    private void testProcess() throws InterruptedException {
+    private void testProcess() throws InterruptedException, IOException {
         final int FILE_SIZE = rand.nextInt(1024 * 1024 * 10);// file size between 0~10M
         final byte data[] = new byte[FILE_SIZE];
         final String type = makeRandType();
@@ -53,8 +54,11 @@ public class StorageServiceTest {
         Thread.sleep(rand.nextInt(1000));
         String uuid = storageService.register(name, type);
         storageService.store(uuid, data);
-
+        
         while (rand.nextDouble() > 0.2) {
+            if(rand.nextDouble()<0.1){
+                storageService.clean();
+            }
             byte result[] = storageService.get(uuid);
             if (Arrays.equals(data, result) == false) {
                 throw new RuntimeException("result is wrong!");
@@ -66,13 +70,15 @@ public class StorageServiceTest {
 
     private void stressTest() throws InterruptedException {
         StressTest stressTest = new StressTest();
-        stressTest.setNumberOfGroup(1);
-        stressTest.setThreadNumberPerGroup(1);
+        stressTest.setNumberOfGroup(10);
+        stressTest.setThreadNumberPerGroup(8);
 
         stressTest.test("myTest", () -> {
             try {
                 testProcess();
             } catch (InterruptedException ex) {
+                Logger.getLogger(StorageServiceTest.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
                 Logger.getLogger(StorageServiceTest.class.getName()).log(Level.SEVERE, null, ex);
             }
         });

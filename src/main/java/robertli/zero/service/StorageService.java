@@ -1,5 +1,6 @@
 package robertli.zero.service;
 
+import java.io.IOException;
 import robertli.zero.entity.FileRecord;
 
 /**
@@ -84,8 +85,9 @@ public interface StorageService {
      *
      * @param uuid which is the identifier of the object or file
      * @param data the binary data of the object or file
+     * @throws java.io.IOException
      */
-    public void store(String uuid, byte[] data);
+    public void store(String uuid, byte[] data) throws IOException;
 
     /**
      * delete the object from the system<br>
