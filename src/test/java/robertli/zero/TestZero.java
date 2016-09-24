@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import robertli.zero.entity.TestRecode;
+import robertli.zero.entity.TestRecord;
 import robertli.zero.service.TestService;
 import static org.junit.Assert.*;
 import robertli.zero.dao.TestRecodeDao;
@@ -22,52 +22,52 @@ import robertli.zero.dao.TestRecodeDao;
  */
 public class TestZero {
 
-    private List<TestRecode> createRandTestList() {
+    private List<TestRecord> createRandTestList() {
         List testRecodeList = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             String key = UUID.randomUUID().toString();
-            TestRecode test = new TestRecode();
+            TestRecord test = new TestRecord();
             test.setKeyname(key);
             testRecodeList.add(test);
         }
         return testRecodeList;
     }
 
-    private boolean recodeListEquals(List<TestRecode> aList, List<TestRecode> bList) {
+    private boolean recodeListEquals(List<TestRecord> aList, List<TestRecord> bList) {
         if (aList.size() != bList.size()) {
             return false;
         }
         HashSet<String> set = new HashSet<>();
-        for (TestRecode t : aList) {
+        for (TestRecord t : aList) {
             set.add(t.getKeyname());
         }
-        for (TestRecode t : bList) {
+        for (TestRecord t : bList) {
             set.remove(t.getKeyname());
         }
         return set.isEmpty();
     }
 
-    private void shouldSuccess(List<TestRecode> testRecodeList, List<TestRecode> resultList) {
+    private void shouldSuccess(List<TestRecord> testRecodeList, List<TestRecord> resultList) {
         assertFalse(resultList.isEmpty());
         assertTrue(recodeListEquals(testRecodeList, resultList));
     }
 
-    private void shouldFail(List<TestRecode> resultList) {
+    private void shouldFail(List<TestRecord> resultList) {
         assertTrue(resultList.isEmpty());
     }
 
     private void testA(TestService testService, TestRecodeDao testRecodeDao) {
-        List<TestRecode> testRecodeList = createRandTestList();
+        List<TestRecord> testRecodeList = createRandTestList();
 
         testService.clearAll();
         testRecodeDao.testA(testRecodeList);
-        List<TestRecode> resultList = testService.getList();
+        List<TestRecord> resultList = testService.getList();
 
         shouldSuccess(testRecodeList, resultList);
     }
 
     private void testB(TestService testService, TestRecodeDao testRecodeDao) {
-        List<TestRecode> testRecodeList = createRandTestList();
+        List<TestRecord> testRecodeList = createRandTestList();
 
         testService.clearAll();
         boolean hasException = false;
@@ -76,24 +76,24 @@ public class TestZero {
         } catch (RuntimeException re) {
             hasException = true;
         }
-        List<TestRecode> resultList = testService.getList();
+        List<TestRecord> resultList = testService.getList();
 
         shouldFail(resultList);
         assertTrue(hasException);
     }
 
     private void test1(TestService testService) {
-        List<TestRecode> testRecodeList = createRandTestList();
+        List<TestRecord> testRecodeList = createRandTestList();
 
         testService.clearAll();
         testService.test1(testRecodeList);
-        List<TestRecode> resultList = testService.getList();
+        List<TestRecord> resultList = testService.getList();
 
         shouldSuccess(testRecodeList, resultList);
     }
 
     private void test2(TestService testService) {
-        List<TestRecode> testRecodeList = createRandTestList();
+        List<TestRecord> testRecodeList = createRandTestList();
 
         testService.clearAll();
         boolean hasException = false;
@@ -102,24 +102,24 @@ public class TestZero {
         } catch (RuntimeException re) {
             hasException = true;
         }
-        List<TestRecode> resultList = testService.getList();
+        List<TestRecord> resultList = testService.getList();
 
         shouldFail(resultList);
         assertTrue(hasException);
     }
 
     private void test3(TestService testService) {
-        List<TestRecode> testRecodeList = createRandTestList();
+        List<TestRecord> testRecodeList = createRandTestList();
 
         testService.clearAll();
         testService.test3(testRecodeList);
-        List<TestRecode> resultList = testService.getList();
+        List<TestRecord> resultList = testService.getList();
 
         shouldSuccess(testRecodeList, resultList);
     }
 
     private void test4(TestService testService) {
-        List<TestRecode> testRecodeList = createRandTestList();
+        List<TestRecord> testRecodeList = createRandTestList();
 
         testService.clearAll();
         boolean hasException = false;
@@ -128,14 +128,14 @@ public class TestZero {
         } catch (RuntimeException re) {
             hasException = true;
         }
-        List<TestRecode> resultList = testService.getList();
+        List<TestRecord> resultList = testService.getList();
 
         shouldFail(resultList);
         assertTrue(hasException);
     }
 
     private void test5(TestService testService) {
-        List<TestRecode> testRecodeList = createRandTestList();
+        List<TestRecord> testRecodeList = createRandTestList();
 
         testService.clearAll();
         boolean hasException = false;
@@ -144,14 +144,14 @@ public class TestZero {
         } catch (RuntimeException re) {
             hasException = true;
         }
-        List<TestRecode> resultList = testService.getList();
+        List<TestRecord> resultList = testService.getList();
 
         shouldFail(resultList);
         assertTrue(hasException);
     }
 
     private void test6(TestService testService) {
-        List<TestRecode> testRecodeList = createRandTestList();
+        List<TestRecord> testRecodeList = createRandTestList();
 
         testService.clearAll();
         boolean hasException = false;
@@ -160,14 +160,14 @@ public class TestZero {
         } catch (RuntimeException re) {
             hasException = true;
         }
-        List<TestRecode> resultList = testService.getList();
+        List<TestRecord> resultList = testService.getList();
 
         shouldFail(resultList);
         assertTrue(hasException);
     }
 
     private void test7(TestService testService) {
-        List<TestRecode> testRecodeList = createRandTestList();
+        List<TestRecord> testRecodeList = createRandTestList();
 
         testService.clearAll();
         boolean hasException = false;
@@ -176,14 +176,14 @@ public class TestZero {
         } catch (RuntimeException re) {
             hasException = true;
         }
-        List<TestRecode> resultList = testService.getList();
+        List<TestRecord> resultList = testService.getList();
 
         shouldFail(resultList);
         assertTrue(hasException);
     }
 
     private void test8(TestService testService) {
-        List<TestRecode> testRecodeList = createRandTestList();
+        List<TestRecord> testRecodeList = createRandTestList();
 
         testService.clearAll();
         boolean hasException = false;
@@ -192,7 +192,7 @@ public class TestZero {
         } catch (RuntimeException re) {
             hasException = true;
         }
-        List<TestRecode> resultList = testService.getList();
+        List<TestRecord> resultList = testService.getList();
 
         shouldFail(resultList);
         assertTrue(hasException);

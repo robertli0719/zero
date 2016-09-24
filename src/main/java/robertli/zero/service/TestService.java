@@ -6,7 +6,7 @@
 package robertli.zero.service;
 
 import java.util.List;
-import robertli.zero.entity.TestRecode;
+import robertli.zero.entity.TestRecord;
 
 /**
  * JUnit can use this service for system self-checking
@@ -22,11 +22,11 @@ public interface TestService {
 
     public void clearAll();
 
-    public List<TestRecode> getList();
+    public List<TestRecord> getList();
 
-    public void save(TestRecode test);
+    public void save(TestRecord test);
 
-    public void save(List<TestRecode> testList);
+    public void save(List<TestRecord> testList);
 
     public void get(String key);
 
@@ -38,7 +38,7 @@ public interface TestService {
      *
      * @param testList
      */
-    public void test1(List<TestRecode> testList);
+    public void test1(List<TestRecord> testList);
 
     /**
      * test2 use session to save test directly,than throw RuntionException <br >
@@ -46,7 +46,7 @@ public interface TestService {
      *
      * @param testList
      */
-    public void test2(List<TestRecode> testList);
+    public void test2(List<TestRecord> testList);
 
     /**
      * test3 invoke test1 to save it <br >
@@ -54,7 +54,7 @@ public interface TestService {
      *
      * @param testList
      */
-    public void test3(List<TestRecode> testList);
+    public void test3(List<TestRecord> testList);
 
     /**
      * test4 invoke test1 to save it, than throw RuntionException <br >
@@ -62,7 +62,7 @@ public interface TestService {
      *
      * @param testList
      */
-    public void test4(List<TestRecode> testList);
+    public void test4(List<TestRecord> testList);
 
     /**
      * test5 use test2 to save it.<br>
@@ -70,7 +70,7 @@ public interface TestService {
      *
      * @param testList
      */
-    public void test5(List<TestRecode> testList);
+    public void test5(List<TestRecord> testList);
 
     /**
      * test6 use DAO.testA success save, than throw RuntimeException<br>
@@ -78,7 +78,7 @@ public interface TestService {
      *
      * @param testList
      */
-    public void test6(List<TestRecode> testList);
+    public void test6(List<TestRecord> testList);
 
     /**
      * test7 use DAO.testA success save, than use DAO.testB to throw
@@ -87,7 +87,7 @@ public interface TestService {
      *
      * @param testList
      */
-    public void test7(List<TestRecode> testList);
+    public void test7(List<TestRecord> testList);
 
     /**
      * test8 use test1 to success save, than use DAO.testB to throw
@@ -97,5 +97,5 @@ public interface TestService {
      *
      * @param testList
      */
-    public void test8(List<TestRecode> testList);
+    public void test8(List<TestRecord> testList);
 }

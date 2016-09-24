@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
-import robertli.zero.entity.TestRecode;
+import robertli.zero.entity.TestRecord;
 import robertli.zero.dao.TestRecodeDao;
 
 /**
@@ -20,23 +20,23 @@ import robertli.zero.dao.TestRecodeDao;
  * @author Robert Li
  */
 @Component("testRecodeDao")
-public class TestRecodeDaoImpl extends GenericHibernateDao<TestRecode, String> implements TestRecodeDao {
+public class TestRecodeDaoImpl extends GenericHibernateDao<TestRecord, String> implements TestRecodeDao {
 
     @Resource
     private SessionFactory sessionFactory;
 
     @Override
-    public void testA(List<TestRecode> testRecodeList) {
+    public void testA(List<TestRecord> testRecodeList) {
         Session session = sessionFactory.getCurrentSession();
-        for (TestRecode test : testRecodeList) {
+        for (TestRecord test : testRecodeList) {
             session.save(test);
         }
     }
 
     @Override
-    public void testB(List<TestRecode> testRecodeList) {
+    public void testB(List<TestRecord> testRecodeList) {
         Session session = sessionFactory.getCurrentSession();
-        for (TestRecode test : testRecodeList) {
+        for (TestRecord test : testRecodeList) {
             session.save(test);
         }
         throw new RuntimeException();

@@ -31,7 +31,7 @@ import robertli.zero.entity.FileRecord;
  * delete at once.
  *
  *
- * @version 1.0 2016-09-22
+ * @version 1.01 2016-09-24
  * @author Robert Li
  */
 public interface StorageService {
@@ -60,17 +60,32 @@ public interface StorageService {
     public byte[] get(String uuid);
 
     /**
-     * store a new object to the system. The system will create an UUID to be
-     * the identifier for the object<br>
+     * When a user upload a file to this system, the system should register this
+     * file in the database before we store it to the file system. This function
+     * will create an UUID to be the identifier of the file.<br>
+     *
+     * Do NOT executes register and store in same transaction.<br>
+     *
+     * @see robertli.zero.entity.FileRecord
+     * @param name the name of the file or object or file
+     * @param type the type of the file or object or file
+     * @return UUID, which is the identifier of the object or file
+     */
+    public String register(String name, String type);
+
+    /**
+     * store a new object to file system. we should register the file in
+     * database before we store the file to file system.<br>
+     *
+     * Do NOT executes register and store in same transaction.<br>
+     *
      * guarantee eventual consistency rather than consistency within a database
      * transaction.
      *
-     * @param name the name of the file or object or file
-     * @param type the type of the file or object or file
+     * @param uuid which is the identifier of the object or file
      * @param data the binary data of the object or file
-     * @return UUID, which is the identifier of the object or file
      */
-    public String add(String name, String type, byte[] data);
+    public void store(String uuid, byte[] data);
 
     /**
      * delete the object from the system<br>
@@ -80,4 +95,9 @@ public interface StorageService {
      * @param uuid the identifier of the object or file
      */
     public void delete(String uuid);
+
+    /**
+     * remove the files which should be delete from file system.
+     */
+    public void clean();
 }

@@ -31,7 +31,7 @@ public class FileRecord implements Serializable {
     private String uuid;
     private String name;
     private String type;
-    private boolean removed;
+    private boolean temp;
     private Date createdDate;
     private Date lastAccessDate;
 
@@ -62,12 +62,12 @@ public class FileRecord implements Serializable {
         this.type = type;
     }
 
-    public boolean isRemoved() {
-        return removed;
+    public boolean isTemp() {
+        return temp;
     }
 
-    public void setRemoved(boolean removed) {
-        this.removed = removed;
+    public void setTemp(boolean temp) {
+        this.temp = temp;
     }
 
     @Column(nullable = false)

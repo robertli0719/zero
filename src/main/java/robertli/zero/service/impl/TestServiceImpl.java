@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
-import robertli.zero.entity.TestRecode;
+import robertli.zero.entity.TestRecord;
 import robertli.zero.service.TestService;
 import robertli.zero.dao.TestRecodeDao;
 
@@ -30,18 +30,18 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public List<TestRecode> getList() {
+    public List<TestRecord> getList() {
         return testDao.list();
     }
 
     @Override
-    public void save(TestRecode test) {
+    public void save(TestRecord test) {
         testDao.save(test);
     }
 
     @Override
-    public void save(List<TestRecode> testList) {
-        for (TestRecode test : testList) {
+    public void save(List<TestRecord> testList) {
+        for (TestRecord test : testList) {
             testDao.save(test);
         }
     }
@@ -57,55 +57,55 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public void test1(List<TestRecode> testList) {
+    public void test1(List<TestRecord> testList) {
         Session session = sessionFactory.getCurrentSession();
-        for (TestRecode test : testList) {
+        for (TestRecord test : testList) {
             session.save(test);
         }
     }
 
     @Override
-    public void test2(List<TestRecode> testList) {
+    public void test2(List<TestRecord> testList) {
         Session session = sessionFactory.getCurrentSession();
-        for (TestRecode test : testList) {
+        for (TestRecord test : testList) {
             session.save(test);
         }
-        TestRecode testRecode = new TestRecode();
+        TestRecord testRecode = new TestRecord();
         session.save(testRecode);//save null for throw Runtime Exception
     }
 
     @Override
-    public void test3(List<TestRecode> testList) {
+    public void test3(List<TestRecord> testList) {
         test1(testList);
     }
 
     @Override
-    public void test4(List<TestRecode> testList) {
+    public void test4(List<TestRecord> testList) {
         test1(testList);
         Session session = sessionFactory.getCurrentSession();
-        TestRecode testRecode = new TestRecode();
+        TestRecord testRecode = new TestRecord();
         session.save(testRecode);//save null for throw Runtime Exception
     }
 
     @Override
-    public void test5(List<TestRecode> testList) {
+    public void test5(List<TestRecord> testList) {
         test2(testList);
     }
 
     @Override
-    public void test6(List<TestRecode> testList) {
+    public void test6(List<TestRecord> testList) {
         testDao.testA(testList);
         throw new RuntimeException();
     }
 
     @Override
-    public void test7(List<TestRecode> testList) {
+    public void test7(List<TestRecord> testList) {
         testDao.testA(testList);
         testDao.testB(testList);
     }
 
     @Override
-    public void test8(List<TestRecode> testList) {
+    public void test8(List<TestRecord> testList) {
         test1(testList);
         testDao.testB(testList);
     }

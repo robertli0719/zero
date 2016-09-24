@@ -21,8 +21,8 @@ import javax.persistence.Temporal;
  * @author Robert Li
  */
 @Entity
-@Table(name = "test_recode")
-public class TestRecode implements Serializable {
+@Table(name = "test_record")
+public class TestRecord implements Serializable {
 
     private String keyname;
     private String name;

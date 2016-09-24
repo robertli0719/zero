@@ -6,7 +6,7 @@
 package robertli.zero.dao;
 
 import java.util.List;
-import robertli.zero.entity.TestRecode;
+import robertli.zero.entity.TestRecord;
 
 /**
  * JUnit can use this TestRecodeDao for system self-checking
@@ -14,14 +14,14 @@ import robertli.zero.entity.TestRecode;
  * @version 1.0 2016-09-19
  * @author Robert Li
  */
-public interface TestRecodeDao extends GenericDao<TestRecode, String> {
+public interface TestRecodeDao extends GenericDao<TestRecord, String> {
 
     /**
      * test to success save a list
      *
      * @param testRecodeList
      */
-    public void testA(List<TestRecode> testRecodeList);
+    public void testA(List<TestRecord> testRecodeList);
 
     /**
      * throws RuntimeException after save a list <br>
@@ -29,6 +29,6 @@ public interface TestRecodeDao extends GenericDao<TestRecode, String> {
      *
      * @param testRecodeList
      */
-    public void testB(List<TestRecode> testRecodeList);
+    public void testB(List<TestRecord> testRecodeList);
 
 }

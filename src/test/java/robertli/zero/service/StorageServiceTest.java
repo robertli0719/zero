@@ -5,8 +5,14 @@
  */
 package robertli.zero.service;
 
+import java.util.Arrays;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import robertli.zero.core.RandomCodeCreater;
+import robertli.zero.test.StressTest;
 
 /**
  *
@@ -14,44 +20,67 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class StorageServiceTest {
 
-    private StorageService storageService;
+    private final StorageService storageService;
+    private final RandomCodeCreater randomCodeCreater;
+    private final Random rand;
 
-    public StorageServiceTest() {
+    private StorageServiceTest() {
         ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
         storageService = (StorageService) context.getBean("storageService");
+        randomCodeCreater = (RandomCodeCreater) context.getBean("randomCodeCreater");
+        rand = new Random();
     }
 
-    public String testSaveFile(String str) {
-        String filename = "hello.txt";
-        String type = "txt";
-        byte[] data = str.getBytes();
-        return storageService.add(filename, type, data);
-    }
-
-    public void showFile(String uuid) {
-        byte[] data = storageService.get(uuid);
-        if (data == null) {
-            System.out.println("file:" + uuid + " is null");
-            return;
+    private String makeRandType() {
+        double val = rand.nextDouble();
+        if (val < 0.3) {
+            return "jpg";
+        } else if (val < 0.5) {
+            return "png";
+        } else if (val < 0.7) {
+            return "bmp";
         }
-        String result = new String(data);
-        System.out.println(result);
+        return "bin";
     }
 
-    public void test() {
-        String file1 = testSaveFile("hello,world~!");
-        String file2 = testSaveFile("test test test");
+    private void testProcess() throws InterruptedException {
+        final int FILE_SIZE = rand.nextInt(1024 * 1024 * 10);// file size between 0~10M
+        final byte data[] = new byte[FILE_SIZE];
+        final String type = makeRandType();
+        final String name = randomCodeCreater.createRandomCode(5, RandomCodeCreater.CodeType.MIX) + "." + type;
+        rand.nextBytes(data);
 
-        storageService.delete(file2);
-        String file3 = testSaveFile("a b c d e f g");
-        showFile(file1);
-        showFile(file2);
-        showFile(file3);
+        Thread.sleep(rand.nextInt(1000));
+        String uuid = storageService.register(name, type);
+        storageService.store(uuid, data);
 
+        while (rand.nextDouble() > 0.2) {
+            byte result[] = storageService.get(uuid);
+            if (Arrays.equals(data, result) == false) {
+                throw new RuntimeException("result is wrong!");
+            }
+        }
+        Thread.sleep(rand.nextInt(1000));
+        storageService.delete(uuid);
     }
 
-    public static void main(String args[]) {
+    private void stressTest() throws InterruptedException {
+        StressTest stressTest = new StressTest();
+        stressTest.setNumberOfGroup(1);
+        stressTest.setThreadNumberPerGroup(1);
+
+        stressTest.test("myTest", () -> {
+            try {
+                testProcess();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(StorageServiceTest.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+    }
+
+    public static void main(String args[]) throws InterruptedException {
         StorageServiceTest test = new StorageServiceTest();
-        test.test();
+        //test.testProcess();
+        test.stressTest();
     }
 }
