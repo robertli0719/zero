@@ -19,4 +19,7 @@ public interface AppConfiguration {
 
     public String getTimeZone();
 
+    public String getInitAdminName();
+
+    public String getInitAdminPassword();
 }

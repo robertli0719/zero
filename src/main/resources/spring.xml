@@ -45,6 +45,8 @@
     <bean id="appConfiguration" class="robertli.zero.core.impl.AppConfigurationImpl">
         <property name="md5Salt" value="${app.md5_salt}"/>
         <property name="timeZone" value="${app.time_zone}"/>
+        <property name="initAdminName" value="${app.init_admin_name}"/>
+        <property name="initAdminPassword" value="${app.init_admin_password}"/>
     </bean>
     
     <bean id="webConfiguration" class="robertli.zero.core.impl.WebConfigurationImpl">
@@ -58,11 +60,11 @@
         <aop:pointcut id="withinService" expression="within(robertli.temp.service.*)"/>
         <aop:pointcut id="pt1" expression="within(robertli.temp.service.*)"/>
         
-        <aop:aspect ref="testAspect">
-            <aop:around pointcut-ref="transfer" method="watch" />
-            <aop:before pointcut-ref="withinService" method="test"  />
-        </aop:aspect>
--->
+                <aop:aspect ref="testAspect">
+                    <aop:around pointcut-ref="transfer" method="watch" />
+                    <aop:before pointcut-ref="withinService" method="test"  />
+                </aop:aspect>
+        -->
         
     </aop:config>
     

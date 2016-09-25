@@ -19,6 +19,11 @@ import robertli.zero.entity.Admin;
 public interface AdminService {
 
     /**
+     * insert default Admin record for first using.
+     */
+    public void init();
+
+    /**
      * Get the current login administrator
      *
      * @param sessionId the identification of a web browser session
@@ -31,7 +36,7 @@ public interface AdminService {
         SUCCESS,
         PASSWORD_WRONG,
         SUSPENDED_STATUS,
-        USER_LOGINED,
+        ADMIN_LOGINED,
         DATABASE_EXCEPTION
     }
 
@@ -54,6 +59,7 @@ public interface AdminService {
     public boolean logout(String sessionId);
 
     public static enum AdminResetPasswordResult {
+        NEED_LOGIN,
         OLD_PASSWORD_WRONG,
         NEW_PASSWORD_IS_TOO_EASY,
         PASSWORD_AGAIN_ERROR,
@@ -66,10 +72,10 @@ public interface AdminService {
      *
      * @param sessionId the identification of a web browser session
      * @param oldPassword the old password for the administrators
-     * @param password the new password for the administrators
-     * @param passwordAgain type again the new password
+     * @param newPassword the new password for the administrators
+     * @param newPasswordAgain type again the new password
      * @return
      */
-    public AdminResetPasswordResult resetPassword(String sessionId, String oldPassword, String password, String passwordAgain);
+    public AdminResetPasswordResult resetPassword(String sessionId, String oldPassword, String newPassword, String newPasswordAgain);
 
 }

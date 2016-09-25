@@ -5,8 +5,6 @@
  */
 package robertli.zero.dao.impl;
 
-import javax.annotation.Resource;
-import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
 import robertli.zero.dao.UserDao;
 import robertli.zero.entity.User;
