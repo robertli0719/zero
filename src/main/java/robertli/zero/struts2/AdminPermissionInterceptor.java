@@ -21,25 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package robertli.zero.dao.impl;
+package robertli.zero.struts2;
 
-import org.springframework.stereotype.Component;
-import robertli.zero.dao.UserAuthDao;
-import robertli.zero.entity.User;
-import robertli.zero.entity.UserAuth;
+import com.opensymphony.xwork2.ActionInvocation;
+import com.opensymphony.xwork2.interceptor.Interceptor;
 
-@Component("userAuthDao")
-public class UserAuthDaoImpl extends GenericHibernateDao<UserAuth, String> implements UserAuthDao {
+/**
+ * This is a struts2 interceptor. This one will be use for the package
+ * robertli.zero.action.admin.* <br>
+ *
+ * This interceptor will be used before defaultStack, and we will use it for
+ * redirect to login page
+ *
+ * @version 1.0 2016-09-24
+ * @author Robert Li
+ */
+public class AdminPermissionInterceptor implements Interceptor {
 
     @Override
-    public UserAuth saveUserAuth(String authId, String label, String type, User user) {
-        UserAuth userAuth = new UserAuth();
-        userAuth.setAuthId(authId);
-        userAuth.setLabel(label);
-        userAuth.setType(type);
-        userAuth.setUser(user);
-        save(userAuth);
-        return userAuth;
+    public void destroy() {
+    }
+
+    @Override
+    public void init() {
+    }
+
+    @Override
+    public String intercept(ActionInvocation ai) throws Exception {
+        return ai.invoke();
     }
 
 }

@@ -9,6 +9,7 @@
     <constant name="struts.multipart.maxSize" value="10485760" />
     <constant name="struts.ognl.allowStaticMethodAccess" value="true" />
     <constant name="struts.enable.DynamicMethodInvocation" value="true"></constant>
+    <include file="struts-admin.xml"/>
     <include file="struts-default.xml"/>
     <include file="struts-json.xml"/>
 </struts>

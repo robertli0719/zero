@@ -21,25 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package robertli.zero.dao.impl;
+package robertli.zero.action.admin;
 
-import org.springframework.stereotype.Component;
-import robertli.zero.dao.UserAuthDao;
-import robertli.zero.entity.User;
-import robertli.zero.entity.UserAuth;
-
-@Component("userAuthDao")
-public class UserAuthDaoImpl extends GenericHibernateDao<UserAuth, String> implements UserAuthDao {
-
-    @Override
-    public UserAuth saveUserAuth(String authId, String label, String type, User user) {
-        UserAuth userAuth = new UserAuth();
-        userAuth.setAuthId(authId);
-        userAuth.setLabel(label);
-        userAuth.setType(type);
-        userAuth.setUser(user);
-        save(userAuth);
-        return userAuth;
-    }
-
+/**
+ *
+ * @author Robert Li
+ */
+public class NewClass {
+    
 }

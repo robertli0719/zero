@@ -21,25 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package robertli.zero.dao.impl;
+package robertli.zero.action.admin;
 
-import org.springframework.stereotype.Component;
-import robertli.zero.dao.UserAuthDao;
-import robertli.zero.entity.User;
-import robertli.zero.entity.UserAuth;
+import com.opensymphony.xwork2.ActionSupport;
+import javax.annotation.Resource;
+import robertli.zero.service.AdminService;
+import robertli.zero.struts2.SessionIdAware;
 
-@Component("userAuthDao")
-public class UserAuthDaoImpl extends GenericHibernateDao<UserAuth, String> implements UserAuthDao {
+/**
+ *
+ * @author Robert Li
+ */
+public class AdminLogoutAction extends ActionSupport implements SessionIdAware {
+
+    @Resource
+    private AdminService adminService;
+
+    private String sessionId;
 
     @Override
-    public UserAuth saveUserAuth(String authId, String label, String type, User user) {
-        UserAuth userAuth = new UserAuth();
-        userAuth.setAuthId(authId);
-        userAuth.setLabel(label);
-        userAuth.setType(type);
-        userAuth.setUser(user);
-        save(userAuth);
-        return userAuth;
+    public String execute() {
+        boolean fail = adminService.logout(sessionId);
+        if (fail) {
+            return "index";
+        }
+        return "login";
     }
 
+    @Override
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
 }
