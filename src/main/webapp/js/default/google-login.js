@@ -1,4 +1,8 @@
-/*
+/* 
+ * Copyright 2016 Robert Li.
+ * Released under the MIT license
+ * https://opensource.org/licenses/MIT
+ *
  * you need add:
  <meta name="google-signin-scope" content="profile email">
  <meta name="google-signin-client_id" content="your-signin-client-id-here">

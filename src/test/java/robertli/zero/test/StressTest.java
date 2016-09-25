@@ -1,7 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2016 Robert Li.
+ * Released under the MIT license
+ * https://opensource.org/licenses/MIT
  */
 package robertli.zero.test;
 
