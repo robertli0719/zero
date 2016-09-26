@@ -18,6 +18,8 @@
         <div>
             <h3>Demo</h3>
             <a href="FileUploadDemo">File Upload Demo</a>
+            <h3>Links</h3>
+            <a href="admin/Index">Admin</a>
         </div>
     </body>
 </html>

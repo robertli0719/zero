@@ -7,7 +7,9 @@
     <package name="admin" namespace="/admin" extends="struts-default">
 
         <interceptors>
+            <interceptor name="adminPermissionInterceptor" class="robertli.zero.struts2.AdminPermissionInterceptor" />
             <interceptor name="zeroCommonInterceptor" class="robertli.zero.struts2.ZeroCommonInterceptor" />
+            <interceptor name="adminInjectionInterceptor" class="robertli.zero.struts2.AdminInjectionInterceptor" />
         </interceptors>
         
         <default-action-ref name="error" />
@@ -21,24 +23,32 @@
             <exception-mapping exception="java.lang.RuntimeException" result="error"/>
         </global-exception-mappings>
         
-        <action name="" class="robertli.zero.action.IndexAction">
+        <action name="" class="robertli.zero.action.admin.IndexAction">
+            <interceptor-ref name="adminPermissionInterceptor"/>
             <interceptor-ref name="defaultStack"/>
-            <interceptor-ref name="zeroCommonInterceptor"/>
+            <interceptor-ref name="adminInjectionInterceptor"/>
             <result name="success"> /WEB-INF/admin/Index.jsp</result>
+            <result name="login" type="redirect">
+                AdminLogin!input
+            </result>
         </action>
 
-        <action name="*" class="robertli.zero.action.{1}Action">
+        <action name="*" class="robertli.zero.action.admin.{1}Action">
+            <interceptor-ref name="adminPermissionInterceptor"/>
             <interceptor-ref name="defaultStack"/>
-            <interceptor-ref name="zeroCommonInterceptor"/>
+            <interceptor-ref name="adminInjectionInterceptor"/>
             <result name="success">
-                /WEB-INF/default/{1}.jsp
+                /WEB-INF/admin/{1}.jsp
             </result>
                         
             <result name="input">
-                /WEB-INF/default/{1}_input.jsp
+                /WEB-INF/admin/{1}_input.jsp
             </result>
             <result name="index" type="redirect">
                 Index
+            </result>
+            <result name="login" type="redirect">
+                AdminLogin!input
             </result>
         </action>
     </package>
