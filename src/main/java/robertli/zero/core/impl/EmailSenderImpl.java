@@ -25,7 +25,7 @@ import robertli.zero.core.EmailSender;
  * reference:<br>
  * http://www.oracle.com/technetwork/java/javamail/faq-135477.html
  *
- * @version 1.0.2 2016-09-17
+ * @version 1.0.3 2016-09-25
  * @author Robert Li
  */
 public final class EmailSenderImpl implements EmailSender {
@@ -35,6 +35,7 @@ public final class EmailSenderImpl implements EmailSender {
     private String username;
     private String password;
     private int port;
+    private boolean test;
 
     public void setHost(String host) {
         this.host = host;
@@ -54,6 +55,10 @@ public final class EmailSenderImpl implements EmailSender {
 
     public void setPort(int port) {
         this.port = port;
+    }
+
+    public void setTest(boolean test) {
+        this.test = test;
     }
 
     private Session getSession() {
@@ -79,6 +84,10 @@ public final class EmailSenderImpl implements EmailSender {
 
     @Override
     public boolean sendWithBlocking(EmailMessage emailMessage) {
+        if (test) {
+            System.out.println("EmailSenderImpl is in test model.");
+            return false;
+        }
         boolean fail = false;
         String subject = emailMessage.getSubject();
         String content = emailMessage.getContent();
@@ -111,6 +120,10 @@ public final class EmailSenderImpl implements EmailSender {
 
     @Override
     public void send(EmailMessage emailMessage) {
+        if (test) {
+            System.out.println("EmailSenderImpl is in test model.");
+            return;
+        }
         new Thread() {
             @Override
             public void run() {
@@ -121,6 +134,10 @@ public final class EmailSenderImpl implements EmailSender {
 
     @Override
     public void send(EmailMessage emailMessage, SenderCallbacker callback) {
+        if (test) {
+            System.out.println("EmailSenderImpl is in test model.");
+            return;
+        }
         new Thread() {
             @Override
             public void run() {

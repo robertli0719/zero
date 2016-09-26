@@ -41,7 +41,7 @@ public class UserRegisterServiceImpl implements UserRegisterService {
      * a register recode will be deleted after x minutes
      */
     public static final int REGISTER_LIFE_MINUTE = 60;
-    public static final int VERIFIED_CODE_LENGTH = 30;
+    public static final int VERIFIED_CODE_LENGTH = 32;
 
     @Resource
     private UserDao userDao;
@@ -136,7 +136,7 @@ public class UserRegisterServiceImpl implements UserRegisterService {
         if (result != null) {
             return result;
         }
-        String authLabel = email;
+        String authLabel = email.trim();
         String authId = ValidationTool.preprocessEmail(email);
         name = name.trim();
         final String authType = "email";

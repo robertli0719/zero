@@ -14,7 +14,8 @@ package robertli.zero.core;
 public interface RandomCodeCreater {
 
     public enum CodeType {
-        NUMBERS, UPPER_LETTERS, LOWER_LETTERS, LETTERS, MIX
+        NUMBERS, UPPER_LETTERS, LOWER_LETTERS, LETTERS, MIX,
+        BINARY, OCTAL, HEXADECIMAL,
     }
 
     public String createRandomCode(int size, CodeType type);

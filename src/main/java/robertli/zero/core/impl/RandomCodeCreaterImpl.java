@@ -21,6 +21,9 @@ public class RandomCodeCreaterImpl implements RandomCodeCreater {
     private final String NUMBERS = "0123456789";
     private final String UPPER_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private final String LOWER_LETTERS = "abcdefghijklmnopqrstuvwxyz";
+    private final String BINARY = "01";
+    private final String OCTAL = "01234567";
+    private final String HEXADECIMAL = "0123456789ABCDEF";
     private final String LETTERS = LOWER_LETTERS + UPPER_LETTERS;
     private final String MIX = LETTERS + NUMBERS;
 
@@ -29,6 +32,12 @@ public class RandomCodeCreaterImpl implements RandomCodeCreater {
             switch (type) {
                 case NUMBERS:
                     return NUMBERS;
+                case BINARY:
+                    return BINARY;
+                case OCTAL:
+                    return OCTAL;
+                case HEXADECIMAL:
+                    return HEXADECIMAL;
                 case UPPER_LETTERS:
                     return UPPER_LETTERS;
                 case LOWER_LETTERS:

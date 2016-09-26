@@ -36,6 +36,7 @@
         <property name="username" value="${email.username}" />
         <property name="password" value="${email.password}" />
         <property name="port" value="${email.port}" />
+        <property name="test" value="${email.test}" />
     </bean>
     
     <bean id="fileManager" class="robertli.zero.core.impl.FileManagerImpl">

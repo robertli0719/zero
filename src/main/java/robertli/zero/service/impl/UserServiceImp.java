@@ -72,6 +72,7 @@ public class UserServiceImp implements UserService {
     }
 
     private String makeUserAuthId(String userAuth) {
+        userAuth = (userAuth != null) ? userAuth.trim() : "";
         if (ValidationTool.checkEmail(userAuth)) {
             return ValidationTool.preprocessEmail(userAuth);
         }
@@ -82,7 +83,7 @@ public class UserServiceImp implements UserService {
     public UserLoginResult login(String sessionId, String userAuth, String orginealPassword) {
         try {
             String userAuthId = makeUserAuthId(userAuth);
-            User user = checkUser(userAuthId, orginealPassword);
+            User user = checkUser(userAuthId, orginealPassword + "");
             if (user == null) {
                 return UserLoginResult.PASSWORD_WRONG;
             }
