@@ -43,6 +43,12 @@ public class AdminManagementServiceImpl implements AdminManagementService {
     public boolean addAdmin(String sessionId, String username, String orginealPassword) {
         if (validateSuperPermission(sessionId)) {
             return true;
+        } else if (username == null || username.isEmpty() || username.contains(" ")) {
+            return true;
+        } else if (orginealPassword == null || orginealPassword.isEmpty()) {
+            return true;
+        } else if (adminDao.get(username) != null) {
+            return true;
         }
         String salt = securityService.createPasswordSalt();
         String password = securityService.uglifyPassoword(orginealPassword, salt);
@@ -50,7 +56,7 @@ public class AdminManagementServiceImpl implements AdminManagementService {
         Admin admin = new Admin();
         admin.setUsername(username);
         admin.setPassword(password);
-        admin.setPasswordSalt(password);
+        admin.setPasswordSalt(salt);
         adminDao.save(admin);
         return false;
     }
