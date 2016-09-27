@@ -28,6 +28,8 @@
                     </div>
                 </div>
                 <div class="col-md-4">
+                    <s:actionmessage theme="bootstrap"/>
+                    <s:actionerror theme="bootstrap"/>
                     <div class="panel panel-primary">
                         <div class="panel-heading">Reset Password</div>
                         <div class="panel-body">

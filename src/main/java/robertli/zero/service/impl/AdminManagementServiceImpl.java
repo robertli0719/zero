@@ -5,6 +5,7 @@
  */
 package robertli.zero.service.impl;
 
+import java.util.List;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Component;
 import robertli.zero.core.SecurityService;
@@ -91,6 +92,11 @@ public class AdminManagementServiceImpl implements AdminManagementService {
         admin.setPasswordSalt(salt);
         admin.setPassword(password);
         return false;
+    }
+
+    @Override
+    public List<Admin> getAdminList(String sessionId) {
+        return adminDao.list();
     }
 
 }

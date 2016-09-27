@@ -5,6 +5,9 @@
  */
 package robertli.zero.service;
 
+import java.util.List;
+import robertli.zero.entity.Admin;
+
 /**
  * This service is design for super administrators such as root user to manage
  * other administrators. super administrators can use this service to add,
@@ -47,6 +50,8 @@ public interface AdminManagementService {
     public boolean setSuspendStatus(String sessionId, String username, boolean suspended);
 
     /**
+     * Super administrator use this function to reset the password of other
+     * administrator.
      *
      * @param sessionId the identification of a web browser session
      * @param username the username for the administrator who will be processed
@@ -54,4 +59,12 @@ public interface AdminManagementService {
      * @return true if fail
      */
     public boolean resetPassword(String sessionId, String username, String newPassword);
+
+    /**
+     * List all the administrator
+     *
+     * @param sessionId the identification of a web browser session
+     * @return List of administrator
+     */
+    public List<Admin> getAdminList(String sessionId);
 }
