@@ -5,7 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib prefix="s" uri="/struts-tags"  %>
+<%@taglib prefix="s" uri="/struts-tags" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -13,7 +13,7 @@
         <link rel="stylesheet" href="../plugin/bootstrap-3.3.7/css/bootstrap.min.css" type="text/css"/>
         <script src='../plugin/jquery/jquery-1.11.3.min.js'></script>
         <script src='../plugin/bootstrap-3.3.7/js/bootstrap.min.js'></script>
-        <title>Admin</title>
+        <title>Admin Management</title>
     </head
     <body>
         <jsp:include page="nav_bar.jsp"/>

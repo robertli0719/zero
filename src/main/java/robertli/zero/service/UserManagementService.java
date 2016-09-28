@@ -5,9 +5,9 @@
  */
 package robertli.zero.service;
 
-import java.util.List;
 import robertli.zero.entity.User;
 import robertli.zero.entity.UserOnline;
+import robertli.zero.model.SearchResult;
 
 /**
  * This service is design for administrators to manage user data.
@@ -18,34 +18,20 @@ import robertli.zero.entity.UserOnline;
 public interface UserManagementService {
 
     /**
-     * get the total number of users;
-     *
-     * @return the size of user list
-     */
-    public int countUsers();
-
-    /**
      * This function should fetch UserAuth together
      *
-     * @param start the first line to fetch data.
+     * @param pageId the number of page
      * @param max the max lines to fetch
      * @return the list of users
      */
-    public List<User> getUserList(int start, int max);
-
-    /**
-     * get the total number of online users;
-     *
-     * @return the size of user list
-     */
-    public int countOnlineUsers();
+    public SearchResult<User> getUserList(int pageId, int max);
 
     /**
      * This function should get User together
      *
-     * @param start the first line to fetch data.
+     * @param pageId the number of page
      * @param max the max lines to fetch
      * @return the list of online users
      */
-    public List<UserOnline> getUserOnlineList(int start, int max);
+    public SearchResult<UserOnline> getUserOnlineList(int pageId, int max);
 }

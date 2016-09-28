@@ -6,10 +6,12 @@
 package robertli.zero.entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -30,6 +32,7 @@ public class User implements Serializable {
     private String passwordSalt;
     private String name;
     private String telephone;
+    private List<UserAuth> userAuthList;
 
     @Id
     @GeneratedValue
@@ -74,6 +77,15 @@ public class User implements Serializable {
 
     public void setTelephone(String telephone) {
         this.telephone = telephone;
+    }
+
+    @OneToMany(mappedBy = "user")
+    public List<UserAuth> getUserAuthList() {
+        return userAuthList;
+    }
+
+    public void setUserAuthList(List<UserAuth> userAuthList) {
+        this.userAuthList = userAuthList;
     }
 
 }

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import robertli.zero.dao.UserOnlineDao;
 import robertli.zero.entity.User;
 import robertli.zero.entity.UserOnline;
+import robertli.zero.model.SearchResult;
 
 @Component("userOnlineDao")
 public class UserOnlineDaoImpl extends GenericHibernateDao<UserOnline, String> implements UserOnlineDao {
@@ -40,6 +41,11 @@ public class UserOnlineDaoImpl extends GenericHibernateDao<UserOnline, String> i
         userOnline.setUser(user);
         userOnline.setLastActiveDate(new Date());
         save(userOnline);
+    }
+
+    @Override
+    public SearchResult<UserOnline> paging(int pageId, int max) {
+        return query("from UserOnline", pageId, max);
     }
 
 }

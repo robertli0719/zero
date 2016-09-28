@@ -7,6 +7,7 @@ package robertli.zero.dao;
 
 import robertli.zero.entity.User;
 import robertli.zero.entity.UserOnline;
+import robertli.zero.model.SearchResult;
 
 /**
  *
@@ -22,4 +23,6 @@ public interface UserOnlineDao extends GenericDao<UserOnline, String> {
     public void clear(final int lifeMinute);
 
     public void saveUserOnline(String sessionId, User user);
+
+    public SearchResult<UserOnline> paging(int pageId, int max);
 }

@@ -15,6 +15,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import robertli.zero.dao.GenericDao;
+import robertli.zero.model.SearchResult;
 
 /**
  *
@@ -122,6 +123,21 @@ public class GenericHibernateDao<T extends Serializable, PK extends Serializable
         query.setFirstResult(first);
         query.setMaxResults(max);
         return query.list();
+    }
+
+    public SearchResult<T> query(String hql, int pageId, int max) {
+        Session session = getSession();
+        Query countQuery = session.createQuery("select count(*) " + hql);
+        Number number = (Number) countQuery.uniqueResult();
+        int count = number.intValue();
+
+        int start = (pageId - 1) * max;
+        Query query = session.createQuery(hql);
+        query.setFirstResult(start);
+        query.setMaxResults(max);
+        List<T> list = query.list();
+
+        return new SearchResult<>(start, max, count, list);
     }
 
 }

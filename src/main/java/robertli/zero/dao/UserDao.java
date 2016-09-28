@@ -6,6 +6,7 @@
 package robertli.zero.dao;
 
 import robertli.zero.entity.User;
+import robertli.zero.model.SearchResult;
 
 /**
  *
@@ -14,4 +15,6 @@ import robertli.zero.entity.User;
 public interface UserDao extends GenericDao<User, Integer> {
 
     public User saveUser(String name, String password, String passwordSalt);
+
+    public SearchResult<User> paging(int pageId, int max);
 }
