@@ -7,6 +7,7 @@
     <package name="admin" namespace="/admin" extends="struts-default">
 
         <interceptors>
+            <interceptor name="fireWallInterceptor" class="robertli.zero.struts2.FireWallInterceptor" />
             <interceptor name="adminPermissionInterceptor" class="robertli.zero.struts2.AdminPermissionInterceptor" />
             <interceptor name="zeroCommonInterceptor" class="robertli.zero.struts2.ZeroCommonInterceptor" />
             <interceptor name="adminInjectionInterceptor" class="robertli.zero.struts2.AdminInjectionInterceptor" />
@@ -24,6 +25,7 @@
         </global-exception-mappings>
         
         <action name="" class="robertli.zero.action.admin.IndexAction">
+            <interceptor-ref name="fireWallInterceptor"/>
             <interceptor-ref name="adminPermissionInterceptor"/>
             <interceptor-ref name="defaultStack"/>
             <interceptor-ref name="adminInjectionInterceptor"/>
@@ -31,16 +33,17 @@
             <result name="login" type="redirect">
                 AdminLogin!input
             </result>
+            <result name="firewall_out"> /WEB-INF/error/firewall_out.html</result>
         </action>
 
         <action name="*" class="robertli.zero.action.admin.{1}Action">
+            <interceptor-ref name="fireWallInterceptor"/>
             <interceptor-ref name="adminPermissionInterceptor"/>
             <interceptor-ref name="defaultStack"/>
             <interceptor-ref name="adminInjectionInterceptor"/>
             <result name="success">
                 /WEB-INF/admin/{1}.jsp
             </result>
-                        
             <result name="input">
                 /WEB-INF/admin/{1}_input.jsp
             </result>
@@ -50,6 +53,7 @@
             <result name="login" type="redirect">
                 AdminLogin!input
             </result>
+            <result name="firewall_out"> /WEB-INF/error/firewall_out.html</result>
         </action>
     </package>
 </struts>
