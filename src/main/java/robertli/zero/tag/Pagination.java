@@ -24,6 +24,16 @@ public class Pagination extends SimpleTagSupport {
     //the number of button
     private final int RANGE_SIZE = 5;
 
+    private boolean resetParamItem(String itemStr, String name, String val, StringBuilder sb) {
+        String p[] = itemStr.split("=");
+        if (p[0].equals(name)) {
+            sb.append(name).append("=").append(val);
+            return true;
+        }
+        sb.append(itemStr);
+        return false;
+    }
+
     private String resetParam(String queryString, String name, String val) {
         if (queryString == null || queryString.isEmpty()) {
             return name + "=" + val;
@@ -35,12 +45,9 @@ public class Pagination extends SimpleTagSupport {
             if (sb.length() > 0) {
                 sb.append("&");
             }
-            String p[] = str.split("=");
-            if (p[0].equals(name)) {
+            if (resetParamItem(str, name, val, sb)) {
                 replaced = true;
-                p[1] = val;
             }
-            sb.append(p[0]).append("=").append(p[1]);
         }
         if (replaced == false) {
             sb.append(sb.length() > 0 ? "&" : "");
@@ -55,11 +62,11 @@ public class Pagination extends SimpleTagSupport {
         String name = ServletActionContext.getActionMapping().getName();
 
         String path = name;
-        if (extension != null) {
-            path += "." + extension;
-        }
         if (method != null) {
             path += "!" + method;
+        }
+        if (extension != null) {
+            path += "." + extension;
         }
         String queryString = ServletActionContext.getRequest().getQueryString();
         queryString = resetParam(queryString, "page", page + "");

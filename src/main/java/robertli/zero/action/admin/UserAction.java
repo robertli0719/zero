@@ -19,6 +19,8 @@ public class UserAction extends ActionSupport {
 
     private final int PAGE_SIZE = 20;
     private int page = 1;
+    private String keyword = "";
+    private String field = "name";
     private SearchResult<User> userSearchResult;
 
     @Resource
@@ -30,12 +32,42 @@ public class UserAction extends ActionSupport {
         return SUCCESS;
     }
 
+    public String search() {
+        switch (field) {
+            case "name":
+                userSearchResult = userManagementService.searchUserByName(keyword, page, PAGE_SIZE);
+                break;
+            case "authorizationId":
+                userSearchResult = userManagementService.searchUserByAuthId(keyword, page, PAGE_SIZE);
+                break;
+            default:
+                return execute();
+        }
+        return SUCCESS;
+    }
+
     public int getPage() {
         return page;
     }
 
     public void setPage(int page) {
         this.page = page;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
+
+    public String getField() {
+        return field;
+    }
+
+    public void setField(String field) {
+        this.field = field;
     }
 
     public SearchResult<User> getUserSearchResult() {

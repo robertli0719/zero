@@ -17,4 +17,8 @@ public interface UserDao extends GenericDao<User, Integer> {
     public User saveUser(String name, String password, String passwordSalt);
 
     public SearchResult<User> paging(int pageId, int max);
+
+    public SearchResult<User> searchByName(String name, int pageId, int max);
+
+    public SearchResult<User> searchByAuthId(String authId, int pageId, int max);
 }

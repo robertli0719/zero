@@ -10,12 +10,17 @@
     <tr>
         <th>id</th>
         <th>name</th>
-        <th></th>
+        <th>authorization Id</th>
     </tr>
     <s:iterator value="userSearchResult.list">
         <tr>
             <td><s:property value="id"/></td>
             <td><s:property value="name"/></td>
+            <td>
+                <s:iterator value="userAuthList">
+                    <s:property value="label"/><br />
+                </s:iterator>
+            </td>
         </tr>
     </s:iterator>
 </table>

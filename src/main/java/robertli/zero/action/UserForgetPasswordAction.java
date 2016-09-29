@@ -46,7 +46,6 @@ public class UserForgetPasswordAction extends ActionSupport {
             default:
                 result = "Error: can't identity this process result.";
         }
-        System.out.println(result);
         return execute();
     }
 

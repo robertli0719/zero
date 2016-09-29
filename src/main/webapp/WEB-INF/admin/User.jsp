@@ -42,8 +42,16 @@
                     <div class="panel panel-primary">
                         <div class="panel-heading">Search User</div>
                         <div class="panel-body">
-                            <s:form action="User!search" method="post" theme="bootstrap">
-                                <s:textfield name="username" label="username"/>
+                            <s:form action="User!search" method="get" theme="bootstrap">
+                                <s:textfield name="keyword" label="keyword"/>
+                                <s:radio
+                                    tooltip="Choose your search field"
+                                    label="search field "
+                                    labelposition="inline"
+                                    list="{'name', 'authorizationId'}"
+                                    name="field"
+                                    cssErrorClass="foo"
+                                    />
                                 <s:submit value="search" cssClass="btn"/>
                             </s:form>
                         </div>

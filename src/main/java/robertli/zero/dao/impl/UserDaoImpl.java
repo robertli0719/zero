@@ -44,4 +44,44 @@ public class UserDaoImpl extends GenericHibernateDao<User, Integer> implements U
         return result;
     }
 
+    @Override
+    public SearchResult<User> searchByName(String keyword, int pageId, int max) {
+        Session session = sessionFactory.getCurrentSession();
+        keyword = "%" + keyword + "%";
+        Query countQuery = session.createQuery("select count(*) from User where name like :keyword");
+        countQuery.setString("keyword", keyword);
+        Number number = (Number) countQuery.uniqueResult();
+        int count = number.intValue();
+        int start = (pageId - 1) * max;
+        Query query = session.createQuery("from User where name like :keyword");
+        query.setString("keyword", keyword);
+        query.setFirstResult(start);
+        query.setMaxResults(max);
+        List<User> list = query.list();
+        for (User user : list) {
+            user.getUserAuthList().size();//fetch UserAuth
+        }
+        return new SearchResult<>(start, max, count, list);
+    }
+
+    @Override
+    public SearchResult<User> searchByAuthId(String authId, int pageId, int max) {
+        Session session = sessionFactory.getCurrentSession();
+        authId = "%" + authId + "%";
+        Query countQuery = session.createQuery("select count(*) from UserAuth as ua where ua.authId like :authId");
+        countQuery.setString("authId", authId);
+        Number number = (Number) countQuery.uniqueResult();
+        int count = number.intValue();
+        int start = (pageId - 1) * max;
+        Query query = session.createQuery("select ua.user from UserAuth as ua where ua.authId like :authId");
+        query.setString("authId", authId);
+        query.setFirstResult(start);
+        query.setMaxResults(max);
+        List<User> list = query.list();
+        for (User user : list) {
+            user.getUserAuthList().size();//fetch UserAuth
+        }
+        return new SearchResult<>(start, max, count, list);
+    }
+
 }

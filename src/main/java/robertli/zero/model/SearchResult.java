@@ -45,7 +45,7 @@ public class SearchResult<T> {
     }
 
     public int getPageSize() {
-        return count / max + 1;
+        return (count - 1) / max + 1;
     }
 
     public List<T> getList() {

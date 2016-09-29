@@ -33,4 +33,14 @@ public class UserManagementServiceImpl implements UserManagementService {
         return userOnlineDao.paging(pageId, max);
     }
 
+    @Override
+    public SearchResult<User> searchUserByName(String name, int pageId, int max) {
+        return userDao.searchByName(name, pageId, max);
+    }
+
+    @Override
+    public SearchResult<User> searchUserByAuthId(String authId, int pageId, int max) {
+        return userDao.searchByAuthId(authId, pageId, max);
+    }
+
 }
