@@ -11,6 +11,7 @@
     <constant name="struts.enable.DynamicMethodInvocation" value="true"></constant>
     <include file="struts-admin.xml"/>
     <include file="struts-default.xml"/>
+    <include file="struts-file.xml"/>
     <include file="struts-json.xml"/>
 </struts>
 

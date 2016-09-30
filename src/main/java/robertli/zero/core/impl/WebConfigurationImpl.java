@@ -10,6 +10,7 @@ import robertli.zero.core.WebConfiguration;
 public class WebConfigurationImpl implements WebConfiguration {
 
     private String domain;
+    private String imageActionUrl;
     private String googleSigninClientId;
 
     @Override
@@ -19,6 +20,15 @@ public class WebConfigurationImpl implements WebConfiguration {
 
     public void setDomain(String domain) {
         this.domain = domain;
+    }
+
+    @Override
+    public String getImageActionUrl() {
+        return imageActionUrl;
+    }
+
+    public void setImageActionUrl(String imageActionUrl) {
+        this.imageActionUrl = imageActionUrl;
     }
 
     @Override

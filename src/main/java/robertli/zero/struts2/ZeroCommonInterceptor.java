@@ -5,11 +5,13 @@
  */
 package robertli.zero.struts2;
 
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.Interceptor;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.struts2.ServletActionContext;
+import robertli.zero.core.WebConfiguration;
 import robertli.zero.entity.User;
 import robertli.zero.service.UserService;
 
@@ -27,6 +29,9 @@ public class ZeroCommonInterceptor implements Interceptor {
     @Resource
     private UserService userService;
 
+    @Resource
+    private WebConfiguration webConfiguration;
+
     @Override
     public void destroy() {
     }
@@ -37,6 +42,11 @@ public class ZeroCommonInterceptor implements Interceptor {
 
     @Override
     public String intercept(ActionInvocation ai) throws Exception {
+
+        ActionContext actionContext = ai.getInvocationContext();
+        actionContext.put("domain", webConfiguration.getDomain());
+        actionContext.put("image_action_url", webConfiguration.getImageActionUrl());
+        actionContext.put("google_signin_client_id", webConfiguration.getGoogleSigninClientId());
 
         if (ai.getAction() instanceof UserAware) {
             UserAware userAware = (UserAware) ai.getAction();

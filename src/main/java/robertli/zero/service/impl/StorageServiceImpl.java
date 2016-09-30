@@ -17,7 +17,7 @@ import robertli.zero.service.StorageService;
 
 /**
  *
- * @version 1.01 2016-09-22
+ * @version 1.02 2016-09-29
  * @author Robert Li
  */
 @Component("storageService")
@@ -66,6 +66,11 @@ public class StorageServiceImpl implements StorageService {
             fileManager.delete(uuid);
             fileRecordDao.delete(fileRecord);
         }
+    }
+
+    @Override
+    public void fix(String uuid) {
+        fileRecordDao.get(uuid).setTemp(false);
     }
 
 }

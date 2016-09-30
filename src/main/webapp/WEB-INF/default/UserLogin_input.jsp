@@ -5,7 +5,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="google-signin-scope" content="profile email">
-        <meta name="google-signin-client_id" content="<s:property value="googleSigninClientId"/>">
+        <meta name="google-signin-client_id" content="<s:property value="google_signin_client_id"/>">
         <script src="plugin/jquery/jquery-1.11.3.min.js"></script>
         <script src="https://apis.google.com/js/platform.js" async defer></script>
         <script src="js/default/google-login.js"></script>

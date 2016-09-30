@@ -26,7 +26,6 @@ public interface FileManager {
      *
      * @param uuid the identification of file
      * @return the file if found. null if not found
-     * @throws java.io.IOException
      */
     public byte[] read(String uuid);
 

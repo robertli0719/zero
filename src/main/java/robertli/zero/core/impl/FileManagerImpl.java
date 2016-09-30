@@ -23,7 +23,7 @@ import robertli.zero.core.FileManager;
  * new file. User is not allowed to update a file after write. After
  * implementing delete, the file may not be delete at once.
  *
- * @version 1.0 2016-09-17
+ * @version 1.0.1 2016-09-29
  * @author Robert Li
  */
 public final class FileManagerImpl implements FileManager {
@@ -33,17 +33,15 @@ public final class FileManagerImpl implements FileManager {
     public void setBasePath(String basePath) {
         this.basePath = basePath;
     }
-    
+
     @Override
     public byte[] read(String uuid) {
         String path = basePath + "/" + uuid;
-        byte[] result = null;
-        try {
-            DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(path)));
+        byte[] result;
+        try (DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(path)))) {
             int size = in.available();
             result = new byte[size];
             in.read(result);
-            in.close();
         } catch (IOException ex) {
             result = null;
             System.out.println("Can't found file uuid:" + uuid);
@@ -54,10 +52,10 @@ public final class FileManagerImpl implements FileManager {
     @Override
     public void write(String uuid, byte[] data) throws IOException {
         String path = basePath + "/" + uuid;
-        DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(path)));
-        out.write(data);
-        out.flush();
-        out.close();
+        try (DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(path)))) {
+            out.write(data);
+            out.flush();
+        }
     }
 
     @Override

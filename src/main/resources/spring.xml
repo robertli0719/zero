@@ -52,6 +52,7 @@
     
     <bean id="webConfiguration" class="robertli.zero.core.impl.WebConfigurationImpl">
         <property name="domain" value="${web.domain}"/>
+        <property name="imageActionUrl" value="${web.image_action_url}"/>
         <property name="googleSigninClientId" value="${web.google_signin_client_id}"/>
     </bean>
             

@@ -6,6 +6,10 @@
 <struts>
     <package name="default" namespace="/" extends="struts-default">
 
+        <result-types>
+            <result-type name="textResult" class="robertli.zero.struts2.TextResult" />
+        </result-types>
+        
         <interceptors>
             <interceptor name="fireWallInterceptor" class="robertli.zero.struts2.FireWallInterceptor" />
             <interceptor name="zeroCommonInterceptor" class="robertli.zero.struts2.ZeroCommonInterceptor" />
@@ -27,6 +31,7 @@
             <interceptor-ref name="defaultStack"/>
             <interceptor-ref name="zeroCommonInterceptor"/>
             <result name="success"> /WEB-INF/default/Index.jsp</result>
+            <result name="text" type="textResult" />
             <result name="firewall_out"> /WEB-INF/error/firewall_out.html</result>
         </action>
 
@@ -43,6 +48,7 @@
             <result name="index" type="redirect">
                 Index
             </result>
+            <result name="text" type="textResult" />
             <result name="firewall_out"> 
                 /WEB-INF/error/firewall_out.html
             </result>

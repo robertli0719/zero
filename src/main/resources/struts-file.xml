@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="file" namespace="/file" extends="struts-default">
+
+        <result-types>
+            <result-type name="textResult" class="robertli.zero.struts2.TextResult" />
+            <result-type name="fileResult" class="robertli.zero.struts2.FileResult" />
+        </result-types>
+        
+        <interceptors>
+            <interceptor name="zeroCommonInterceptor" class="robertli.zero.struts2.ZeroCommonInterceptor" />
+        </interceptors>
+        
+        <default-action-ref name="error" />
+
+        <global-results>
+            <result name="error">/WEB-INF/error/500.jsp</result>
+        </global-results>
+        
+        <global-exception-mappings>
+            <exception-mapping exception="java.lang.Exception" result="error"/>
+            <exception-mapping exception="java.lang.RuntimeException" result="error"/>
+        </global-exception-mappings>
+        
+        <action name="*" class="robertli.zero.action.file.{1}Action">
+            <interceptor-ref name="defaultStack"/>
+            <result name="text" type="textResult" />
+            <result name="file" type="fileResult" />
+            <result name="firewall_out"> /WEB-INF/error/firewall_out.html</result>
+        </action>
+    </package>
+</struts>

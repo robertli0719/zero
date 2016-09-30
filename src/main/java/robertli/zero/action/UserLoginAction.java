@@ -7,7 +7,6 @@ package robertli.zero.action;
 
 import com.opensymphony.xwork2.ActionSupport;
 import javax.annotation.Resource;
-import robertli.zero.core.WebConfiguration;
 import robertli.zero.entity.User;
 import robertli.zero.service.UserService;
 import robertli.zero.service.UserService.UserLoginResult;
@@ -23,24 +22,18 @@ public class UserLoginAction extends ActionSupport implements SessionIdAware, Us
     @Resource
     private UserService userService;
 
-    @Resource
-    private WebConfiguration webConfiguration;
-
     private String authId;
     private String password;
     private String sessionId;
     private User user;
-    private String googleSigninClientId;
 
     @Override
     public String input() {
-        googleSigninClientId = webConfiguration.getGoogleSigninClientId();
         return INPUT;
     }
 
     @Override
     public String execute() {
-        googleSigninClientId = webConfiguration.getGoogleSigninClientId();
         UserLoginResult result = userService.login(sessionId, authId, password);
         switch (result) {
             case SUCCESS:
@@ -74,10 +67,6 @@ public class UserLoginAction extends ActionSupport implements SessionIdAware, Us
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getGoogleSigninClientId() {
-        return googleSigninClientId;
     }
 
     @Override

@@ -11,6 +11,7 @@ import com.opensymphony.xwork2.interceptor.Interceptor;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.struts2.ServletActionContext;
+import robertli.zero.core.WebConfiguration;
 import robertli.zero.entity.Admin;
 import robertli.zero.service.AdminService;
 
@@ -33,6 +34,9 @@ public class AdminInjectionInterceptor implements Interceptor {
     @Resource
     private AdminService adminService;
 
+    @Resource
+    private WebConfiguration webConfiguration;
+
     @Override
     public void destroy() {
     }
@@ -54,6 +58,10 @@ public class AdminInjectionInterceptor implements Interceptor {
         ActionContext actionContext = ai.getInvocationContext();
         Admin admin = adminService.getCurrentAdmin(sessionId);
         actionContext.put("admin", admin);
+
+        actionContext.put("domain", webConfiguration.getDomain());
+        actionContext.put("image_action_url", webConfiguration.getImageActionUrl());
+        actionContext.put("google_signin_client_id", webConfiguration.getGoogleSigninClientId());
         return ai.invoke();
     }
 

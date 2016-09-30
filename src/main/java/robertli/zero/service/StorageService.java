@@ -34,10 +34,11 @@ import robertli.zero.entity.FileRecord;
  * Each object can be identity by UUID. Because of CDN and web cache, our system
  * always need to use new UUID to write write new object. User is not allowed to
  * update a object after write. After implementing delete, the object may not be
- * delete at once.
+ * delete at once.<br>
  *
+ * The file uploading process should be: register -> store -> fix
  *
- * @version 1.01 2016-09-24
+ * @version 1.02 2016-09-29
  * @author Robert Li
  */
 public interface StorageService {
@@ -85,6 +86,11 @@ public interface StorageService {
      *
      * Do NOT executes register and store in same transaction.<br>
      *
+     * After store successful, the file will be in temp status. In temp status,
+     * users can access it within a period of validity, but the system could
+     * clean it if the file is out of date. We can use 'fix' to fix the file
+     * from temp status to fixed status.<br>
+     *
      * guarantee eventual consistency rather than consistency within a database
      * transaction.
      *
@@ -93,6 +99,16 @@ public interface StorageService {
      * @throws java.io.IOException
      */
     public void store(String uuid, byte[] data) throws IOException;
+
+    /**
+     * After store successful, the file will be in temp status. In temp status,
+     * users can access it within a period of validity, but the system could
+     * clean it if the file is out of date. We can use 'fix' to fix the file
+     * from temp status to fixed status.<br>
+     *
+     * @param uuid which is the identifier of the object or file
+     */
+    public void fix(String uuid);
 
     /**
      * delete the object from the system<br>
