@@ -1,17 +1,17 @@
 # Zero Java Framework 1.0-SNAPSHOT
 
-为了缩短创建一个新项目的搭建时间，我想把我写过的可复用的Java代码整理出来，然后开放给其他写Java Web Application的小伙伴们。
+为了让程序员们更轻松的创建项目，降低Java SSH框架的使用门槛，我将可复用的Java代码整理出来，写成可通过Spring装配的组件，开放给所有写Java Web Application的小伙伴们。
 
 ## 我的设计目标
 * 让开发者将主要精力用于业务逻辑，而不是软件架构和功能实现
-* 联合大家伙共同商议出公认最优化的Java SSH架构和编程约定
+* 联合众多小伙伴共同讨论和提升编程技术
 * 多项目共享同一软件架构和编程约定，实现代码复用
 
 ## 当前结构
 * 这套代码是基于SSH框架 Spring4 + Struts2 + Hibernate4
 * 基于Maven自动下载Jar包。
-* 具体到实际项目的相关信息，集中存放在了配置文件之中，可供使用者修改
-* 基于Spring的依赖注入，使得各方可以方面的更换实现
+* 通过将配置文件设置在框架之外，实现框架与具体应用项目的解耦
+* 基于Spring的依赖注入，使框架中所有组件都可根据需求来更换实现
 
 ## 系统分层
 ### 表现层
@@ -99,6 +99,7 @@
 * 后台Root管理员增删其他管理员
 * 后台Root管理员挂起其他管理员
 * 后台Root管理员重设其他管理员密码
+* 后台管理员查询用户信息
 * 结合事务回滚的文件存储服务
 
 ### 目前支持的小组件
@@ -106,6 +107,7 @@
 * 文件管理器 fileManager
 * URL抓取服务 WebService
 * 随机字串生成器 RandomCodeCreater
+* 图片处理服务 ImageService
 
 （所有小组件全可通过Spring依赖注入到需要的地方）
 
@@ -113,14 +115,16 @@
 * AES
 * Luhn
 * MD5
+* 邮箱格式验证工具
 
-我将于每周末抽空进行进一步优化和升级，也希望能有更多小伙伴们共同参与完善。
+我将于每天晚上抽个人时间对该项目做维护和升级，也希望能有更多的小伙伴们共同参与完善。
+
 
 欢迎大家吐槽~！
 
-email: li.liufv@gmail.com
-wechat: robertli0719
-[Github: https://github.com/robertli0719/zero](https://github.com/robertli0719/zero)
+* email: li.liufv@gmail.com
+* wechat: robertli0719
+* [Github: https://github.com/robertli0719/zero](https://github.com/robertli0719/zero)
 
-2016-09-27
+2016-10-02
 Robert Li
