@@ -42,6 +42,8 @@ public class ImageAction implements FileResultSupport, TextResultSupport {
     private JsonService jsonSerice;
 
     public static final long IMAGE_SIZE_LIMIT = 5 * 1024 * 1024;//5Mb
+    public static final int MAX_WIDTH = 600;
+    public static final int MAX_HEIGHT = 600;
 
     private String id;
     private byte[] content;
@@ -98,6 +100,7 @@ public class ImageAction implements FileResultSupport, TextResultSupport {
     private ArrayList<String> uploadProcess() throws IOException {
         ArrayList<String> urlList = new ArrayList<>();
         for (int i = 0; i < img.length; i++) {
+            System.out.println(img[i]);
             String uuid = storageService.register(imgFileName[i], imgContentType[i]);
             content = readFile(img[i]);
             storageService.store(uuid, content);

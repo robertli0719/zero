@@ -7,11 +7,16 @@ package robertli.zero.struts2;
 
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.Interceptor;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.annotation.Resource;
 import org.apache.struts2.ServletActionContext;
 import org.json.JSONObject;
 import robertli.zero.action.file.ImageAction;
+import robertli.zero.core.ImageService;
 import robertli.zero.core.JsonService;
 
 /**
@@ -30,6 +35,9 @@ public class ImagePreprocessInterceptor implements Interceptor {
 
     @Resource
     private JsonService jsonService;
+
+    @Resource
+    private ImageService imageService;
 
     @Override
     public void destroy() {
@@ -59,6 +67,15 @@ public class ImagePreprocessInterceptor implements Interceptor {
         return null;
     }
 
+    private void compress(File[] img, String[] imgContentType) throws IOException {
+        for (int i = 0; i < img.length; i++) {
+            imgContentType[i] = "image/jpeg";
+            BufferedImage image = imageService.readImage(img[i]);
+            image = imageService.compress(image, ImageAction.MAX_WIDTH, ImageAction.MAX_HEIGHT);
+            imageService.writeImage(img[i], image, "jpg");
+        }
+    }
+
     @Override
     public String intercept(ActionInvocation ai) throws Exception {
         if (ai.getAction() instanceof ImageAction == false) {
@@ -70,11 +87,14 @@ public class ImagePreprocessInterceptor implements Interceptor {
         }
         ImageAction action = (ImageAction) ai.getAction();
         String textResult = validateUpload(action.getImg(), action.getImgContentType());
-        
+
         if (textResult != null) {
-            ai.getStack().setValue("textResult", textResult);
+            Map<String, Object> context = new HashMap<>();
+            context.put("textResult", textResult);
+            ai.getStack().push(context);
             return ImageAction.TEXT;
         }
+        compress(action.getImg(), action.getImgContentType());
         return ai.invoke();
     }
 
