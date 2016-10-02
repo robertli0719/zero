@@ -36,6 +36,7 @@ $(function () {
             success: function (result) {
                 files = null;
                 $("[data-cmd=upload-image]").val(null);
+                console.log("\n\n RESSULT:");
                 uploadImageCallback(result);
             },
             error: function (result) {

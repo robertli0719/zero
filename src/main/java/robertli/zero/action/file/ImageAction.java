@@ -15,6 +15,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import robertli.zero.core.JsonService;
 import robertli.zero.core.WebConfiguration;
 import robertli.zero.entity.FileRecord;
 import robertli.zero.service.StorageService;
@@ -37,7 +38,10 @@ public class ImageAction implements FileResultSupport, TextResultSupport {
     @Resource
     private WebConfiguration webConfiguration;
 
-    private static final long IMAGE_SIZE_LIMIT = 5 * 1024 * 1024;//5Mb
+    @Resource
+    private JsonService jsonSerice;
+
+    public static final long IMAGE_SIZE_LIMIT = 5 * 1024 * 1024;//5Mb
 
     private String id;
     private byte[] content;
@@ -66,19 +70,6 @@ public class ImageAction implements FileResultSupport, TextResultSupport {
         return TEXT;
     }
 
-    private JSONObject createSuccessResult() {
-        JSONObject json = new JSONObject();
-        json.put("result", "success");
-        return json;
-    }
-
-    private JSONObject createFailResult(String errorString) {
-        JSONObject json = new JSONObject();
-        json.put("result", "fail");
-        json.put("errorString", errorString);
-        return json;
-    }
-
     private String createImageUrl(String uuid) {
         String urlHeader = webConfiguration.getImageActionUrl();
         return urlHeader + "?id=" + uuid;
@@ -89,7 +80,7 @@ public class ImageAction implements FileResultSupport, TextResultSupport {
         urlList.stream().forEach((url) -> {
             array.put(url);
         });
-        JSONObject result = createSuccessResult();
+        JSONObject result = jsonSerice.createSuccessResult();
         result.put("urlList", urlList);
         return result.toString();
     }
@@ -117,31 +108,7 @@ public class ImageAction implements FileResultSupport, TextResultSupport {
         return urlList;
     }
 
-    private String validateUpload() {
-        if (img == null || img.length == 0) {
-            JSONObject result = createFailResult("not found img in params");
-            return result.toString();
-        }
-        for (String type : imgContentType) {
-            if (type.startsWith("image/") == false) {
-                JSONObject result = createFailResult("wrong file type");
-                return result.toString();
-            }
-        }
-        for (File fe : img) {
-            if (fe.length() > IMAGE_SIZE_LIMIT) {
-                JSONObject result = createFailResult("the file is bigger than the limit in ImageAction");
-                return result.toString();
-            }
-        }
-        return null;
-    }
-
     public String upload() throws IOException {
-        textResult = validateUpload();
-        if (textResult != null) {
-            return TEXT;
-        }
         ArrayList<String> urlList = uploadProcess();
         textResult = createUploadResult(urlList);
         return TEXT;
@@ -166,12 +133,24 @@ public class ImageAction implements FileResultSupport, TextResultSupport {
         this.id = id;
     }
 
+    public File[] getImg() {
+        return img;
+    }
+
     public void setImg(File[] img) {
         this.img = img;
     }
 
+    public String[] getImgContentType() {
+        return imgContentType;
+    }
+
     public void setImgContentType(String[] imgContentType) {
         this.imgContentType = imgContentType;
+    }
+
+    public String[] getImgFileName() {
+        return imgFileName;
     }
 
     public void setImgFileName(String[] imgFileName) {

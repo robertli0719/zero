@@ -9,6 +9,7 @@ import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.Result;
 import com.opensymphony.xwork2.util.ValueStack;
 import java.io.PrintWriter;
+import java.util.Map;
 import org.apache.struts2.ServletActionContext;
 
 /**
@@ -22,7 +23,7 @@ import org.apache.struts2.ServletActionContext;
  * @author Robert Li
  */
 public class TextResult implements Result {
-
+    
     @Override
     public void execute(ActionInvocation ai) throws Exception {
         ServletActionContext.getResponse().setContentType("text/plain");
@@ -33,5 +34,5 @@ public class TextResult implements Result {
         responseStream.print(text);
         responseStream.flush();
     }
-
+    
 }

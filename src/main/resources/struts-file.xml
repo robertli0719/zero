@@ -13,6 +13,7 @@
         
         <interceptors>
             <interceptor name="zeroCommonInterceptor" class="robertli.zero.struts2.ZeroCommonInterceptor" />
+            <interceptor name="imagePreprocessInterceptor" class="robertli.zero.struts2.ImagePreprocessInterceptor" />
         </interceptors>
         
         <default-action-ref name="error" />
@@ -28,6 +29,7 @@
         
         <action name="*" class="robertli.zero.action.file.{1}Action">
             <interceptor-ref name="defaultStack"/>
+            <interceptor-ref name="imagePreprocessInterceptor"/>
             <result name="text" type="textResult" />
             <result name="file" type="fileResult" />
             <result name="firewall_out"> /WEB-INF/error/firewall_out.html</result>

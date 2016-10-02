@@ -54,6 +54,12 @@
         </dependency>
         
         <dependency>
+            <groupId>com.twelvemonkeys.imageio</groupId>
+            <artifactId>imageio-jpeg</artifactId>
+            <version>3.2.1</version> <!-- Alternatively, build your own version -->
+        </dependency>
+        
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>4.3.2.RELEASE</version>
