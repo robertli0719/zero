@@ -95,11 +95,15 @@ public class PageServiceImpl implements PageService {
             return true;
         }
         return false;
-
     }
 
     @Override
     public void removePage(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setStatus(int id, boolean opened) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -110,7 +114,7 @@ public class PageServiceImpl implements PageService {
 
     @Override
     public List<Page> listAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return pageDao.list();
     }
 
     @Override

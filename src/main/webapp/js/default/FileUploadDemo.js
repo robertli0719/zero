@@ -4,15 +4,19 @@
  * https://opensource.org/licenses/MIT
  */
 
-$(function () {
-    var files = null;
-
+function getUploadUrl() {
     var imageActionUrl = $("meta[name=image-action-url]").attr("content");
     if (imageActionUrl === undefined) {
         console.log("FileUpload doesn't work.");
         console.log("tips: you need to set image-action-url in <meta>");
     }
-    var uploadUrl = imageActionUrl + "!upload";
+    return imageActionUrl + "!upload";
+}
+
+$(function () {
+    var files = null;
+
+    var uploadUrl = getUploadUrl();
 
     $(document).on("change", "[data-cmd=upload-image]", function (event) {
         files = event.target.files;

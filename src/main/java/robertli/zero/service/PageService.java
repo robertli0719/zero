@@ -26,6 +26,8 @@ public interface PageService {
 
     public void removePage(int id);
 
+    public void setStatus(int id, boolean opened);
+
     public boolean updatePage(int id, String title, String description, String content);
 
     public List<Page> listAll();
