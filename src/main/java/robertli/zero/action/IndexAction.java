@@ -5,11 +5,7 @@
  */
 package robertli.zero.action;
 
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
-import com.opensymphony.xwork2.util.ValueStack;
-import java.util.HashMap;
-import java.util.Map;
 import robertli.zero.entity.User;
 import robertli.zero.struts2.UserAware;
 
