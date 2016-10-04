@@ -14,7 +14,9 @@ tinymce.init({
         'insertdatetime media table contextmenu paste code'
     ],
     toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-    content_css: '//www.tinymce.com/css/codepen.min.css'
+    content_css: '//www.tinymce.com/css/codepen.min.css',
+    relative_urls: false,
+    remove_script_host: false
 });
 
 function insertImageToEditor(url) {
@@ -49,21 +51,51 @@ function uploadImageCallback(result) {
     $('#addImageModal').modal('hide');
 }
 
+function submit(category, title, description, content) {
+    $.post("PageAdd!submit", {
+        category: category,
+        title: title,
+        description: description,
+        content: content
+    }, function (val) {
+        var result = JSON.parse(val);
+        if (result["result"] === 'success') {
+            window.location = 'Page';
+        } else {
+            var errorStrring = result["errorString"];
+            $(".alert").remove();
+            var alert_div = $('<div>').addClass("alert alert-danger alert-dismissible").html("<strong>Error!</strong> " + errorStrring).insertAfter(".container hr");
+            $('<button>').addClass("close").attr("type", "button").attr("data-dismiss", "alert").attr("aria-label", "Close").html("<span aria-hidden=\"true\">&times;</span>").appendTo(alert_div);
+            console.log(result);
+        }
+    });
+}
+
 $(function () {
     var files = null;
     var uploadUrl = getUploadUrl();
     var imageInput = "#addImageModal [data-input=image]";
+    var imageUploadBtn = "#addImageModal [data-cmd=upload]";
 
     $(document).on("click", "[data-cmd=run]", function () {
         tinymce.activeEditor.execCommand('mceInsertContent', false, "some text");
         console.debug(tinyMCE.activeEditor.getContent());
     });
 
+    $(document).on("click", "[data-cmd=submit]", function () {
+        console.log("hello");
+        var category = $("select[name=category]").val();
+        var title = $("input[name=title]").val();
+        var description = $("input[name=description]").val();
+        var content = tinyMCE.activeEditor.getContent();
+        submit(category, title, description, content);
+    });
+
     $(document).on("change", imageInput, function (event) {
         files = event.target.files;
     });
 
-    $(document).on("click", "#addImageModal [data-cmd=upload]", function () {
+    $(document).on("click", imageUploadBtn, function () {
         if (files === null) {
             return;
         }

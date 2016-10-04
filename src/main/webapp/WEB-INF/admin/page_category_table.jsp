@@ -4,6 +4,7 @@
     <tr>
     <th>name</th>
     <th>description</th>
+    <th></th>
 </tr>
 <s:iterator value="pageCategoryList">
     <tr>
@@ -12,6 +13,9 @@
     </td>
     <td>
         <s:property value="description"/>
+    </td>
+    <td>
+        <a class="btn btn-danger btn-xs" href="PageCategory!delete?name=<s:property value="name"/>">delete</a>
     </td>
 </tr>
 </s:iterator>

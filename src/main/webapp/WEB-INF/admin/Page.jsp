@@ -34,8 +34,8 @@
                     <div class="panel panel-primary">
                         <div class="panel-heading">Search Page</div>
                         <div class="panel-body">
-                            <s:form action="PageCategory!listByCategory" method="get" theme="bootstrap">
-                                <s:textfield name="category" label="category"/>
+                            <s:form action="Page!listByCategory" method="get" theme="bootstrap">
+                                <s:select name="category" list="pageCategoryNameList" label="category"/>
                                 <s:submit value="list" cssClass="btn"/>
                             </s:form>
                         </div>

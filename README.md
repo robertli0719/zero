@@ -100,6 +100,7 @@
 * 后台Root管理员挂起其他管理员
 * 后台Root管理员重设其他管理员密码
 * 后台管理员查询用户信息
+* 后台管理员编辑前台页面
 * 结合事务回滚的文件存储服务
 
 ### 目前支持的小组件
@@ -126,5 +127,5 @@
 * wechat: robertli0719
 * [Github: https://github.com/robertli0719/zero](https://github.com/robertli0719/zero)
 
-2016-10-02
+2016-10-03
 Robert Li

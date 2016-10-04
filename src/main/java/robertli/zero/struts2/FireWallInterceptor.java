@@ -68,7 +68,7 @@ class FireWallRecode {
         this.timeRange = timeRange;
     }
 
-    public int checkIp(String ip) {
+    public synchronized int checkIp(String ip) {
         long now = getNow();
         if (now - lastTime > timeRange) {
             map = new ConcurrentHashMap();

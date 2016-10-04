@@ -44,7 +44,6 @@ public class ImageServiceImpl implements ImageService {
         int width = image.getWidth();
         int height = image.getHeight();
         if (width <= maxWidth && height <= maxHeight) {
-            System.out.println("return for compress");
             return image;
         }
 

@@ -27,15 +27,24 @@ public class PageAction extends ActionSupport implements SessionIdAware {
     private int id;
     private boolean opened;
     private List<Page> pageList;
+    private List<String> pageCategoryNameList;
 
     @Override
     public String execute() {
+        pageCategoryNameList = pageService.listCategoryName();
+        pageCategoryNameList.add(0, "All");
         pageList = pageService.listAll();
         return SUCCESS;
     }
 
     public String listByCategory() {
-        pageList = pageService.listAll(category);
+        pageCategoryNameList = pageService.listCategoryName();
+        pageCategoryNameList.add(0, "All");
+        if (category == null || category.equals("All")) {
+            pageList = pageService.listAll();
+            return SUCCESS;
+        }
+        pageList = pageService.listByCategory(category);
         return SUCCESS;
     }
 
@@ -86,4 +95,11 @@ public class PageAction extends ActionSupport implements SessionIdAware {
         this.pageList = pageList;
     }
 
+    public List<String> getPageCategoryNameList() {
+        return pageCategoryNameList;
+    }
+
+    public void setPageCategoryNameList(List<String> pageCategoryNameList) {
+        this.pageCategoryNameList = pageCategoryNameList;
+    }
 }

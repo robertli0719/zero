@@ -11,7 +11,7 @@ import robertli.zero.entity.PageCategory;
 
 /**
  *
- * @version 1.0 2016-10-02
+ * @version 1.0.1 2016-10-03
  * @author Robert Li
  */
 public interface PageService {
@@ -22,9 +22,15 @@ public interface PageService {
 
     public List<PageCategory> listCategory();
 
-    public boolean addPage(String category, String title, String description, String content);
+    public List<String> listCategoryName();
 
-    public void removePage(int id);
+    public enum AddPageResult {
+        SUCCESS, FAIL, NO_CATEGORY, NO_TITLE, NO_CONTENT
+    }
+
+    public AddPageResult addPage(String category, String title, String description, String content);
+
+    public boolean removePage(int id);
 
     public void setStatus(int id, boolean opened);
 
@@ -32,7 +38,7 @@ public interface PageService {
 
     public List<Page> listAll();
 
-    public List<Page> listAll(String category);
+    public List<Page> listByCategory(String category);
 
     public Page getPage(int id);
 }

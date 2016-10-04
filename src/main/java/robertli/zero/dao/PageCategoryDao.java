@@ -5,6 +5,7 @@
  */
 package robertli.zero.dao;
 
+import java.util.List;
 import robertli.zero.entity.PageCategory;
 
 /**
@@ -13,4 +14,5 @@ import robertli.zero.entity.PageCategory;
  */
 public interface PageCategoryDao extends GenericDao<PageCategory, String> {
 
+    public List<String> listName();
 }

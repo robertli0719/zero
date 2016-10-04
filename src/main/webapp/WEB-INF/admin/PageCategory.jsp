@@ -44,15 +44,6 @@
                             </s:form>
                         </div>
                     </div>
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">Delete Category</div>
-                        <div class="panel-body">
-                            <s:form action="PageCategory!delete" method="post" theme="bootstrap">
-                                <s:textfield name="name" label="name"/>
-                                <s:submit value="delete" cssClass="btn"/>
-                            </s:form>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

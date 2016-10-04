@@ -100,7 +100,6 @@ public class ImageAction implements FileResultSupport, TextResultSupport {
     private ArrayList<String> uploadProcess() throws IOException {
         ArrayList<String> urlList = new ArrayList<>();
         for (int i = 0; i < img.length; i++) {
-            System.out.println(img[i]);
             String uuid = storageService.register(imgFileName[i], imgContentType[i]);
             content = readFile(img[i]);
             storageService.store(uuid, content);
