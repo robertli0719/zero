@@ -1,0 +1,41 @@
+<!DOCTYPE>
+<!--
+Copyright 2016 Robert Li.
+Released under the MIT license
+https://opensource.org/licenses/MIT
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="plugin/bootstrap-3.3.7/css/bootstrap.min.css" type="text/css"/>
+        <link rel="stylesheet" href="plugin/cropper/cropper.min.css" type="text/css"/>
+        <script src='plugin/jquery/jquery-1.11.3.min.js'></script>
+        <script src='plugin/bootstrap-3.3.7/js/bootstrap.min.js'></script>
+        <script src='plugin/cropper/cropper.min.js'></script>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Cropper Demo</h1>
+            <div>
+                <img class="img-responsive" id="image" src="https://fengyuanchen.github.io/cropper/img/picture.jpg">
+            </div>
+            <script>
+                var image = document.getElementById('image');
+                var cropper = new Cropper(image, {
+                    aspectRatio: 16 / 9,
+                    crop: function (e) {
+                        console.log(e.detail.x);
+                        console.log(e.detail.y);
+                        console.log(e.detail.width);
+                        console.log(e.detail.height);
+                        console.log(e.detail.rotate);
+                        console.log(e.detail.scaleX);
+                        console.log(e.detail.scaleY);
+                    }
+                });
+            </script>
+        </div>
+    </body>
+</html>
