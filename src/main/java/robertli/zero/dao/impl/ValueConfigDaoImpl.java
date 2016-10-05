@@ -36,6 +36,7 @@ public class ValueConfigDaoImpl extends GenericHibernateDao<ValueConfig, Integer
     public List<String> getActionList(String domain) {
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("select action from ValueConfig where domain=:domain group by action");
+        query.setString("domain", domain);
         return query.list();
     }
 
@@ -43,6 +44,8 @@ public class ValueConfigDaoImpl extends GenericHibernateDao<ValueConfig, Integer
     public List<ValueConfig> getValueConfigList(String domain, String action) {
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("from ValueConfig where domain=:domain and action=:action");
+        query.setString("domain", domain);
+        query.setString("action", action);
         return query.list();
     }
 

@@ -32,7 +32,7 @@
                         <li><a href="PageCategory">Page Category</a></li>
                         <li><a href="PageAdd">New Page</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
+                        <li><a href="ValueConfig">Value Configuration</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="#">One more separated link</a></li>
                     </ul>

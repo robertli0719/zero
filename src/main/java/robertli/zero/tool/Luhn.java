@@ -10,7 +10,7 @@ package robertli.zero.tool;
  * This one can be used for checking credit card or any number based on Luhn.
  *
  * @version 1.1 2016-08-21
- * @author robert
+ * @author Robert Li
  */
 public class Luhn {
 

@@ -23,7 +23,7 @@ import robertli.zero.core.WebService;
  * WebService can get or post information based on URL
  *
  * @version 1.0 2016-09-18
- * @author robert
+ * @author Robert Li
  */
 @Component("webService")
 public class WebServiceImpl implements WebService {

@@ -8,11 +8,18 @@ package robertli.zero.service.impl;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import robertli.zero.dao.ValueConfigDao;
 import robertli.zero.entity.ValueConfig;
 import robertli.zero.service.ValueConfigService;
 
+/**
+ *
+ * @version 1.0 2016-10-05
+ * @author Robert Li
+ */
+@Component("valueConfigService")
 public class ValueConfigServiceImpl implements ValueConfigService {
 
     @Resource
