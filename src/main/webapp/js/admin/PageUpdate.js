@@ -4,9 +4,11 @@
  * https://opensource.org/licenses/MIT
  */
 
-function submit(category, title, description, content) {
-    $.post("PageAdd!submit", {
-        category: category,
+/* global tinyMCE */
+
+function update(id, title, description, content) {
+    $.post("PageUpdate!update", {
+        id: id,
         title: title,
         description: description,
         content: content
@@ -25,11 +27,12 @@ function submit(category, title, description, content) {
 }
 
 $(function () {
-    $(document).on("click", "[data-cmd=submit]", function () {
-        var category = $("select[name=category]").val();
+
+    $(document).on("click", "[data-cmd=update]", function () {
+        var id = $("input[name=id]").val();
         var title = $("input[name=title]").val();
         var description = $("input[name=description]").val();
         var content = tinyMCE.activeEditor.getContent();
-        submit(category, title, description, content);
+        update(id, title, description, content);
     });
 });

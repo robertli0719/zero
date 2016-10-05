@@ -1,9 +1,3 @@
-<%-- 
-    Document   : PageAdd
-    Created on : Oct 3, 2016, 12:48:38 AM
-    Author     : Robert Li
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="s" uri="/struts-tags" %>
 <!DOCTYPE html>
@@ -18,7 +12,7 @@
         <script src='../plugin/bootstrap-3.3.7/js/bootstrap.min.js'></script>
         <script src='../plugin/tinymce/tinymce.min.js'></script>
         <script src='../js/admin/editor.js'></script>
-        <script src='../js/admin/PageAdd.js'></script>
+        <script src='../js/admin/PageUpdate.js'></script>
         <title>Page Management</title>
     </head>
     <body>
@@ -26,13 +20,14 @@
         <jsp:include page="add_image_modal.jsp"/>
 
         <div class="container">
-            <s:select label="Category" name="category" list="pageCategoryNameList" theme="bootstrap"/>
+            <s:textfield label="Id" name="id" disabled="true" theme="bootstrap"/>
+            <s:textfield label="Category" name="category" disabled="true" theme="bootstrap"/>
             <s:textfield label="Title" name="title" theme="bootstrap"/>
             <s:textfield label="Description" name="description" theme="bootstrap"/>
             <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addImageModal">Add Image</a>
-            <a href="#" class="btn btn-primary btn-sm" data-cmd="submit">submit</a>
+            <a href="#" class="btn btn-primary btn-sm" data-cmd="update">update</a>
             <hr>
-            <textarea></textarea>
+            <textarea><s:property value="content"/></textarea>
         </div>
     </body>
 </html>

@@ -30,6 +30,7 @@
     </td>
     <td><s:property value="description"/></td>
     <td>
+        <a class="btn btn-primary btn-xs" href="PageUpdate?id=<s:property value="id"/>">edit</a>
         <a class="btn btn-danger btn-xs" href="Page!delete?id=<s:property value="id"/>">delete</a>
         <s:if test="opened">
             <a class="btn btn-success btn-xs" href="Page!resetStatus?id=<s:property value="id"/>&opened=false">opened</a>

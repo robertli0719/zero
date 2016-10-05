@@ -11,7 +11,7 @@ import robertli.zero.entity.PageCategory;
 
 /**
  *
- * @version 1.0.1 2016-10-03
+ * @version 1.0.2 2016-10-03
  * @author Robert Li
  */
 public interface PageService {
@@ -34,7 +34,11 @@ public interface PageService {
 
     public void setStatus(int id, boolean opened);
 
-    public boolean updatePage(int id, String title, String description, String content);
+    public enum UpdatePageResult {
+        SUCCESS, FAIL, NO_TITLE, NO_CONTENT
+    }
+
+    public UpdatePageResult updatePage(int id, String title, String description, String content);
 
     public List<Page> listAll();
 

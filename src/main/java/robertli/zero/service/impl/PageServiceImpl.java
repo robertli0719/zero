@@ -6,13 +6,16 @@
 package robertli.zero.service.impl;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import robertli.zero.core.WebConfiguration;
+import robertli.zero.dao.FileRecordDao;
 import robertli.zero.dao.PageCategoryDao;
 import robertli.zero.dao.PageDao;
 import robertli.zero.dao.PageImageDao;
@@ -27,7 +30,7 @@ import robertli.zero.service.StorageService;
  *
  * Unfinished
  *
- * @version 1.0 2016-10-03
+ * @version 1.0.1 2016-10-03
  * @author robert
  */
 @Component("pageService")
@@ -47,6 +50,9 @@ public class PageServiceImpl implements PageService {
 
     @Resource
     private WebConfiguration webConfiguration;
+
+    @Resource
+    private FileRecordDao fileRecordDao;
 
     @Override
     public boolean addCategory(String name, String description) {
@@ -87,19 +93,33 @@ public class PageServiceImpl implements PageService {
         return pageCategoryDao.listName();
     }
 
-    private void saveImage(Page page, String content) {
+    private String getImageUrl(String uuid) {
+        String imageActionUrl = webConfiguration.getImageActionUrl();
+        return imageActionUrl + "?id=" + uuid;
+    }
+
+    private Set<String> getImageIdSet(String content) {
         String imageActionUrl = webConfiguration.getImageActionUrl();
         String patternStr = imageActionUrl + "\\?id=[0-9a-z]{8}(-[0-9a-z]{4}){3}-[0-9a-z]{12}";
         Pattern pattern = Pattern.compile(patternStr);
         Matcher matcher = pattern.matcher(content);
 
+        Set<String> set = new HashSet<>();
         while (matcher.find()) {
             String url = matcher.group();
             String uuid = url.split("id=")[1];
+            set.add(uuid);
+        }
+        return set;
+    }
+
+    private void saveImage(Page page, Set<String> imgIdSet) {
+        for (String uuid : imgIdSet) {
             FileRecord record = storageService.getFileRecord(uuid);
             if (record == null) {
                 throw new RuntimeException("no image:" + uuid);
             } else if (record.isTemp()) {
+                String url = getImageUrl(uuid);
                 PageImage pImg = new PageImage();
                 pImg.setImgId(uuid);
                 pImg.setImgUrl(url);
@@ -134,7 +154,9 @@ public class PageServiceImpl implements PageService {
             page.setCreateTime(now);
             page.setLastModifyTime(now);
             pageDao.save(page);
-            saveImage(page, content);
+
+            Set<String> imgIdSet = getImageIdSet(content);
+            saveImage(page, imgIdSet);
             result = AddPageResult.SUCCESS;
         } catch (RuntimeException re) {
             System.out.println("Error when addPage:" + re.getMessage());
@@ -166,9 +188,43 @@ public class PageServiceImpl implements PageService {
         pageDao.get(id).setOpened(opened);
     }
 
+    private void removeImageWhenUpdatePage(Page oldPage, Set<String> imageIdSet) {
+        for (PageImage pImg : oldPage.getPageImageList()) {
+            String uuid = pImg.getImgId();
+            if (imageIdSet.contains(uuid)) {
+                continue;
+            }
+            pageImageDao.delete(pImg);
+            storageService.delete(uuid);
+        }
+    }
+
     @Override
-    public boolean updatePage(int id, String title, String description, String content) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public UpdatePageResult updatePage(int id, String title, String description, String content) {
+        UpdatePageResult result = UpdatePageResult.FAIL;
+        try {
+            if (title == null || title.length() == 0) {
+                result = UpdatePageResult.NO_TITLE;
+                throw new RuntimeException("no title");
+            } else if (content == null || content.length() == 0) {
+                result = UpdatePageResult.NO_CONTENT;
+                throw new RuntimeException("no content");
+            }
+            Page page = pageDao.get(id);
+            page.setContent(content);
+            page.setDescription(description);
+            page.setLastModifyTime(new Date());
+            page.setTitle(title);
+
+            Set<String> imgIdSet = getImageIdSet(content);
+            removeImageWhenUpdatePage(page, imgIdSet);
+            saveImage(page, imgIdSet);
+            result = UpdatePageResult.SUCCESS;
+        } catch (RuntimeException re) {
+            System.out.println("Error when updatePage:" + re.getMessage());
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        }
+        return result;
     }
 
     @Override
@@ -183,11 +239,7 @@ public class PageServiceImpl implements PageService {
 
     @Override
     public Page getPage(int id) {
-        Page page = pageDao.get(id);
-        if (page != null && page.isOpened() == false) {
-            return null;
-        }
-        return page;
+        return pageDao.get(id);
     }
 
 }

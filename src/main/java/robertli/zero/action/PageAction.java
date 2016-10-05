@@ -25,6 +25,9 @@ public class PageAction extends ActionSupport {
     @Override
     public String execute() {
         page = pageService.getPage(id);
+        if (page != null && page.isOpened() == false) {
+            page = null;
+        }
         return SUCCESS;
     }
 
