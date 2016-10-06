@@ -12,7 +12,6 @@ function ValueConfig(keyname, value) {
 var valueConfigList = new Array();
 
 var updateInputs = function () {
-    console.log("updateInputs");
     var table = $('#value_config_form_table').empty();
     table.append('<tr><th>Key</th><th>Value</th><th class="function_col"></th></tr>');
     for (var i = 0; i < valueConfigList.length; i++) {
@@ -47,13 +46,48 @@ var addLineById = function (id) {
 };
 
 var initModel = function (valueConfigArray) {
+    valueConfigList = [];
     for (var id in valueConfigArray) {
         var val = valueConfigArray[id];
         var vc = new ValueConfig(val["keyname"], val["value"]);
-        console.log(val["keyname"]);
-        console.log(val["value"]);
         valueConfigList.push(vc);
     }
+    $(".table_div .btn").attr("disabled", false);
+};
+
+var submit = function () {
+    updateModel();
+    var domain = $("#select_domain").val();
+    var action = $("#select_action").val();
+    var vcMap = new Object();
+    for (var id in valueConfigList) {
+        var e = valueConfigList[id];
+        var key = e.keyname;
+        if (vcMap[key] === undefined) {
+            vcMap[key] = [];
+        }
+        vcMap[key].push(e.value);
+    }
+    $.post("ValueConfig!update", {
+        "valueConfig.domain": domain,
+        "valueConfig.action": action,
+        "vcMap": JSON.stringify(vcMap)
+    }, function (val) {
+        var obj = JSON.parse(val);
+        if (obj["result"] === 'success') {
+            var errorStrring = obj["errorString"];
+            $(".alert").remove();
+            var alert_div = $('<div>').addClass("alert alert-success alert-dismissible").html("<strong>Update!</strong> success").insertAfter(".container hr");
+            $('<button>').addClass("close").attr("type", "button").attr("data-dismiss", "alert").attr("aria-label", "Close").html("<span aria-hidden=\"true\">&times;</span>").appendTo(alert_div);
+            console.log(obj);
+        } else {
+            var errorStrring = obj["errorString"];
+            $(".alert").remove();
+            var alert_div = $('<div>').addClass("alert alert-danger alert-dismissible").html("<strong>Error!</strong> " + errorStrring).insertAfter(".container hr");
+            $('<button>').addClass("close").attr("type", "button").attr("data-dismiss", "alert").attr("aria-label", "Close").html("<span aria-hidden=\"true\">&times;</span>").appendTo(alert_div);
+            console.log(obj);
+        }
+    });
 };
 
 $(function () {
@@ -73,6 +107,9 @@ $(function () {
             }
         });
     });
+    $(document).on("click", "[data-cmd]", function () {
+        $(".alert").remove();
+    });
     $(document).on("click", "[data-cmd=addLine]", function () {
         updateModel();
         valueConfigList.push(new ValueConfig('keyname', 'value'));
@@ -80,8 +117,12 @@ $(function () {
     });
     $(document).on("click", "[data-cmd=deleteLine]", function () {
         updateModel();
-        valueConfigList.length -= 1;
-        updateInputs();
+        if (valueConfigList.length > 0) {
+            valueConfigList.length -= 1;
+            updateInputs();
+        }
     });
-    updateInputs();
+    $(document).on("click", "[data-cmd=submit]", function () {
+        submit();
+    });
 });

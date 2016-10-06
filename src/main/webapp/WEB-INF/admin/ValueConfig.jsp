@@ -57,12 +57,11 @@
                 <div class="col-md-8">
                     <s:if test="valueConfig.domain!=null">
                         <div class="table_div">
-                            <table class="table table-bordered table-condensed" id="value_config_form_table">
-                            </table>
+                            <table class="table table-bordered table-condensed" id="value_config_form_table"></table>
                             <hr>
-                            <button class="btn btn-primary" data-cmd="addLine">add line</button>
-                            <button class="btn btn-danger" data-cmd="deleteLine">remove line</button>
-                            <button class="btn btn-success" data-cmd="sumbit">submit</button>
+                            <button class="btn btn-primary" data-cmd="addLine" disabled="true">add line</button>
+                            <button class="btn btn-danger" data-cmd="deleteLine" disabled="true">remove line</button>
+                            <button class="btn btn-success" data-cmd="submit" disabled="true">submit</button>
                         </div>
                     </s:if>
                 </div>

@@ -6,6 +6,8 @@
 package robertli.zero.action.admin;
 
 import com.opensymphony.xwork2.ActionSupport;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
@@ -32,7 +34,7 @@ public class ValueConfigAction extends ActionSupport implements TextResultSuppor
     private ValueConfig valueConfig;
     private List<String> domainList;
     private List<String> actionList;
-    private Map<String, List<String>> vcMap;
+    private String vcMap;
     private String textResult;
 
     @Override
@@ -67,14 +69,30 @@ public class ValueConfigAction extends ActionSupport implements TextResultSuppor
         return TEXT;
     }
 
+    private Map<String, List<String>> makeMap() {
+        Map<String, List<String>> map = new HashMap<>();
+        JSONObject jsonMap = new JSONObject(vcMap);
+        for (String key : jsonMap.keySet()) {
+            JSONArray array = jsonMap.getJSONArray(key);
+            ArrayList<String> list = new ArrayList<>();
+            for (Object val : array.toList()) {
+                list.add(val.toString());
+            }
+            map.put(key, list);
+        }
+        return map;
+    }
+
     public String update() {
         String domain = valueConfig.getDomain();
         String action = valueConfig.getAction();
-        boolean fail = valueConfigService.updateValueConfig(domain, action, vcMap);
+        boolean fail = valueConfigService.updateValueConfig(domain, action, makeMap());
         if (fail) {
             addActionError("Fail to update");
         }
-        return list();
+        JSONObject result = jsonService.createSuccessResult();
+        textResult = result.toString();
+        return TEXT;
     }
 
     public String insert() {
@@ -113,11 +131,11 @@ public class ValueConfigAction extends ActionSupport implements TextResultSuppor
         this.actionList = actionList;
     }
 
-    public Map<String, List<String>> getVcMap() {
+    public String getVcMap() {
         return vcMap;
     }
 
-    public void setVcMap(Map<String, List<String>> vcMap) {
+    public void setVcMap(String vcMap) {
         this.vcMap = vcMap;
     }
 
