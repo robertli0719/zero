@@ -17,6 +17,12 @@ $(function () {
     var files = null;
 
     var uploadUrl = getUploadUrl();
+    
+    $(document).on("click", "[data-cmd=uploadImage]", function () {
+        $.uploadImage(800, 600, function (url) {
+            console.log(url);
+        });
+    });
 
     $(document).on("change", "[data-cmd=upload-image]", function (event) {
         files = event.target.files;
