@@ -4,6 +4,8 @@
  * https://opensource.org/licenses/MIT
  */
 
+/* global tinyMCE */
+
 function submit(category, title, description, content) {
     $.post("PageAdd!submit", {
         category: category,

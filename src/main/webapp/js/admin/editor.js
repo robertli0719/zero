@@ -21,65 +21,18 @@ tinymce.init({
 });
 
 $(function () {
-    function getUploadUrl() {
-        var imageActionUrl = $("meta[name=image-action-url]").attr("content");
-        if (imageActionUrl === undefined) {
-            console.log("FileUpload doesn't work.");
-            console.log("tips: you need to set image-action-url in <meta>");
-        }
-        return imageActionUrl + "!upload";
-    }
-
-    function uploadImageCallback(val) {
-        var obj = JSON.parse(val);
-        var result = obj["result"];
-        if (result === "fail") {
-            var error = obj["errorString"];
-            alert(error);
-            console.log(error);
-            return;
-        }
-        var urlList = obj["urlList"];
-        for (var id in urlList) {
-            var url = urlList[id];
+    $(document).on("click", "[data-cmd=addImageToEditor]", function () {
+        $.uploadImage(function (url) {
             var tag = '<img src="' + url + '">';
             tinymce.activeEditor.execCommand('mceInsertContent', false, tag);
-        }
-        $('#addImageModal').modal('hide');
-    }
-    var images = null;
-    var uploadUrl = getUploadUrl();
-    var imageInput = "#addImageModal [data-input=image]";
-    var imageUploadBtn = "#addImageModal [data-cmd=upload]";
-
-    $(document).on("change", imageInput, function (event) {
-        images = event.target.files;
-    });
-
-    $(document).on("click", imageUploadBtn, function () {
-        if (images === null) {
-            return;
-        }
-        var data = new FormData();
-        $.each(images, function (key, value) {
-            console.log(key + "->" + value);
-            data.append("img", value);
-        });
-        $.ajax({
-            url: uploadUrl,
-            type: 'POST',
-            data: data,
-            processData: false,
-            contentType: false,
-            success: function (result) {
-                images = null;
-                $(imageInput).val(null);
-                uploadImageCallback(result);
-            },
-            error: function (result) {
-                console.log("Error" + result);
-                alert(result);
-            }
         });
     });
+
+    $(document).on("click", "[data-cmd=uploadCroppedImageToEditor]", function () {
+        $.uploadCroppedImage(function (url) {
+            var tag = '<img src="' + url + '">';
+            tinymce.activeEditor.execCommand('mceInsertContent', false, tag);
+        });
+    });
+
 });
