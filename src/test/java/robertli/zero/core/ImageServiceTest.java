@@ -30,7 +30,8 @@ public class ImageServiceTest {
     public void test() throws IOException {
         String file = TEST_PIC_DIR_PATH + "/b.jpg";
         BufferedImage image = imageService.readImage(new File(file));
-        image = imageService.compress(image, 600, 600);
+//        image = imageService.compress(image, 600, 600);
+        image = imageService.crop(image, 100, 100, 500, 300);
 
         String types[] = {"jpg", "png", "bmp"};
         for (String type : types) {

@@ -5,6 +5,7 @@
  */
 package robertli.zero.action.file;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.File;
@@ -12,9 +13,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Resource;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import robertli.zero.core.ImageService;
 import robertli.zero.core.JsonService;
 import robertli.zero.core.WebConfiguration;
 import robertli.zero.entity.FileRecord;
@@ -36,10 +40,13 @@ public class ImageAction implements FileResultSupport, TextResultSupport {
     private StorageService storageService;
 
     @Resource
+    private ImageService imageService;
+
+    @Resource
     private WebConfiguration webConfiguration;
 
     @Resource
-    private JsonService jsonSerice;
+    private JsonService jsonService;
 
     public static final long IMAGE_SIZE_LIMIT = 5 * 1024 * 1024;//5Mb
     public static final int MAX_WIDTH = 600;
@@ -53,6 +60,12 @@ public class ImageAction implements FileResultSupport, TextResultSupport {
     private File img[];
     private String imgContentType[];
     private String imgFileName[];
+    private int x;
+    private int y;
+    private int width;
+    private int height;
+    private int fixedWidth;
+    private int fixedHeight;
 
     public String execute() {
         FileRecord record = storageService.getFileRecord(id);
@@ -77,12 +90,20 @@ public class ImageAction implements FileResultSupport, TextResultSupport {
         return urlHeader + "?id=" + uuid;
     }
 
+    private String createImageProcessResult(String uuid) {
+        String url = createImageUrl(uuid);
+        JSONObject result = jsonService.createSuccessResult();
+        result.put("url", url);
+        result.put("uuid", uuid);
+        return result.toString();
+    }
+
     private String createUploadResult(List<String> urlList) {
         JSONArray array = new JSONArray();
         urlList.stream().forEach((url) -> {
             array.put(url);
         });
-        JSONObject result = jsonSerice.createSuccessResult();
+        JSONObject result = jsonService.createSuccessResult();
         result.put("urlList", urlList);
         return result.toString();
     }
@@ -113,6 +134,47 @@ public class ImageAction implements FileResultSupport, TextResultSupport {
     public String upload() throws IOException {
         ArrayList<String> urlList = uploadProcess();
         textResult = createUploadResult(urlList);
+        return TEXT;
+    }
+
+    private byte[] cropImageData(byte[] content, String fileType) throws IOException {
+        BufferedImage image = imageService.readImage(content);
+        image = imageService.crop(image, x, y, width, height);
+        return imageService.getImageData(image, fileType);
+    }
+
+    public String crop() {
+        FileRecord record = storageService.getFileRecord(id);
+        byte[] oldData = storageService.get(id);
+        try {
+            String uuid = storageService.register(record.getName(), "image/jpeg");
+            storageService.store(uuid, cropImageData(oldData, "jpg"));
+            textResult = createImageProcessResult(uuid);
+        } catch (IOException ex) {
+            textResult = jsonService.createFailResult(ex.getMessage()).toString();
+            Logger.getLogger(ImageAction.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return TEXT;
+    }
+
+    private byte[] fixImageData(byte[] content, String fileType) throws IOException {
+        BufferedImage image = imageService.readImage(content);
+        image = imageService.crop(image, x, y, width, height);
+        image = imageService.scale(image, fixedWidth, fixedHeight);
+        return imageService.getImageData(image, fileType);
+    }
+
+    public String fix() {
+        FileRecord record = storageService.getFileRecord(id);
+        byte[] oldData = storageService.get(id);
+        try {
+            String uuid = storageService.register(record.getName(), "image/jpeg");
+            storageService.store(uuid, fixImageData(oldData, "jpg"));
+            textResult = createImageProcessResult(uuid);
+        } catch (IOException ex) {
+            textResult = jsonService.createFailResult(ex.getMessage()).toString();
+            Logger.getLogger(ImageAction.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return TEXT;
     }
 
@@ -157,6 +219,54 @@ public class ImageAction implements FileResultSupport, TextResultSupport {
 
     public void setImgFileName(String[] imgFileName) {
         this.imgFileName = imgFileName;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getFixedWidth() {
+        return fixedWidth;
+    }
+
+    public void setFixedWidth(int fixedWidth) {
+        this.fixedWidth = fixedWidth;
+    }
+
+    public int getFixedHeight() {
+        return fixedHeight;
+    }
+
+    public void setFixedHeight(int fixedHeight) {
+        this.fixedHeight = fixedHeight;
     }
 
 }

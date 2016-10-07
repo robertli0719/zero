@@ -10,9 +10,12 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import javax.imageio.ImageIO;
 import org.springframework.stereotype.Component;
 import robertli.zero.core.ImageService;
@@ -21,7 +24,7 @@ import robertli.zero.core.ImageService;
  * Because we include com.twelvemonkeys.imageio in pom, ImageIO can support CMYK
  * for JPG.
  *
- * @version 1.0 2016-10-01
+ * @version 1.0.1 2016-10-06
  * @author Robert Li
  */
 @Component("imageService")
@@ -33,9 +36,23 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
+    public BufferedImage readImage(byte[] data) throws IOException {
+        InputStream in = new ByteArrayInputStream(data);
+        return ImageIO.read(in);
+    }
+
+    @Override
     public void writeImage(File fe, BufferedImage image, String formatName) throws IOException {
         try (FileOutputStream out = new FileOutputStream(fe)) {
             ImageIO.write(image, formatName, out);
+        }
+    }
+
+    @Override
+    public byte[] getImageData(BufferedImage image, String formatName) throws IOException {
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            ImageIO.write(image, formatName, baos);
+            return baos.toByteArray();
         }
     }
 
@@ -83,6 +100,17 @@ public class ImageServiceImpl implements ImageService {
         double h = image.getHeight();
         double p = w / h;
         int width = (int) (p * height);
+        Image img = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        return createBufferedImage(img);
+    }
+
+    @Override
+    public BufferedImage crop(BufferedImage image, int x, int y, int width, int height) {
+        return image.getSubimage(x, y, width, height);
+    }
+
+    @Override
+    public BufferedImage scale(BufferedImage image, int width, int height) {
         Image img = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         return createBufferedImage(img);
     }

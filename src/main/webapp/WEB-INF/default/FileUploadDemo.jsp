@@ -42,20 +42,12 @@
                 <div class="panel-body">
                     <p>上传图片至图片服务，服务返回访问路径。</p>
                     <p>(上传有跨域名保护，用IP无效)</p>
-                    <a class="btn btn-success" data-cmd="uploadImage">upload</a>
+                    <a class="btn btn-success" data-cmd="uploadImage">直接上传</a>
+                    <a class="btn btn-success" data-cmd="uploadCroppedImage">裁切上传</a>
+                    <a class="btn btn-success" data-cmd="uploadFixedImage" data-width="360" data-height="240">上传360*240</a>
                 </div>
             </div>
 
-            <div class="panel panel-default">
-                <div class="panel-heading">jquery form demo</div>
-                <div class="panel-body">
-                    <p>上传图片至图片服务，服务返回访问路径。</p>
-                    <p>(上传有跨域名保护，用IP无效)</p>
-                    <input type="file" data-cmd="upload-image" name="fe"/>
-                    <a class="btn btn-success" data-cmd="upload">upload</a>
-                </div>
-            </div>
-            <div id="img_content"></div>
         </div>
 
     </body>
