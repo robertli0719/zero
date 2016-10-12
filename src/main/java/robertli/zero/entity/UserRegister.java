@@ -39,6 +39,7 @@ public class UserRegister implements Serializable {
     private Date signDate;
 
     @Id
+    @Column(length = 50)
     public String getAuthId() {
         return authId;
     }
@@ -47,7 +48,7 @@ public class UserRegister implements Serializable {
         this.authId = authId;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     public String getAuthLabel() {
         return authLabel;
     }
@@ -56,7 +57,7 @@ public class UserRegister implements Serializable {
         this.authLabel = authLabel;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     public String getAuthType() {
         return authType;
     }
@@ -65,7 +66,7 @@ public class UserRegister implements Serializable {
         this.authType = authType;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     public String getName() {
         return name;
     }
@@ -74,7 +75,7 @@ public class UserRegister implements Serializable {
         this.name = name;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     public String getPassword() {
         return password;
     }
@@ -83,7 +84,7 @@ public class UserRegister implements Serializable {
         this.password = password;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     public String getPasswordSalt() {
         return passwordSalt;
     }
@@ -103,7 +104,7 @@ public class UserRegister implements Serializable {
         this.signDate = signDate;
     }
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 100)
     @Index(name = "verified_code")
     public String getVerifiedCode() {
         return verifiedCode;

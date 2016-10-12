@@ -44,7 +44,7 @@ public class AdminLog implements Serializable {
         this.id = id;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 10)
     @Index(name = "type")
     public String getType() {
         return type;
@@ -54,7 +54,7 @@ public class AdminLog implements Serializable {
         this.type = type;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     @Index(name = "username")
     public String getUsername() {
         return username;
@@ -64,7 +64,7 @@ public class AdminLog implements Serializable {
         this.username = username;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 150)
     public String getComment() {
         return comment;
     }

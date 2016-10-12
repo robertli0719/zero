@@ -26,7 +26,7 @@ public class TestServiceImpl implements TestService {
     @Override
     public void clearAll() {
         Session session = sessionFactory.getCurrentSession();
-        session.createQuery("delete from TestRecode").executeUpdate();
+        session.createQuery("delete from TestRecord").executeUpdate();
     }
 
     @Override

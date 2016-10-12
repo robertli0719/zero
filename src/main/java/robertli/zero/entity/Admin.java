@@ -33,6 +33,7 @@ public class Admin implements Serializable {
     private List<AdminPermission> adminPermissionList;
 
     @Id
+    @Column(length = 50)
     public String getUsername() {
         return username;
     }
@@ -41,7 +42,7 @@ public class Admin implements Serializable {
         this.username = username;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     public String getPassword() {
         return password;
     }
@@ -50,7 +51,7 @@ public class Admin implements Serializable {
         this.password = password;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     public String getPasswordSalt() {
         return passwordSalt;
     }

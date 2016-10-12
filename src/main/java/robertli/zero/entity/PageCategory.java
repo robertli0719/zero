@@ -23,6 +23,7 @@ public class PageCategory implements Serializable {
     private String description;
 
     @Id
+    @Column(length = 50)
     public String getName() {
         return name;
     }
@@ -31,7 +32,7 @@ public class PageCategory implements Serializable {
         this.name = name;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 150)
     public String getDescription() {
         return description;
     }

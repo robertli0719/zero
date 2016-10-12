@@ -49,7 +49,7 @@ public class PageImage implements Serializable {
         this.page = page;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 36)
     public String getImgId() {
         return imgId;
     }
@@ -58,7 +58,7 @@ public class PageImage implements Serializable {
         this.imgId = imgId;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 190)
     public String getImgUrl() {
         return imgUrl;
     }

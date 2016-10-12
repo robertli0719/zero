@@ -38,6 +38,7 @@ public class AdminOnline implements Serializable {
     private Date lastActiveDate;
 
     @Id
+    @Column(length = 32)
     public String getSessionId() {
         return sessionId;
     }

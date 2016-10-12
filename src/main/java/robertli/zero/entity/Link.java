@@ -41,7 +41,7 @@ public class Link implements Serializable {
         this.id = id;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 150)
     public String getTitle() {
         return title;
     }
@@ -50,7 +50,7 @@ public class Link implements Serializable {
         this.title = title;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 190)
     public String getUrl() {
         return url;
     }
@@ -59,6 +59,7 @@ public class Link implements Serializable {
         this.url = url;
     }
 
+    @Column(length = 190)
     public String getImgUrl() {
         return imgUrl;
     }
@@ -67,6 +68,7 @@ public class Link implements Serializable {
         this.imgUrl = imgUrl;
     }
 
+    @Column(length = 36)
     public String getImgId() {
         return imgId;
     }
@@ -75,7 +77,7 @@ public class Link implements Serializable {
         this.imgId = imgId;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 190)
     public String getComment() {
         return comment;
     }

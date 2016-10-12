@@ -44,7 +44,7 @@ public class LinkGroup implements Serializable {
         this.id = id;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 190)
     public String getDomain() {
         return domain;
     }
@@ -53,7 +53,7 @@ public class LinkGroup implements Serializable {
         this.domain = domain;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 190)
     public String getAction() {
         return action;
     }
@@ -62,7 +62,7 @@ public class LinkGroup implements Serializable {
         this.action = action;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 190)
     public String getKeyname() {
         return keyname;
     }
@@ -71,7 +71,7 @@ public class LinkGroup implements Serializable {
         this.keyname = keyname;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 190)
     public String getComment() {
         return comment;
     }

@@ -34,6 +34,7 @@ public class UserPasswordResetToken implements Serializable {
     private Date createDate;
 
     @Id
+    @Column(length = 100)
     public String getCode() {
         return code;
     }

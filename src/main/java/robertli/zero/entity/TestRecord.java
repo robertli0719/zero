@@ -7,6 +7,7 @@ package robertli.zero.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -30,6 +31,7 @@ public class TestRecord implements Serializable {
     private Date date;
 
     @Id
+    @Column(length = 50)
     public String getKeyname() {
         return keyname;
     }
@@ -38,6 +40,7 @@ public class TestRecord implements Serializable {
         this.keyname = keyname;
     }
 
+    @Column(length = 50)
     public String getName() {
         return name;
     }
@@ -46,6 +49,7 @@ public class TestRecord implements Serializable {
         this.name = name;
     }
 
+    @Column(length = 50)
     public String getComment() {
         return comment;
     }

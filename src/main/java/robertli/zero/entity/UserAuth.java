@@ -38,6 +38,7 @@ public class UserAuth implements Serializable {
     private User user;
 
     @Id
+    @Column(length = 50)
     public String getAuthId() {
         return authId;
     }
@@ -46,7 +47,7 @@ public class UserAuth implements Serializable {
         this.authId = authId;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     public String getLabel() {
         return label;
     }
@@ -55,7 +56,7 @@ public class UserAuth implements Serializable {
         this.label = label;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false,length = 50)
     public String getType() {
         return type;
     }

@@ -17,7 +17,8 @@ tinymce.init({
     toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
     content_css: '//www.tinymce.com/css/codepen.min.css',
     relative_urls: false,
-    remove_script_host: false
+    remove_script_host: false,
+    entity_encoding : "raw"
 });
 
 $(function () {

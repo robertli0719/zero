@@ -60,7 +60,7 @@ public class Page implements Serializable {
         this.category = category;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 150)
     public String getTitle() {
         return title;
     }
@@ -69,7 +69,7 @@ public class Page implements Serializable {
         this.title = title;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 190)
     public String getDescription() {
         return description;
     }

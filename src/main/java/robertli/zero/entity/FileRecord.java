@@ -36,6 +36,7 @@ public class FileRecord implements Serializable {
     private Date lastAccessDate;
 
     @Id
+    @Column(length = 36)
     public String getUuid() {
         return uuid;
     }
@@ -44,7 +45,7 @@ public class FileRecord implements Serializable {
         this.uuid = uuid;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     public String getName() {
         return name;
     }
@@ -53,7 +54,7 @@ public class FileRecord implements Serializable {
         this.name = name;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     public String getType() {
         return type;
     }

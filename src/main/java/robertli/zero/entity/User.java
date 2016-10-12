@@ -44,7 +44,7 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     public String getPassword() {
         return password;
     }
@@ -53,7 +53,7 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     public String getPasswordSalt() {
         return passwordSalt;
     }
@@ -62,7 +62,7 @@ public class User implements Serializable {
         this.passwordSalt = passwordSalt;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     public String getName() {
         return name;
     }
@@ -71,6 +71,7 @@ public class User implements Serializable {
         this.name = name;
     }
 
+    @Column(length = 20)
     public String getTelephone() {
         return telephone;
     }

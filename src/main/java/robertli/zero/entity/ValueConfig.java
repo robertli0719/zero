@@ -14,7 +14,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Index;
 
 /**
- * 
+ *
  * @version 1.0 2016-10-04
  * @author Robert Li
  */
@@ -40,7 +40,7 @@ public class ValueConfig implements Serializable {
         this.id = id;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     public String getDomain() {
         return domain;
     }
@@ -49,7 +49,7 @@ public class ValueConfig implements Serializable {
         this.domain = domain;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     public String getAction() {
         return action;
     }
@@ -58,7 +58,7 @@ public class ValueConfig implements Serializable {
         this.action = action;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     public String getKeyname() {
         return keyname;
     }
@@ -67,7 +67,7 @@ public class ValueConfig implements Serializable {
         this.keyname = keyname;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 190)
     public String getValue() {
         return value;
     }
