@@ -34,7 +34,7 @@
                         <li role="separator" class="divider"></li>
                         <li><a href="ValueConfig">Value Configuration</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="#">One more separated link</a></li>
+                        <li><a href="Link">Link Configuration</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">

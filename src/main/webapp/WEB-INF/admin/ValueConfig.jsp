@@ -27,15 +27,15 @@
                     <s:actionmessage theme="bootstrap"/>
                     <s:actionerror theme="bootstrap"/>
                     <div class="panel panel-primary">
-                        <div class="panel-heading">Select Domain</div>
+                        <div class="panel-heading">Select Name Space</div>
                         <div class="panel-body">
-                            <s:form action="ValueConfig!listAction" method="get" theme="bootstrap">
-                                <s:select id="select_domain" name="valueConfig.domain" list="domainList" label="domain"/>
-                                <s:submit value="list action" cssClass="btn"/>
+                            <s:form action="ValueConfig!listPageName" method="get" theme="bootstrap">
+                                <s:select id="select_namespace" name="valueConfig.namespace" list="namespaceList" label="namespace"/>
+                                <s:submit value="list page name" cssClass="btn"/>
                             </s:form>
-                            <s:if test="actionList!=null">
+                            <s:if test="pageNameList!=null">
                                 <s:form theme="bootstrap">
-                                    <s:select id="select_action" name="valueConfig.action" list="actionList" label="action"/>
+                                    <s:select id="select_page_name" name="valueConfig.pageName" list="pageNameList" label="page name"/>
                                 </s:form>
                                 <button class="btn btn-success" data-cmd="listValueConfig">List</button>
                             </s:if>
@@ -45,17 +45,17 @@
                         <div class="panel-heading">Insert Value</div>
                         <div class="panel-body">
                             <s:form action="ValueConfig!insert" method="post" theme="bootstrap">
-                                <s:textfield name="valueConfig.domain" label="domain"/>
-                                <s:textfield name="valueConfig.action" label="action"/>
-                                <s:textfield name="valueConfig.keyname" label="keyname"/>
-                                <s:textfield name="valueConfig.value" label="value"/>
+                                <s:textfield name="valueConfig.namespace" label="namespace"/>
+                                <s:textfield name="valueConfig.pageName" label="pageName"/>
+                                <s:textfield name="valueConfig.name" label="name"/>
+                                <s:textfield name="valueConfig.val" label="val"/>
                                 <s:submit value="add" cssClass="btn"/>
                             </s:form>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-8">
-                    <s:if test="valueConfig.domain!=null">
+                    <s:if test="valueConfig.namespace!=null">
                         <div class="table_div">
                             <table class="table table-bordered table-condensed" id="value_config_form_table"></table>
                             <hr>

@@ -26,67 +26,67 @@ public class ValueConfigDaoImpl extends GenericHibernateDao<ValueConfig, Integer
     private SessionFactory sessionFactory;
 
     @Override
-    public List<String> getDomainList() {
+    public List<String> getNamespaceList() {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("select domain from ValueConfig group by domain");
+        Query query = session.createQuery("select namespace from ValueConfig group by namespace");
         return query.list();
     }
 
     @Override
-    public List<String> getActionList(String domain) {
+    public List<String> getPageNameList(String namespace) {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("select action from ValueConfig where domain=:domain group by action");
-        query.setString("domain", domain);
+        Query query = session.createQuery("select pageName from ValueConfig where namespace=:namespace group by pageName");
+        query.setString("namespace", namespace);
         return query.list();
     }
 
     @Override
-    public List<ValueConfig> getValueConfigList(String domain, String action) {
+    public List<ValueConfig> getValueConfigList(String namespace, String pageName) {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from ValueConfig where domain=:domain and action=:action");
-        query.setString("domain", domain);
-        query.setString("action", action);
+        Query query = session.createQuery("from ValueConfig where namespace=:namespace and pageName=:pageName");
+        query.setString("namespace", namespace);
+        query.setString("pageName", pageName);
         return query.list();
     }
 
     @Override
-    public List<String> getValueList(String domain, String action, String keyname) {
+    public List<String> getValList(String namespace, String pageName, String name) {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("select value from ValueConfig where domain=:domain and action=:action and keyname=:keyname");
-        query.setString("domain", domain);
-        query.setString("action", action);
-        query.setString("keyname", keyname);
+        Query query = session.createQuery("select val from ValueConfig where namespace=:namespace and pageName=:pageName and name=:name");
+        query.setString("namespace", namespace);
+        query.setString("pageName", pageName);
+        query.setString("name", name);
         return query.list();
     }
 
     @Override
-    public void insertValueConfig(String domain, String action, String keyname, String value) {
+    public void insertValueConfig(String namespace, String pageName, String name, String val) {
         Session session = sessionFactory.getCurrentSession();
         ValueConfig vc = new ValueConfig();
-        vc.setAction(action);
-        vc.setDomain(domain);
-        vc.setKeyname(keyname);
-        vc.setValue(value);
+        vc.setPageName(pageName);
+        vc.setNamespace(namespace);
+        vc.setName(name);
+        vc.setVal(val);
         session.save(vc);
     }
 
     @Override
-    public void deleteValueConfig(String domain, String action) {
+    public void deleteValueConfig(String namespace, String pageName) {
         Session session = sessionFactory.getCurrentSession();
-        Query delete_query = session.createQuery("delete from ValueConfig where domain=:domain and action=:action");
-        delete_query.setString("domain", domain);
-        delete_query.setString("action", action);
+        Query delete_query = session.createQuery("delete from ValueConfig where namespace=:namespace and pageName=:pageName");
+        delete_query.setString("namespace", namespace);
+        delete_query.setString("pageName", pageName);
         delete_query.executeUpdate();
     }
 
     @Override
-    public void updateValueConfig(String domain, String action, Map<String, List<String>> valueConfigMap) {
-        deleteValueConfig(domain, action);
+    public void updateValueConfig(String namespace, String pageName, Map<String, List<String>> valueConfigMap) {
+        deleteValueConfig(namespace, pageName);
 
-        for (String keyname : valueConfigMap.keySet()) {
-            List<String> valList = valueConfigMap.get(keyname);
+        for (String name : valueConfigMap.keySet()) {
+            List<String> valList = valueConfigMap.get(name);
             for (String val : valList) {
-                insertValueConfig(domain, action, keyname, val);
+                insertValueConfig(namespace, pageName, name, val);
             }
         }
     }

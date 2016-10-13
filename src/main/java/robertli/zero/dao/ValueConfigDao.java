@@ -15,17 +15,17 @@ import robertli.zero.entity.ValueConfig;
  */
 public interface ValueConfigDao extends GenericDao<ValueConfig, Integer> {
 
-    public List<String> getDomainList();
+    public List<String> getNamespaceList();
 
-    public List<String> getActionList(String domain);
+    public List<String> getPageNameList(String namespace);
 
-    public List<ValueConfig> getValueConfigList(String domain, String action);
+    public List<ValueConfig> getValueConfigList(String namespace, String pageName);
 
-    public List<String> getValueList(String domain, String action, String keyname);
+    public List<String> getValList(String namespace, String pageName, String name);
 
-    public void insertValueConfig(String domain, String action, String keyname, String value);
+    public void insertValueConfig(String namespace, String pageName, String name, String val);
 
-    public void deleteValueConfig(String domain, String action);
-    
-    public void updateValueConfig(String domain, String action, Map<String, List<String>> valueConfigMap);
+    public void deleteValueConfig(String namespace, String pageName);
+
+    public void updateValueConfig(String namespace, String pageName, Map<String, List<String>> valueConfigMap);
 }

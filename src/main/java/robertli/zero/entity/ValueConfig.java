@@ -15,20 +15,20 @@ import org.hibernate.annotations.Index;
 
 /**
  *
- * @version 1.0 2016-10-04
+ * @version 1.0 2016-10-12
  * @author Robert Li
  */
 @Entity
 @Table(name = "value_config")
 @org.hibernate.annotations.Table(appliesTo = "value_config", indexes = {
-    @Index(name = "domain_action_key", columnNames = {"domain", "action", "keyname"})})
+    @Index(name = "combined_index", columnNames = {"namespace", "pageName", "name"})})
 public class ValueConfig implements Serializable {
 
     private int id;
-    private String domain;
-    private String action;
-    private String keyname;
-    private String value;
+    private String namespace;
+    private String pageName;
+    private String name;
+    private String val;
 
     @Id
     @GeneratedValue
@@ -41,39 +41,39 @@ public class ValueConfig implements Serializable {
     }
 
     @Column(nullable = false, length = 50)
-    public String getDomain() {
-        return domain;
+    public String getNamespace() {
+        return namespace;
     }
 
-    public void setDomain(String domain) {
-        this.domain = domain;
-    }
-
-    @Column(nullable = false, length = 50)
-    public String getAction() {
-        return action;
-    }
-
-    public void setAction(String action) {
-        this.action = action;
+    public void setNamespace(String namespace) {
+        this.namespace = namespace;
     }
 
     @Column(nullable = false, length = 50)
-    public String getKeyname() {
-        return keyname;
+    public String getPageName() {
+        return pageName;
     }
 
-    public void setKeyname(String keyname) {
-        this.keyname = keyname;
+    public void setPageName(String pageName) {
+        this.pageName = pageName;
+    }
+
+    @Column(nullable = false, length = 50)
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Column(nullable = false, length = 190)
-    public String getValue() {
-        return value;
+    public String getVal() {
+        return val;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setVal(String val) {
+        this.val = val;
     }
 
 }

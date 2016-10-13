@@ -13,20 +13,20 @@ import robertli.zero.entity.ValueConfig;
  * This service is design for save values for each web pages<br>
  *
  *
- * @version 1.0 2016-10-04
+ * @version 1.0.1 2016-10-12
  * @author Robert Li
  */
 public interface ValueConfigService {
 
-    public List<String> getDomainList();
+    public List<String> getNamespaceList();
 
-    public List<String> getActionList(String domain);
+    public List<String> getPageNameList(String namespace);
 
-    public List<ValueConfig> getValueConfigList(String domain, String action);
+    public List<ValueConfig> getValueConfigList(String namespace, String pageName);
 
-    public List<String> getValueList(String domain, String action, String keyname);
+    public List<String> getValList(String namespace, String pageName, String name);
 
-    public boolean insertValueConfig(String domain, String action, String keyname, String value);
+    public boolean insertValueConfig(String namespace, String pageName, String name, String val);
 
-    public boolean updateValueConfig(String domain, String action, Map<String, List<String>> valueConfigMap);
+    public boolean updateValueConfig(String namespace, String pageName, Map<String, List<String>> valueConfigMap);
 }

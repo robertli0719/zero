@@ -10,6 +10,7 @@
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="${jdbc.driverClassName}" />
         <property name="url" value="${jdbc.url}" />
+        <property name="connectionProperties" value="useUnicode=yes;characterEncoding=utf8;" />
         <property name="username" value="${jdbc.username}" />
         <property name="password" value="${jdbc.password}" />
         <property name="initialSize" value="3" />
@@ -28,8 +29,8 @@
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.connection.useUnicode">true</prop>
-                <prop key="hibernate.connection.characterEncoding">utf8mb4</prop>
-                <prop key="hibernate.connection.charSet">utf8mb4</prop>
+                <prop key="hibernate.connection.characterEncoding">UTF-8</prop>
+                <prop key="hibernate.connection.charSet">UTF-8</prop>
                 <!-- SQL dialect -->
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
                 

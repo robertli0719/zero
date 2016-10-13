@@ -28,7 +28,7 @@ public class TestRecord implements Serializable {
     private String keyname;
     private String name;
     private String comment;
-    private Date date;
+    private Date datetime;
 
     @Id
     @Column(length = 50)
@@ -59,12 +59,12 @@ public class TestRecord implements Serializable {
     }
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    public Date getDate() {
-        return date;
+    public Date getDatetime() {
+        return datetime;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDatetime(Date datetime) {
+        this.datetime = datetime;
     }
 
 }

@@ -22,13 +22,13 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity
 @Table(name = "link_group",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"domain", "action", "keyname"}))
+        uniqueConstraints = @UniqueConstraint(columnNames = {"namespace", "pageName", "name"}))
 public class LinkGroup implements Serializable {
 
     private int id;
-    private String domain;
-    private String action;
-    private String keyname;
+    private String namespace;
+    private String pageName;
+    private String name;
     private String comment;
     private int picWidth;
     private int picHeight;
@@ -44,31 +44,31 @@ public class LinkGroup implements Serializable {
         this.id = id;
     }
 
-    @Column(nullable = false, length = 190)
-    public String getDomain() {
-        return domain;
+    @Column(nullable = false, length = 50)
+    public String getNamespace() {
+        return namespace;
     }
 
-    public void setDomain(String domain) {
-        this.domain = domain;
+    public void setNamespace(String namespace) {
+        this.namespace = namespace;
     }
 
-    @Column(nullable = false, length = 190)
-    public String getAction() {
-        return action;
+    @Column(nullable = false, length = 50)
+    public String getPageName() {
+        return pageName;
     }
 
-    public void setAction(String action) {
-        this.action = action;
+    public void setPageName(String pageName) {
+        this.pageName = pageName;
     }
 
-    @Column(nullable = false, length = 190)
-    public String getKeyname() {
-        return keyname;
+    @Column(nullable = false, length = 50)
+    public String getName() {
+        return name;
     }
 
-    public void setKeyname(String keyname) {
-        this.keyname = keyname;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Column(nullable = false, length = 190)

@@ -20,7 +20,7 @@ import robertli.zero.struts2.TextResultSupport;
 
 /**
  *
- * @version 1.0 2016-10-05
+ * @version 1.0.1 2016-10-12
  * @author Robert Li
  */
 public class ValueConfigAction extends ActionSupport implements TextResultSupport {
@@ -32,35 +32,35 @@ public class ValueConfigAction extends ActionSupport implements TextResultSuppor
     private JsonService jsonService;
 
     private ValueConfig valueConfig;
-    private List<String> domainList;
-    private List<String> actionList;
+    private List<String> namespaceList;
+    private List<String> pageNameList;
     private String vcMap;
     private String textResult;
 
     @Override
     public String execute() {
-        domainList = valueConfigService.getDomainList();
+        namespaceList = valueConfigService.getNamespaceList();
         return SUCCESS;
     }
 
-    public String listAction() {
-        String domain = valueConfig.getDomain();
-        actionList = valueConfigService.getActionList(domain);
+    public String listPageName() {
+        String namespace = valueConfig.getNamespace();
+        pageNameList = valueConfigService.getPageNameList(namespace);
         return execute();
     }
 
     public String list() {
-        String domain = valueConfig.getDomain();
-        String action = valueConfig.getAction();
-        List<ValueConfig> valueConfigList = valueConfigService.getValueConfigList(domain, action);
+        String namespace = valueConfig.getNamespace();
+        String pageName = valueConfig.getPageName();
+        List<ValueConfig> valueConfigList = valueConfigService.getValueConfigList(namespace, pageName);
 
         JSONArray valueConfigArray = new JSONArray();
         for (ValueConfig vc : valueConfigList) {
             JSONObject element = new JSONObject();
-            element.put("domain", vc.getDomain());
-            element.put("action", vc.getAction());
-            element.put("keyname", vc.getKeyname());
-            element.put("value", vc.getValue());
+            element.put("namespace", vc.getNamespace());
+            element.put("pageName", vc.getPageName());
+            element.put("name", vc.getName());
+            element.put("val", vc.getVal());
             valueConfigArray.put(element);
         }
         JSONObject result = jsonService.createSuccessResult();
@@ -84,11 +84,13 @@ public class ValueConfigAction extends ActionSupport implements TextResultSuppor
     }
 
     public String update() {
-        String domain = valueConfig.getDomain();
-        String action = valueConfig.getAction();
-        boolean fail = valueConfigService.updateValueConfig(domain, action, makeMap());
+        String namespace = valueConfig.getNamespace();
+        String pageName = valueConfig.getPageName();
+        boolean fail = valueConfigService.updateValueConfig(namespace, pageName, makeMap());
         if (fail) {
-            addActionError("Fail to update");
+            JSONObject result = jsonService.createFailResult("Fail to update");
+            textResult = result.toString();
+            return TEXT;
         }
         JSONObject result = jsonService.createSuccessResult();
         textResult = result.toString();
@@ -96,11 +98,11 @@ public class ValueConfigAction extends ActionSupport implements TextResultSuppor
     }
 
     public String insert() {
-        String domain = valueConfig.getDomain();
-        String action = valueConfig.getAction();
-        String keyname = valueConfig.getKeyname();
-        String value = valueConfig.getValue();
-        boolean fail = valueConfigService.insertValueConfig(domain, action, keyname, value);
+        String namespace = valueConfig.getNamespace();
+        String pageName = valueConfig.getPageName();
+        String name = valueConfig.getName();
+        String val = valueConfig.getVal();
+        boolean fail = valueConfigService.insertValueConfig(namespace, pageName, name, val);
         if (fail) {
             addActionError("Fail to Insert");
         }
@@ -115,20 +117,20 @@ public class ValueConfigAction extends ActionSupport implements TextResultSuppor
         this.valueConfig = valueConfig;
     }
 
-    public List<String> getDomainList() {
-        return domainList;
+    public List<String> getNamespaceList() {
+        return namespaceList;
     }
 
-    public void setDomainList(List<String> domainList) {
-        this.domainList = domainList;
+    public void setNamespaceList(List<String> namespaceList) {
+        this.namespaceList = namespaceList;
     }
 
-    public List<String> getActionList() {
-        return actionList;
+    public List<String> getPageNameList() {
+        return pageNameList;
     }
 
-    public void setActionList(List<String> actionList) {
-        this.actionList = actionList;
+    public void setPageNameList(List<String> pageNameList) {
+        this.pageNameList = pageNameList;
     }
 
     public String getVcMap() {

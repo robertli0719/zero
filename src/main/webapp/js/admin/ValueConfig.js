@@ -4,9 +4,9 @@
  * https://opensource.org/licenses/MIT
  */
 
-function ValueConfig(keyname, value) {
-    this.keyname = keyname;
-    this.value = value;
+function ValueConfig(name, val) {
+    this.name = name;
+    this.val = val;
 }
 
 var valueConfigList = new Array();
@@ -17,8 +17,8 @@ var updateInputs = function () {
     for (var i = 0; i < valueConfigList.length; i++) {
         var item = valueConfigList[i];
         $('<tr>')
-                .append('<td><input type="text" class="form-control" data-variable="keyname" value="' + item.keyname + '"></td>')
-                .append('<td><input type="text" class="form-control" data-variable="value" value="' + item.value + '"></td>')
+                .append('<td><input type="text" class="form-control" data-variable="name" value="' + item.name + '"></td>')
+                .append('<td><input type="text" class="form-control" data-variable="val" value="' + item.val + '"></td>')
                 .append('<td><a class="btn btn-primary btn-sm" onclick="addLineById(' + i + ')"><span>insert</span></a> <a class="btn btn-danger btn-sm" onclick="delLineById(' + i + ')"><span>delete</span></a></td>')
                 .appendTo(table);
     }
@@ -27,9 +27,9 @@ var updateInputs = function () {
 var updateModel = function () {
     valueConfigList = new Array();
     $('#value_config_form_table tr:has(td)').each(function () {
-        var keyname = $('[data-variable=keyname]', this).val();
-        var value = $('[data-variable=value]', this).val();
-        valueConfigList.push(new ValueConfig(keyname, value));
+        var name = $('[data-variable=name]', this).val();
+        var val = $('[data-variable=val]', this).val();
+        valueConfigList.push(new ValueConfig(name, val));
     });
 };
 
@@ -49,7 +49,7 @@ var initModel = function (valueConfigArray) {
     valueConfigList = [];
     for (var id in valueConfigArray) {
         var val = valueConfigArray[id];
-        var vc = new ValueConfig(val["keyname"], val["value"]);
+        var vc = new ValueConfig(val["name"], val["val"]);
         valueConfigList.push(vc);
     }
     $(".table_div .btn").attr("disabled", false);
@@ -57,20 +57,20 @@ var initModel = function (valueConfigArray) {
 
 var submit = function () {
     updateModel();
-    var domain = $("#select_domain").val();
-    var action = $("#select_action").val();
+    var namespace = $("#select_namespace").val();
+    var pageName = $("#select_page_name").val();
     var vcMap = new Object();
     for (var id in valueConfigList) {
         var e = valueConfigList[id];
-        var key = e.keyname;
+        var key = e.name;
         if (vcMap[key] === undefined) {
             vcMap[key] = [];
         }
-        vcMap[key].push(e.value);
+        vcMap[key].push(e.val);
     }
     $.post("ValueConfig!update", {
-        "valueConfig.domain": domain,
-        "valueConfig.action": action,
+        "valueConfig.namespace": namespace,
+        "valueConfig.pageName": pageName,
         "vcMap": JSON.stringify(vcMap)
     }, function (val) {
         var obj = JSON.parse(val);
@@ -92,11 +92,11 @@ var submit = function () {
 
 $(function () {
     $(document).on("click", "[data-cmd=listValueConfig]", function () {
-        var domain = $("#select_domain").val();
-        var action = $("#select_action").val();
+        var namespace = $("#select_namespace").val();
+        var pageName = $("#select_page_name").val();
         $.post("ValueConfig!list", {
-            "valueConfig.domain": domain,
-            "valueConfig.action": action
+            "valueConfig.namespace": namespace,
+            "valueConfig.pageName": pageName
         }, function (val) {
             var obj = JSON.parse(val);
             if (obj["result"] === 'success') {
@@ -112,7 +112,7 @@ $(function () {
     });
     $(document).on("click", "[data-cmd=addLine]", function () {
         updateModel();
-        valueConfigList.push(new ValueConfig('keyname', 'value'));
+        valueConfigList.push(new ValueConfig('name', 'val'));
         updateInputs();
     });
     $(document).on("click", "[data-cmd=deleteLine]", function () {

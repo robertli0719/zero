@@ -26,29 +26,29 @@ public class ValueConfigServiceImpl implements ValueConfigService {
     private ValueConfigDao valueConfigDao;
 
     @Override
-    public List<String> getDomainList() {
-        return valueConfigDao.getDomainList();
+    public List<String> getNamespaceList() {
+        return valueConfigDao.getNamespaceList();
     }
 
     @Override
-    public List<String> getActionList(String domain) {
-        return valueConfigDao.getActionList(domain);
+    public List<String> getPageNameList(String namespace) {
+        return valueConfigDao.getPageNameList(namespace);
     }
 
     @Override
-    public List<ValueConfig> getValueConfigList(String domain, String action) {
-        return valueConfigDao.getValueConfigList(domain, action);
+    public List<ValueConfig> getValueConfigList(String namespace, String pageName) {
+        return valueConfigDao.getValueConfigList(namespace, pageName);
     }
 
     @Override
-    public List<String> getValueList(String domain, String action, String keyname) {
-        return valueConfigDao.getValueList(domain, action, keyname);
+    public List<String> getValList(String namespace, String pageName, String name) {
+        return valueConfigDao.getValList(namespace, pageName, name);
     }
 
     @Override
-    public boolean insertValueConfig(String domain, String action, String keyname, String value) {
+    public boolean insertValueConfig(String namespace, String pageName, String name, String val) {
         try {
-            valueConfigDao.insertValueConfig(domain, action, keyname, value);
+            valueConfigDao.insertValueConfig(namespace, pageName, name, val);
         } catch (RuntimeException re) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return true;
@@ -57,9 +57,9 @@ public class ValueConfigServiceImpl implements ValueConfigService {
     }
 
     @Override
-    public boolean updateValueConfig(String domain, String action, Map<String, List<String>> valueConfigMap) {
+    public boolean updateValueConfig(String namespace, String pageName, Map<String, List<String>> valueConfigMap) {
         try {
-            valueConfigDao.updateValueConfig(domain, action, valueConfigMap);
+            valueConfigDao.updateValueConfig(namespace, pageName, valueConfigMap);
         } catch (RuntimeException re) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return true;
