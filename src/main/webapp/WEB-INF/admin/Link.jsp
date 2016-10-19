@@ -8,15 +8,18 @@
         <meta name="image-action-url" content="<s:property value="image_action_url"/>" />
 
         <link rel="stylesheet" href="../plugin/bootstrap-3.3.7/css/bootstrap.min.css" type="text/css"/>
+        <link rel="stylesheet" href="../plugin/cropper/cropper.min.css" type="text/css"/>
         <script src='../plugin/jquery/jquery-1.11.3.min.js'></script>
         <script src='../plugin/bootstrap-3.3.7/js/bootstrap.min.js'></script>
+        <script src='../plugin/cropper/cropper.min.js'></script>
+        <script src='../js/common/components.js'></script>
         <script src='../js/admin/Link.js'></script>
         <title>Link Configuration Management</title>
     </head>
     <body>
         <jsp:include page="nav_bar.jsp"/>
         <div class="container">
-            <h2>Value Configuration</h2>
+            <h2>Link Configuration</h2>
             <div class="row">
                 <div class="col-md-4">
                     <s:actionmessage theme="bootstrap"/>
@@ -59,7 +62,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-8"></div>
+                <div class="col-md-8" id="link_group_panel"></div>
             </div>
         </div>
     </body>

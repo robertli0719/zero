@@ -8,6 +8,7 @@ package robertli.zero.action.admin;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.List;
 import javax.annotation.Resource;
+import org.json.JSONObject;
 import robertli.zero.core.JsonService;
 import robertli.zero.entity.LinkGroup;
 import robertli.zero.service.LinkService;
@@ -16,7 +17,7 @@ import robertli.zero.struts2.TextResultSupport;
 
 /**
  *
- * @version 1.0 2016-10-12
+ * @version 1.0.1 2016-10-19
  * @author Robert Li
  */
 public class LinkAction extends ActionSupport implements TextResultSupport {
@@ -32,6 +33,7 @@ public class LinkAction extends ActionSupport implements TextResultSupport {
     private List<String> pageNameList;
     private List<String> nameList;
     private String textResult;
+    private String linkGroupJson;
 
     @Override
     public String execute() {
@@ -110,7 +112,26 @@ public class LinkAction extends ActionSupport implements TextResultSupport {
     }
 
     public String loadLinkGroup() {
-        textResult = jsonService.createSuccessResult().toString();
+        String namespace = linkGroup.getNamespace();
+        String pageName = linkGroup.getPageName();
+        String name = linkGroup.getName();
+        JSONObject linkGroupJSON = linkService.getLinkGroupJSON(namespace, pageName, name);
+        JSONObject result = jsonService.createSuccessResult();
+        result.put("linkGroup", linkGroupJSON);
+        textResult = result.toString();
+        return TEXT;
+    }
+
+    //we just update link list
+    public String updateLinkGroup() {
+        JSONObject json = new JSONObject(linkGroupJson);
+        System.out.println(json);
+        
+        linkService.updateLinkGroupByJSON(json);
+        
+        JSONObject result = jsonService.createSuccessResult();
+        //result.put("linkGroup", linkGroupJSON);
+        textResult = result.toString();
         return TEXT;
     }
 
@@ -146,12 +167,21 @@ public class LinkAction extends ActionSupport implements TextResultSupport {
         this.nameList = nameList;
     }
 
+    @Override
     public String getTextResult() {
         return textResult;
     }
 
     public void setTextResult(String textResult) {
         this.textResult = textResult;
+    }
+
+    public String getLinkGroupJson() {
+        return linkGroupJson;
+    }
+
+    public void setLinkGroupJson(String linkGroupJson) {
+        this.linkGroupJson = linkGroupJson;
     }
 
 }

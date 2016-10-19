@@ -25,7 +25,7 @@ var updateInputs = function () {
 };
 
 var updateModel = function () {
-    valueConfigList = new Array();
+    valueConfigList = [];
     $('#value_config_form_table tr:has(td)').each(function () {
         var name = $('[data-variable=name]', this).val();
         var val = $('[data-variable=val]', this).val();

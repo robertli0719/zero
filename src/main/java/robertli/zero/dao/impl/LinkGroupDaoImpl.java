@@ -58,14 +58,19 @@ public class LinkGroupDaoImpl extends GenericHibernateDao<LinkGroup, Integer> im
     }
 
     @Override
-    public boolean isExist(String namespace, String pageName, String name) {
+    public LinkGroup getLinkGroup(String namespace, String pageName, String name) {
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("from LinkGroup where namespace=:namespace and pageName=:pageName and name=:name");
         query.setString("namespace", namespace);
         query.setString("pageName", pageName);
         query.setString("name", name);
         query.setMaxResults(1);
-        return query.uniqueResult() != null;
+        return (LinkGroup) query.uniqueResult();
+    }
+
+    @Override
+    public boolean isExist(String namespace, String pageName, String name) {
+        return getLinkGroup(namespace, pageName, name) != null;
     }
 
     @Override

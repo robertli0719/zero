@@ -6,11 +6,12 @@
 package robertli.zero.service;
 
 import java.util.List;
+import org.json.JSONObject;
 import robertli.zero.entity.LinkGroup;
 
 /**
  *
- * @version 1.0 2016-10-12
+ * @version 1.0.1 2016-10-19
  * @author Robert Li
  */
 public interface LinkService {
@@ -31,4 +32,12 @@ public interface LinkService {
     public AddLinkGroupResult addLinkGroup(String namespace, String pageName, String name, String comment, int picWidth, int picHeight);
 
     public void deleteLinkGroup(String namespace, String pageName, String name);
+
+    public JSONObject getLinkGroupJSON(String namespace, String pageName, String name);
+
+    public enum UpdateLinkGroupResult {
+        SUCCESS, DATABASE_FAIL
+    }
+
+    public UpdateLinkGroupResult updateLinkGroupByJSON(JSONObject json);
 }
