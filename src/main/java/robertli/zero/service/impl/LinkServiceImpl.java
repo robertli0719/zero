@@ -11,16 +11,28 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import robertli.zero.core.ImagePathService;
+import robertli.zero.dao.LinkDao;
 import robertli.zero.dao.LinkGroupDao;
 import robertli.zero.entity.Link;
 import robertli.zero.entity.LinkGroup;
 import robertli.zero.service.LinkService;
+import robertli.zero.service.StorageService;
 
 @Component("linkService")
 public class LinkServiceImpl implements LinkService {
 
     @Resource
     private LinkGroupDao linkGroupDao;
+
+    @Resource
+    private LinkDao linkDao;
+
+    @Resource
+    private StorageService storageService;
+
+    @Resource
+    private ImagePathService imagePathService;
 
     @Override
     public List<String> getNamespaceList() {
@@ -71,7 +83,7 @@ public class LinkServiceImpl implements LinkService {
             }
             linkGroupDao.addLinkGroup(namespace, pageName, name, comment, picWidth, picHeight);
         } catch (RuntimeException re) {
-            System.out.println(re);
+            System.out.println("Error when addLinkGroup: " + re.getMessage());
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return AddLinkGroupResult.DATABASE_FAIL;
         }
@@ -87,6 +99,7 @@ public class LinkServiceImpl implements LinkService {
         JSONObject json = new JSONObject();
         json.put("id", link.getId());
         json.put("title", link.getTitle());
+        json.put("url", link.getUrl());
         json.put("comment", link.getComment());
         json.put("imgId", link.getImgId());
         json.put("imgUrl", link.getImgUrl());
@@ -122,21 +135,45 @@ public class LinkServiceImpl implements LinkService {
         return json;
     }
 
+    private void removeAllLinks(LinkGroup linkGroup) {
+        for (Link link : linkGroup.getLinkList()) {
+            String imgId = link.getImgId();
+            if (imgId != null) {
+                storageService.delete(imgId);
+            }
+            linkDao.delete(link);
+        }
+    }
+
+    private void saveLinks(int linkGroupId, JSONArray linkArray) {
+        for (int i = 0; i < linkArray.length(); i++) {
+            JSONObject linkJSON = linkArray.getJSONObject(i);
+            String title = linkJSON.getString("title");
+            String url = linkJSON.getString("url");
+            String imgUrl = linkJSON.getString("imgUrl");
+            String imgId = imagePathService.pickImageId(imgUrl);
+            String comment = linkJSON.getString("comment");
+            linkDao.saveLink(title, url, imgUrl, imgId, comment, linkGroupId);
+            if (imgId != null) {
+                storageService.fix(imgId);
+            }
+        }
+    }
+
     @Override
     public UpdateLinkGroupResult updateLinkGroupByJSON(JSONObject json) {
         try {
             String namespace = json.getString("namespace");
             String pageName = json.getString("pageName");
             String name = json.getString("name");
-            LinkGroup linkGroup = linkGroupDao.getLinkGroup(namespace, pageName, name);
-            linkGroup.getLinkList();
-            //unfinish
-            if (true) {
-                throw new RuntimeException("Unfinish");
-            }
+            JSONArray linkArray = json.getJSONArray("linkArray");
 
+            LinkGroup linkGroup = linkGroupDao.getLinkGroup(namespace, pageName, name);
+            removeAllLinks(linkGroup);
+            saveLinks(linkGroup.getId(), linkArray);
         } catch (RuntimeException re) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            re.printStackTrace();
             return UpdateLinkGroupResult.DATABASE_FAIL;
         }
         return UpdateLinkGroupResult.SUCCESS;

@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<!--
+Copyright 2016 Robert Li.
+Released under the MIT license
+https://opensource.org/licenses/MIT
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="initial-scale=1.0, width=device-width, user-scalable=yes" />
+        <link rel="stylesheet" href="plugin/bootstrap-3.3.7/css/bootstrap.min.css" type="text/css"/>
+        <style>
+            #qrcode{
+                min-height:100px;
+            }
+        </style>
+        <script src='plugin/jquery/jquery-1.11.3.min.js'></script>
+        <script src='plugin/jquery/jquery.qrcode.min.js'></script>
+        <script src='plugin/bootstrap-3.3.7/js/bootstrap.min.js'></script>
+        <script>
+            $(function () {
+                $('#qrcode').qrcode("https://eatmeals.ca");
+            });
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <h1>QR-CODE</h1>
+            <div id="qrcode"></div>
+        </div>
+    </body>
+</html>

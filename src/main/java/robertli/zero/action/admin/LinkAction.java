@@ -124,9 +124,7 @@ public class LinkAction extends ActionSupport implements TextResultSupport {
 
     //we just update link list
     public String updateLinkGroup() {
-        JSONObject json = new JSONObject(linkGroupJson);
-        System.out.println(json);
-        
+        JSONObject json = new JSONObject(linkGroupJson);        
         linkService.updateLinkGroupByJSON(json);
         
         JSONObject result = jsonService.createSuccessResult();

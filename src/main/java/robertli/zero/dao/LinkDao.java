@@ -13,4 +13,5 @@ import robertli.zero.entity.Link;
  */
 public interface LinkDao extends GenericDao<Link, Integer> {
 
+    public Link saveLink(String title, String url, String imgUrl, String imgId, String comment, int linkGroupId);
 }

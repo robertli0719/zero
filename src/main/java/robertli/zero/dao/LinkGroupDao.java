@@ -23,7 +23,7 @@ public interface LinkGroupDao extends GenericDao<LinkGroup, Integer> {
     public List<String> getNameList(String namespace, String pageName);
 
     public LinkGroup getLinkGroup(String namespace, String pageName, String name);
-
+    
     public boolean isExist(String namespace, String pageName, String name);
 
     public void addLinkGroup(String namespace, String pageName, String name, String comment, int picWidth, int picHeight);

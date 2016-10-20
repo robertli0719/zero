@@ -18,9 +18,9 @@ import java.util.logging.Logger;
 import javax.annotation.Resource;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import robertli.zero.core.ImagePathService;
 import robertli.zero.core.ImageService;
 import robertli.zero.core.JsonService;
-import robertli.zero.core.WebConfiguration;
 import robertli.zero.entity.FileRecord;
 import robertli.zero.service.StorageService;
 import robertli.zero.struts2.FileResultSupport;
@@ -43,7 +43,7 @@ public class ImageAction implements FileResultSupport, TextResultSupport {
     private ImageService imageService;
 
     @Resource
-    private WebConfiguration webConfiguration;
+    private ImagePathService imagePathService;
 
     @Resource
     private JsonService jsonService;
@@ -85,13 +85,8 @@ public class ImageAction implements FileResultSupport, TextResultSupport {
         return TEXT;
     }
 
-    private String createImageUrl(String uuid) {
-        String urlHeader = webConfiguration.getImageActionUrl();
-        return urlHeader + "?id=" + uuid;
-    }
-
     private String createImageProcessResult(String uuid) {
-        String url = createImageUrl(uuid);
+        String url = imagePathService.makeImageUrl(uuid);
         JSONObject result = jsonService.createSuccessResult();
         result.put("url", url);
         result.put("uuid", uuid);
@@ -124,7 +119,7 @@ public class ImageAction implements FileResultSupport, TextResultSupport {
             String uuid = storageService.register(imgFileName[i], imgContentType[i]);
             content = readFile(img[i]);
             storageService.store(uuid, content);
-            String url = createImageUrl(uuid);
+            String url = imagePathService.makeImageUrl(uuid);
             urlList.add(url);
         }
         storageService.clean();
