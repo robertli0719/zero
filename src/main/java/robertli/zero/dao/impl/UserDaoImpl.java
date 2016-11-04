@@ -13,7 +13,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
 import robertli.zero.dao.UserDao;
 import robertli.zero.entity.User;
-import robertli.zero.model.SearchResult;
+import robertli.zero.dto.SearchResult;
 
 /**
  *

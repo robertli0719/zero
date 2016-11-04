@@ -1,23 +1,29 @@
 # Zero Java Framework 1.0-SNAPSHOT
 
-为了让程序员们更轻松的创建项目，降低Java SSH框架的使用门槛，我将可复用的Java代码整理出来，写成可通过Spring装配的组件，开放给所有写Java Web Application的小伙伴们。
+为了让程序员们更轻松的创建项目，降低Java项目的开发门槛，我将可复用的Java代码整理出来，写成可通过Spring装配的组件，开放给所有写Java Web Application的小伙伴们。
 
 ## 我的设计目标
 * 让开发者将主要精力用于业务逻辑，而不是软件架构和功能实现
 * 联合众多小伙伴共同讨论和提升编程技术
 * 多项目共享同一软件架构和编程约定，实现代码复用
 
+## 最新动态
+* 受到小伙伴们的建议，我决定彻底放弃Struts2，改用SpringMVC
+* 过去的项目被转移至了一个分支项目ZeroSSH
+* 我刚刚清除掉了所有系统中与Struts2有关的代码，决心用SpringMVC重造
+* 我计划通过REST的方式实现前后端彻底分离，并在未来引入React
+
 ## 当前结构
-* 这套代码是基于SSH框架 Spring4 + Struts2 + Hibernate4
+* 这套代码是基于 Spring Framework + Hibernate4
 * 基于Maven自动下载Jar包。
 * 通过将配置文件设置在框架之外，实现框架与具体应用项目的解耦
 * 基于Spring的依赖注入，使框架中所有组件都可根据需求来更换实现
 
 ## 系统分层
 ### 表现层
-* JSP/JSON 提供result
-*  robertli.zero.action..*Action 映射URL
-*  robertli.zero.struts2.* 提供各种Interceptor功能
+* 我计划实现前后端完全分离
+* 通过SpringMVC为前端提供REST Service
+*  robertli.zero.interceptor.* 提供各种Interceptor功能
 
 ### 业务逻辑层
 * robertli.zero.service.* 提供各种服务的接口
@@ -34,8 +40,8 @@
 * robertli.zero.model.* 一组有结构关系的数据所构成的数据对象
 
 #### 简单解释
- 1. 由于我的设计目标是给约5人左右的小型开发团队提供轻量级框架，所以我没有引入DTO。因此Entity无法被完全封装在DAO之下，而是必须贯穿全局。这样可以降低用户需求变化时所带来的级联修改的成本。
- 2. robertli.zero.model.* 中的model并不是指MVC中的model，不是指数据库entity，不是指view model，也不是指DTO，而是表示一组有结构关系的数据所构成的数据对象。有时候Service层的返回结果无法直接用Entity来表示，所以需要将Entity的计算结果转换为model再返回上去。由于一些查询结果需要通过MySQL事务的快照读来保证一致性，所以可以使用model对多个DAO查询结果进行封装。
+ 1. 由于我的设计目标是给约5人左右的小型开发团队提供轻量级框架，所以我没有引入大量的DTO。因此Entity无法被完全封装在DAO之下，而是必须贯穿全局。这样可以降低用户需求变化时所带来的级联修改的成本。
+ 2. 当系统遇到一些不得不采用DTO的情况时，我们将局部重构系统来区分开Entity和DTO
  
 
 ## 使用指南
@@ -65,21 +71,8 @@ create database zero default character set utf8mb4 default collate utf8mb4_gener
 3. 修改META-INF/context.xml 下的path到你的项目名称
 
 ## 编程指南
-### 添加新JSP页面
-当想添加 http://yourdomain.com/Xxx 页面时（Struts2 约定优于配置）
-
-1. 在robertli.zero.action包下创建XxxAction.java
-2. 在WEB-INF/default下添加Xxx.jsp
-3. 在XxxAction中添加业务逻辑
-4. 在jsp中编辑视图
-
-### 添加JSON数据URL
-当想让http://yourdomain.com/json/Yyy返回想要的数据时
-
-1. 在robertli.zero.action包下创建YyyAction.java
-2. 向YyyAction放入private的数据，并通过Netbeans自动生成好getter
-3. 向YyyAction放入需要的若干function
-4. 访问http://yourdomain.com/json/Yyy!funName 得到运行结果
+### 建立新页面
+（文档尚未完成）
 
 ### 建立数据库entity
 当ER图画好后，按如下方式快速建立数据库（纯Hibernate知识）
@@ -127,6 +120,10 @@ create database zero default character set utf8mb4 default collate utf8mb4_gener
 * MD5
 * 邮箱格式验证工具
 
+## 其他分支项目
+* 我还另外提供了一个采用传统的Struts2（不采用SpringMVC）的解决方案，适用于传统JSP开发者
+* [Github: https://github.com/robertli0719/ZeroSSH](https://github.com/robertli0719/ZeroSSH)
+
 我将于每天晚上抽个人时间对该项目做维护和升级，也希望能有更多的小伙伴们共同参与完善。
 
 
@@ -136,5 +133,5 @@ create database zero default character set utf8mb4 default collate utf8mb4_gener
 * wechat: robertli0719
 * [Github: https://github.com/robertli0719/zero](https://github.com/robertli0719/zero)
 
-2016-10-03
+2016-11-03
 Robert Li

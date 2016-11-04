@@ -9,7 +9,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import robertli.zero.core.RandomCodeCreater;
 import robertli.zero.entity.User;
-import robertli.zero.model.SearchResult;
+import robertli.zero.dto.SearchResult;
 import robertli.zero.test.StressTest;
 
 /**

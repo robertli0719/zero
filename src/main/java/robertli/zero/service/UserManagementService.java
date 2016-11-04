@@ -7,7 +7,7 @@ package robertli.zero.service;
 
 import robertli.zero.entity.User;
 import robertli.zero.entity.UserOnline;
-import robertli.zero.model.SearchResult;
+import robertli.zero.dto.SearchResult;
 
 /**
  * This service is design for administrators to manage user data.

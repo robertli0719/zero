@@ -11,7 +11,7 @@ import robertli.zero.dao.UserDao;
 import robertli.zero.dao.UserOnlineDao;
 import robertli.zero.entity.User;
 import robertli.zero.entity.UserOnline;
-import robertli.zero.model.SearchResult;
+import robertli.zero.dto.SearchResult;
 import robertli.zero.service.UserManagementService;
 
 @Component("userManagementService")

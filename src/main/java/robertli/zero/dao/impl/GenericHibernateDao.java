@@ -15,7 +15,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import robertli.zero.dao.GenericDao;
-import robertli.zero.model.SearchResult;
+import robertli.zero.dto.SearchResult;
 
 /**
  *

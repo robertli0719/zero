@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import robertli.zero.dao.UserOnlineDao;
 import robertli.zero.entity.User;
 import robertli.zero.entity.UserOnline;
-import robertli.zero.model.SearchResult;
+import robertli.zero.dto.SearchResult;
 
 @Component("userOnlineDao")
 public class UserOnlineDaoImpl extends GenericHibernateDao<UserOnline, String> implements UserOnlineDao {

@@ -27,6 +27,7 @@
         </property>
     </bean>
     
+    <import resource="spring-mvc.xml"/>
     <import resource="spring-database.xml"/>
     <import resource="spring-transaction.xml"/>
     

@@ -6,7 +6,7 @@
 package robertli.zero.dao;
 
 import robertli.zero.entity.User;
-import robertli.zero.model.SearchResult;
+import robertli.zero.dto.SearchResult;
 
 /**
  *
