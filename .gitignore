@@ -1,2 +1,5 @@
 log/
 target/
+webapp/dist
+webapp/node_modules
+src/main/webapp/js

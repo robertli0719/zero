@@ -1,0 +1,42 @@
+{
+  "name": "zero-webapp",
+  "version": "1.0.0",
+  "description": "just a demo",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "history": "^4.4.0",
+    "jquery": "^3.1.1",
+    "react": "^15.3.2",
+    "react-bootstrap": "^0.30.6",
+    "react-dom": "^15.3.2",
+    "react-redux": "^4.4.6",
+    "react-router": "^3.0.0",
+    "react-router-bootstrap": "^0.23.1",
+    "redux": "^3.6.0"
+  },
+  "devDependencies": {
+    "@types/history": "^2.0.39",
+    "@types/jquery": "^2.0.34",
+    "@types/react": "^0.14.44",
+    "@types/react-bootstrap": "0.0.36",
+    "@types/react-dom": "^0.14.18",
+    "@types/react-redux": "^4.4.32",
+    "@types/react-router": "^2.0.38",
+    "@types/react-router-bootstrap": "0.0.27",
+    "@types/redux": "^3.6.31",
+    "copy-webpack-plugin": "^4.0.1",
+    "css-loader": "^0.25.0",
+    "node-sass": "^3.11.2",
+    "sass-loader": "^4.0.2",
+    "source-map-loader": "^0.1.5",
+    "style-loader": "^0.13.1",
+    "ts-loader": "^1.0.0",
+    "typescript": "^2.0.9",
+    "webpack": "^1.13.3"
+  }
+}

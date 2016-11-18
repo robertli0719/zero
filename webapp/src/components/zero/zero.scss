@@ -1,0 +1,13 @@
+$ALERT_COLOR:red;
+
+.navbar{
+
+    .hello{
+        color: $ALERT_COLOR !important;
+    }
+}
+
+.z_panel{
+    background-color: #ccc;
+    padding: 20px;
+}

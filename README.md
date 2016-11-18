@@ -8,20 +8,23 @@
 * 多项目共享同一软件架构和编程约定，实现代码复用
 
 ## 最新动态
-* 受到小伙伴们的建议，我决定彻底放弃Struts2，改用SpringMVC
-* 过去的项目被转移至了一个分支项目ZeroSSH
-* 我刚刚清除掉了所有系统中与Struts2有关的代码，决心用SpringMVC重造
-* 我计划通过REST的方式实现前后端彻底分离，并在未来引入React
+* 我计划彻底放弃JSP,改用React重造前端
+* 前端的所有代码放置在了/webapp下
+* 初次运行程序前，请先进入/webapp目录下，通过npm install按照需要的文件
+* 建议同时开启netbeans和vs code，分别编写前后端内容。
+* 开发时使用webpack --watch可以实现前端的保存后自动更新
 
 ## 当前结构
-* 这套代码是基于 Spring Framework + Hibernate4
-* 基于Maven自动下载Jar包。
+* 前端基于 React + Redux + Boostrap
+* 前端基于 NPM 安装依赖包，基于webpack实现打包
+* 后端基于 Spring Framework + Hibernate4
+* 后端基于Maven自动下载Jar包。
 * 通过将配置文件设置在框架之外，实现框架与具体应用项目的解耦
 * 基于Spring的依赖注入，使框架中所有组件都可根据需求来更换实现
 
 ## 系统分层
 ### 表现层
-* 我计划实现前后端完全分离
+* 前端完全采用webapp方式实现
 * 通过SpringMVC为前端提供REST Service
 *  robertli.zero.interceptor.* 提供各种Interceptor功能
 
@@ -133,5 +136,5 @@ create database zero default character set utf8mb4 default collate utf8mb4_gener
 * wechat: robertli0719
 * [Github: https://github.com/robertli0719/zero](https://github.com/robertli0719/zero)
 
-2016-11-03
+2016-11-18
 Robert Li
