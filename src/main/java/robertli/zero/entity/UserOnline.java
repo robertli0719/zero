@@ -10,11 +10,11 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import org.hibernate.annotations.Index;
 
 /**
  * This is a Hibernate entity class which is mapped to a relevant database
@@ -24,11 +24,13 @@ import org.hibernate.annotations.Index;
  * sessionId (different device or browser) to be the login status at the same
  * time, it is possible for one user in more than one line.
  *
- * @version 1.02 2016-09-19
+ * @version 1.0.3 2016-11-19
  * @author Robert Li
  */
 @Entity
-@Table(name = "users_online")
+@Table(name = "users_online", indexes = {
+    @Index(name = "lastActiveDate", columnList = "lastActiveDate")
+})
 public class UserOnline implements Serializable {
 
     private String sessionId;
@@ -57,7 +59,6 @@ public class UserOnline implements Serializable {
 
     @Column(nullable = false)
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    @Index(name = "last_active_date")
     public Date getLastActiveDate() {
         return lastActiveDate;
     }

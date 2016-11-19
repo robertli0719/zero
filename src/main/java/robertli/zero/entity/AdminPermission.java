@@ -10,10 +10,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import org.hibernate.annotations.Index;
 
 /**
  * This is a Hibernate entity class which is mapped to a relevant database
@@ -21,13 +21,12 @@ import org.hibernate.annotations.Index;
  *
  * Each line of this table is an permission for an administrator of the system.
  *
- * @version 1.0 2016-09-21
+ * @version 1.0.1 2016-11-19
  * @author Robert Li
  */
 @Entity
-@Table(name = "admins_permission")
-@org.hibernate.annotations.Table(appliesTo = "admins_permission", indexes = {
-    @Index(name = "combine_index", columnNames = {"admin_username", "name"})
+@Table(name = "admins_permission", indexes = {
+    @Index(name = "combine_index", columnList = "admin_username,name")
 })
 public class AdminPermission implements Serializable {
 

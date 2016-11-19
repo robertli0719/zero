@@ -10,11 +10,11 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import org.hibernate.annotations.Index;
 
 /**
  * This is a Hibernate entity class which is mapped to a relevant database
@@ -22,11 +22,13 @@ import org.hibernate.annotations.Index;
  *
  * Each line is a token for user to reset password.
  *
- * @version 1.02 2016-09-19
+ * @version 1.0.3 2016-11-19
  * @author Robert Li
  */
 @Entity
-@Table(name = "users_password_reset_token")
+@Table(name = "users_password_reset_token", indexes = {
+    @Index(name = "createDate", columnList = "createDate")
+})
 public class UserPasswordResetToken implements Serializable {
 
     private String code;
@@ -55,7 +57,6 @@ public class UserPasswordResetToken implements Serializable {
 
     @Column(nullable = false)
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    @Index(name = "create_date")
     public Date getCreateDate() {
         return createDate;
     }

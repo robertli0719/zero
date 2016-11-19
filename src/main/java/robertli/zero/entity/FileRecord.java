@@ -10,9 +10,9 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import org.hibernate.annotations.Index;
 
 /**
  * This is a Hibernate entity class which is mapped to a relevant database
@@ -21,11 +21,13 @@ import org.hibernate.annotations.Index;
  * Each line of this table is a file for StorageService
  *
  * @see robertli.zero.service.StorageService
- * @version 1.0 2016-09-22
+ * @version 1.0.1 2016-11-19
  * @author Robert Li
  */
 @Entity
-@Table(name = "file_record")
+@Table(name = "file_record", indexes = {
+    @Index(name = "createdDate", columnList = "createdDate")
+})
 public class FileRecord implements Serializable {
 
     private String uuid;
@@ -73,7 +75,6 @@ public class FileRecord implements Serializable {
 
     @Column(nullable = false)
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    @Index(name = "createdDate")
     public Date getCreatedDate() {
         return createdDate;
     }

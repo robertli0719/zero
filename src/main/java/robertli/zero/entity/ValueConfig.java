@@ -10,18 +10,18 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Table;
-import org.hibernate.annotations.Index;
 
 /**
  *
- * @version 1.0 2016-10-12
+ * @version 1.0.1 2016-11-19
  * @author Robert Li
  */
 @Entity
-@Table(name = "value_config")
-@org.hibernate.annotations.Table(appliesTo = "value_config", indexes = {
-    @Index(name = "combined_index", columnNames = {"namespace", "pageName", "name"})})
+@Table(name = "value_config", indexes = {
+    @Index(name = "combine_index", columnList = "namespace,pageName,name")
+})
 public class ValueConfig implements Serializable {
 
     private int id;

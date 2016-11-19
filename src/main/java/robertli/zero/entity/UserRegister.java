@@ -10,9 +10,9 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import org.hibernate.annotations.Index;
 
 /**
  * This is a Hibernate entity class which is mapped to a relevant database
@@ -22,11 +22,13 @@ import org.hibernate.annotations.Index;
  * validated.
  *
  * @comment authLabel is for showing authId. ex: email address can include point
- * @version 1.02 2016-09-19
+ * @version 1.0.3 2016-11-19
  * @author Robert Li
  */
 @Entity
-@Table(name = "users_register")
+@Table(name = "users_register", indexes = {
+    @Index(name = "signDate", columnList = "signDate")
+})
 public class UserRegister implements Serializable {
 
     private String authId;
@@ -95,7 +97,6 @@ public class UserRegister implements Serializable {
 
     @Column(nullable = false)
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    @Index(name = "sign_date")
     public Date getSignDate() {
         return signDate;
     }
@@ -105,7 +106,6 @@ public class UserRegister implements Serializable {
     }
 
     @Column(nullable = false, unique = true, length = 100)
-    @Index(name = "verified_code")
     public String getVerifiedCode() {
         return verifiedCode;
     }

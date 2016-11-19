@@ -11,9 +11,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import org.hibernate.annotations.Index;
 
 /**
  * This is a Hibernate entity class which is mapped to a relevant database
@@ -21,11 +21,14 @@ import org.hibernate.annotations.Index;
  *
  * Each line of this table is an log record for administrator of the system.
  *
- * @version 1.0 2016-09-21
+ * @version 1.0.1 2016-11-19
  * @author Robert Li
  */
 @Entity
-@Table(name = "admins_log")
+@Table(name = "admins_log", indexes = {
+    @Index(name = "type", columnList = "type")
+    ,@Index(name = "username", columnList = "username")
+    ,@Index(name = "dateTime", columnList = "dateTime"),})
 public class AdminLog implements Serializable {
 
     private int id;
@@ -45,7 +48,6 @@ public class AdminLog implements Serializable {
     }
 
     @Column(nullable = false, length = 10)
-    @Index(name = "type")
     public String getType() {
         return type;
     }
@@ -55,7 +57,6 @@ public class AdminLog implements Serializable {
     }
 
     @Column(nullable = false, length = 50)
-    @Index(name = "username")
     public String getUsername() {
         return username;
     }
@@ -75,7 +76,6 @@ public class AdminLog implements Serializable {
 
     @Column(nullable = false)
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    @Index(name = "dateTime")
     public Date getDateTime() {
         return dateTime;
     }
