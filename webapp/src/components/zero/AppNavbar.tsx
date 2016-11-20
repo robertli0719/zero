@@ -1,36 +1,56 @@
+/*
+ * Copyright 2016 Robert Li.
+ * Released under the MIT license
+ * https://opensource.org/licenses/MIT
+ */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Button, ButtonToolbar, Navbar, Nav, NavItem, NavbarProps } from "react-bootstrap";
 import { LinkContainer } from 'react-router-bootstrap';
 import './zero.scss';
 
-let template = (
-    <Navbar className="navbar" collapseOnSelect>
-        <Navbar.Header>
-            <Navbar.Brand>
-                <a className="hello" href="#">React-Bootstrap</a>
-            </Navbar.Brand>
-            <Navbar.Toggle />
-        </Navbar.Header>
-        <Navbar.Collapse>
-            <Nav>
-                <LinkContainer to="/index">
-                    <NavItem eventKey={1}>Index</NavItem>
-                </LinkContainer>
-                <LinkContainer to="/about">
-                    <NavItem eventKey={2}>About</NavItem>
-                </LinkContainer>
-            </Nav>
-            <Nav pullRight>
-                <NavItem eventKey={1} href="#">Link Right</NavItem>
-                <NavItem eventKey={2} href="#">Link Right</NavItem>
-            </Nav>
-        </Navbar.Collapse>
-    </Navbar>
-);
+export interface NavbarItem {
+    name: string
+    url: string
+}
 
-export class AppNavbar extends React.Component<{}, {}>{
+interface AppNavbarProp {
+    name: string
+    itemList: NavbarItem[]
+    rightItemList: NavbarItem[]
+}
+
+export class AppNavbar extends React.Component<AppNavbarProp, {}>{
     render() {
-        return template;
+        return (
+            <Navbar className="navbar" collapseOnSelect>
+                <Navbar.Header>
+                    <Navbar.Brand>
+                        <a href="#">React-Bootstrap</a>
+                    </Navbar.Brand>
+                    <Navbar.Toggle />
+                </Navbar.Header>
+                <Navbar.Collapse>
+                    <Nav>
+                        {this.props.itemList.map((item, index) => {
+                            return (
+                                <LinkContainer to={item.url}>
+                                    <NavItem eventKey={index}>{item.name}</NavItem>
+                                </LinkContainer>
+                            )
+                        })}
+                    </Nav>
+                    <Nav pullRight>
+                        {this.props.rightItemList.map((item, index) => {
+                            return (
+                                <LinkContainer to={item.url}>
+                                    <NavItem eventKey={index}>{item.name}</NavItem>
+                                </LinkContainer>
+                            )
+                        })}
+                    </Nav>
+                </Navbar.Collapse>
+            </Navbar>
+        );
     }
 }

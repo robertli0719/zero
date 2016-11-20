@@ -1,6 +1,5 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { hashHistory } from 'react-router';
 import { connect } from "react-redux"
 import { AppState } from "../Store"
 

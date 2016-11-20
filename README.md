@@ -17,7 +17,7 @@
 ## 当前结构
 * 前端基于 React + Redux + Boostrap
 * 前端基于 NPM 安装依赖包，基于webpack实现打包
-* 后端基于 Spring Framework + Hibernate4
+* 后端基于 Spring Framework + Hibernate5.2
 * 后端基于Maven自动下载Jar包。
 * 通过将配置文件设置在框架之外，实现框架与具体应用项目的解耦
 * 基于Spring的依赖注入，使框架中所有组件都可根据需求来更换实现
@@ -136,5 +136,5 @@ create database zero default character set utf8mb4 default collate utf8mb4_gener
 * wechat: robertli0719
 * [Github: https://github.com/robertli0719/zero](https://github.com/robertli0719/zero)
 
-2016-11-18
+2016-11-20
 Robert Li

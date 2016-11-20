@@ -3,23 +3,34 @@ import * as ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { Router, Route, hashHistory, IndexRoute } from 'react-router';
 import { store } from "./Store"
-import { AppNavbar } from "./components/zero/AppNavbar"
+import { AppNavbar, NavbarItem } from "./components/zero/AppNavbar"
 import { Index } from "./pages/Index"
 import { About } from "./pages/About"
+import { Test } from "./pages/Test"
+import { UserRegister } from "./pages/auth/UserRegister"
 import * as jQuery from "jquery";
 
+let navBarItemList = [
+    { name: "Index", url: "/index" },
+    { name: "About", url: "/about" },
+    { name: "Test", url: "/test" }
+];
+
+let rightNavBarItemList = [
+    // { name: "Link", url: "/" },
+    // { name: "Link", url: "/" }
+] as NavbarItem[];
 
 class App extends React.Component<{}, {}>{
 
     constructor() {
         super();
-        console.log("hello,world App");
     }
 
     render() {
         return (
             <div>
-                <AppNavbar />
+                <AppNavbar name="React-Bootstrap" itemList={navBarItemList} rightItemList={rightNavBarItemList} />
                 {this.props.children}
             </div>
         )
@@ -31,8 +42,13 @@ let template = (
         <Router history={hashHistory}>
             <Route path="/" component={App}>
                 <IndexRoute component={Index} />
-                <Route path="/index" component={Index} />
-                <Route path="/about" component={About} />
+                <Route path="index" component={Index} />
+                <Route path="about" component={About} />
+                <Route path="test" component={Test} />
+                <Route path="auth">
+                    <Route path="register" component={UserRegister} />
+
+                </Route>
             </Route>
         </Router>
     </Provider>
