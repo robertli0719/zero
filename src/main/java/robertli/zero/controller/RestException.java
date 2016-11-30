@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
-package robertli.zero.dto;
+package robertli.zero.controller;
 
 import org.springframework.http.HttpStatus;
 
@@ -11,17 +11,20 @@ import org.springframework.http.HttpStatus;
  * A RuntimeExcption which is handled by GenericRestController
  *
  * @see robertli.zero.controller.GenericRestController
- * @version 2016-11-23 1.0
+ * @version 2016-11-30 1.0.1
  * @author Robert Li
  */
 public class RestException extends RuntimeException {
 
     private String status;
     private HttpStatus httpStatus;
+    private String detail;
 
-    public RestException(String status, HttpStatus httpStatus) {
+    public RestException(String status, String message, String detail, HttpStatus httpStatus) {
+        super(message);
         this.status = status;
         this.httpStatus = httpStatus;
+        this.detail = detail;
     }
 
     public String getStatus() {
@@ -38,6 +41,14 @@ public class RestException extends RuntimeException {
 
     public void setHttpStatus(HttpStatus httpStatus) {
         this.httpStatus = httpStatus;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 
 }

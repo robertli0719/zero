@@ -17,76 +17,95 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import robertli.zero.dto.RestException;
+import robertli.zero.dto.RestErrorDto;
 
 /**
  * This class will be extended by other Rest Controller, so that the controller
  * can map exceptions to JSON response.
  *
- * @version 2016-11-23 1.0
+ * @version 2016-11-30 1.0.1
  * @author Robert Li
  */
 public abstract class GenericRestController {
 
-    private Map<String, String> getFieldErrorMap(BindingResult result) {
-        Map<String, String> fieldError = new HashMap<>();
+    private void appendFieldErrors(List<RestErrorDto> errorList, BindingResult result) {
+        //getFieldErrors return errors in rand order, so we have to keep the 'big' one
+        Map<String, String> messageMap = new HashMap();
         for (FieldError error : result.getFieldErrors()) {
             String name = error.getField();
             String message = error.getDefaultMessage();
-            //getFieldErrors return errors in rand order, so we have to keep the 'big' one
-            if (fieldError.containsKey(name) == false) {
-                fieldError.put(name, message);
-            } else if (fieldError.get(name).compareTo(message) > 0) {
-                fieldError.put(name, message);
+            if (messageMap.containsKey(name) && messageMap.get(name).compareTo(message) <= 0) {
+                continue;
             }
+            messageMap.put(name, message);
+            RestErrorDto errorDto = new RestErrorDto();
+            errorDto.setType("FIELD_ERROR");
+            errorDto.setSource(name);
+            errorDto.setMessage(message);
+            errorDto.setDetail("BindingResult gets validation errors");
+            errorList.add(errorDto);
         }
-        return fieldError;
     }
 
-    private List<String> getGlobalErrorList(BindingResult result) {
-        List<String> errorList = new ArrayList<>();
+    private void appendGlobalErrors(List<RestErrorDto> errorList, BindingResult result) {
         for (ObjectError error : result.getGlobalErrors()) {
-            String message = error.getDefaultMessage();
-            errorList.add(message);
+            RestErrorDto errorDto = new RestErrorDto();
+            errorDto.setType("GLOBAL_ERROR");
+            errorDto.setSource(error.getObjectName());
+            errorDto.setMessage(error.getDefaultMessage());
+            errorDto.setDetail("BindingResult gets validation errors");
+            errorList.add(errorDto);
         }
-        return errorList;
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public Map<String, Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
         BindingResult bindingResult = exception.getBindingResult();
-        Map<String, String> fieldErrors = getFieldErrorMap(bindingResult);
-        List<String> globalErrors = getGlobalErrorList(bindingResult);
+        List<RestErrorDto> errorList = new ArrayList<>();
+        appendFieldErrors(errorList, bindingResult);
+        appendGlobalErrors(errorList, bindingResult);
+
         Map<String, Object> map = new HashMap<>();
         map.put("status", "INVALID_REQUEST");
-        map.put("fieldErrors", fieldErrors);
-        map.put("globalErrors", globalErrors);
+        map.put("errors", errorList);
         return map;
     }
 
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public Map<String, Object> handleRuntimeException(RuntimeException exception) {
-        List<String> globalErrors = new ArrayList<>();
-        String error = exception.getMessage();
-        globalErrors.add(error);
+        RestErrorDto errorDto = new RestErrorDto();
+        errorDto.setType("RUNTIME_EXCEPTION");
+        errorDto.setSource(null);
+        errorDto.setMessage("There are some errors in sever.");
+        errorDto.setDetail(exception.getMessage());
+        List<RestErrorDto> errorList = new ArrayList<>();
+        errorList.add(errorDto);
+
         Map<String, Object> map = new HashMap<>();
-        map.put("status", "RuntimeException");
-        map.put("fieldError", null);
-        map.put("globalError", globalErrors);
+        map.put("status", "RUNTIME_EXCEPTION");
+        map.put("errors", errorList);
         return map;
     }
 
     @ExceptionHandler(RestException.class)
     public ResponseEntity handleRestException(RestException exception) {
-        List<String> globalErrors = new ArrayList<>();
-        String error = exception.getStatus();
-        globalErrors.add(error);
+        String status = exception.getStatus();
+        String message = exception.getMessage();
+        String detail = exception.getDetail();
+
+        RestErrorDto errorDto = new RestErrorDto();
+        errorDto.setType(status);
+        errorDto.setSource(null);
+        errorDto.setMessage(message);
+        errorDto.setDetail(detail);
+        List<RestErrorDto> errorList = new ArrayList<>();
+        errorList.add(errorDto);
+
         Map<String, Object> map = new HashMap<>();
-        map.put("status", "RestException");
-        map.put("fieldError", null);
-        map.put("globalError", globalErrors);
-        return new ResponseEntity(map, exception.getHttpStatus());
+        map.put("status", status);
+        map.put("errors", errorList);
+        return new ResponseEntity(map, HttpStatus.BAD_REQUEST);
     }
 }

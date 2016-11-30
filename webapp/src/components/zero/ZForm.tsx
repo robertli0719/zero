@@ -62,48 +62,42 @@ export class Form extends React.Component<ZFormProps, ZFormState>{
     }
 
     formSubmitErrorHandler(feedback: any) {
-        console.log("formSubmitErrorHandler start");
         this.state.fieldErrors = {};
         this.state.globalErrors = [];
-        switch (feedback.status) {
-            case 400:
-                let fieldNameSet = this.makeFieldNameSet();
-                let result = JSON.parse(feedback.responseText);
-                let fieldErrors = result["fieldErrors"];
-                for (let field in fieldErrors) {
-                    let val = fieldErrors[field];
+
+        let fieldNameSet = this.makeFieldNameSet();
+        let result = JSON.parse(feedback.responseText);
+        let errors = result["errors"];
+        for (let field in errors) {
+            let error = errors[field];
+            let msg = error['message'];
+            switch (error['type']) {
+                case 'FIELD_ERROR':
+                    let field = error["source"];
                     if (field in fieldNameSet) {
-                        this.state.fieldErrors[field] = val;
+                        this.state.fieldErrors[field] = msg;
                     } else {
-                        console.log(val);
-                        this.state.globalErrors.push(val);
+                        this.state.globalErrors.push(msg);
                     }
-                }
-                for (let val of result["globalErrors"]) {
-                    this.state.globalErrors.push(val);
-                }
-                break;
-            default:
-                console.log("Error:Fail to submit");
+                    break;
+                default:
+                    console.log(error);
+                    this.state.globalErrors.push(msg);
+            }
         }
         this.setState(this.state);
-        console.log("formSubmitErrorHandler end");
     }
 
     submit() {
         let json = JSON.stringify(this.state.fieldVals);
-        try {
-            $.ajax({
-                url: this.props.action,
-                method: "post",
-                contentType: "application/json;charset=UTF-8",
-                data: json,
-                success: this.formSubmitSuccessHandler.bind(this),
-                error: this.formSubmitErrorHandler.bind(this)
-            });
-        } catch (error) {
-            console.log("catch the error");
-        }
+        $.ajax({
+            url: this.props.action,
+            method: "post",
+            contentType: "application/json;charset=UTF-8",
+            data: json,
+            success: this.formSubmitSuccessHandler.bind(this),
+            error: this.formSubmitErrorHandler.bind(this)
+        });
     }
 
     render() {
@@ -115,7 +109,6 @@ export class Form extends React.Component<ZFormProps, ZFormState>{
                 })
             }
             {
-
                 this.props.fields.map((item) => {
                     return (
                         <FormGroup>

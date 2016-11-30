@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import robertli.zero.dto.DemoDto;
-import robertli.zero.dto.RestException;
 import robertli.zero.dto.UserEmailRegisterDto;
 import robertli.zero.entity.User;
 import robertli.zero.service.UserRegisterService;
@@ -72,17 +71,19 @@ public class AuthController extends GenericRestController {
     @RequestMapping(path = "register", method = RequestMethod.POST)
     public Map<String, Object> register(@Valid @RequestBody UserEmailRegisterDto userRegisterDto) {
         UserRegisterService.UserRegisterResult result = userRegisterService.registerByEmail(userRegisterDto);
+
         switch (result) {
             case SUBMIT_SUCCESS:
                 Map<String, Object> map = new HashMap<>();
                 map.put("result", result);
                 return map;
             case USER_EXIST:
+                throw new RestException(result.name(), "E-mail address already in use", "You indicated you are a new customer, but an account already exists with this e-mail", HttpStatus.CONFLICT);
             case REGISTER_EXIST:
-                throw new RestException(result.name(), HttpStatus.CONFLICT);
+                throw new RestException(result.name(), "You had submitted this register.", "You use this email to submit register more than ones. Please check your emailbox.", HttpStatus.CONFLICT);
             default:
                 System.out.println(result.name());
-                throw new RestException(result.name(), HttpStatus.FORBIDDEN);
+                throw new RestException(result.name(), "Submit Fail", "The controller can't recognize the error", HttpStatus.FORBIDDEN);
         }
     }
 
@@ -109,6 +110,6 @@ public class AuthController extends GenericRestController {
         System.out.println("test");
         Map<String, Object> map = new HashMap<>();
         map.put("key", "success");
-        throw new RestException("runtime exception", HttpStatus.FORBIDDEN);
+        throw new RestException("RUNTIME_EXCEPTION", "runtime exception", "detail info", HttpStatus.FORBIDDEN);
     }
 }
