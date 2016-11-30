@@ -7,7 +7,7 @@ package robertli.zero.dao.impl;
 
 import java.util.List;
 import javax.annotation.Resource;
-import org.hibernate.Query;
+import javax.persistence.TypedQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
@@ -27,9 +27,9 @@ public class PageDaoImpl extends GenericHibernateDao<Page, Integer> implements P
     @Override
     public List<Page> listByCategory(String category) {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Page where category = :category");
-        query.setString("category", category);
-        return query.list();
+        TypedQuery query = session.createQuery("from Page where category = :category");
+        query.setParameter("category", category);
+        return query.getResultList();
     }
 
 }

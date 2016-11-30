@@ -15,6 +15,7 @@ import robertli.zero.core.SecurityService;
 import robertli.zero.dao.UserAuthDao;
 import robertli.zero.dao.UserDao;
 import robertli.zero.dao.UserRegisterDao;
+import robertli.zero.dto.UserEmailRegisterDto;
 import robertli.zero.entity.User;
 import robertli.zero.entity.UserRegister;
 import robertli.zero.service.UserEmailBuilder;
@@ -31,7 +32,7 @@ import robertli.zero.tool.ValidationTool;
  * the email.The email will includes a verified code, so that the user can use
  * the code to implement verifiyRegister() to finish the register.
  *
- * @version 1.0.2 2016-09-19
+ * @version 1.0.3 2016-11-23
  * @author Robert Li
  */
 @Component("userRegisterService")
@@ -114,38 +115,20 @@ public class UserRegisterServiceImpl implements UserRegisterService {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    private UserRegisterResult validateRegisterByEmail(String email, String orginealPassword, String passwordAgain, String name) {
-        if (ValidationTool.checkEmail(email.trim()) == false) {
-            return UserRegisterResult.EMAIL_FORMAT_ERROR;
-        }
-        if (orginealPassword.length() < 8) {
-            return UserRegisterResult.PASSWORD_SHORTER_THAN_8;
-        }
-        if (orginealPassword.equals(passwordAgain) == false) {
-            return UserRegisterResult.PASSWORD_AGAIN_ERROR;
-        }
-        if (name == null || name.isEmpty()) {
-            return UserRegisterResult.NO_NAME_ERROR;
-        }
-        return null;
-    }
-
     @Override
-    public UserRegisterResult registerByEmail(String email, String originalPassword, String passwordAgain, String name) {
-        UserRegisterResult result = validateRegisterByEmail(email, originalPassword, passwordAgain, name);
-        if (result != null) {
-            return result;
-        }
-        String authLabel = email.trim();
-        String authId = ValidationTool.preprocessEmail(email);
-        name = name.trim();
+    public UserRegisterResult registerByEmail(UserEmailRegisterDto registerDto) {
+        String emailLabel = registerDto.getEmail().trim();
+        String originalPassword = registerDto.getPassword();
+        String name = registerDto.getName().trim();
+
+        String authId = ValidationTool.preprocessEmail(emailLabel);
         final String authType = "email";
-        email = ValidationTool.preprocessEmail(email);
-        result = register(authId, authLabel, authType, originalPassword, name);
+        userRegisterDao.clear(REGISTER_LIFE_MINUTE);
+        UserRegisterResult result = register(authId, emailLabel, authType, originalPassword, name);
         if (result != UserRegisterResult.SUBMIT_SUCCESS) {
             return result;
         }
-        boolean emailFail = sendRegisterVerificationEmail(email);
+        boolean emailFail = sendRegisterVerificationEmail(emailLabel);
         if (emailFail) {
             return UserRegisterResult.EMAIL_SEND_FAIL;
         }

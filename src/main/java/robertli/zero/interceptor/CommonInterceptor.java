@@ -18,18 +18,18 @@ public class CommonInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest hsr, HttpServletResponse hsr1, Object o) throws Exception {
-        System.out.println("CommonInterceptor preHandle");
+//        System.out.println("CommonInterceptor preHandle");
         return true;
     }
 
     @Override
     public void postHandle(HttpServletRequest hsr, HttpServletResponse hsr1, Object o, ModelAndView mav) throws Exception {
-        System.out.println("CommonInterceptor postHandle");
+//        System.out.println("CommonInterceptor postHandle");
     }
 
     @Override
     public void afterCompletion(HttpServletRequest hsr, HttpServletResponse hsr1, Object o, Exception excptn) throws Exception {
-        System.out.println("CommonInterceptor afterCompletion");
+//        System.out.println("CommonInterceptor afterCompletion");
     }
 
 }

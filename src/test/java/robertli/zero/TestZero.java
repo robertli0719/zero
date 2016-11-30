@@ -231,10 +231,10 @@ public class TestZero {
 
         //service 调用Dao成功存储后自身抛出异常，测试rollback
         test6(testService);
-        
+
         //service 调用Dao成功存储后，调用另一个Dao方法抛出异常，测试rollback
         test7(testService);
-        
+
         //service 自身存储成功后，调用Dao的方法抛出异常，测试rollback
         test8(testService);
 

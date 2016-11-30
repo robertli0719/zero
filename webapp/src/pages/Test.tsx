@@ -3,14 +3,15 @@ import * as ReactDOM from "react-dom"
 import { Button, ButtonToolbar, FormControl, FormGroup } from "react-bootstrap"
 
 interface TestState {
-    url: string
+    url: string,
+    dateTime: string
 }
 
 export class Test extends React.Component<{}, TestState>{
 
     constructor(props: {}) {
         super(props);
-        this.state = { url: "auth/register" };
+        this.state = { url: "demo/fun", dateTime: null };
     }
 
     urlInputChange(event: React.FormEvent<HTMLInputElement>) {
@@ -19,12 +20,25 @@ export class Test extends React.Component<{}, TestState>{
         this.setState(this.state);
     }
 
+    dateInputChange(event: React.FormEvent<HTMLInputElement>) {
+        let val = event.currentTarget.value;
+        this.state.dateTime = val;
+        this.setState(this.state);
+    }
+
     execute(method: string) {
+
+        let data = {
+            name: "asdd",
+        };
+        let json = JSON.stringify(data);
         $.ajax({
             url: this.state.url,
             method: method,
+            contentType: "application/json;charset=UTF-8",
+            data: json,
             success: function (feedback) {
-                console.log("success:", feedback,feedback.length);
+                console.log("success:", feedback, feedback.length);
             },
             error: function (feedback) {
                 console.log("error:", feedback);

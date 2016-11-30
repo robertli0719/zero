@@ -5,6 +5,8 @@
  */
 package robertli.zero.service;
 
+import robertli.zero.dto.UserEmailRegisterDto;
+
 /**
  * This service is design for users to register the system.<br>
  * In my plan, users can register by email, telephone, or any other ways,but my
@@ -15,7 +17,7 @@ package robertli.zero.service;
  * the email.The email will includes a verified code, so that the user can use
  * the code to implement verifiyRegister() to finish the register.
  *
- * @version 1.0.2 2016-09-19
+ * @version 1.0.3 2016-11-23
  * @author Robert Li
  */
 public interface UserRegisterService {
@@ -47,10 +49,6 @@ public interface UserRegisterService {
         REGISTER_EXIST,
         EMAIL_SEND_FAIL,
         SMS_SEND_FAIL,
-        EMAIL_FORMAT_ERROR,
-        PASSWORD_AGAIN_ERROR,
-        PASSWORD_SHORTER_THAN_8,
-        NO_NAME_ERROR,
         DATABASE_EXCEPTION
     }
 
@@ -63,13 +61,10 @@ public interface UserRegisterService {
      * is that the field 'password' should be with MD5. In other words, the
      * password is protected by MD5, and original password is the real one.
      *
-     * @param email the email address
-     * @param originalPassword the real password which inputs by user
-     * @param passwordAgain user should type the password twice
-     * @param name the name which will show on pages after user login
+     * @param userEmailRegisterDto register form info
      * @return a status set of running result
      */
-    public UserRegisterResult registerByEmail(String email, String originalPassword, String passwordAgain, String name);
+    public UserRegisterResult registerByEmail(UserEmailRegisterDto userEmailRegisterDto);
 
     /**
      * This function has not finish

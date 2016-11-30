@@ -8,6 +8,7 @@ import { Index } from "./pages/Index"
 import { About } from "./pages/About"
 import { Test } from "./pages/Test"
 import { UserRegister } from "./pages/auth/UserRegister"
+import { UserLogin } from "./pages/auth/UserLogin"
 import * as jQuery from "jquery";
 
 let navBarItemList = [
@@ -47,6 +48,7 @@ let template = (
                 <Route path="test" component={Test} />
                 <Route path="auth">
                     <Route path="register" component={UserRegister} />
+                    <Route path="login" component={UserLogin} />
 
                 </Route>
             </Route>

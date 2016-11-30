@@ -14,6 +14,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import robertli.zero.core.RandomCodeCreater;
 import robertli.zero.core.impl.EmailSenderImpl;
 import robertli.zero.dao.UserRegisterDao;
+import robertli.zero.dto.UserEmailRegisterDto;
 import robertli.zero.entity.User;
 import robertli.zero.entity.UserRegister;
 import robertli.zero.service.UserService.UserLoginResult;
@@ -47,7 +48,12 @@ public class UserServiceTest {
     }
 
     private void addUser(String email, String name, String password) {
-        userRegisterService.registerByEmail(email, password, password, name);
+        UserEmailRegisterDto registerDto = new UserEmailRegisterDto();
+        registerDto.setEmail(email);
+        registerDto.setName(name);
+        registerDto.setPassword(password);
+        registerDto.setPasswordAgain(password);
+        userRegisterService.registerByEmail(registerDto);
         UserRegister userRegister = userRegisterDao.get(email);
         String verifiedCode = userRegister.getVerifiedCode();
         userRegisterService.verifiyRegister(verifiedCode);

@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import javax.annotation.Resource;
-import org.hibernate.Query;
+import javax.persistence.TypedQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
@@ -48,9 +48,9 @@ public class FileRecordDaoImpl extends GenericHibernateDao<FileRecord, String> i
         cal.add(Calendar.MINUTE, -lifeMinute);
         Date endDate = cal.getTime();
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from FileRecord where createdDate<=:endDate and temp=true");
+        TypedQuery query = session.createQuery("from FileRecord where createdDate<=:endDate and temp=true");
         query.setParameter("endDate", endDate);
-        return query.list();
+        return query.getResultList();
     }
 
 }

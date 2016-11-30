@@ -8,7 +8,7 @@ package robertli.zero.dao.impl;
 import java.util.Calendar;
 import java.util.Date;
 import javax.annotation.Resource;
-import org.hibernate.Query;
+import javax.persistence.TypedQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
@@ -32,7 +32,7 @@ public class UserRegisterDaoImpl extends GenericHibernateDao<UserRegister, Strin
         Date endDate = cal.getTime();
 
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("delete from UserRegister where signDate<=:endDate");
+        TypedQuery<UserRegister> query = session.createQuery("delete from UserRegister where signDate<=:endDate");
         query.setParameter("endDate", endDate);
         query.executeUpdate();
     }
@@ -40,10 +40,10 @@ public class UserRegisterDaoImpl extends GenericHibernateDao<UserRegister, Strin
     @Override
     public UserRegister getByVerifiedCode(String code) {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from UserRegister where verifiedCode=:verifiedCode");
+        TypedQuery<UserRegister> query = session.createQuery("from UserRegister where verifiedCode=:verifiedCode");
         query.setMaxResults(1);
-        query.setString("verifiedCode", code);
-        return (UserRegister) query.uniqueResult();
+        query.setParameter("verifiedCode", code);
+        return (UserRegister) query.getSingleResult();
     }
 
 }

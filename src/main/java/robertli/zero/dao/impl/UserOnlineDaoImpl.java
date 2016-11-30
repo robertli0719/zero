@@ -8,7 +8,7 @@ package robertli.zero.dao.impl;
 import java.util.Calendar;
 import java.util.Date;
 import javax.annotation.Resource;
-import org.hibernate.Query;
+import javax.persistence.TypedQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
@@ -29,7 +29,7 @@ public class UserOnlineDaoImpl extends GenericHibernateDao<UserOnline, String> i
         cal.add(Calendar.MINUTE, -lifeMinute);
         Date endDate = cal.getTime();
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("delete from UserOnline where lastActiveDate<=:endDate");
+        TypedQuery query = session.createQuery("delete from UserOnline where lastActiveDate<=:endDate");
         query.setParameter("endDate", endDate);
         query.executeUpdate();
     }

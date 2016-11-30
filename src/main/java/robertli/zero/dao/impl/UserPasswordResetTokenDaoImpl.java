@@ -8,7 +8,7 @@ package robertli.zero.dao.impl;
 import java.util.Calendar;
 import java.util.Date;
 import javax.annotation.Resource;
-import org.hibernate.Query;
+import javax.persistence.TypedQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
@@ -31,7 +31,7 @@ public class UserPasswordResetTokenDaoImpl extends GenericHibernateDao<UserPassw
         cal.add(Calendar.MINUTE, -lifeMinute);
         Date endDate = cal.getTime();
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("delete from UserPasswordResetToken where createDate<=:endDate");
+        TypedQuery query = session.createQuery("delete from UserPasswordResetToken where createDate<=:endDate");
         query.setParameter("endDate", endDate);
         query.executeUpdate();
     }

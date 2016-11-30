@@ -8,7 +8,7 @@ package robertli.zero.dao.impl;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
-import org.hibernate.Query;
+import javax.persistence.TypedQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
@@ -28,35 +28,35 @@ public class ValueConfigDaoImpl extends GenericHibernateDao<ValueConfig, Integer
     @Override
     public List<String> getNamespaceList() {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("select namespace from ValueConfig group by namespace");
-        return query.list();
+        TypedQuery query = session.createQuery("select namespace from ValueConfig group by namespace");
+        return query.getResultList();
     }
 
     @Override
     public List<String> getPageNameList(String namespace) {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("select pageName from ValueConfig where namespace=:namespace group by pageName");
-        query.setString("namespace", namespace);
-        return query.list();
+        TypedQuery query = session.createQuery("select pageName from ValueConfig where namespace=:namespace group by pageName");
+        query.setParameter("namespace", namespace);
+        return query.getResultList();
     }
 
     @Override
     public List<ValueConfig> getValueConfigList(String namespace, String pageName) {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from ValueConfig where namespace=:namespace and pageName=:pageName");
-        query.setString("namespace", namespace);
-        query.setString("pageName", pageName);
-        return query.list();
+        TypedQuery query = session.createQuery("from ValueConfig where namespace=:namespace and pageName=:pageName");
+        query.setParameter("namespace", namespace);
+        query.setParameter("pageName", pageName);
+        return query.getResultList();
     }
 
     @Override
     public List<String> getValList(String namespace, String pageName, String name) {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("select val from ValueConfig where namespace=:namespace and pageName=:pageName and name=:name");
-        query.setString("namespace", namespace);
-        query.setString("pageName", pageName);
-        query.setString("name", name);
-        return query.list();
+        TypedQuery query = session.createQuery("select val from ValueConfig where namespace=:namespace and pageName=:pageName and name=:name");
+        query.setParameter("namespace", namespace);
+        query.setParameter("pageName", pageName);
+        query.setParameter("name", name);
+        return query.getResultList();
     }
 
     @Override
@@ -73,9 +73,9 @@ public class ValueConfigDaoImpl extends GenericHibernateDao<ValueConfig, Integer
     @Override
     public void deleteValueConfig(String namespace, String pageName) {
         Session session = sessionFactory.getCurrentSession();
-        Query delete_query = session.createQuery("delete from ValueConfig where namespace=:namespace and pageName=:pageName");
-        delete_query.setString("namespace", namespace);
-        delete_query.setString("pageName", pageName);
+        TypedQuery delete_query = session.createQuery("delete from ValueConfig where namespace=:namespace and pageName=:pageName");
+        delete_query.setParameter("namespace", namespace);
+        delete_query.setParameter("pageName", pageName);
         delete_query.executeUpdate();
     }
 

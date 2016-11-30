@@ -19,11 +19,11 @@
     <context:component-scan base-package="robertli.zero.*"/>
     <aop:aspectj-autoproxy/>
     
-    <!-- database.properties can be save at out of the app -->
+    <!-- app.properties can be save at out of the app by system environment -->
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="location">
-            <!--<value>file://~/app.properties</value>-->
-            <value>classpath:app.properties</value>
+            <value>file:${ZERO_PROPERTIES}</value>
+            <!--<value>classpath:app.properties</value>-->
         </property>
     </bean>
     

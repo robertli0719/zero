@@ -8,7 +8,7 @@ package robertli.zero.dao.impl;
 import java.util.Calendar;
 import java.util.Date;
 import javax.annotation.Resource;
-import org.hibernate.Query;
+import javax.persistence.TypedQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
@@ -32,7 +32,7 @@ public class AdminOnlineDaoImpl extends GenericHibernateDao<AdminOnline, String>
         cal.add(Calendar.MINUTE, -lifeMinute);
         Date endDate = cal.getTime();
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("delete from AdminOnline where lastActiveDate<=:endDate");
+        TypedQuery query = session.createQuery("delete from AdminOnline where lastActiveDate<=:endDate");
         query.setParameter("endDate", endDate);
         query.executeUpdate();
     }
@@ -49,8 +49,8 @@ public class AdminOnlineDaoImpl extends GenericHibernateDao<AdminOnline, String>
     @Override
     public void kickAdminByUsername(String username) {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("delete from AdminOnline where admin=:username");
-        query.setString("username", username);
+        TypedQuery query = session.createQuery("delete from AdminOnline where admin=:username");
+        query.setParameter("username", username);
         query.executeUpdate();
     }
 

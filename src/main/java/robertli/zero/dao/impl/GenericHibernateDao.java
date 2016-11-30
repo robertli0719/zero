@@ -10,8 +10,8 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 import javax.annotation.Resource;
+import javax.persistence.TypedQuery;
 import org.hibernate.LockOptions;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import robertli.zero.dao.GenericDao;
@@ -19,7 +19,7 @@ import robertli.zero.dto.SearchResult;
 
 /**
  *
- * @version 1.0 2016.09-17
+ * @version 1.0.1 2016-11-29
  * @author Robert Li
  * @param <T> The Entity Class
  * @param <PK> The Type of ID
@@ -87,55 +87,55 @@ public class GenericHibernateDao<T extends Serializable, PK extends Serializable
     @Override
     public List<T> list(int max) {
         Session session = getSession();
-        Query query = session.createQuery("from " + entityClass.getName());
+        TypedQuery query = session.createQuery("from " + entityClass.getName());
         query.setMaxResults(max);
-        return query.list();
+        return query.getResultList();
     }
 
     @Override
     public List<T> list(int first, int max) {
         Session session = getSession();
-        Query query = session.createQuery("from " + entityClass.getName());
+        TypedQuery query = session.createQuery("from " + entityClass.getName());
         query.setFirstResult(first);
         query.setMaxResults(max);
-        return query.list();
+        return query.getResultList();
     }
 
     @Override
     public List<T> listDesc() {
         Session session = getSession();
-        Query query = session.createQuery("from " + entityClass.getName() + " desc");
-        return query.list();
+        TypedQuery query = session.createQuery("from " + entityClass.getName() + " desc");
+        return query.getResultList();
     }
 
     @Override
     public List<T> listDesc(int max) {
         Session session = getSession();
-        Query query = session.createQuery("from " + entityClass.getName() + " desc");
+        TypedQuery query = session.createQuery("from " + entityClass.getName() + " desc");
         query.setMaxResults(max);
-        return query.list();
+        return query.getResultList();
     }
 
     @Override
     public List<T> listDesc(int first, int max) {
         Session session = getSession();
-        Query query = session.createQuery("from " + entityClass.getName() + " desc");
+        TypedQuery query = session.createQuery("from " + entityClass.getName() + " desc");
         query.setFirstResult(first);
         query.setMaxResults(max);
-        return query.list();
+        return query.getResultList();
     }
 
     public SearchResult<T> query(String hql, int pageId, int max) {
         Session session = getSession();
-        Query countQuery = session.createQuery("select count(*) " + hql);
-        Number number = (Number) countQuery.uniqueResult();
+        TypedQuery countQuery = session.createQuery("select count(*) " + hql);
+        Number number = (Number) countQuery.getSingleResult();
         int count = number.intValue();
 
         int start = (pageId - 1) * max;
-        Query query = session.createQuery(hql);
+        TypedQuery query = session.createQuery(hql);
         query.setFirstResult(start);
         query.setMaxResults(max);
-        List<T> list = query.list();
+        List<T> list = query.getResultList();
 
         return new SearchResult<>(start, max, count, list);
     }

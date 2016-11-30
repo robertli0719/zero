@@ -23,16 +23,18 @@ interface ZFormProps {
 }
 
 interface ZFormState {
-    vals: { [key: string]: string }
+    fieldVals: { [key: string]: string },
+    fieldErrors: { [key: string]: string },
+    globalErrors: string[]
 }
 
 export class Form extends React.Component<ZFormProps, ZFormState>{
 
     constructor(props: ZFormProps) {
         super(props);
-        this.state = { vals: {} };
+        this.state = { fieldVals: {}, fieldErrors: {}, globalErrors: [] };
         for (let field of this.props.fields) {
-            this.state.vals[field.name] = "";
+            this.state.fieldVals[field.name] = "";
         }
     }
 
@@ -40,20 +42,80 @@ export class Form extends React.Component<ZFormProps, ZFormState>{
         let target = event.currentTarget;
         let name = target.name;
         let val = target.value;
-        this.state.vals[name] = val;
+        this.state.fieldVals[name] = val;
         this.setState(this.state);
     }
 
+    formSubmitSuccessHandler(feedback: any) {
+        console.log("success:", feedback, feedback.length);
+        this.state.fieldErrors = {};
+        this.state.globalErrors = [];
+        this.setState(this.state);
+    }
+
+    makeFieldNameSet() {
+        let nameSet: { [key: string]: Boolean } = {};
+        this.props.fields.map((item) => {
+            nameSet[item.name] = true;
+        });
+        return nameSet;
+    }
+
+    formSubmitErrorHandler(feedback: any) {
+        console.log("formSubmitErrorHandler start");
+        this.state.fieldErrors = {};
+        this.state.globalErrors = [];
+        switch (feedback.status) {
+            case 400:
+                let fieldNameSet = this.makeFieldNameSet();
+                let result = JSON.parse(feedback.responseText);
+                let fieldErrors = result["fieldErrors"];
+                for (let field in fieldErrors) {
+                    let val = fieldErrors[field];
+                    if (field in fieldNameSet) {
+                        this.state.fieldErrors[field] = val;
+                    } else {
+                        console.log(val);
+                        this.state.globalErrors.push(val);
+                    }
+                }
+                for (let val of result["globalErrors"]) {
+                    this.state.globalErrors.push(val);
+                }
+                break;
+            default:
+                console.log("Error:Fail to submit");
+        }
+        this.setState(this.state);
+        console.log("formSubmitErrorHandler end");
+    }
+
     submit() {
-        for (let key in this.state.vals) {
-            let val = this.state.vals[key];
-            console.log(key + " : " + val);
+        let json = JSON.stringify(this.state.fieldVals);
+        try {
+            $.ajax({
+                url: this.props.action,
+                method: "post",
+                contentType: "application/json;charset=UTF-8",
+                data: json,
+                success: this.formSubmitSuccessHandler.bind(this),
+                error: this.formSubmitErrorHandler.bind(this)
+            });
+        } catch (error) {
+            console.log("catch the error");
         }
     }
 
     render() {
+
         return <form>
             {
+                this.state.globalErrors.map((val) => {
+                    return <p>{val}</p>
+                })
+            }
+            {
+
                 this.props.fields.map((item) => {
                     return (
                         <FormGroup>
@@ -61,10 +123,11 @@ export class Form extends React.Component<ZFormProps, ZFormState>{
                             <FormControl
                                 type={item.type}
                                 name={item.name}
-                                value={this.state.vals[item.name]}
+                                value={this.state.fieldVals[item.name]}
                                 onChange={this.fieldChangeHandler.bind(this)}
                                 />
                             <FormControl.Feedback />
+                            <p>{this.state.fieldErrors[item.name]}</p>
                         </FormGroup>
                     )
                 })
