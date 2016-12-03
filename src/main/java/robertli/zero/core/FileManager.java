@@ -35,7 +35,7 @@ public interface FileManager {
      *
      * @param uuid the identification of file
      * @param data the data of file
-     * @throws java.io.IOException
+     * @throws java.io.IOException when writing failly
      */
     public void write(String uuid, byte[] data) throws IOException;
 

@@ -16,7 +16,7 @@ public interface UserRegisterDao extends GenericDao<UserRegister, String> {
     /**
      * delete the register records which have no activities within lifeMinute
      *
-     * @param lifeMinute
+     * @param lifeMinute the time range for a register in minute
      */
     public void clear(final int lifeMinute);
 

@@ -35,7 +35,7 @@ public interface EmailSender {
      * result.
      *
      * @param emailMessage the email which will be send out.
-     * @param callback
+     * @param callback the callback function after send
      */
     public void send(EmailMessage emailMessage, SenderCallbacker callback);
 

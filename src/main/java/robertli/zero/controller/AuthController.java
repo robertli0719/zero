@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import robertli.zero.dto.DemoDto;
-import robertli.zero.dto.UserEmailRegisterDto;
+import robertli.zero.dto.auth.UserEmailRegisterDto;
+import robertli.zero.dto.auth.UserVerifiyRegisterDto;
 import robertli.zero.entity.User;
 import robertli.zero.service.UserRegisterService;
 import robertli.zero.service.UserService;
@@ -97,19 +97,12 @@ public class AuthController extends GenericRestController {
     }
 
     @RequestMapping(path = "register/verifiy", method = RequestMethod.POST)
-    public Map<String, Object> verifiyRegister(HttpSession session, String verifiedCode) {
+    public Map<String, Object> verifiyRegister(@Valid @RequestBody UserVerifiyRegisterDto userVerifiyRegisterDto) {
+        String verifiedCode = userVerifiyRegisterDto.getVerifiedCode();
         Map<String, Object> map = new HashMap<>();
-        String sessionId = session.getId();
-        Object result = userRegisterService.verifiyRegister(sessionId);
+        Object result = userRegisterService.verifiyRegister(verifiedCode);
         map.put("result", result);
         return map;
     }
 
-    @RequestMapping(path = "test", method = RequestMethod.POST)
-    public String test(@Valid @RequestBody DemoDto production) {
-        System.out.println("test");
-        Map<String, Object> map = new HashMap<>();
-        map.put("key", "success");
-        throw new RestException("RUNTIME_EXCEPTION", "runtime exception", "detail info", HttpStatus.FORBIDDEN);
-    }
 }

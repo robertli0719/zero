@@ -81,6 +81,9 @@ public class UserServiceImp implements UserService {
 
     @Override
     public UserLoginResult login(String sessionId, String userAuth, String orginealPassword) {
+        System.out.println("sessionId:"+sessionId);
+        System.out.println("userAuth:"+userAuth);
+        System.out.println("orginealPassword:"+orginealPassword);
         try {
             String userAuthId = makeUserAuthId(userAuth);
             User user = checkUser(userAuthId, orginealPassword + "");

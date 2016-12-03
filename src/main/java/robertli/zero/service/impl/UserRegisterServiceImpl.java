@@ -15,7 +15,7 @@ import robertli.zero.core.SecurityService;
 import robertli.zero.dao.UserAuthDao;
 import robertli.zero.dao.UserDao;
 import robertli.zero.dao.UserRegisterDao;
-import robertli.zero.dto.UserEmailRegisterDto;
+import robertli.zero.dto.auth.UserEmailRegisterDto;
 import robertli.zero.entity.User;
 import robertli.zero.entity.UserRegister;
 import robertli.zero.service.UserEmailBuilder;

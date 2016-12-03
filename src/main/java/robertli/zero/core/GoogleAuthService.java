@@ -9,10 +9,10 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * This service is for using Google sign-in for web site.<br />
- * reference:<br/>
+ * This service is for using Google sign-in for web site.<br>
+ * reference:<br>
  * https://developers.google.com/identity/sign-in/web/backend-auth
- * <br/>
+ * <br>
  *
  *
  * @version 1.0 2016-09-20

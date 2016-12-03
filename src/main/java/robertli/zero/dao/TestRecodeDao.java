@@ -19,7 +19,7 @@ public interface TestRecodeDao extends GenericDao<TestRecord, String> {
     /**
      * test to success save a list
      *
-     * @param testRecodeList
+     * @param testRecodeList list of TestRecord
      */
     public void testA(List<TestRecord> testRecodeList);
 
@@ -27,7 +27,7 @@ public interface TestRecodeDao extends GenericDao<TestRecord, String> {
      * throws RuntimeException after save a list <br>
      * test rollback
      *
-     * @param testRecodeList
+     * @param testRecodeList a list of TestRecode
      */
     public void testB(List<TestRecord> testRecodeList);
 

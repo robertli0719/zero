@@ -79,7 +79,7 @@ public interface AdminService {
      * @param oldPassword the old password for the administrators
      * @param newPassword the new password for the administrators
      * @param newPasswordAgain type again the new password
-     * @return
+     * @return AdminResetPasswordResult
      */
     public AdminResetPasswordResult resetPassword(String sessionId, String oldPassword, String newPassword, String newPasswordAgain);
 

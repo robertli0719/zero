@@ -20,6 +20,7 @@ interface ZFormProps {
     action: string
     submit: string
     fields: Field[]
+    onSuccess: Function
 }
 
 interface ZFormState {
@@ -51,6 +52,7 @@ export class Form extends React.Component<ZFormProps, ZFormState>{
         this.state.fieldErrors = {};
         this.state.globalErrors = [];
         this.setState(this.state);
+        this.props.onSuccess(feedback);
     }
 
     makeFieldNameSet() {
@@ -101,7 +103,6 @@ export class Form extends React.Component<ZFormProps, ZFormState>{
     }
 
     render() {
-
         return <form>
             {
                 this.state.globalErrors.map((val) => {

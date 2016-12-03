@@ -12,15 +12,37 @@ let fieldArray = [
     { label: "Nickname", name: "name", type: "text", value: "" }
 ] as ZForm.Field[];
 
-export class UserRegister extends React.Component<{}, {}>{
+interface UserRegisterState {
+    submitSuccess: boolean
+}
+
+export class UserRegister extends React.Component<{}, UserRegisterState>{
+
+    constructor() {
+        super();
+        this.state = { submitSuccess: false }
+    }
+
+    submitSuccessHandler(feedback: any) {
+        this.state.submitSuccess = true;
+        this.setState(this.state);
+    }
 
     render() {
+        if (this.state.submitSuccess) {
+            return (
+                <div className="container">
+                    <h1>Your register has been submitted successfully.</h1>
+                    <p>Please check your email to verify it.</p>
+                </div>
+            );
+        }
         return (
             <div className="container">
                 <h1>User Register</h1>
                 <Row>
                     <Col sm={3}>
-                        <ZForm.Form action="auth/register" submit="register" fields={fieldArray} />
+                        <ZForm.Form action="auth/register" submit="register" fields={fieldArray} onSuccess={this.submitSuccessHandler.bind(this)} />
                     </Col>
                 </Row>
             </div>

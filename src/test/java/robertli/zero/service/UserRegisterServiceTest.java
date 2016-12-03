@@ -12,7 +12,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import robertli.zero.core.RandomCodeCreater;
 import robertli.zero.core.impl.EmailSenderImpl;
 import robertli.zero.dao.UserRegisterDao;
-import robertli.zero.dto.UserEmailRegisterDto;
+import robertli.zero.dto.auth.UserEmailRegisterDto;
 import robertli.zero.entity.User;
 import robertli.zero.entity.UserRegister;
 import robertli.zero.service.UserRegisterService.UserRegisterResult;

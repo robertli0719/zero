@@ -5,7 +5,7 @@
  */
 package robertli.zero.service;
 
-import robertli.zero.dto.UserEmailRegisterDto;
+import robertli.zero.dto.auth.UserEmailRegisterDto;
 
 /**
  * This service is design for users to register the system.<br>
@@ -30,7 +30,7 @@ public interface UserRegisterService {
      * but users can use this function to ask the email again if they can't get
      * the last email.
      *
-     * @param email
+     * @param email the email address
      * @return ture when fail
      */
     public boolean sendRegisterVerificationEmail(String email);
@@ -88,7 +88,7 @@ public interface UserRegisterService {
      * Users use this function to finish their register after they get their
      * verified code in their validation email.
      *
-     * @param verifiedCode
+     * @param verifiedCode the verified code in validation email.
      * @return a status set of running result
      */
     public UserRegisterVerifiyResult verifiyRegister(String verifiedCode);

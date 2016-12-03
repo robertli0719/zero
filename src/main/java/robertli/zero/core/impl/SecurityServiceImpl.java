@@ -34,7 +34,7 @@ public class SecurityServiceImpl implements SecurityService {
      * the administrator will never be allow to get the database access
      * permission.
      *
-     * @param orginealPassword
+     * @param orginealPassword the real password
      * @param salt each user should own a different salt for MD5 or similar
      * algorithm
      * @return password

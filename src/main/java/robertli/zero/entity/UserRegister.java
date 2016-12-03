@@ -19,9 +19,10 @@ import javax.persistence.Temporal;
  * table<br>
  *
  * Each line is a user who has submit sign up application but has not be
- * validated.
+ * validated.<br>
  *
- * @comment authLabel is for showing authId. ex: email address can include point
+ * authLabel is for showing authId. ex: email address can include point
+ *
  * @version 1.0.3 2016-11-19
  * @author Robert Li
  */

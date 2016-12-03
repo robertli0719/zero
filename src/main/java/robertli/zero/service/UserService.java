@@ -55,9 +55,9 @@ public interface UserService {
     }
 
     /**
-     * user can login directly by Google account: <br />
+     * user can login directly by Google account: <br>
      * https://developers.google.com/identity/sign-in/web/backend-auth
-     * <br />
+     * <br>
      * Only the users who have verified email within their Google account can
      * use Google to login our system. (I think almost all the Google account
      * have verified email). If the email has registered in our system before,

@@ -16,7 +16,7 @@ public interface UserPasswordResetTokenDao extends GenericDao<UserPasswordResetT
     /**
      * delete the tokens which is past due
      *
-     * @param lifeMinute
+     * @param lifeMinute  the time range for a token in minute
      */
     public void clear(final int lifeMinute);
 }

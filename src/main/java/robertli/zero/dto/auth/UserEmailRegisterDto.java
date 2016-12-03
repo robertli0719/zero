@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
-package robertli.zero.dto;
+package robertli.zero.dto.auth;
 
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;

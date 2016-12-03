@@ -36,7 +36,7 @@ public interface TestService {
      * test1 use session to save test directly.<br >
      * should save success
      *
-     * @param testList
+     * @param testList a list of TestRecord
      */
     public void test1(List<TestRecord> testList);
 
@@ -44,7 +44,7 @@ public interface TestService {
      * test2 use session to save test directly,than throw RuntionException <br >
      * should save fail
      *
-     * @param testList
+     * @param testList a list of TestRecord
      */
     public void test2(List<TestRecord> testList);
 
@@ -52,7 +52,7 @@ public interface TestService {
      * test3 invoke test1 to save it <br >
      * should save success
      *
-     * @param testList
+     * @param testList a list of TestRecord
      */
     public void test3(List<TestRecord> testList);
 
@@ -60,7 +60,7 @@ public interface TestService {
      * test4 invoke test1 to save it, than throw RuntionException <br >
      * should save fail
      *
-     * @param testList
+     * @param testList a list of TestRecord
      */
     public void test4(List<TestRecord> testList);
 
@@ -68,7 +68,7 @@ public interface TestService {
      * test5 use test2 to save it.<br>
      * should save fail
      *
-     * @param testList
+     * @param testList a list of TestRecord
      */
     public void test5(List<TestRecord> testList);
 
@@ -76,7 +76,7 @@ public interface TestService {
      * test6 use DAO.testA success save, than throw RuntimeException<br>
      * should save fail
      *
-     * @param testList
+     * @param testList a list of TestRecord
      */
     public void test6(List<TestRecord> testList);
 
@@ -85,7 +85,7 @@ public interface TestService {
      * RuntimeException<br>
      * should save fail
      *
-     * @param testList
+     * @param testList a list of TestRecord
      */
     public void test7(List<TestRecord> testList);
 
@@ -95,7 +95,7 @@ public interface TestService {
      * should save fail
      *
      *
-     * @param testList
+     * @param testList a list of TestRecord
      */
     public void test8(List<TestRecord> testList);
 }

@@ -18,7 +18,7 @@ public interface UserOnlineDao extends GenericDao<UserOnline, String> {
     /**
      * delete the online user who has no activities within lifeMinute
      *
-     * @param lifeMinute
+     * @param lifeMinute the time range for user session in minute
      */
     public void clear(final int lifeMinute);
 

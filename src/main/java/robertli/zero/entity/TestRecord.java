@@ -15,7 +15,7 @@ import javax.persistence.Temporal;
 
 /**
  * This is a Hibernate entity class which is mapped to a relevant database table
- * <br/>
+ * <br>
  * JUnit can use this table for system self-checking
  *
  * @version 1.0 2016-09-19

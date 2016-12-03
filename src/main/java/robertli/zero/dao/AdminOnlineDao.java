@@ -23,7 +23,7 @@ public interface AdminOnlineDao extends GenericDao<AdminOnline, String> {
     /**
      * remove AdminOnline by username
      *
-     * @param username
+     * @param username the username for the admin
      */
     public void kickAdminByUsername(String username);
 }

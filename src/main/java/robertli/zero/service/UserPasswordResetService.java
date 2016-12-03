@@ -36,7 +36,7 @@ public interface UserPasswordResetService {
      * has any other tokens. Users can keep more than one tokens at the same
      * time. Each token is single use and has one day useful life.
      *
-     * @param email
+     * @param email the email address which need be reseted the password
      * @return A status set of running result.
      */
     public CreatePasswordResetTokenResult createPasswordResetToken(String email);

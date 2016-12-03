@@ -14,7 +14,7 @@ package robertli.zero.tool;
  */
 public class Luhn {
 
-    private static int BITS_ARRAY[] = {0, 2, 4, 6, 8, 1, 3, 5, 7, 9};
+    private static final int BITS_ARRAY[] = {0, 2, 4, 6, 8, 1, 3, 5, 7, 9};
 
     /**
      * verify if a luhn code is correct.
@@ -54,8 +54,8 @@ public class Luhn {
     /**
      * Add a Luhn check bit on the end of a common number
      *
-     * @param number
-     * @return
+     * @param number the code without check digit
+     * @return the code after append check digit
      */
     public static long appendCheckDigit(long number) {
         int checkDigit = countCheckDigit(number);
@@ -64,7 +64,7 @@ public class Luhn {
 
     public static void main(String args[]) {
         boolean result = Luhn.verify(4519011328206481L);
-        long v=Luhn.appendCheckDigit(451901132820448L);
+        long v = Luhn.appendCheckDigit(451901132820448L);
         System.out.println(v);
     }
 

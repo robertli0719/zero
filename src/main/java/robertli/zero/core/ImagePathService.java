@@ -10,7 +10,6 @@ import java.util.Set;
 /**
  * ImagePathService can process URL for ImageAction
  *
- * @see robertli.zero.action.file.ImageAction
  * @version 1.0 2016-10-19
  * @author Robert Li
  */

@@ -19,7 +19,7 @@ public interface FileRecordDao extends GenericDao<FileRecord, String> {
     /**
      * list the FileRecord which has been mark removed.
      *
-     * @param lifeMinute
+     * @param lifeMinute the life time in minute
      * @return List of FileRecord
      */
     public List<FileRecord> listOverdueFileRecord(final int lifeMinute);

@@ -36,7 +36,7 @@ import robertli.zero.entity.FileRecord;
  * update a object after write. After implementing delete, the object may not be
  * delete at once.<br>
  *
- * The file uploading process should be: register -> store -> fix
+ * The file uploading process should be: 1.register 2.store 3.fix
  *
  * @version 1.02 2016-09-29
  * @author Robert Li
@@ -96,7 +96,7 @@ public interface StorageService {
      *
      * @param uuid which is the identifier of the object or file
      * @param data the binary data of the object or file
-     * @throws java.io.IOException
+     * @throws java.io.IOException when store failly
      */
     public void store(String uuid, byte[] data) throws IOException;
 

@@ -21,10 +21,11 @@ import javax.persistence.Table;
  * telephone, WeChat，GoogleAuth and so on. No matter the way users using, users
  * always type two fields to login. One is authId, and the other is password.
  * When the user use email to login, the userAuthId is the email address. When
- * the user use telephone to login, the userAuthId is the phone number.
+ * the user use telephone to login, the userAuthId is the phone number.<br>
  *
- * @comment authId can be email, phone, and any account name for login
- * @comment label is for showing. ex: email address can include point
+ * authId can be email, phone, and any account name for login<br>
+ * label is for showing. ex: email address can include point<br>
+ *
  * @version 1.02 2016-09-19
  * @author Robert Li
  */
@@ -56,7 +57,7 @@ public class UserAuth implements Serializable {
         this.label = label;
     }
 
-    @Column(nullable = false,length = 50)
+    @Column(nullable = false, length = 50)
     public String getType() {
         return type;
     }
