@@ -5,12 +5,12 @@
  */
 package robertli.zero.dao;
 
-import robertli.zero.entity.AdminPermission;
+import robertli.zero.entity.Permission;
 
 /**
  *
  * @author Robert Li
  */
-public interface AdminPermissionDao extends GenericDao<AdminPermission, String> {
+public interface PermissionDao extends GenericDao<Permission, String> {
 
 }

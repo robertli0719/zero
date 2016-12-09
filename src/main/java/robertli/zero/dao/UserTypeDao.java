@@ -5,12 +5,12 @@
  */
 package robertli.zero.dao;
 
-import robertli.zero.entity.AdminLog;
+import robertli.zero.entity.UserType;
 
 /**
  *
  * @author Robert Li
  */
-public interface AdminLogDao extends GenericDao<AdminLog, Integer> {
+public interface UserTypeDao extends GenericDao<UserType, String> {
 
 }

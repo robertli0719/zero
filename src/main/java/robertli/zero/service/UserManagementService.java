@@ -6,7 +6,6 @@
 package robertli.zero.service;
 
 import robertli.zero.entity.User;
-import robertli.zero.entity.UserOnline;
 import robertli.zero.dto.SearchResult;
 
 /**
@@ -46,12 +45,5 @@ public interface UserManagementService {
      */
     public SearchResult<User> searchUserByAuthId(String authId, int pageId, int max);
 
-    /**
-     * This function should get User together
-     *
-     * @param pageId the number of page
-     * @param max the max lines to fetch
-     * @return the list of online users
-     */
-    public SearchResult<UserOnline> getUserOnlineList(int pageId, int max);
+    
 }

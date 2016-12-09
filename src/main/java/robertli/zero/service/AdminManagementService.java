@@ -6,7 +6,7 @@
 package robertli.zero.service;
 
 import java.util.List;
-import robertli.zero.entity.Admin;
+import robertli.zero.entity.User;
 
 /**
  * This service is design for super administrators such as root user to manage
@@ -66,5 +66,5 @@ public interface AdminManagementService {
      * @param sessionId the identification of a web browser session
      * @return List of administrator
      */
-    public List<Admin> getAdminList(String sessionId);
+    public List<User> getAdminList(String sessionId);
 }

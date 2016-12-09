@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import robertli.zero.dto.auth.UserEmailRegisterDto;
 import robertli.zero.dto.auth.UserVerifiyRegisterDto;
-import robertli.zero.entity.User;
 import robertli.zero.service.UserRegisterService;
-import robertli.zero.service.UserService;
 
 /**
  *
@@ -29,44 +27,44 @@ import robertli.zero.service.UserService;
 @RequestMapping("auth")
 public class AuthController extends GenericRestController {
 
-    @Resource
-    private UserService userService;
+    //@Resource
+    //private UserService userService;
 
     @Resource
     private UserRegisterService userRegisterService;
 
-    @RequestMapping(method = RequestMethod.GET)
-    public User getCurrentUser(HttpSession session) {
-        String sessionId = session.getId();
-        return userService.getCurrentUser(sessionId);
-    }
-
-    @RequestMapping(path = "login", method = RequestMethod.POST)
-    public Map<String, Object> login(HttpSession session, String authName, String password) {
-        Map<String, Object> map = new HashMap<>();
-        String sessionId = session.getId();
-        Object result = userService.login(sessionId, authName, password);
-        map.put("result", result);
-        return map;
-    }
-
-    @RequestMapping(path = "loginByGoogle", method = RequestMethod.POST)
-    public Map<String, Object> loginByGoogle(HttpSession session, String token) {
-        Map<String, Object> map = new HashMap<>();
-        String sessionId = session.getId();
-        Object result = userService.loginByGoogle(sessionId, token);
-        map.put("result", result);
-        return map;
-    }
-
-    @RequestMapping(path = "logout", method = RequestMethod.POST)
-    public Map<String, Object> logout(HttpSession session) {
-        Map<String, Object> map = new HashMap<>();
-        String sessionId = session.getId();
-        Object result = userService.logout(sessionId);
-        map.put("result", result);
-        return map;
-    }
+//    @RequestMapping(method = RequestMethod.GET)
+//    public User getCurrentUser(HttpSession session) {
+//        String sessionId = session.getId();
+//        return userService.getCurrentUser(sessionId);
+//    }
+//
+//    @RequestMapping(path = "login", method = RequestMethod.POST)
+//    public Map<String, Object> login(HttpSession session, String authName, String password) {
+//        Map<String, Object> map = new HashMap<>();
+//        String sessionId = session.getId();
+//        Object result = userService.login(sessionId, authName, password);
+//        map.put("result", result);
+//        return map;
+//    }
+//
+//    @RequestMapping(path = "loginByGoogle", method = RequestMethod.POST)
+//    public Map<String, Object> loginByGoogle(HttpSession session, String token) {
+//        Map<String, Object> map = new HashMap<>();
+//        String sessionId = session.getId();
+//        Object result = userService.loginByGoogle(sessionId, token);
+//        map.put("result", result);
+//        return map;
+//    }
+//
+//    @RequestMapping(path = "logout", method = RequestMethod.POST)
+//    public Map<String, Object> logout(HttpSession session) {
+//        Map<String, Object> map = new HashMap<>();
+//        String sessionId = session.getId();
+//        Object result = userService.logout(sessionId);
+//        map.put("result", result);
+//        return map;
+//    }
 
     @RequestMapping(path = "register", method = RequestMethod.POST)
     public Map<String, Object> register(@Valid @RequestBody UserEmailRegisterDto userRegisterDto) {

@@ -11,6 +11,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -20,7 +22,7 @@ import javax.persistence.Table;
  *
  * Each line of this table is a signed user.
  *
- * @version 1.02 2016-09-19
+ * @version 1.03 2016-12-08
  * @author Robert Li
  */
 @Entity
@@ -28,6 +30,7 @@ import javax.persistence.Table;
 public class User implements Serializable {
 
     private int id;
+    private UserType userType;
     private String password;
     private String passwordSalt;
     private String name;
@@ -42,6 +45,16 @@ public class User implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    public UserType getUserType() {
+        return userType;
+    }
+
+    public void setUserType(UserType userType) {
+        this.userType = userType;
     }
 
     @Column(nullable = false, length = 50)

@@ -6,14 +6,14 @@
 package robertli.zero.dao.impl;
 
 import org.springframework.stereotype.Component;
-import robertli.zero.dao.AdminLogDao;
-import robertli.zero.entity.AdminLog;
+import robertli.zero.dao.UserTypeDao;
+import robertli.zero.entity.UserType;
 
 /**
  *
  * @author Robert Li
  */
-@Component("adminLogDao")
-public class AdminLogDaoImpl extends GenericHibernateDao<AdminLog, Integer> implements AdminLogDao {
-
+@Component("userTypeDao")
+public class UserTypeDaoImpl extends GenericHibernateDao<UserType, String> implements UserTypeDao {
+    
 }

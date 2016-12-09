@@ -6,11 +6,9 @@
 package robertli.zero.entity;
 
 import java.io.Serializable;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -19,20 +17,18 @@ import javax.persistence.Table;
  * This is a Hibernate entity class which is mapped to a relevant database
  * table.<br>
  *
- * Each line of this table is an permission for an administrator of the system.
+ * This is the cross table between User and UserRole
  *
- * @version 1.0.1 2016-11-19
+ * @version 1.0 2016-12-08
  * @author Robert Li
  */
 @Entity
-@Table(name = "admins_permission", indexes = {
-    @Index(name = "combine_index", columnList = "admin_username,name")
-})
-public class AdminPermission implements Serializable {
+@Table(name = "users_role_item")
+public class UserRoleItem implements Serializable {
 
     private int id;
-    private Admin admin;
-    private String name;
+    private User user;
+    private UserRole userRole;
 
     @Id
     @GeneratedValue
@@ -46,21 +42,22 @@ public class AdminPermission implements Serializable {
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    public Admin getAdmin() {
-        return admin;
+    public User getUser() {
+        return user;
     }
 
-    public void setAdmin(Admin admin) {
-        this.admin = admin;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    @Column(nullable = false, length = 50)
-    public String getName() {
-        return name;
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    public UserRole getUserRole() {
+        return userRole;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUserRole(UserRole userRole) {
+        this.userRole = userRole;
     }
 
 }

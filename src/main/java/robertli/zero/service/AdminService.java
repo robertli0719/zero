@@ -5,7 +5,7 @@
  */
 package robertli.zero.service;
 
-import robertli.zero.entity.Admin;
+import robertli.zero.entity.User;
 
 /**
  * This service is design for the administrators to login, logout, query
@@ -18,7 +18,7 @@ import robertli.zero.entity.Admin;
  * within 60 minutes.
  *
  * @see AdminManagementService
- * @version 1.0 2016-09-21
+ * @version 1.1 2016-12-08
  * @author Robert Li
  */
 public interface AdminService {
@@ -35,7 +35,7 @@ public interface AdminService {
      * @return return the Admin entity<br> return null if there is no
      * administrator login.
      */
-    public Admin getCurrentAdmin(String sessionId);
+    public User getCurrentAdmin(String sessionId);
 
     public static enum AdminLoginResult {
         SUCCESS,
