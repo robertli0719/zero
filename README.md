@@ -94,18 +94,7 @@ create database zero default character set utf8mb4 default collate utf8mb4_gener
 ## 其他功能项
 
 ### 目前支持的功能组件
-* 用户注册
-* 用户登陆
-* 用户通过Google登陆
-* 用户登出
-* 用户找回密码（发邮件要求用户重设）
-* 后台管理员登陆
-* 后台管理员修改密码
-* 后台Root管理员增删其他管理员
-* 后台Root管理员挂起其他管理员
-* 后台Root管理员重设其他管理员密码
-* 后台管理员查询用户信息
-* 后台管理员编辑前台页面
+* [用户管理系统](docs/UserManagement.md)
 * 结合事务回滚的文件存储服务
 
 ### 目前支持的小组件
@@ -136,5 +125,5 @@ create database zero default character set utf8mb4 default collate utf8mb4_gener
 * wechat: robertli0719
 * [Github: https://github.com/robertli0719/zero](https://github.com/robertli0719/zero)
 
-2016-11-20
+2016-12-10
 Robert Li
