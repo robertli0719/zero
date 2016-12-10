@@ -14,5 +14,5 @@ import robertli.zero.entity.UserAuth;
  */
 public interface UserAuthDao extends GenericDao<UserAuth, String> {
 
-    public UserAuth saveUserAuth(String authId, String label, String type, User user);
+    public UserAuth saveUserAuth(String userType, String clientId, String username, String label, String usernameType, User user);
 }

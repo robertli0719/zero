@@ -3,10 +3,11 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
-package robertli.zero.dto;
+package robertli.zero.dto.user;
 
 /**
  *
+ * @version 1.0 2016-12-09
  * @author Robert Li
  */
 public class UserProfileDto {

@@ -30,8 +30,8 @@ public class AuthController extends GenericRestController {
     //@Resource
     //private UserService userService;
 
-    @Resource
-    private UserRegisterService userRegisterService;
+//    @Resource
+//    private UserRegisterService userRegisterService;
 
 //    @RequestMapping(method = RequestMethod.GET)
 //    public User getCurrentUser(HttpSession session) {
@@ -66,41 +66,41 @@ public class AuthController extends GenericRestController {
 //        return map;
 //    }
 
-    @RequestMapping(path = "register", method = RequestMethod.POST)
-    public Map<String, Object> register(@Valid @RequestBody UserEmailRegisterDto userRegisterDto) {
-        UserRegisterService.UserRegisterResult result = userRegisterService.registerByEmail(userRegisterDto);
+//    @RequestMapping(path = "register", method = RequestMethod.POST)
+//    public Map<String, Object> register(@Valid @RequestBody UserEmailRegisterDto userRegisterDto) {
+//        UserRegisterService.UserRegisterResult result = userRegisterService.registerByEmail(userRegisterDto);
+//
+//        switch (result) {
+//            case SUBMIT_SUCCESS:
+//                Map<String, Object> map = new HashMap<>();
+//                map.put("result", result);
+//                return map;
+//            case USER_EXIST:
+//                throw new RestException(result.name(), "E-mail address already in use", "You indicated you are a new customer, but an account already exists with this e-mail", HttpStatus.CONFLICT);
+//            case REGISTER_EXIST:
+//                throw new RestException(result.name(), "You had submitted this register.", "You use this email to submit register more than ones. Please check your emailbox.", HttpStatus.CONFLICT);
+//            default:
+//                System.out.println(result.name());
+//                throw new RestException(result.name(), "Submit Fail", "The controller can't recognize the error", HttpStatus.FORBIDDEN);
+//        }
+//    }
 
-        switch (result) {
-            case SUBMIT_SUCCESS:
-                Map<String, Object> map = new HashMap<>();
-                map.put("result", result);
-                return map;
-            case USER_EXIST:
-                throw new RestException(result.name(), "E-mail address already in use", "You indicated you are a new customer, but an account already exists with this e-mail", HttpStatus.CONFLICT);
-            case REGISTER_EXIST:
-                throw new RestException(result.name(), "You had submitted this register.", "You use this email to submit register more than ones. Please check your emailbox.", HttpStatus.CONFLICT);
-            default:
-                System.out.println(result.name());
-                throw new RestException(result.name(), "Submit Fail", "The controller can't recognize the error", HttpStatus.FORBIDDEN);
-        }
-    }
-
-    @RequestMapping(path = "register/sendEmail", method = RequestMethod.POST)
-    public Map<String, Object> sendRegisterVerificationEmail(HttpSession session) {
-        Map<String, Object> map = new HashMap<>();
-        String sessionId = session.getId();
-        Object result = userRegisterService.sendRegisterVerificationEmail(sessionId);
-        map.put("result", result);
-        return map;
-    }
-
-    @RequestMapping(path = "register/verifiy", method = RequestMethod.POST)
-    public Map<String, Object> verifiyRegister(@Valid @RequestBody UserVerifiyRegisterDto userVerifiyRegisterDto) {
-        String verifiedCode = userVerifiyRegisterDto.getVerifiedCode();
-        Map<String, Object> map = new HashMap<>();
-        Object result = userRegisterService.verifiyRegister(verifiedCode);
-        map.put("result", result);
-        return map;
-    }
+//    @RequestMapping(path = "register/sendEmail", method = RequestMethod.POST)
+//    public Map<String, Object> sendRegisterVerificationEmail(HttpSession session) {
+//        Map<String, Object> map = new HashMap<>();
+//        String sessionId = session.getId();
+//        Object result = userRegisterService.sendRegisterVerificationEmail(sessionId);
+//        map.put("result", result);
+//        return map;
+//    }
+//
+//    @RequestMapping(path = "register/verifiy", method = RequestMethod.POST)
+//    public Map<String, Object> verifiyRegister(@Valid @RequestBody UserVerifiyRegisterDto userVerifiyRegisterDto) {
+//        String verifiedCode = userVerifiyRegisterDto.getVerifiedCode();
+//        Map<String, Object> map = new HashMap<>();
+//        Object result = userRegisterService.verifiyRegister(verifiedCode);
+//        map.put("result", result);
+//        return map;
+//    }
 
 }

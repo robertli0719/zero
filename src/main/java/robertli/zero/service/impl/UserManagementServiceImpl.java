@@ -5,32 +5,61 @@
  */
 package robertli.zero.service.impl;
 
+import java.util.List;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Component;
+import robertli.zero.core.SecurityService;
+import robertli.zero.dao.UserAuthDao;
 import robertli.zero.dao.UserDao;
+import robertli.zero.dao.UserTypeDao;
 import robertli.zero.entity.User;
-import robertli.zero.dto.SearchResult;
+import robertli.zero.entity.UserType;
 import robertli.zero.service.UserManagementService;
 
 @Component("userManagementService")
 public class UserManagementServiceImpl implements UserManagementService {
-
+    
+    @Resource
+    private SecurityService securityService;
+    
     @Resource
     private UserDao userDao;
-
+    
+    @Resource
+    private UserAuthDao userAuthDao;
+    
+    @Resource
+    private UserTypeDao userTypeDao;
+    
     @Override
-    public SearchResult<User> getUserList(int pageId, int max) {
-        return userDao.paging(pageId, max);
+    public void addUser(String type, String clientId, String usernameType, String username, String orginealPassword, String nickname) {
+        String salt = securityService.createPasswordSalt();
+        String password = securityService.uglifyPassoword(orginealPassword, salt);
+        
+        UserType userType = userTypeDao.get(type);
+        User user = new User();
+        user.setName(nickname);
+        user.setPassword(password);
+        user.setPasswordSalt(salt);
+        user.setUserType(userType);
+        userDao.save(user);
+        
+        userAuthDao.saveUserAuth(type, clientId, username, username, usernameType, user);
     }
-
+    
     @Override
-    public SearchResult<User> searchUserByName(String name, int pageId, int max) {
-        return userDao.searchByName(name, pageId, max);
+    public void setLock(int userId, boolean lock) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
     @Override
-    public SearchResult<User> searchUserByAuthId(String authId, int pageId, int max) {
-        return userDao.searchByAuthId(authId, pageId, max);
+    public List<User> getUserList() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
+    @Override
+    public List<User> getUserListByType(String type) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
 }

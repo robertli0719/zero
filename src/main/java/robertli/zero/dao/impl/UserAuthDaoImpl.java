@@ -14,11 +14,12 @@ import robertli.zero.entity.UserAuth;
 public class UserAuthDaoImpl extends GenericHibernateDao<UserAuth, String> implements UserAuthDao {
 
     @Override
-    public UserAuth saveUserAuth(String authId, String label, String type, User user) {
+    public UserAuth saveUserAuth(String userType, String clientId, String username, String label, String usernameType, User user) {
+        String authId = userType + ":" + clientId + ":" + username;
         UserAuth userAuth = new UserAuth();
         userAuth.setAuthId(authId);
         userAuth.setLabel(label);
-        userAuth.setType(type);
+        userAuth.setUsernameType(usernameType);
         userAuth.setUser(user);
         save(userAuth);
         return userAuth;
