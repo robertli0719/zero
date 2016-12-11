@@ -1,6 +1,8 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Button, ButtonToolbar } from "react-bootstrap";
+import { AppService } from "../../services/AppService"
+import { AuthService, UserAuthDto } from "../../services/AuthService"
 
 export class AppInit extends React.Component<{}, {}>{
 
@@ -10,24 +12,31 @@ export class AppInit extends React.Component<{}, {}>{
     }
 
     appInit() {
-        $.ajax({
-            url: "admin/init",
-            method: "put",
-            success: (feedback) => {
-                console.log("init success:", feedback);
-            },
-            error: (feedback) => {
-                console.log("error happened:", feedback);
-            }
-        });
+        AppService.getInstance().initApp();
+    }
+
+    test() {
+        let userAuth: UserAuthDto = {
+            userType: "general",
+            platform: null,
+            username: "tom",
+            password: "hello123"
+        };
+        AuthService.getInstance().putAuth(userAuth);
+    }
+
+    testLogout() {
+        AuthService.getInstance().deleteAuth();
     }
 
     render() {
         return (
             <div className="container">
-                <h1>App Init</h1>
+                <h1>App Init 2</h1>
                 <ButtonToolbar>
                     <Button bsStyle="success" onClick={this.appInit.bind(this)}>Init</Button>
+                    <Button bsStyle="success" onClick={this.test.bind(this)}>Test</Button>
+                    <Button bsStyle="success" onClick={this.testLogout.bind(this)}>testLogout</Button>
                 </ButtonToolbar>
             </div>
         );

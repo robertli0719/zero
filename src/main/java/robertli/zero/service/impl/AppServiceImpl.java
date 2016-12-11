@@ -45,7 +45,7 @@ public class AppServiceImpl implements AppService {
         addUserType(UserService.USER_TYPE_GENERAL);
         addUserType(UserService.USER_TYPE_STAFF);
         addUserType(UserService.USER_TYPE_ADMIN);
-        userManagementService.addUser(UserService.USER_TYPE_ADMIN, null, "string", initAdminName, initAdminPassword, initAdminName);
+        userManagementService.addUser(UserService.USER_TYPE_ADMIN, "default", "string", initAdminName, initAdminPassword, initAdminName);
     }
 
 }

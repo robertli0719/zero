@@ -5,17 +5,23 @@
  */
 package robertli.zero.dto.user;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
  *
- * @version 1.0 2016-12-09
+ * @version 1.0.1 2016-12-10
  * @author Robert Li
  */
 public class UserAuthDto {
 
+    @NotBlank
     private String userType;
+    @NotBlank
+    private String platform;
+    @NotBlank
     private String username;
+    @NotBlank
     private String password;
-    private String client;
 
     public String getUserType() {
         return userType;
@@ -23,6 +29,14 @@ public class UserAuthDto {
 
     public void setUserType(String userType) {
         this.userType = userType;
+    }
+
+    public String getPlatform() {
+        return platform;
+    }
+
+    public void setPlatform(String platform) {
+        this.platform = platform;
     }
 
     public String getUsername() {
@@ -39,14 +53,6 @@ public class UserAuthDto {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getClient() {
-        return client;
-    }
-
-    public void setClient(String client) {
-        this.client = client;
     }
 
 }

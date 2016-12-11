@@ -21,6 +21,8 @@
 * 后端基于Maven自动下载Jar包。
 * 通过将配置文件设置在框架之外，实现框架与具体应用项目的解耦
 * 基于Spring的依赖注入，使框架中所有组件都可根据需求来更换实现
+* 前后端通过REST API解耦
+* [点击查看API设计原则](docs/ApiDesign.md)
 
 ## 系统分层
 ### 表现层
@@ -89,7 +91,7 @@ create database zero default character set utf8mb4 default collate utf8mb4_gener
 7. 通过@ManyToOne设置外键关系，必要时对应添加@OneToMany
 8. 必要时通过@Column对列的非空、唯一、默认值进行具体设置
 9. 必要时通过@Index追加索引以优化性能
-10. 在Test包中随便执行一个会读写数据库的Service，Hibernate会自动扫描entity包下所有class并自动创建好所有的数据库表。
+10.  在Test包中随便执行一个会读写数据库的Service，Hibernate会自动扫描entity包下所有class并自动创建好所有的数据库表。
 
 ## 其他功能项
 

@@ -34,7 +34,7 @@ UserType -> Platform -> User -> UserAuth
 * 当username为email时必须去掉其中的“.”并且转化为全小写
 * 当username为telephone时，需要添加区号前缀以解决国际化问题
 * google登陆和facebook登陆等可获得email的第三方登陆方式都一并归类为邮件授权
-* 不支持username相同的两种不同用户授权
+* 同一用户平台下不存在username相同的两种或两种以上不同的用户授权
 
 
 ## 访问令牌 AccessToken

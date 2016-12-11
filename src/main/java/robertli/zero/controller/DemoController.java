@@ -32,4 +32,5 @@ public class DemoController extends GenericRestController {
         Map<String, Object> map = new HashMap<>();
         return map;
     }
+    
 }

@@ -16,7 +16,7 @@ import robertli.zero.entity.User;
  */
 public interface UserManagementService {
 
-    public void addUser(String type, String clientId, String usernameType, String username, String password, String nickname);
+    public void addUser(String type, String platformName, String usernameType, String username, String password, String nickname);
 
     public void setLock(int userId, boolean lock);
 

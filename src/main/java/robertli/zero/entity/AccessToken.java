@@ -10,6 +10,7 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -20,7 +21,7 @@ import javax.persistence.Temporal;
  *
  * Each line of this table is an access token for RESTful API
  *
- * @version 1.0 2016-12-08
+ * @version 1.0.1 2016-12-11
  * @author Robert Li
  */
 @Entity
@@ -43,6 +44,7 @@ public class AccessToken implements Serializable {
     }
 
     @ManyToOne
+    @JoinColumn(nullable = false)
     public User getUser() {
         return user;
     }
@@ -52,6 +54,7 @@ public class AccessToken implements Serializable {
     }
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    @Column(nullable = false)
     public Date getCreatedDate() {
         return createdDate;
     }
@@ -61,6 +64,7 @@ public class AccessToken implements Serializable {
     }
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    @Column(nullable = false)
     public Date getExpiryDate() {
         return expiryDate;
     }

@@ -32,7 +32,7 @@ public class UserManagementServiceImpl implements UserManagementService {
     private UserTypeDao userTypeDao;
     
     @Override
-    public void addUser(String type, String clientId, String usernameType, String username, String orginealPassword, String nickname) {
+    public void addUser(String type, String platformName, String usernameType, String username, String orginealPassword, String nickname) {
         String salt = securityService.createPasswordSalt();
         String password = securityService.uglifyPassoword(orginealPassword, salt);
         
@@ -44,7 +44,7 @@ public class UserManagementServiceImpl implements UserManagementService {
         user.setUserType(userType);
         userDao.save(user);
         
-        userAuthDao.saveUserAuth(type, clientId, username, username, usernameType, user);
+        userAuthDao.saveUserAuth(type, platformName, username, username, usernameType, user);
     }
     
     @Override
