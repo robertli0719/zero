@@ -26,7 +26,7 @@ import robertli.zero.service.UserService;
  */
 @RestController
 @RequestMapping("me")
-public class MeController extends GenericRestController {
+public class MeController {
 
     @Resource
     private UserService userService;

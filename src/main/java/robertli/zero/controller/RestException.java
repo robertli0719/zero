@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
  * A RuntimeExcption which is handled by GenericRestController
  *
  * @see robertli.zero.controller.GenericRestController
- * @version 2016-11-30 1.0.1
+ * @version 2016-12-12 1.0.2
  * @author Robert Li
  */
 public class RestException extends RuntimeException {
@@ -25,6 +25,10 @@ public class RestException extends RuntimeException {
         this.status = status;
         this.httpStatus = httpStatus;
         this.detail = detail;
+    }
+
+    public RestException(String status, String message, String detail) {
+        this(status, message, detail, HttpStatus.FORBIDDEN);
     }
 
     public String getStatus() {

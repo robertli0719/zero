@@ -6,7 +6,7 @@
 package robertli.zero.service;
 
 import robertli.zero.dto.user.UserAuthDto;
-import robertli.zero.entity.User;
+import robertli.zero.dto.user.UserProfileDto;
 
 /**
  * The service for users to operate themselves
@@ -20,7 +20,15 @@ public interface UserService {
     public static final String USER_TYPE_STAFF = "staff";
     public static final String USER_TYPE_ADMIN = "admin";
 
-    public User getUserProfile(String token);
+    /**
+     * The function is for current online user to get info for self.<br>
+     * If the user has not logged in, this function should return a
+     * userProfileDto with authLabel=null
+     *
+     * @param token the access_token
+     * @return UserProfileDto and never be null
+     */
+    public UserProfileDto getUserProfile(String token);
 
     /**
      * For user login

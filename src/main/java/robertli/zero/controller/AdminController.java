@@ -19,7 +19,7 @@ import robertli.zero.service.AppService;
  */
 @RestController
 @RequestMapping("admin")
-public class AdminController extends GenericRestController {
+public class AdminController {
 
     @Resource
     private AppService appService;

@@ -15,18 +15,27 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import robertli.zero.dto.RestErrorDto;
 
 /**
- * This class will be extended by other Rest Controller, so that the controller
- * can map exceptions to JSON response.
+ * This advice will be using for mapping exceptions to JSON response.
  *
- * @version 2016-11-30 1.0.1
+ * @version 2016-12-12 1.0
  * @author Robert Li
  */
-public abstract class GenericRestController {
+@RestController
+@ControllerAdvice
+public class RestExceptionAdvice {
+
+    @InitBinder
+    public void test() {
+        System.out.println("RestExceptionAdvice running...");
+    }
 
     private void appendFieldErrors(List<RestErrorDto> errorList, BindingResult result) {
         //getFieldErrors return errors in rand order, so we have to keep the 'big' one
@@ -78,7 +87,7 @@ public abstract class GenericRestController {
         RestErrorDto errorDto = new RestErrorDto();
         errorDto.setType("RUNTIME_EXCEPTION");
         errorDto.setSource(null);
-        errorDto.setMessage("There are some errors in sever.");
+        errorDto.setMessage("There are some errors in server.");
         errorDto.setDetail(exception.getMessage());
         List<RestErrorDto> errorList = new ArrayList<>();
         errorList.add(errorDto);
@@ -95,6 +104,8 @@ public abstract class GenericRestController {
         String message = exception.getMessage();
         String detail = exception.getDetail();
 
+        HttpStatus httpStatus = exception.getHttpStatus();
+
         RestErrorDto errorDto = new RestErrorDto();
         errorDto.setType(status);
         errorDto.setSource(null);
@@ -106,6 +117,6 @@ public abstract class GenericRestController {
         Map<String, Object> map = new HashMap<>();
         map.put("status", status);
         map.put("errors", errorList);
-        return new ResponseEntity(map, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity(map, httpStatus);
     }
 }

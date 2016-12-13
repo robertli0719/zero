@@ -27,7 +27,7 @@
 ## 系统分层
 ### 表现层
 * 前端完全采用webapp方式实现
-* 通过SpringMVC为前端提供REST Service
+* 通过SpringMVC为前端提供REST API Service
 *  robertli.zero.interceptor.* 提供各种Interceptor功能
 
 ### 业务逻辑层
@@ -40,14 +40,11 @@
 * robertli.zero.dao.* 提供数据访问对象的DAO的接口通常与entity一一对应
 * robertli.zero.dao.impl.* 提供DAO的具体实现
 
-### 贯串对象
-* robertli.zero.entity.* 实体类，与数据库表对应
-* robertli.zero.model.* 一组有结构关系的数据所构成的数据对象
-
-#### 简单解释
- 1. 由于我的设计目标是给约5人左右的小型开发团队提供轻量级框架，所以我没有引入大量的DTO。因此Entity无法被完全封装在DAO之下，而是必须贯穿全局。这样可以降低用户需求变化时所带来的级联修改的成本。
- 2. 当系统遇到一些不得不采用DTO的情况时，我们将局部重构系统来区分开Entity和DTO
- 
+### 数据对象
+* robertli.zero.entity.* 实体类，与数据库表对应，封装在业务逻辑层以下
+* robertli.zero.dto.* 数据传输对象，由业务逻辑层向上提供
+* DTO上采用hibernate-validator 来进行数据验证
+* 基于ModelMapper来帮助实现DTO与Entity的相互转化
 
 ## 使用指南
 

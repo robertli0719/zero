@@ -11,13 +11,18 @@
 * 将HTTP视为应用层协议而非传输层协议
 * URI设计要面向资源而非面向功能
 * URI设计要基于客户端需求而非数据库结构
+* 设计规范统一，并且无局限性
 
 ## 设计规范
 * Request应为无状态的，因此不可依赖于session id
-* 采用GET, POST, PUT, DELETE 4个方法
+* 仅采用GET, POST, PUT, DELETE 4个方法
 * GET为安全操作，其它方法为不安全操作
 * POST为非幂等性操作，其他方法为幂等性操作
 * POST和PUT时都在request body中提供资源的完备信息
+* 使用PathVariable来区分资源
+* 在GET和DELETE上用Parameters来限制资源
+* 只在POST和PUT上使用request body
+* 只在GET上使用response body
 * URI统一为小写字母，‘-’分割单词
 
 ## 限制性规范
@@ -28,10 +33,14 @@
 
 ## 编程约定
 * 一项资源对应一个URL
-* 一项资源对应一个DTO
+* 一项资源采用的方法（GET、POST、PUT、DELETE）都公用同一个DTO
 * access_token包含在DTO外部
+* 只有文件相关请求支持3XX状态码，并且不使用DTO。
+* API请求的结果要么成功，要么失败，没有第三种情况
+* 当API返回成功时，返回2XX作为状态码，内容是DTO
+* 当API返回失败时，返回3XX、4XX、5XX作为状态码，内容采用统一错误消息格式
 
-### 错误消息格式
+### 统一错误消息格式
 {
 	status:"status",
 	errors:[{
@@ -82,7 +91,4 @@ POST /productions/1234 | 增加一个vender给产品1234，vender数据放在RequestBody里
 PUT /productions/1234 | 增加或修改某产品信息，数据格式为JSON放在RequestBody里
 DELETE /productions | 删除所有产品信息
 DELETE /productions/1234 | 删除某产品信息
-
-
-
 

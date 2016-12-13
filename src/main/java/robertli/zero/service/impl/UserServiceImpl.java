@@ -6,6 +6,7 @@
 package robertli.zero.service.impl;
 
 import javax.annotation.Resource;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import robertli.zero.controller.RestException;
@@ -13,6 +14,7 @@ import robertli.zero.dao.AccessTokenDao;
 import robertli.zero.dao.UserAuthDao;
 import robertli.zero.dao.UserDao;
 import robertli.zero.dto.user.UserAuthDto;
+import robertli.zero.dto.user.UserProfileDto;
 import robertli.zero.entity.AccessToken;
 import robertli.zero.entity.User;
 import robertli.zero.service.UserService;
@@ -30,12 +32,18 @@ public class UserServiceImpl implements UserService {
     private AccessTokenDao accessTokenDao;
 
     @Override
-    public User getUserProfile(String token) {
+    public UserProfileDto getUserProfile(String token) {
+        if (token == null) {
+            return new UserProfileDto();
+        }
         AccessToken accessToken = accessTokenDao.get(token);
         if (accessToken == null) {
-            return null;
+            return new UserProfileDto();
         }
-        return accessToken.getUser();
+        User user = accessToken.getUser();
+        ModelMapper modelMapper = new ModelMapper();
+        UserProfileDto orderDTO = modelMapper.map(user, UserProfileDto.class);
+        return orderDTO;
     }
 
     @Override
@@ -58,7 +66,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteAuth(String token) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
     }
 
 }
