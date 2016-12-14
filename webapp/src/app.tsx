@@ -11,6 +11,7 @@ import { Test } from "./pages/Test"
 import { UserRegister } from "./pages/auth/UserRegister"
 import { UserRegisterVerifiy } from "./pages/auth/UserRegisterVerifiy"
 import { UserLogin } from "./pages/auth/UserLogin"
+import { AdminInterceptor } from "./pages/admin/AdminInterceptor"
 import { AppInit } from "./pages/admin/AppInit"
 import { AdminIndex } from "./pages/admin/AdminIndex"
 import { AdminLogin } from "./pages/admin/AdminLogin"
@@ -39,20 +40,6 @@ class App extends React.Component<{}, {}>{
                 <AppNavbar name="React-Bootstrap" itemList={navBarItemList} rightItemList={rightNavBarItemList} />
                 {this.props.children}
             </div>
-        )
-    }
-}
-
-class AdminInterceptor extends React.Component<{}, {}>{
-
-    constructor() {
-        super();
-        AuthService.getInstance().getProfile();
-        console.log("AdminInterceptor");
-    }
-    render() {
-        return (
-            <div>{this.props.children}</div>
         )
     }
 }

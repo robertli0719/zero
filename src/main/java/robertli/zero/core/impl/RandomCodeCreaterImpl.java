@@ -5,14 +5,14 @@
  */
 package robertli.zero.core.impl;
 
-import java.util.Random;
+import java.security.SecureRandom;
 import org.springframework.stereotype.Component;
 import robertli.zero.core.RandomCodeCreater;
 
 /**
  * RandomCodeCreater can create random string
  *
- * @version 1.0 2016-09-19
+ * @version 1.0.1 2016-12-13
  * @author Robert Li
  */
 @Component("randomCodeCreater")
@@ -57,7 +57,7 @@ public class RandomCodeCreaterImpl implements RandomCodeCreater {
     public String createRandomCode(int size, CodeType type) {
         StringBuilder sb = new StringBuilder();
 
-        Random rand = new Random();
+        SecureRandom rand = new SecureRandom();
         final String patternStr = getPatternString(type);
         for (int i = 0; i < size; i++) {
             int index = rand.nextInt(patternStr.length());

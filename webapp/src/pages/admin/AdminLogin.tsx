@@ -1,8 +1,18 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { Button, ButtonToolbar } from "react-bootstrap";
+import { Button, ButtonToolbar, FormControl, FormGroup, ControlLabel, Col, Row } from "react-bootstrap"
+import * as ZForm from "../../components/zero/ZForm"
 
-export class AdminLogin extends React.Component<{}, {}>{
+let fieldArray = [
+    { label: "Email", name: "email", type: "text", value: "" },
+    { label: "Password", name: "password", type: "password", value: "" },
+] as ZForm.Field[];
+
+interface AdminLoginState {
+    message: string
+}
+
+export class AdminLogin extends React.Component<{}, AdminLoginState>{
 
     constructor() {
         super();

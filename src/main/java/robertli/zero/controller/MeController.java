@@ -5,8 +5,6 @@
  */
 package robertli.zero.controller;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -27,40 +25,36 @@ import robertli.zero.service.UserService;
 @RestController
 @RequestMapping("me")
 public class MeController {
-
+    
     @Resource
     private UserService userService;
     
+    private static final String COOKIE_ACCESS_TOKEN = "access_token";
+    
     @RequestMapping(method = RequestMethod.GET)
-    public UserProfileDto getMe() {
-        Logger logger = Logger.getLogger("MeController");
-        logger.log(Level.INFO, "init getMe");
-
-//        User user = userService.getUserProfile(token);
-        //先写到这，睡了
-        return new UserProfileDto();
+    public UserProfileDto getMe(@CookieValue(COOKIE_ACCESS_TOKEN) String accessToken) {
+        return userService.getUserProfile(accessToken);
     }
-
+    
     @RequestMapping(path = "auth", method = RequestMethod.PUT)
     public void putAuth(@Valid @RequestBody UserAuthDto userAuthDto, HttpServletResponse response) {
-        System.out.println("putAuth");
-        Cookie cookie = new Cookie("access_token", "hello1234567");
+        String accessToken = userService.putAuth(userAuthDto);
+        
+        Cookie cookie = new Cookie(COOKIE_ACCESS_TOKEN, accessToken);
         cookie.setHttpOnly(true);
         cookie.setMaxAge(5 * 365 * 24 * 3600);
         cookie.setPath("/");
         response.addCookie(cookie);
-        //cookie实验成功，等待完成UserService
     }
-
+    
     @RequestMapping(path = "auth", method = RequestMethod.DELETE)
-    public void deleteAuth(@CookieValue("access_token") String accessToken, HttpServletResponse response) {
-        System.out.println("access_token:" + accessToken);
-        Cookie cookie = new Cookie("access_token", null);
+    public void deleteAuth(@CookieValue(COOKIE_ACCESS_TOKEN) String accessToken, HttpServletResponse response) {
+        userService.deleteAuth(accessToken);
+        Cookie cookie = new Cookie(COOKIE_ACCESS_TOKEN, null);
         cookie.setHttpOnly(true);
         cookie.setMaxAge(0);
         cookie.setPath("/");
         response.addCookie(cookie);
-        //cookie实验成功，等待完成UserService
     }
-
+    
 }

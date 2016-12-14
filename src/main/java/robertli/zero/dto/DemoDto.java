@@ -16,16 +16,16 @@ import org.hibernate.validator.constraints.Range;
  */
 public class DemoDto {
 
-    private int id;
+    private Integer id;
     private String name;
     private Date dateTime;
 
     @Range(min = 0, max = 30)
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

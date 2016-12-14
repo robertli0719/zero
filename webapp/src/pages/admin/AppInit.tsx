@@ -22,11 +22,9 @@ export class AppInit extends React.Component<{}, {}>{
             username: "tom",
             password: "hello123"
         };
-        AuthService.getInstance().putAuth(userAuth);
     }
 
     testLogout() {
-        AuthService.getInstance().deleteAuth();
     }
 
     render() {

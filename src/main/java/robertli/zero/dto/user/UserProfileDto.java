@@ -7,13 +7,14 @@ package robertli.zero.dto.user;
 
 /**
  *
- * @version 1.0 2016-12-09
+ * @version 1.0.1 2016-12-13
  * @author Robert Li
  */
 public class UserProfileDto {
 
     private String authLabel;
     private String userType;
+    private String platform;
     private String name;
     private String telephone;
 
@@ -31,6 +32,14 @@ public class UserProfileDto {
 
     public void setUserType(String userType) {
         this.userType = userType;
+    }
+
+    public String getPlatform() {
+        return platform;
+    }
+
+    public void setPlatform(String platform) {
+        this.platform = platform;
     }
 
     public String getName() {

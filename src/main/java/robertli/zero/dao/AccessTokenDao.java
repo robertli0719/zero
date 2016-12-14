@@ -13,4 +13,8 @@ import robertli.zero.entity.AccessToken;
  */
 public interface AccessTokenDao extends GenericDao<AccessToken, String> {
 
+    /**
+     * delete the lines which is out of date.
+     */
+    public void clear();
 }
