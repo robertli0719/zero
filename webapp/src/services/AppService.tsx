@@ -1,24 +1,14 @@
+import { httpService } from "./HttpService"
 
-export class AppService {
-
-    private static instance = new AppService()
-
-    private constructor() { }
-
-    public static getInstance(): AppService {
-        return this.instance;
-    }
+class AppService {
 
     initApp() {
-        $.ajax({
-            url: "admin/init",
-            method: "put",
-            success: (feedback) => {
-                console.log("init success:", feedback);
-            },
-            error: (feedback) => {
-                console.log("error happened:", feedback);
-            }
+        httpService.put("admin/init", null, (feedback) => {
+            console.log("success:", feedback);
+        }, (result) => {
+            console.log("fail:", result);
         });
     }
 }
+
+export let appService = new AppService();

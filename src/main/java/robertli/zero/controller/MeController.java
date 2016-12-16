@@ -25,28 +25,28 @@ import robertli.zero.service.UserService;
 @RestController
 @RequestMapping("me")
 public class MeController {
-    
+
     @Resource
     private UserService userService;
-    
+
     private static final String COOKIE_ACCESS_TOKEN = "access_token";
-    
+
     @RequestMapping(method = RequestMethod.GET)
-    public UserProfileDto getMe(@CookieValue(COOKIE_ACCESS_TOKEN) String accessToken) {
+    public UserProfileDto getMe(@CookieValue(value = COOKIE_ACCESS_TOKEN, required = false) String accessToken) {
         return userService.getUserProfile(accessToken);
     }
-    
+
     @RequestMapping(path = "auth", method = RequestMethod.PUT)
     public void putAuth(@Valid @RequestBody UserAuthDto userAuthDto, HttpServletResponse response) {
         String accessToken = userService.putAuth(userAuthDto);
-        
+
         Cookie cookie = new Cookie(COOKIE_ACCESS_TOKEN, accessToken);
         cookie.setHttpOnly(true);
         cookie.setMaxAge(5 * 365 * 24 * 3600);
         cookie.setPath("/");
         response.addCookie(cookie);
     }
-    
+
     @RequestMapping(path = "auth", method = RequestMethod.DELETE)
     public void deleteAuth(@CookieValue(COOKIE_ACCESS_TOKEN) String accessToken, HttpServletResponse response) {
         userService.deleteAuth(accessToken);
@@ -56,5 +56,5 @@ public class MeController {
         cookie.setPath("/");
         response.addCookie(cookie);
     }
-    
+
 }

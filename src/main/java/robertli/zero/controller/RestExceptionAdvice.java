@@ -17,7 +17,6 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import robertli.zero.dto.RestErrorDto;
@@ -31,11 +30,6 @@ import robertli.zero.dto.RestErrorDto;
 @RestController
 @ControllerAdvice
 public class RestExceptionAdvice {
-
-    @InitBinder
-    public void test() {
-        System.out.println("RestExceptionAdvice running...");
-    }
 
     private void appendFieldErrors(List<RestErrorDto> errorList, BindingResult result) {
         //getFieldErrors return errors in rand order, so we have to keep the 'big' one

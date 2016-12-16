@@ -8,20 +8,10 @@
     I create this code for using REST API based on jquery.
     
     author: robert li
-    version: 2016-12-13 1.0
+    version: 2016-12-15 1.0.1
 */
 
-export class HttpService {
-
-    private static instance = new HttpService();
-
-    private constructor() {
-
-    }
-
-    public static getInstance() {
-        return this.instance;
-    }
+class HttpService {
 
     public get(url: string, success: (data: any) => any, error: (jqXHR: JQueryXHR) => any) {
         $.ajax({
@@ -66,3 +56,4 @@ export class HttpService {
     }
 }
 
+export let httpService = new HttpService();

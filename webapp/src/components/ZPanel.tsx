@@ -4,7 +4,7 @@ import { FormEvent } from "react"
 import { Button, ButtonToolbar } from "react-bootstrap"
 import { createStore, Action } from 'redux'
 import { connect } from "react-redux"
-import { TestService } from "../services/TestService"
+import { testService } from "../services/TestService"
 import { AppState } from "../Store"
 
 interface InjectProps {
@@ -40,7 +40,7 @@ class ZPanelComponent extends React.Component<Props, ZPanelState>{
     }
 
     add() {
-        TestService.getInstance().addNumber(1);
+        testService.addNumber(1);
     }
 
     render() {

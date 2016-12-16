@@ -31,6 +31,10 @@
                 <prop key="hibernate.connection.useUnicode">true</prop>
                 <prop key="hibernate.connection.characterEncoding">UTF-8</prop>
                 <prop key="hibernate.connection.charSet">UTF-8</prop>
+                
+                <!-- Use GeneratedType.Identity for GeneratedType.Auto when false -->
+                <prop key="hibernate.id.new_generator_mappings">false</prop>
+                
                 <!-- SQL dialect -->
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
                 

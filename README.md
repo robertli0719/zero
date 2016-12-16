@@ -56,6 +56,8 @@
 4. 修改app.properties内的jdbc信息到自己的数据库
 5. 修改app.properties内的email邮件服务器信息到自己的
 6. 修改app.properties内的file_storage.basepath到自己新建立的一个空文件夹
+7. 打开spring.xml注释掉“<value>file:${ZERO_PROPERTIES}</value>”
+8. 解开注释掉的行“<value>classpath:app.properties</value>”
 7. Clean and Build Project (Shift + F11)
 8. 完成，一切正常后开始编写自己的业务逻辑
 

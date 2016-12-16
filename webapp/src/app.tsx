@@ -1,9 +1,8 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import { Router, Route, hashHistory, IndexRoute } from 'react-router';
-import { store } from "./Store"
-import { AuthService } from "./services/AuthService"
+import { Router, Route, hashHistory, IndexRoute, RouterState, RedirectFunction } from 'react-router';
+import { store, AppState } from "./Store"
 import { AppNavbar, NavbarItem } from "./components/zero/AppNavbar"
 import { Index } from "./pages/Index"
 import { About } from "./pages/About"
@@ -44,6 +43,21 @@ class App extends React.Component<{}, {}>{
     }
 }
 
+function requireAuth(nextState: RouterState, replace: RedirectFunction) {
+
+    console.log("requireAuth");
+    console.log(nextState.location);
+    let path = hashHistory.getCurrentLocation().pathname;
+    let loginPath = '/admin/login';
+    let state: AppState = store.getState();
+    state.val;
+    if (path != loginPath) {
+        replace({
+            pathname: loginPath
+        })
+    }
+}
+
 let template = (
     <Provider store={store}>
         <Router history={hashHistory}>
@@ -58,7 +72,7 @@ let template = (
                     <Route path="login" component={UserLogin} />
                 </Route>
                 <Route path="admin" component={AdminInterceptor}>
-                    <Route path="init" component={AppInit} />
+                    <Route path="init" component={AppInit} onEnter={requireAuth} />
                     <Route path="index" component={AdminIndex} />
                     <Route path="login" component={AdminLogin} />
                 </Route>

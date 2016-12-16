@@ -46,6 +46,19 @@ export class Test extends React.Component<{}, TestState>{
         });
     }
 
+    test() {
+        let a = { v1: 123, v2: 234, v3: 345 }
+        let b = { n1: 100, n2: 101, n3: 102 }
+        let c = { a, b }
+        console.log(a);
+        console.log(b);
+        console.log(c);
+        let newState = $.extend({}, c);
+        a.v1 = 1;
+        console.log(newState);
+        console.log(a);
+    }
+
     render() {
         return (
             <div className="container">
@@ -60,6 +73,9 @@ export class Test extends React.Component<{}, TestState>{
                     <Button onClick={this.execute.bind(this, "POST")}>POST</Button>
                     <Button onClick={this.execute.bind(this, "PUT")}>PUT</Button>
                     <Button onClick={this.execute.bind(this, "DELETE")}>DELETE</Button>
+                </ButtonToolbar>
+                <ButtonToolbar>
+                    <Button onClick={this.test}>Test</Button>
                 </ButtonToolbar>
             </div>
         );

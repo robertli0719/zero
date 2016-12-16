@@ -11,7 +11,6 @@ class AboutPage extends React.Component<Prop, {}>{
 
     constructor() {
         super();
-        console.log("hello, world~! About");
     }
 
     render() {

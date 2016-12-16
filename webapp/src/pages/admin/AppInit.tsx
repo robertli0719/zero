@@ -1,18 +1,18 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Button, ButtonToolbar } from "react-bootstrap";
-import { AppService } from "../../services/AppService"
-import { AuthService, UserAuthDto } from "../../services/AuthService"
+import { appService } from "../../services/AppService"
+import { authService } from "../../services/AuthService"
+import { UserAuthDto } from "../../Store"
 
 export class AppInit extends React.Component<{}, {}>{
 
     constructor() {
         super();
-        console.log("hello, world~! About");
     }
 
     appInit() {
-        AppService.getInstance().initApp();
+        appService.initApp();
     }
 
     test() {

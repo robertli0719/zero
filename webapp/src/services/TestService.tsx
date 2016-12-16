@@ -1,23 +1,13 @@
 import { store } from "../Store"
 import { Action } from "redux"
 
-export class TestService {
+class TestService {
 
-    private static instance = new TestService()
-
-    public static getInstance() {
-        return this.instance;
-    }
-
-    private constructor() {
-    }
-
-    addNumber(val:number) {
+    addNumber(val: number) {
         let action: Action = createAddNumberAction(val);
         store.dispatch(action);
     }
 }
-
 
 function createAddNumberAction(val: number) {
     return {
@@ -27,3 +17,4 @@ function createAddNumberAction(val: number) {
     }
 }
 
+export let testService = new TestService();
