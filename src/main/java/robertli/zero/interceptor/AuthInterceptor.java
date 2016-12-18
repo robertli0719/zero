@@ -5,17 +5,12 @@
  */
 package robertli.zero.interceptor;
 
-import java.util.HashMap;
-import java.util.Map;
 import javax.annotation.Resource;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import robertli.zero.core.AppConfiguration;
 import robertli.zero.core.ClientAccessTokenManager;
-import robertli.zero.tool.MD5;
 
 /**
  * This Interceptor is used to inject the access_token to request attributes

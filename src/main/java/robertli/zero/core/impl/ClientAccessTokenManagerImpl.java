@@ -34,7 +34,11 @@ public class ClientAccessTokenManagerImpl implements ClientAccessTokenManager {
 
     private Map<String, String> getCookieMap(HttpServletRequest request) {
         Map<String, String> cookieMap = new HashMap<>();
-        for (Cookie cookie : request.getCookies()) {
+        Cookie[] cookieArray = request.getCookies();
+        if (cookieArray == null) {
+            return cookieMap;
+        }
+        for (Cookie cookie : cookieArray) {
             String key = cookie.getName();
             String val = cookie.getValue();
             cookieMap.put(key, val);
@@ -82,9 +86,9 @@ public class ClientAccessTokenManagerImpl implements ClientAccessTokenManager {
         return null;
     }
 
-    private void putCookie(HttpServletResponse response, String name, String val) {
+    private void putCookie(HttpServletResponse response, String name, String val, boolean httpOnly) {
         Cookie cookie = new Cookie(name, val);
-        cookie.setHttpOnly(true);
+        cookie.setHttpOnly(httpOnly);
         cookie.setMaxAge(ACCESS_KEY_MAX_AGE);
         cookie.setPath("/");
         response.addCookie(cookie);
@@ -94,8 +98,8 @@ public class ClientAccessTokenManagerImpl implements ClientAccessTokenManager {
     public void putAccessTokenO(HttpServletResponse response, String accessTokenO) {
         String accessToken = countAccessToken(accessTokenO);
         String accessTokenP = countAccessTokenP(accessToken);
-        putCookie(response, COOKIE_ACCESS_TOKEN_O, accessTokenO);
-        putCookie(response, COOKIE_ACCESS_TOKEN_P, accessTokenP);
+        putCookie(response, COOKIE_ACCESS_TOKEN_O, accessTokenO, true);
+        putCookie(response, COOKIE_ACCESS_TOKEN_P, accessTokenP, false);
     }
 
     private void deleteCookie(HttpServletResponse response, String name) {
