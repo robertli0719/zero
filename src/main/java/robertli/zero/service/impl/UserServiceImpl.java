@@ -12,11 +12,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import robertli.zero.controller.RestException;
-import robertli.zero.core.RandomCodeCreater;
 import robertli.zero.core.SecurityService;
 import robertli.zero.dao.AccessTokenDao;
 import robertli.zero.dao.UserAuthDao;
-import robertli.zero.dao.UserDao;
 import robertli.zero.dto.user.UserAuthDto;
 import robertli.zero.dto.user.UserProfileDto;
 import robertli.zero.entity.AccessToken;
@@ -28,9 +26,6 @@ import robertli.zero.service.UserService;
 public class UserServiceImpl implements UserService {
 
     @Resource
-    private UserDao userDao;
-
-    @Resource
     private UserAuthDao userAuthDao;
 
     @Resource
@@ -38,9 +33,6 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private SecurityService securityService;
-
-    @Resource
-    private RandomCodeCreater randomCodeCreater;
 
     @Override
     public UserProfileDto getUserProfile(String token) {
@@ -67,9 +59,7 @@ public class UserServiceImpl implements UserService {
         return password.equals(user.getPassword());
     }
 
-    private String recordAccessToken(User user) {
-        String token = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
-
+    private void recordAccessToken(String token, User user) {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.MONTH, 1);
         Date expiryDate = cal.getTime();
@@ -80,11 +70,10 @@ public class UserServiceImpl implements UserService {
         accessToken.setToken(token);
         accessToken.setUser(user);
         accessTokenDao.save(accessToken);
-        return token;
     }
 
     @Override
-    public String putAuth(UserAuthDto userAuthDto) {
+    public void putAuth(String token, UserAuthDto userAuthDto) {
         String userType = userAuthDto.getUserType();
         String username = userAuthDto.getUsername().trim();
         String authId = userAuthDao.makeAuthId(userType, userAuthDto.getPlatform(), username);
@@ -102,7 +91,8 @@ public class UserServiceImpl implements UserService {
                 if (isValidPassword(userAuthDto, userAuth) == false) {
                     throw new RestException("WRONG_AUTH_ID", "username or password wrong", "for this authId, the userAuth is null", HttpStatus.FORBIDDEN);
                 }
-                return recordAccessToken(userAuth.getUser());
+                recordAccessToken(token, userAuth.getUser());
+                return;
             default:
                 String state = "USER_TYPE_NOT_SUPPORT";
                 String message = "this user type is not support";

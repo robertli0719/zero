@@ -3,17 +3,18 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
-package robertli.zero.controller;
+package robertli.zero.controller.api.v1;
 
 import javax.annotation.Resource;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestAttribute;
+import robertli.zero.core.ClientAccessTokenManager;
+import robertli.zero.core.RandomCodeCreater;
 import robertli.zero.dto.user.UserAuthDto;
 import robertli.zero.dto.user.UserProfileDto;
 import robertli.zero.service.UserService;
@@ -23,38 +24,36 @@ import robertli.zero.service.UserService;
  * @author Robert Li
  */
 @RestController
-@RequestMapping("me")
+@RequestMapping("api/v1/me")
 public class MeController {
 
     @Resource
     private UserService userService;
 
-    private static final String COOKIE_ACCESS_TOKEN = "access_token";
+    @Resource
+    private RandomCodeCreater randomCodeCreater;
+
+    @Resource
+    private ClientAccessTokenManager clientAccessTokenManager;
 
     @RequestMapping(method = RequestMethod.GET)
-    public UserProfileDto getMe(@CookieValue(value = COOKIE_ACCESS_TOKEN, required = false) String accessToken) {
+    public UserProfileDto getMe(@RequestAttribute(required = false) String accessToken) {
         return userService.getUserProfile(accessToken);
     }
 
     @RequestMapping(path = "auth", method = RequestMethod.PUT)
     public void putAuth(@Valid @RequestBody UserAuthDto userAuthDto, HttpServletResponse response) {
-        String accessToken = userService.putAuth(userAuthDto);
+        String accessTokenO = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
+        String accessToken = clientAccessTokenManager.countAccessToken(accessTokenO);
 
-        Cookie cookie = new Cookie(COOKIE_ACCESS_TOKEN, accessToken);
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(5 * 365 * 24 * 3600);
-        cookie.setPath("/");
-        response.addCookie(cookie);
+        userService.putAuth(accessToken, userAuthDto);
+        clientAccessTokenManager.putAccessTokenO(response, accessTokenO);
     }
 
     @RequestMapping(path = "auth", method = RequestMethod.DELETE)
-    public void deleteAuth(@CookieValue(COOKIE_ACCESS_TOKEN) String accessToken, HttpServletResponse response) {
+    public void deleteAuth(@RequestAttribute String accessToken, HttpServletResponse response) {
         userService.deleteAuth(accessToken);
-        Cookie cookie = new Cookie(COOKIE_ACCESS_TOKEN, null);
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(0);
-        cookie.setPath("/");
-        response.addCookie(cookie);
+        clientAccessTokenManager.deleteAccessToken(response);
     }
 
 }

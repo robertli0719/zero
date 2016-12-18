@@ -4,13 +4,13 @@ import { Provider } from "react-redux";
 import { Router, Route, hashHistory, IndexRoute, RouterState, RedirectFunction } from 'react-router';
 import { store, AppState } from "./Store"
 import { AppNavbar, NavbarItem } from "./components/zero/AppNavbar"
+import { authService } from "./services/AuthService"
 import { Index } from "./pages/Index"
 import { About } from "./pages/About"
 import { Test } from "./pages/Test"
 import { UserRegister } from "./pages/auth/UserRegister"
 import { UserRegisterVerifiy } from "./pages/auth/UserRegisterVerifiy"
 import { UserLogin } from "./pages/auth/UserLogin"
-import { AdminInterceptor } from "./pages/admin/AdminInterceptor"
 import { AppInit } from "./pages/admin/AppInit"
 import { AdminIndex } from "./pages/admin/AdminIndex"
 import { AdminLogin } from "./pages/admin/AdminLogin"
@@ -43,15 +43,12 @@ class App extends React.Component<{}, {}>{
     }
 }
 
-function requireAuth(nextState: RouterState, replace: RedirectFunction) {
-
-    console.log("requireAuth");
+function requireRoleAdmin(nextState: RouterState, replace: RedirectFunction) {
+    console.log("requireRoleAdmin");
     console.log(nextState.location);
     let path = hashHistory.getCurrentLocation().pathname;
     let loginPath = '/admin/login';
-    let state: AppState = store.getState();
-    state.val;
-    if (path != loginPath) {
+    if (authService.idAdmin() == false) {
         replace({
             pathname: loginPath
         })
@@ -71,9 +68,9 @@ let template = (
                     <Route path="register/verifiy/:code" component={UserRegisterVerifiy} />
                     <Route path="login" component={UserLogin} />
                 </Route>
-                <Route path="admin" component={AdminInterceptor}>
-                    <Route path="init" component={AppInit} onEnter={requireAuth} />
-                    <Route path="index" component={AdminIndex} />
+                <Route path="admin">
+                    <Route path="init" component={AppInit} onEnter={requireRoleAdmin} />
+                    <Route path="index" component={AdminIndex} onEnter={requireRoleAdmin} />
                     <Route path="login" component={AdminLogin} />
                 </Route>
             </Route>

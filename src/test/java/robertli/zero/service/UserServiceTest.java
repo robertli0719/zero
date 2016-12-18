@@ -67,7 +67,8 @@ public class UserServiceTest {
         userAuthDto.setPlatform("default");
         userAuthDto.setPassword(password);
         userAuthDto.setUserType(UserService.USER_TYPE_GENERAL);
-        String token = userService.putAuth(userAuthDto);
+        String token = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
+        userService.putAuth(token, userAuthDto);
         assertTrue(token != null);
         assertTrue(userService.getUserProfile(token).getName().equals(nickname));
         userService.deleteAuth(token);
@@ -77,7 +78,8 @@ public class UserServiceTest {
         userAuthDto.setPassword("wrong_password");
         boolean flag = false;
         try {
-            userService.putAuth(userAuthDto);
+            token = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
+            userService.putAuth(token, userAuthDto);
         } catch (RestException re) {
             flag = true;
         }

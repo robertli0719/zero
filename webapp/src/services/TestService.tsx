@@ -1,19 +1,12 @@
 import { store } from "../Store"
+import { actionCreater } from "../ActionCreater"
 import { Action } from "redux"
 
 class TestService {
 
     addNumber(val: number) {
-        let action: Action = createAddNumberAction(val);
+        let action: Action = actionCreater.addNumber(val);
         store.dispatch(action);
-    }
-}
-
-function createAddNumberAction(val: number) {
-    return {
-        type: "ADD_NUMBER",
-        payload: val,
-        meta: "increasse the number in state"
     }
 }
 

@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
-package robertli.zero.controller;
+package robertli.zero.controller.api.v1;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import robertli.zero.controller.RestException;
 import robertli.zero.dto.DemoDto;
 import robertli.zero.dto.user.UserProfileDto;
 
@@ -23,7 +24,7 @@ import robertli.zero.dto.user.UserProfileDto;
  * @author Robert Li
  */
 @RestController
-@RequestMapping("test")
+@RequestMapping("api/v1/test")
 public class TestController {
 
     @RequestMapping(path = "demos/{id}", method = RequestMethod.GET)
@@ -81,6 +82,6 @@ public class TestController {
         String status = "ERROR_TEST";
         String message = "test for throw new RestException";
         String detail = "test info detail";
-        throw new RestException(status, message, detail,HttpStatus.FORBIDDEN);
+        throw new RestException(status, message, detail, HttpStatus.FORBIDDEN);
     }
 }

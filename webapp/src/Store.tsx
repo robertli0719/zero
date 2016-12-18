@@ -1,4 +1,5 @@
-import { createStore, Action } from "redux"
+import { createStore } from "redux"
+import * as a from "./ActionCreater"
 
 export type UserAuthDto = {
     userType: string
@@ -16,16 +17,19 @@ export type UserProfileDto = {
 
 export interface AppState {
     val: number
+    userProfile: UserProfileDto
 }
 
-let initState: AppState = { val: 0 }
+let initState: AppState = { val: 0, userProfile: null }
 
-function reducer(state: AppState = initState, action: Action): any {
+function reducer(state: AppState = initState, action: a.Action): any {
     switch (action.type) {
-        case "ADD_NUMBER":
+        case a.ADD_NUMBER:
             state = $.extend({}, state);
             state.val = state.val + 1;
             return state;
+        case a.PUT_USER_PROFILE:
+            state = $.extend({}, state, { userProfile: action.payload });
         default:
             return state;
     }

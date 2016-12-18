@@ -1,34 +1,36 @@
 import { httpService } from "./HttpService"
-import { UserProfileDto, UserAuthDto } from "../Store"
+import { UserProfileDto, UserAuthDto, store, AppState } from "../Store"
+import { actionCreater } from "../ActionCreater"
 
 
 class AuthService {
 
-    private static instance = new AuthService();
-
-    private AuthService() {
-    }
-
-    public static getInstance(): AuthService {
-        return this.instance;
-    }
-
-    getProfile(callback: (userProfileDto: UserProfileDto) => any) {
-        httpService.get("me", callback, (feedback) => {
+    loadProfile() {
+        httpService.get("me", (userProfileDto: UserProfileDto) => {
+            actionCreater.putUserProfile(userProfileDto);
+        }, (feedback) => {
             console.log("Error happened when getProfile:", feedback);
         });
     }
 
-    putAuth(userAuth: UserAuthDto, callback: () => any) {
-        httpService.put("me/auth", userAuth, callback, (feedback) => {
+    login(userAuth: UserAuthDto) {
+        httpService.put("me/auth", userAuth, this.loadProfile, (feedback) => {
             console.log("Error happened when putAuth:", feedback);
         });
     }
 
-    deleteAuth(callback: () => any) {
-        httpService.delete("me/auth", callback, (feedback) => {
+    logout() {
+        httpService.delete("me/auth", this.loadProfile, (feedback) => {
             console.log("Error happened when deleteAuth:", feedback);
         });
+    }
+
+    idAdmin() {
+        let state: AppState = store.getState();
+        if (state.userProfile != null && state.userProfile.userType == "admin") {
+            return true;
+        }
+        return false;
     }
 }
 

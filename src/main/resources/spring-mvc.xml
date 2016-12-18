@@ -16,9 +16,9 @@
     <mvc:interceptors>
         
         <mvc:interceptor>
-            <mvc:mapping path="/**"/>
+            <mvc:mapping path="/api/v1/**"/>
             <mvc:exclude-mapping path="/login"/>
-            <bean class="robertli.zero.interceptor.CommonInterceptor"></bean>
+            <bean class="robertli.zero.interceptor.AuthInterceptor"></bean>
         </mvc:interceptor>
         
     </mvc:interceptors>

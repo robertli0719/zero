@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
-package robertli.zero.controller;
+package robertli.zero.controller.api.v1;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,7 +18,7 @@ import robertli.zero.service.AppService;
  * @author Robert Li
  */
 @RestController
-@RequestMapping("admin")
+@RequestMapping("api/v1/admin")
 public class AdminController {
 
     @Resource

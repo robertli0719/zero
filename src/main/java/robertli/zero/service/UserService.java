@@ -11,7 +11,7 @@ import robertli.zero.dto.user.UserProfileDto;
 /**
  * The service for users to operate themselves
  *
- * @version 1.0 2016-12-09
+ * @version 1.0.1 2016-12-18
  * @author Robert Li
  */
 public interface UserService {
@@ -33,10 +33,10 @@ public interface UserService {
     /**
      * For user login
      *
+     * @param token the accessToken which we will use
      * @param userAuthDto user login form
-     * @return access_token
      */
-    public String putAuth(UserAuthDto userAuthDto);
+    public void putAuth(String token, UserAuthDto userAuthDto);
 
     /**
      * For user logout

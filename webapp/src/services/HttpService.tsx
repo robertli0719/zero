@@ -13,9 +13,11 @@
 
 class HttpService {
 
+    private prefix: string = "api/v1/";
+
     public get(url: string, success: (data: any) => any, error: (jqXHR: JQueryXHR) => any) {
         $.ajax({
-            url: url,
+            url: this.prefix + url,
             method: "get",
             success: success,
             error: error
@@ -25,7 +27,7 @@ class HttpService {
     public post(url: string, dto: any, success: (data: any) => any, error: (jqXHR: JQueryXHR) => any) {
         let json = JSON.stringify(dto);
         $.ajax({
-            url: url,
+            url: this.prefix + url,
             method: "post",
             contentType: "application/json;charset=UTF-8",
             data: json,
@@ -37,7 +39,7 @@ class HttpService {
     public put(url: string, dto: any, success: (data: any) => any, error: (jqXHR: JQueryXHR) => any) {
         let json = JSON.stringify(dto);
         $.ajax({
-            url: url,
+            url: this.prefix + url,
             method: "put",
             contentType: "application/json;charset=UTF-8",
             data: json,
@@ -48,7 +50,7 @@ class HttpService {
 
     public delete(url: string, success: (data: any) => any, error: (jqXHR: JQueryXHR) => any) {
         $.ajax({
-            url: url,
+            url: this.prefix + url,
             method: "delete",
             success: success,
             error: error
