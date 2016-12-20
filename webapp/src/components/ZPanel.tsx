@@ -59,7 +59,7 @@ class ZPanelComponent extends React.Component<Props, ZPanelState>{
 
 
 function select(state: AppState): InjectProps {
-    return { val: state.val };
+    return { val: state.test.val };
 }
 
 export let ZPanel = connect(select)(ZPanelComponent) as React.ComponentClass<ZPanelProps>;

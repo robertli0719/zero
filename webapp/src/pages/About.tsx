@@ -25,7 +25,7 @@ class AboutPage extends React.Component<Prop, {}>{
 }
 
 function select(state: AppState): Prop {
-    return { val: state.val };
+    return { val: state.test.val };
 }
 
 export let About = connect(select)(AboutPage);

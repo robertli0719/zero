@@ -48,7 +48,7 @@ function requireRoleAdmin(nextState: RouterState, replace: RedirectFunction) {
     console.log(nextState.location);
     let path = hashHistory.getCurrentLocation().pathname;
     let loginPath = '/admin/login';
-    if (authService.idAdmin() == false) {
+    if (authService.isAdmin() == false) {
         replace({
             pathname: loginPath
         })

@@ -1,13 +1,27 @@
 import { httpService } from "./HttpService"
-import { UserProfileDto, UserAuthDto, store, AppState } from "../Store"
-import { actionCreater } from "../ActionCreater"
+import { store, AppState } from "../Store"
+import { userProfileActionCreater } from "../actions/userProfile"
 
+
+export type UserAuthDto = {
+    userType: string
+    platform: string
+    username: string
+    password: string
+}
+
+export type UserProfileDto = {
+    authLabel: string
+    userType: string
+    name: string
+    telephone: string
+}
 
 class AuthService {
 
     loadProfile() {
         httpService.get("me", (userProfileDto: UserProfileDto) => {
-            actionCreater.putUserProfile(userProfileDto);
+            userProfileActionCreater.putUserProfile(userProfileDto);
         }, (feedback) => {
             console.log("Error happened when getProfile:", feedback);
         });
@@ -25,7 +39,7 @@ class AuthService {
         });
     }
 
-    idAdmin() {
+    isAdmin() {
         let state: AppState = store.getState();
         if (state.userProfile != null && state.userProfile.userType == "admin") {
             return true;

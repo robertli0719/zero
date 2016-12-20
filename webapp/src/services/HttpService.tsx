@@ -8,8 +8,15 @@
     I create this code for using REST API based on jquery.
     
     author: robert li
-    version: 2016-12-15 1.0.1
+    version: 2016-12-19 1.0.2
 */
+
+export type RestErrorDto = {
+    type: string
+    source: string
+    message: string
+    detail: string
+}
 
 class HttpService {
 

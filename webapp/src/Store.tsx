@@ -1,39 +1,30 @@
-import { createStore } from "redux"
-import * as a from "./ActionCreater"
+import { createStore, combineReducers, Store } from "redux"
+import { testReducer, TestState } from "./reducers/test"
+import { userProfileReducer, UserProfileState } from "./reducers/userProfile"
+import { requestStoreReducer, RequestStoreState } from "./reducers/requestStore"
 
-export type UserAuthDto = {
-    userType: string
-    platform: string
-    username: string
-    password: string
-}
+export const ADD_NUMBER = "ADD_NUMBER"
+export const PUT_USER_PROFILE = "PUT_USER_PROFILE"
+export const ADD_REQUEST_RESULT = "ADD_REQUEST_RESULT"
+export const UPDATE_REQUEST_RESULT = "UPDATE_REQUEST_RESULT"
+export const DELETE_REQUEST_RESULT = "DELETE_REQUEST_RESULT"
 
-export type UserProfileDto = {
-    authLabel: string
-    userType: string
-    name: string
-    telephone: string
+export interface Action {
+    readonly type: string;
+    readonly payload?: any;
+    readonly meta?: string
 }
 
 export interface AppState {
-    val: number
-    userProfile: UserProfileDto
+    userProfile: UserProfileState
+    test: TestState
+    requestStore: RequestStoreState
 }
 
-let initState: AppState = { val: 0, userProfile: null }
+const reducer = combineReducers<AppState>({
+    userProfile: userProfileReducer,
+    test: testReducer,
+    requestStore: requestStoreReducer
+})
 
-function reducer(state: AppState = initState, action: a.Action): any {
-    switch (action.type) {
-        case a.ADD_NUMBER:
-            state = $.extend({}, state);
-            state.val = state.val + 1;
-            return state;
-        case a.PUT_USER_PROFILE:
-            state = $.extend({}, state, { userProfile: action.payload });
-        default:
-            return state;
-    }
-
-}
-
-export let store = createStore(reducer);
+export let store: Store<AppState> = createStore<AppState>(reducer);

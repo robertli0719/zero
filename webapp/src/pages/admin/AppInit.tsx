@@ -3,7 +3,6 @@ import * as ReactDOM from "react-dom";
 import { Button, ButtonToolbar } from "react-bootstrap";
 import { appService } from "../../services/AppService"
 import { authService } from "../../services/AuthService"
-import { UserAuthDto } from "../../Store"
 
 export class AppInit extends React.Component<{}, {}>{
 
@@ -16,12 +15,6 @@ export class AppInit extends React.Component<{}, {}>{
     }
 
     test() {
-        let userAuth: UserAuthDto = {
-            userType: "general",
-            platform: null,
-            username: "tom",
-            password: "hello123"
-        };
     }
 
     testLogout() {
