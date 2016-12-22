@@ -8,7 +8,7 @@
     I create this code for using REST API based on jquery.
     
     author: robert li
-    version: 2016-12-19 1.0.2
+    version: 2016-12-21 1.0
 */
 
 export type RestErrorDto = {
@@ -65,4 +65,4 @@ class HttpService {
     }
 }
 
-export let httpService = new HttpService();
+export let http = new HttpService();

@@ -1,24 +1,24 @@
-import { Action, PUT_USER_PROFILE } from "../Store"
+import { Action, UPDATE_AUTH } from "../Store"
 
 let valState: number;
 
-export interface UserProfileState {
+export interface Auth {
     authLabel: string
     userType: string
     name: string
     telephone: string
 }
 
-let initState: UserProfileState = {
+let initState: Auth = {
     authLabel: null,
     userType: null,
     name: null,
     telephone: null
 }
 
-export function userProfileReducer(state: UserProfileState = initState, action: Action): any {
+export function authReducer(state: Auth = initState, action: Action): any {
     switch (action.type) {
-        case PUT_USER_PROFILE:
+        case UPDATE_AUTH:
             state = $.extend({}, state, { userProfile: action.payload });
         default:
             return state;

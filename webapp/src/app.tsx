@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { Router, Route, hashHistory, IndexRoute, RouterState, RedirectFunction } from 'react-router';
 import { store, AppState } from "./Store"
 import { AppNavbar, NavbarItem } from "./components/zero/AppNavbar"
-import { authService } from "./services/AuthService"
+import * as auth from "./actions/auth"
 import { Index } from "./pages/Index"
 import { About } from "./pages/About"
 import { Test } from "./pages/Test"
@@ -48,7 +48,7 @@ function requireRoleAdmin(nextState: RouterState, replace: RedirectFunction) {
     console.log(nextState.location);
     let path = hashHistory.getCurrentLocation().pathname;
     let loginPath = '/admin/login';
-    if (authService.isAdmin() == false) {
+    if (auth.isAdmin() == false) {
         replace({
             pathname: loginPath
         })
@@ -69,7 +69,7 @@ let template = (
                     <Route path="login" component={UserLogin} />
                 </Route>
                 <Route path="admin">
-                    <Route path="init" component={AppInit} onEnter={requireRoleAdmin} />
+                    <Route path="init" component={AppInit} />
                     <Route path="index" component={AdminIndex} onEnter={requireRoleAdmin} />
                     <Route path="login" component={AdminLogin} />
                 </Route>

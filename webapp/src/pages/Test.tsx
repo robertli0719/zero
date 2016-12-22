@@ -1,6 +1,8 @@
 import * as React from "react"
 import * as ReactDOM from "react-dom"
+import { store } from "../Store"
 import { Button, ButtonToolbar, FormControl, FormGroup } from "react-bootstrap"
+import * as test from "../actions/test"
 
 interface TestState {
     url: string,
@@ -47,16 +49,9 @@ export class Test extends React.Component<{}, TestState>{
     }
 
     test() {
-        let a = { v1: 123, v2: 234, v3: 345 }
-        let b = { n1: 100, n2: 101, n3: 102 }
-        let c = { a, b }
-        console.log(a);
-        console.log(b);
-        console.log(c);
-        let newState = $.extend({}, c);
-        a.v1 = 1;
-        console.log(newState);
-        console.log(a);
+        console.log("before store.dispatch");
+        store.dispatch(test.demo());
+        console.log("after store.dispatch");
     }
 
     render() {

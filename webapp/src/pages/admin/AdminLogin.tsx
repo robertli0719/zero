@@ -2,18 +2,20 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { connect } from "react-redux"
 import { Button, ButtonToolbar, ControlLabel, FormControl, Form, FormGroup, Checkbox, Col, Row } from "react-bootstrap"
-import { authService, UserAuthDto } from "../../services/AuthService"
-import { testService } from "../../services/TestService"
+import * as auth from "../../actions/auth"
+import * as utilities from "../../utilities/random-coder"
 import { store, AppState } from "../../Store"
 
 interface AdminLoginState {
-    userAuthDto: UserAuthDto
+    userAuthDto: auth.UserAuthDto
     btnDisable: boolean
 }
 
 interface Prop {
     val: number
 }
+
+let LOGIN_FORM_ID = utilities.makeRandomString(32);
 
 export class AdminLoginPage extends React.Component<Prop, AdminLoginState>{
 
@@ -23,10 +25,6 @@ export class AdminLoginPage extends React.Component<Prop, AdminLoginState>{
             userAuthDto: { username: "", password: "", platform: "default", userType: "admin" },
             btnDisable: false
         }
-    }
-
-    appInit() {
-        console.log(document.cookie);
     }
 
     fieldOnChange(event: React.FormEvent<HTMLInputElement>) {
@@ -43,24 +41,13 @@ export class AdminLoginPage extends React.Component<Prop, AdminLoginState>{
         this.setState(this.state);
     }
 
-    runSomethingBig() {
-        let sum = 0;
-        for (let a = 0; a < 1024 * 1024; a++) {
-            for (let b = 0; b < 1024; b++) {
-                sum += a * b;
-                sum %= 10000;
-            }
-        }
-    }
-
     submit() {
+        if (this.state.btnDisable) {
+            return;
+        }
         this.state.btnDisable = true;
         this.setState(this.state);
-        console.log("before dispatch", store.getState());
-        testService.addNumber(1);//计数器判断执行次数
-        console.log("after dispatch", store.getState());
-        //authService.login(this.state.userAuthDto);
-        this.runSomethingBig();//运行一个很耗时的操作，故意拖慢速度
+        store.dispatch(auth.triggerLogin(this.state.userAuthDto, LOGIN_FORM_ID));
     }
 
     render() {
@@ -93,16 +80,13 @@ export class AdminLoginPage extends React.Component<Prop, AdminLoginState>{
                         </Form>
                     </Col>
                 </Row>
-                <ButtonToolbar>
-                    <Button bsStyle="success" disabled={this.state.btnDisable} onClick={this.appInit.bind(this)}>OK</Button>
-                </ButtonToolbar>
             </div>
         );
     }
 }
 
 function select(state: AppState): Prop {
-    console.log("select in AdminLogin...")
+    console.log("select in AdminLogin...", state)
     return { val: state.test.val };
 }
 

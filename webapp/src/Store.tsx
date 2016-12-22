@@ -1,13 +1,15 @@
-import { createStore, combineReducers, Store } from "redux"
+import { createStore, applyMiddleware, combineReducers, Store } from "redux"
+import thunkMiddleware from "redux-thunk"
 import { testReducer, TestState } from "./reducers/test"
-import { userProfileReducer, UserProfileState } from "./reducers/userProfile"
-import { requestStoreReducer, RequestStoreState } from "./reducers/requestStore"
+import { authReducer, Auth } from "./reducers/auth"
+import { formsReducer, Forms } from "./reducers/forms"
 
 export const ADD_NUMBER = "ADD_NUMBER"
-export const PUT_USER_PROFILE = "PUT_USER_PROFILE"
-export const ADD_REQUEST_RESULT = "ADD_REQUEST_RESULT"
-export const UPDATE_REQUEST_RESULT = "UPDATE_REQUEST_RESULT"
-export const DELETE_REQUEST_RESULT = "DELETE_REQUEST_RESULT"
+export const UPDATE_AUTH = "UPDATE_AUTH"
+export const UPDATE_FORM = "UPDATE_FORM"
+export const DELETE_FORM = "DELETE_FORM"
+export const MARK_FROM_AS_PROCESSING = "MARK_FROM_AS_PROCESSING"
+export const UNMARK_FROM_AS_PROCESSING = "UNMARK_FROM_AS_PROCESSING"
 
 export interface Action {
     readonly type: string;
@@ -16,15 +18,15 @@ export interface Action {
 }
 
 export interface AppState {
-    userProfile: UserProfileState
+    auth: Auth
+    forms: Forms
     test: TestState
-    requestStore: RequestStoreState
 }
 
 const reducer = combineReducers<AppState>({
-    userProfile: userProfileReducer,
-    test: testReducer,
-    requestStore: requestStoreReducer
+    auth: authReducer,
+    forms: formsReducer,
+    test: testReducer
 })
 
-export let store: Store<AppState> = createStore<AppState>(reducer);
+export let store: Store<AppState> = createStore<AppState>(reducer, applyMiddleware(thunkMiddleware));

@@ -1,8 +1,8 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Button, ButtonToolbar } from "react-bootstrap";
-import { appService } from "../../services/AppService"
-import { authService } from "../../services/AuthService"
+import * as app from "../../actions/app"
+import { store } from "../../Store"
 
 export class AppInit extends React.Component<{}, {}>{
 
@@ -11,7 +11,7 @@ export class AppInit extends React.Component<{}, {}>{
     }
 
     appInit() {
-        appService.initApp();
+        store.dispatch(app.initApp());
     }
 
     test() {
