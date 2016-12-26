@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import robertli.zero.dto.RestErrorDto;
+import robertli.zero.dto.RestErrorItemDto;
 
 /**
  * This advice will be using for mapping exceptions to JSON response.
@@ -31,7 +32,7 @@ import robertli.zero.dto.RestErrorDto;
 @ControllerAdvice
 public class RestExceptionAdvice {
 
-    private void appendFieldErrors(List<RestErrorDto> errorList, BindingResult result) {
+    private void appendFieldErrors(List<RestErrorItemDto> errorList, BindingResult result) {
         //getFieldErrors return errors in rand order, so we have to keep the 'big' one
         Map<String, String> messageMap = new HashMap();
         for (FieldError error : result.getFieldErrors()) {
@@ -41,55 +42,55 @@ public class RestExceptionAdvice {
                 continue;
             }
             messageMap.put(name, message);
-            RestErrorDto errorDto = new RestErrorDto();
-            errorDto.setType("FIELD_ERROR");
-            errorDto.setSource(name);
-            errorDto.setMessage(message);
-            errorDto.setDetail("BindingResult gets validation errors");
-            errorList.add(errorDto);
+            RestErrorItemDto errorItemDto = new RestErrorItemDto();
+            errorItemDto.setType("FIELD_ERROR");
+            errorItemDto.setSource(name);
+            errorItemDto.setMessage(message);
+            errorItemDto.setDetail("BindingResult gets validation errors");
+            errorList.add(errorItemDto);
         }
     }
 
-    private void appendGlobalErrors(List<RestErrorDto> errorList, BindingResult result) {
+    private void appendGlobalErrors(List<RestErrorItemDto> errorList, BindingResult result) {
         for (ObjectError error : result.getGlobalErrors()) {
-            RestErrorDto errorDto = new RestErrorDto();
-            errorDto.setType("GLOBAL_ERROR");
-            errorDto.setSource(error.getObjectName());
-            errorDto.setMessage(error.getDefaultMessage());
-            errorDto.setDetail("BindingResult gets validation errors");
-            errorList.add(errorDto);
+            RestErrorItemDto errorItemDto = new RestErrorItemDto();
+            errorItemDto.setType("GLOBAL_ERROR");
+            errorItemDto.setSource(error.getObjectName());
+            errorItemDto.setMessage(error.getDefaultMessage());
+            errorItemDto.setDetail("BindingResult gets validation errors");
+            errorList.add(errorItemDto);
         }
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public Map<String, Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
+    public RestErrorDto handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
         BindingResult bindingResult = exception.getBindingResult();
-        List<RestErrorDto> errorList = new ArrayList<>();
+        List<RestErrorItemDto> errorList = new ArrayList<>();
         appendFieldErrors(errorList, bindingResult);
         appendGlobalErrors(errorList, bindingResult);
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("status", "INVALID_REQUEST");
-        map.put("errors", errorList);
-        return map;
+        RestErrorDto restError = new RestErrorDto();
+        restError.setStatus("INVALID_REQUEST");
+        restError.setErrors(errorList);
+        return restError;
     }
 
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    public Map<String, Object> handleRuntimeException(RuntimeException exception) {
-        RestErrorDto errorDto = new RestErrorDto();
-        errorDto.setType("RUNTIME_EXCEPTION");
-        errorDto.setSource(null);
-        errorDto.setMessage("There are some errors in server.");
-        errorDto.setDetail(exception.getMessage());
-        List<RestErrorDto> errorList = new ArrayList<>();
-        errorList.add(errorDto);
+    public RestErrorDto handleRuntimeException(RuntimeException exception) {
+        RestErrorItemDto errorItemDto = new RestErrorItemDto();
+        errorItemDto.setType("RUNTIME_EXCEPTION");
+        errorItemDto.setSource(null);
+        errorItemDto.setMessage("There are some errors in server.");
+        errorItemDto.setDetail(exception.getMessage());
+        List<RestErrorItemDto> errorList = new ArrayList<>();
+        errorList.add(errorItemDto);
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("status", "RUNTIME_EXCEPTION");
-        map.put("errors", errorList);
-        return map;
+        RestErrorDto restError = new RestErrorDto();
+        restError.setStatus("RUNTIME_EXCEPTION");
+        restError.setErrors(errorList);
+        return restError;
     }
 
     @ExceptionHandler(RestException.class)
@@ -100,17 +101,18 @@ public class RestExceptionAdvice {
 
         HttpStatus httpStatus = exception.getHttpStatus();
 
-        RestErrorDto errorDto = new RestErrorDto();
-        errorDto.setType(status);
-        errorDto.setSource(null);
-        errorDto.setMessage(message);
-        errorDto.setDetail(detail);
-        List<RestErrorDto> errorList = new ArrayList<>();
-        errorList.add(errorDto);
+        RestErrorItemDto errorItemDto = new RestErrorItemDto();
+        errorItemDto.setType(status);
+        errorItemDto.setSource(null);
+        errorItemDto.setMessage(message);
+        errorItemDto.setDetail(detail);
+        List<RestErrorItemDto> errorList = new ArrayList<>();
+        errorList.add(errorItemDto);
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("status", status);
-        map.put("errors", errorList);
-        return new ResponseEntity(map, httpStatus);
+        RestErrorDto restError = new RestErrorDto();
+        restError.setStatus(status);
+        restError.setErrors(errorList);
+
+        return new ResponseEntity(restError, httpStatus);
     }
 }

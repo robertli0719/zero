@@ -5,48 +5,33 @@
  */
 package robertli.zero.dto;
 
+import java.util.List;
+
 /**
  *
- * @version 2016-11-30 1.0.0
+ * @version 2016-12-22 1.0
  * @author Robert Li
  */
 public class RestErrorDto {
 
-    private String type;
-    private String source;
-    private String message;
-    private String detail;
+    private String status;
+    private List<RestErrorItemDto> errors;
 
-    public String getType() {
-        return type;
+    public String getStatus() {
+        return status;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public String getSource() {
-        return source;
+    public List<RestErrorItemDto> getErrors() {
+        return errors;
     }
 
-    public void setSource(String source) {
-        this.source = source;
+    public void setErrors(List<RestErrorItemDto> errors) {
+        this.errors = errors;
     }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getDetail() {
-        return detail;
-    }
-
-    public void setDetail(String detail) {
-        this.detail = detail;
-    }
-
+    
+    
 }

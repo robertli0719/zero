@@ -1,15 +1,9 @@
 import { Action, UPDATE_FORM, DELETE_FORM, MARK_FROM_AS_PROCESSING, UNMARK_FROM_AS_PROCESSING } from "../Store"
-
-export type RestError = {
-    type: string
-    source: string
-    message: string
-    detail: string
-}
+import { RestErrorDto } from "../utilities/http"
 
 export type FormState = {
     processing: boolean
-    restError: RestError
+    restError: RestErrorDto
 }
 
 export interface Forms {

@@ -41,7 +41,7 @@ public class TestController {
         if (demoDto.getId() == null) {
             throw new RestException("PUT_ERROR", "no id", "should include id when put");
         }
-        System.out.println("\npost demo:");
+        System.out.println("\nput demo:");
         System.out.println("name" + demoDto.getName());
         System.out.println("datetime:" + demoDto.getDateTime());
     }

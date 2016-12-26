@@ -22,7 +22,7 @@
 * 使用PathVariable来区分资源
 * 在GET和DELETE上用Parameters来限制资源
 * 只在POST和PUT上使用request body
-* 只在GET上使用response body
+* 除返回错误信息外，只在GET上使用response body
 * URI统一为小写字母，‘-’分割单词
 
 ## 限制性规范
