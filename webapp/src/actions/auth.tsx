@@ -1,7 +1,7 @@
 import { http, RestErrorDto } from "../utilities/http"
 import { Dispatch } from "redux"
 import { store, AppState, Action, UPDATE_AUTH } from "../Store"
-import * as froms from "../actions/forms"
+import * as forms from "../actions/forms"
 import { FormState } from "../reducers/forms"
 
 export type UserAuthDto = {
@@ -51,19 +51,21 @@ export function loadProfile() {
 
 export function triggerLogin(userAuth: UserAuthDto, formId: string) {
     return (dispatch: Dispatch<AppState>, getState: () => AppState) => {
-        let form: FormState = getState().forms[formId];
-        if (form != null && form.processing) {
+        if (forms.isProcessing(formId)) {
             return;
         }
-        dispatch(froms.markFromAsProcessing(formId));
+        dispatch(forms.markFromAsProcessing(formId));
+
+        console.log("after mark:", getState());
         return http.put("me/auth", userAuth)
             .then(() => {
-                dispatch(loadProfile()).then(() => {
-                    dispatch(froms.unmarkFromAsProcessing(formId));
-                })
+                return dispatch(loadProfile());
+            }).then(() => {
+                dispatch(forms.unmarkFromAsProcessing(formId));
             }).catch((restError: RestErrorDto) => {
                 let form: FormState = { processing: false, restError: restError }
-                dispatch(froms.updateForm(formId, form));
+                dispatch(forms.updateForm(formId, form));
+                throw restError;
             });
     }
 }
@@ -72,8 +74,9 @@ export function triggerLogout() {
     return (dispatch: Dispatch<AppState>) => {
         return http.delete("me/auth")
             .then(() => {
-                dispatch(loadProfile()).then(() => {
-                });
+                return dispatch(loadProfile());
+            }).then(() => {
+
             })
             .catch((restError: RestErrorDto) => {
                 console.log("Error happened when deleteAuth:", restError);
