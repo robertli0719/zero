@@ -72,6 +72,10 @@ export class Test extends React.Component<{}, TestState>{
                 <ButtonToolbar>
                     <Button onClick={this.test}>Test</Button>
                 </ButtonToolbar>
+                <form action="api/v1/images" method="POST" encType="multipart/form-data">
+                    <input name="file" type="file" multiple={true} />
+                    <input type="submit" />
+                </form>
             </div>
         );
     }

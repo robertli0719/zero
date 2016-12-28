@@ -22,7 +22,7 @@ public class ImagePathServiceImpl implements ImagePathService {
 
     private Matcher createImageIdMatcher(String content) {
         String imageActionUrl = webConfiguration.getImageActionUrl();
-        String patternStr = imageActionUrl + "\\?id=[0-9a-z]{8}(-[0-9a-z]{4}){3}-[0-9a-z]{12}";
+        String patternStr = imageActionUrl + "images/[0-9a-z]{8}(-[0-9a-z]{4}){3}-[0-9a-z]{12}";
         Pattern pattern = Pattern.compile(patternStr);
         return pattern.matcher(content);
     }
@@ -30,14 +30,14 @@ public class ImagePathServiceImpl implements ImagePathService {
     @Override
     public String makeImageUrl(String uuid) {
         String imageActionUrl = webConfiguration.getImageActionUrl();
-        return imageActionUrl + "?id=" + uuid;
+        return imageActionUrl + "/" + uuid;
     }
 
     @Override
     public String pickImageId(String url) {
         Matcher matcher = createImageIdMatcher(url);
         if (matcher.find()) {
-            return matcher.group().split("id=")[1];
+            return matcher.group().split("images/")[1];
         }
         return null;
     }
@@ -48,7 +48,7 @@ public class ImagePathServiceImpl implements ImagePathService {
         Set<String> set = new HashSet<>();
         while (matcher.find()) {
             String url = matcher.group();
-            String uuid = url.split("id=")[1];
+            String uuid = url.split("images/")[1];
             set.add(uuid);
         }
         return set;

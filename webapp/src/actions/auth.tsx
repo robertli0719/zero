@@ -55,8 +55,6 @@ export function triggerLogin(userAuth: UserAuthDto, formId: string) {
             return;
         }
         dispatch(forms.markFromAsProcessing(formId));
-
-        console.log("after mark:", getState());
         return http.put("me/auth", userAuth)
             .then(() => {
                 return dispatch(loadProfile());
