@@ -102,4 +102,9 @@ public class User implements Serializable {
         this.userAuthList = userAuthList;
     }
 
+    @Override
+    public String toString() {
+        return "User{" + "id=" + id + ", userType=" + userType + ", name=" + name + ", telephone=" + telephone + '}';
+    }
+
 }

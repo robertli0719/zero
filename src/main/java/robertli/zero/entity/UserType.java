@@ -37,4 +37,9 @@ public class UserType implements Serializable {
         this.name = name;
     }
 
+    @Override
+    public String toString() {
+        return "UserType{" + "name=" + name + '}';
+    }
+
 }

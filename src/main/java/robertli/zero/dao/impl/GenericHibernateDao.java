@@ -19,7 +19,7 @@ import robertli.zero.dto.SearchResult;
 
 /**
  *
- * @version 1.0.1 2016-11-29
+ * @version 1.0.2 2016-12-28
  * @author Robert Li
  * @param <T> The Entity Class
  * @param <PK> The Type of ID
@@ -44,9 +44,24 @@ public class GenericHibernateDao<T extends Serializable, PK extends Serializable
         return sessionFactory.getCurrentSession();
     }
 
+    private TypedQuery makeTypedQuery() {
+        String jpql = "select t from " + entityClass.getName() + " t";
+        return getSession().createQuery(jpql);
+    }
+
+    private TypedQuery makeTypedQueryDesc(String colName) {
+        String jpql = "select t from " + entityClass.getName() + " t order by " + colName + " desc";
+        return getSession().createQuery(jpql);
+    }
+
     @Override
     public T get(PK id) {
         return (T) getSession().get(entityClass, id);
+    }
+
+    @Override
+    public T getLast(String colName) {
+        return (T) makeTypedQueryDesc(colName).setMaxResults(1).getSingleResult();
     }
 
     @Override
@@ -81,50 +96,45 @@ public class GenericHibernateDao<T extends Serializable, PK extends Serializable
 
     @Override
     public List<T> list() {
-        return getSession().createQuery("from " + entityClass.getName()).list();
+        return makeTypedQuery().getResultList();
     }
 
     @Override
     public List<T> list(int max) {
-        Session session = getSession();
-        TypedQuery query = session.createQuery("from " + entityClass.getName());
-        query.setMaxResults(max);
-        return query.getResultList();
+        return makeTypedQuery()
+                .setMaxResults(max)
+                .getResultList();
     }
 
     @Override
     public List<T> list(int first, int max) {
-        Session session = getSession();
-        TypedQuery query = session.createQuery("from " + entityClass.getName());
-        query.setFirstResult(first);
-        query.setMaxResults(max);
-        return query.getResultList();
+        return makeTypedQuery()
+                .setFirstResult(first)
+                .setMaxResults(max)
+                .getResultList();
     }
 
     @Override
-    public List<T> listDesc() {
-        Session session = getSession();
-        TypedQuery query = session.createQuery("from " + entityClass.getName() + " desc");
-        return query.getResultList();
+    public List<T> listDesc(String colName) {
+        return makeTypedQueryDesc(colName).getResultList();
     }
 
     @Override
-    public List<T> listDesc(int max) {
-        Session session = getSession();
-        TypedQuery query = session.createQuery("from " + entityClass.getName() + " desc");
-        query.setMaxResults(max);
-        return query.getResultList();
+    public List<T> listDesc(String colName, int max) {
+        return makeTypedQueryDesc(colName)
+                .setMaxResults(max)
+                .getResultList();
     }
 
     @Override
-    public List<T> listDesc(int first, int max) {
-        Session session = getSession();
-        TypedQuery query = session.createQuery("from " + entityClass.getName() + " desc");
-        query.setFirstResult(first);
-        query.setMaxResults(max);
-        return query.getResultList();
+    public List<T> listDesc(String colName, int first, int max) {
+        return makeTypedQueryDesc(colName)
+                .setFirstResult(first)
+                .setMaxResults(max)
+                .getResultList();
     }
 
+    @Override
     public SearchResult<T> query(String hql, int pageId, int max) {
         Session session = getSession();
         TypedQuery countQuery = session.createQuery("select count(*) " + hql);
