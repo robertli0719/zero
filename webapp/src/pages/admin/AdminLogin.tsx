@@ -1,7 +1,7 @@
 import * as React from "react";
-import * as ReactDOM from "react-dom";
 import { connect } from "react-redux"
-import { Button, ButtonToolbar, ControlLabel, FormControl, Form, FormGroup, Checkbox, Col, Row } from "react-bootstrap"
+import { Button, ButtonToolbar, ControlLabel, FormControl, Form, FormGroup, Checkbox, Col, Row, Panel } from "react-bootstrap"
+import { Link } from "react-router"
 import * as auth from "../../actions/auth"
 import * as forms from "../../actions/forms"
 import * as utilities from "../../utilities/random-coder"
@@ -9,14 +9,16 @@ import { store, AppState } from "../../Store"
 import { FormState } from "../../reducers/forms"
 import { Auth } from "../../reducers/auth"
 import { RestErrorDto } from "../../utilities/http"
+import { FormErrorPanel } from "../../components/FormErrorPanel"
 
-interface AdminLoginState {
-    userAuthDto: auth.UserAuthDto
-}
 
 interface Prop {
     loginForm: FormState
     auth: Auth
+}
+
+interface AdminLoginState {
+    userAuthDto: auth.UserAuthDto
 }
 
 let LOGIN_FORM_ID = utilities.makeRandomString(32);
@@ -25,11 +27,10 @@ export class AdminLoginPage extends React.Component<Prop, AdminLoginState>{
 
     constructor() {
         super();
-        console.log("constructor");
+        console.log("AdminLoginPage constructor");
     }
 
     componentWillMount() {
-        console.log("componentWillMount");
         this.state = {
             userAuthDto: { username: "", password: "", platform: "default", userType: "admin" },
         }
@@ -38,7 +39,6 @@ export class AdminLoginPage extends React.Component<Prop, AdminLoginState>{
     }
 
     componentWillUnmount() {
-        console.log("componentWillUnmount");
         store.dispatch(forms.deleteForm(LOGIN_FORM_ID));
     }
 
@@ -60,30 +60,23 @@ export class AdminLoginPage extends React.Component<Prop, AdminLoginState>{
         this.setState(this.state);
     }
 
+    passwordKeyUp(event: KeyboardEvent) {
+        if (event.keyCode == 13) {
+            this.submit();
+        }
+    }
+
     submit() {
         if (this.props.loginForm.processing) {
             return;
         }
-        store.dispatch(auth.triggerLogin(this.state.userAuthDto, LOGIN_FORM_ID))
-            .then(() => {
-                console.log("after login:", this.props.auth);
-            })
-            .catch((error: RestErrorDto) => {
-                console.log("after login catch:", error);
-            });
+        store.dispatch(auth.triggerLogin(this.state.userAuthDto, LOGIN_FORM_ID));
     }
 
     render() {
-        console.log("adminLogin render");
-        let errorMessage = <div></div>
-        if (this.props.loginForm && this.props.loginForm.restError) {
-            errorMessage = <p>{this.props.loginForm.restError.status}</p>
-            //we need a error shower Component here....
-        }
-        return (
-            <div className="container">
-                <h1>Admin Login</h1>
-                {errorMessage}
+        let loginForm = (
+            <div>
+                <FormErrorPanel formState={this.props.loginForm} />
                 <Row>
                     <Col xs={12} sm={6} md={4}>
                         <Form horizontal>
@@ -97,7 +90,7 @@ export class AdminLoginPage extends React.Component<Prop, AdminLoginState>{
                             <FormGroup controlId="formHorizontalPassword">
                                 <Col componentClass={ControlLabel} sm={3}>Password</Col>
                                 <Col sm={9}>
-                                    <FormControl name="password" type="password" placeholder="Password" onChange={this.fieldOnChange.bind(this)} />
+                                    <FormControl name="password" type="password" placeholder="Password" onChange={this.fieldOnChange.bind(this)} onKeyUp={this.passwordKeyUp.bind(this)} />
                                 </Col>
                             </FormGroup>
 
@@ -111,11 +104,24 @@ export class AdminLoginPage extends React.Component<Prop, AdminLoginState>{
                 </Row>
             </div>
         );
+
+        let redirectPanel = (
+            <Panel header="current logged in">
+                <Link to="admin/index">Click here to dashboard</Link>
+            </Panel>
+        );
+
+        let panel = auth.isAdmin() ? redirectPanel : loginForm;
+        return (
+            <div className="container">
+                <h1>Admin Login</h1>
+                {panel}
+            </div>
+        );
     }
 }
 
 function select(state: AppState): Prop {
-    console.log("select in AdminLogin...", state)
     return { loginForm: state.forms[LOGIN_FORM_ID], auth: state.auth };
 }
 

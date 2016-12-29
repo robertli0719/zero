@@ -51,7 +51,10 @@ public class MeController {
     }
 
     @RequestMapping(path = "auth", method = RequestMethod.DELETE)
-    public void deleteAuth(@RequestAttribute String accessToken, HttpServletResponse response) {
+    public void deleteAuth(@RequestAttribute(required = false) String accessToken, HttpServletResponse response) {
+        if (accessToken == null) {
+            return;
+        }
         userService.deleteAuth(accessToken);
         clientAccessTokenManager.deleteAccessToken(response);
     }

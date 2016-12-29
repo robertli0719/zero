@@ -11,9 +11,11 @@ import { Test } from "./pages/Test"
 import { UserRegister } from "./pages/auth/UserRegister"
 import { UserRegisterVerifiy } from "./pages/auth/UserRegisterVerifiy"
 import { UserLogin } from "./pages/auth/UserLogin"
+import { AdminApp } from "./pages/admin/AdminApp"
 import { AppInit } from "./pages/admin/AppInit"
-import { AdminIndex } from "./pages/admin/AdminIndex"
 import { AdminLogin } from "./pages/admin/AdminLogin"
+import { AdminIndex } from "./pages/admin/AdminIndex"
+import { AdminUserManagement } from "./pages/admin/AdminUserManagement"
 
 
 let navBarItemList = [
@@ -36,7 +38,7 @@ class App extends React.Component<{}, {}>{
     render() {
         return (
             <div>
-                <AppNavbar name="React-Bootstrap" itemList={navBarItemList} rightItemList={rightNavBarItemList} />
+                <AppNavbar name="React-Bootstrap" brandUrl="/" itemList={navBarItemList} rightItemList={rightNavBarItemList} />
                 {this.props.children}
             </div>
         )
@@ -44,8 +46,6 @@ class App extends React.Component<{}, {}>{
 }
 
 function requireRoleAdmin(nextState: RouterState, replace: RedirectFunction) {
-    console.log("requireRoleAdmin");
-    console.log(nextState.location);
     let path = hashHistory.getCurrentLocation().pathname;
     let loginPath = '/admin/login';
     if (auth.isAdmin() == false) {
@@ -58,19 +58,22 @@ function requireRoleAdmin(nextState: RouterState, replace: RedirectFunction) {
 let template = (
     <Provider store={store}>
         <Router history={hashHistory}>
-            <Route path="/" component={App}>
-                <IndexRoute component={Index} />
-                <Route path="index" component={Index} />
-                <Route path="about" component={About} />
-                <Route path="test" component={Test} />
-                <Route path="auth">
-                    <Route path="register" component={UserRegister} />
-                    <Route path="register/verifiy/:code" component={UserRegisterVerifiy} />
-                    <Route path="login" component={UserLogin} />
+            <Route path="/" >
+                <Route component={App}>
+                    <IndexRoute component={Index} />
+                    <Route path="index" component={Index} />
+                    <Route path="about" component={About} />
+                    <Route path="test" component={Test} />
+                    <Route path="auth">
+                        <Route path="register" component={UserRegister} />
+                        <Route path="register/verifiy/:code" component={UserRegisterVerifiy} />
+                        <Route path="login" component={UserLogin} />
+                    </Route>
                 </Route>
-                <Route path="admin">
+                <Route path="admin" component={AdminApp}>
                     <Route path="init" component={AppInit} />
                     <Route path="index" component={AdminIndex} onEnter={requireRoleAdmin} />
+                    <Route path="user" component={AdminUserManagement} onEnter={requireRoleAdmin} />
                     <Route path="login" component={AdminLogin} />
                 </Route>
             </Route>

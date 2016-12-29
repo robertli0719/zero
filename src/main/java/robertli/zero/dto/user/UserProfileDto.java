@@ -14,7 +14,6 @@ public class UserProfileDto {
 
     private String authLabel;
     private String userType;
-    private String platform;
     private String name;
     private String telephone;
 
@@ -32,14 +31,6 @@ public class UserProfileDto {
 
     public void setUserType(String userType) {
         this.userType = userType;
-    }
-
-    public String getPlatform() {
-        return platform;
-    }
-
-    public void setPlatform(String platform) {
-        this.platform = platform;
     }
 
     public String getName() {

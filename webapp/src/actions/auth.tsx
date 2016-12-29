@@ -3,6 +3,7 @@ import { Dispatch } from "redux"
 import { store, AppState, Action, UPDATE_AUTH } from "../Store"
 import * as forms from "../actions/forms"
 import { FormState } from "../reducers/forms"
+import { hashHistory } from 'react-router';
 
 export type UserAuthDto = {
     userType: string
@@ -75,8 +76,10 @@ export function triggerLogout() {
                 return dispatch(loadProfile());
             }).then(() => {
 
+                hashHistory.replace("admin/login");
             })
             .catch((restError: RestErrorDto) => {
+                document.cookie = 'access_token_p=; expires=Thu, 01-Jan-70 00:00:01 GMT;';
                 console.log("Error happened when deleteAuth:", restError);
             });
     }

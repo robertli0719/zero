@@ -8,7 +8,6 @@ package robertli.zero.service.impl;
 import java.util.Calendar;
 import java.util.Date;
 import javax.annotation.Resource;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import robertli.zero.controller.RestException;
@@ -24,16 +23,16 @@ import robertli.zero.service.UserService;
 
 @Component("userService")
 public class UserServiceImpl implements UserService {
-
+    
     @Resource
     private UserAuthDao userAuthDao;
-
+    
     @Resource
     private AccessTokenDao accessTokenDao;
-
+    
     @Resource
     private SecurityService securityService;
-
+    
     @Override
     public UserProfileDto getUserProfile(String token) {
         if (token == null) {
@@ -46,11 +45,13 @@ public class UserServiceImpl implements UserService {
             return new UserProfileDto();
         }
         User user = accessToken.getUser();
-        ModelMapper modelMapper = new ModelMapper();
-        UserProfileDto userProfileDto = modelMapper.map(user, UserProfileDto.class);
+        UserProfileDto userProfileDto = new UserProfileDto();
+        userProfileDto.setName(user.getName());
+        userProfileDto.setAuthLabel(user.getName());
+        userProfileDto.setUserType(user.getUserType().getName());
         return userProfileDto;
     }
-
+    
     private boolean isValidPassword(UserAuthDto userAuthDto, UserAuth userAuth) {
         String orginealPassword = userAuthDto.getPassword();
         User user = userAuth.getUser();
@@ -58,12 +59,12 @@ public class UserServiceImpl implements UserService {
         String password = securityService.uglifyPassoword(orginealPassword, salt);
         return password.equals(user.getPassword());
     }
-
+    
     private void recordAccessToken(String token, User user) {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.MONTH, 1);
         Date expiryDate = cal.getTime();
-
+        
         AccessToken accessToken = new AccessToken();
         accessToken.setCreatedDate(new Date());
         accessToken.setExpiryDate(expiryDate);
@@ -71,7 +72,7 @@ public class UserServiceImpl implements UserService {
         accessToken.setUser(user);
         accessTokenDao.save(accessToken);
     }
-
+    
     @Override
     public void putAuth(String token, UserAuthDto userAuthDto) {
         String userType = userAuthDto.getUserType();
@@ -100,10 +101,10 @@ public class UserServiceImpl implements UserService {
                 throw new RestException(state, message, detail);
         }
     }
-
+    
     @Override
     public void deleteAuth(String token) {
         accessTokenDao.deleteById(token);
     }
-
+    
 }

@@ -19,7 +19,7 @@ let initState: Auth = {
 export function authReducer(state: Auth = initState, action: Action): any {
     switch (action.type) {
         case UPDATE_AUTH:
-            state = $.extend({}, state, { userProfile: action.payload });
+            state = $.extend({}, state, action.payload);
         default:
             return state;
     }

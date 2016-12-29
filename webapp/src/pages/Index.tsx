@@ -16,8 +16,6 @@ export class Index extends React.Component<{}, IndexStateModel>{
     }
 
     render() {
-        this.state;
-        console.log("render");
         return (
             <div className="container">
                 <ButtonToolbar>
@@ -28,7 +26,6 @@ export class Index extends React.Component<{}, IndexStateModel>{
                 </ButtonToolbar>
                 <ZPanel title="Panel-1" />
                 <ZPanel title="Panel-2" />
-
             </div>
         );
     }
