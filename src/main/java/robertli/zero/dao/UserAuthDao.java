@@ -24,5 +24,5 @@ public interface UserAuthDao extends GenericDao<UserAuth, String> {
      */
     public String makeAuthId(String userType, String platformName, String username);
 
-    public UserAuth saveUserAuth(String userType, String platformName, String username, String label, String usernameType, User user);
+    public UserAuth saveUserAuth(String userPlatformName, String username, String label, String usernameType, User user);
 }

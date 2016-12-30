@@ -6,14 +6,16 @@
 package robertli.zero.dto.user;
 
 /**
+ * after user loged in, the font-end system will keep this dto
  *
- * @version 1.0.1 2016-12-13
+ * @version 1.0.2 2016-12-29
  * @author Robert Li
  */
 public class UserProfileDto {
 
     private String authLabel;
-    private String userType;
+    private String userTypeName;
+    private String userPlatformName;
     private String name;
     private String telephone;
 
@@ -25,12 +27,20 @@ public class UserProfileDto {
         this.authLabel = authLabel;
     }
 
-    public String getUserType() {
-        return userType;
+    public String getUserTypeName() {
+        return userTypeName;
     }
 
-    public void setUserType(String userType) {
-        this.userType = userType;
+    public void setUserTypeName(String userTypeName) {
+        this.userTypeName = userTypeName;
+    }
+
+    public String getUserPlatformName() {
+        return userPlatformName;
+    }
+
+    public void setUserPlatformName(String userPlatformName) {
+        this.userPlatformName = userPlatformName;
     }
 
     public String getName() {

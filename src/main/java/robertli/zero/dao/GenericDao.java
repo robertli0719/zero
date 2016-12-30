@@ -11,7 +11,7 @@ import robertli.zero.dto.SearchResult;
 
 /**
  *
- * @version 1.0.1 2016-12-28
+ * @version 1.0.2 2016-12-29
  * @author Robert Li
  * @param <T> The Entity Class
  * @param <PK> The Type of ID
@@ -19,7 +19,7 @@ import robertli.zero.dto.SearchResult;
 public interface GenericDao<T extends Serializable, PK extends Serializable> {
 
     public T get(PK id);
-    
+
     public T getLast(String colName);
 
     public T getForUpdate(PK id);
@@ -33,6 +33,8 @@ public interface GenericDao<T extends Serializable, PK extends Serializable> {
     public void delete(T entity);
 
     public void deleteById(PK id);
+
+    public long count();
 
     public List<T> list();
 

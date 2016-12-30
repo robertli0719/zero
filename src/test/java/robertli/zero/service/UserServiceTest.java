@@ -13,6 +13,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import robertli.zero.controller.RestException;
 import robertli.zero.core.RandomCodeCreater;
 import robertli.zero.dto.user.UserAuthDto;
+import robertli.zero.dto.user.UserDto;
 import robertli.zero.dto.user.UserProfileDto;
 
 /**
@@ -42,7 +43,7 @@ public class UserServiceTest {
         assertTrue(userProfile.getAuthLabel() == null);
         assertTrue(userProfile.getName() == null);
         assertTrue(userProfile.getTelephone() == null);
-        assertTrue(userProfile.getUserType() == null);
+        assertTrue(userProfile.getUserTypeName() == null);
     }
 
     //getUserProfile Token为null时候，返回一个空的DTO
@@ -52,19 +53,31 @@ public class UserServiceTest {
         assertTrue(userProfile.getAuthLabel() == null);
         assertTrue(userProfile.getName() == null);
         assertTrue(userProfile.getTelephone() == null);
-        assertTrue(userProfile.getUserType() == null);
+        assertTrue(userProfile.getUserTypeName() == null);
     }
 
     //常规登陆登出测试
     public void test3() {
-        String username = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
-        String password = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
-        String nickname = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
-        userManagementService.addUser(UserService.USER_TYPE_GENERAL, "default", "string", username, password, nickname);
+        final String username = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
+        final String password = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
+        final String nickname = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
+        final String platformName = UserService.USER_PLATFORM_GENERAL;
+        final String usernameType = UserService.USERNAME_TYPE_STRING;
+
+        UserDto userDto = new UserDto();
+        userDto.setLabel(username);
+        userDto.setName(nickname);
+        userDto.setPassword(password);
+        userDto.setTelephone(null);
+        userDto.setUserPlatformName(platformName);
+        userDto.setUsername(username);
+        userDto.setUsernameType(usernameType);
+
+        userManagementService.addUser(userDto);
 
         UserAuthDto userAuthDto = new UserAuthDto();
         userAuthDto.setUsername(username);
-        userAuthDto.setPlatform("default");
+        userAuthDto.setPlatform(platformName);
         userAuthDto.setPassword(password);
         userAuthDto.setUserType(UserService.USER_TYPE_GENERAL);
         String token = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
@@ -86,10 +99,55 @@ public class UserServiceTest {
         assertTrue(flag);
     }
 
+    //多平台重用username测试
+    public void test4() {
+        final String username = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
+        final String password1 = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
+        final String password2 = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
+        
+        UserDto userDto1 = new UserDto();
+        userDto1.setLabel(username);
+        userDto1.setName("testUser1");
+        userDto1.setPassword(password1);
+        userDto1.setUserPlatformName(UserService.USER_PLATFORM_ADMIN);
+        userDto1.setUsername(username);
+        userDto1.setUsernameType(UserService.USERNAME_TYPE_STRING);
+        
+        UserDto userDto2 = new UserDto();
+        userDto2.setLabel(username);
+        userDto2.setName("testUser2");
+        userDto2.setPassword(password2);
+        userDto2.setUserPlatformName(UserService.USER_PLATFORM_GENERAL);
+        userDto2.setUsername(username);
+        userDto2.setUsernameType(UserService.USERNAME_TYPE_STRING);
+
+        userManagementService.addUser(userDto1);
+        userManagementService.addUser(userDto2);
+
+        UserAuthDto userAuthDto1 = new UserAuthDto();
+        userAuthDto1.setUsername(username);
+        userAuthDto1.setPlatform(UserService.USER_PLATFORM_ADMIN);
+        userAuthDto1.setPassword(password1);
+        userAuthDto1.setUserType(UserService.USER_TYPE_ADMIN);
+        String token1 = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
+        userService.putAuth(token1, userAuthDto1);
+        assertTrue(userService.getUserProfile(token1).getName().equals("testUser1"));
+
+        UserAuthDto userAuthDto2 = new UserAuthDto();
+        userAuthDto2.setUsername(username);
+        userAuthDto2.setPlatform(UserService.USER_PLATFORM_GENERAL);
+        userAuthDto2.setPassword(password2);
+        userAuthDto2.setUserType(UserService.USER_TYPE_GENERAL);
+        String token2 = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
+        userService.putAuth(token2, userAuthDto2);
+        assertTrue(userService.getUserProfile(token2).getName().equals("testUser2"));
+    }
+
     public void test() throws UnsupportedEncodingException {
         test1();
         test2();
         test3();
+        test4();
     }
 
     public static void main(String args[]) throws UnsupportedEncodingException {

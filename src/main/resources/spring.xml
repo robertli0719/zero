@@ -56,6 +56,8 @@
         <property name="imageActionUrl" value="${web.image_action_url}"/>
         <property name="googleSigninClientId" value="${web.google_signin_client_id}"/>
     </bean>
+    
+    <bean id="modelMapper" class="org.modelmapper.ModelMapper"/>
             
     <aop:config>
 <!--        

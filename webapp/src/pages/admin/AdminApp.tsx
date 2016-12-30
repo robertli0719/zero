@@ -1,12 +1,15 @@
 import * as React from "react";
 import { connect } from "react-redux"
+import { hashHistory } from 'react-router'
 import { store, AppState } from "../../Store"
 import { AppNavbar, NavbarItem } from "../../components/zero/AppNavbar"
 import { Auth } from "../../reducers/auth"
 import * as auth from "../../actions/auth"
 
 function logout() {
-    store.dispatch(auth.triggerLogout());
+    store.dispatch(auth.triggerLogout()).then(()=>{
+        hashHistory.replace("admin/login");
+    });
 }
 
 let navBarItemList = [

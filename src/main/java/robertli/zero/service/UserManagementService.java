@@ -6,22 +6,38 @@
 package robertli.zero.service;
 
 import java.util.List;
-import robertli.zero.entity.User;
+import robertli.zero.dto.user.UserDto;
+import robertli.zero.dto.user.UserPlatformDto;
+import robertli.zero.dto.user.UserTypeDto;
 
 /**
  * This service is design for administrators to manage user data.
  *
- * @version 1.0.1 2016-12-09
+ * @version 1.0.2 2016-12-29
  * @author Robert Li
  */
 public interface UserManagementService {
 
-    public void addUser(String type, String platformName, String usernameType, String username, String password, String nickname);
+    public void addUserType(String name);
 
-    public void setLock(int userId, boolean lock);
+    public void deleteUserType(String name);
 
-    public List<User> getUserList();
+    public void addUserPlatform(String userTypeName, String name);
 
-    public List<User> getUserListByType(String type);
+    public void deleteUserPlatform(String name);
+
+    public void addUser(UserDto userDto);
+
+    public void deleteUser(int userId);
+
+    public void updateUser(UserDto userDto);
+
+    public void setLock(int userId, boolean locked);
+
+    public List<UserTypeDto> getUserTypeList();
+
+    public List<UserPlatformDto> getUserPlatformList();
+
+    public List<UserDto> getUserList();
 
 }

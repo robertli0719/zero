@@ -11,7 +11,7 @@ import robertli.zero.dto.user.UserProfileDto;
 /**
  * The service for users to operate themselves
  *
- * @version 1.0.1 2016-12-18
+ * @version 1.0.2 2016-12-29
  * @author Robert Li
  */
 public interface UserService {
@@ -19,6 +19,12 @@ public interface UserService {
     public static final String USER_TYPE_GENERAL = "general";
     public static final String USER_TYPE_STAFF = "staff";
     public static final String USER_TYPE_ADMIN = "admin";
+
+    public static final String USER_PLATFORM_GENERAL = "general";
+    public static final String USER_PLATFORM_ADMIN = "admin";
+
+    public static final String USERNAME_TYPE_STRING = "string";
+    public static final String USERNAME_TYPE_EMAIL = "email";
 
     /**
      * The function is for current online user to get info for self.<br>

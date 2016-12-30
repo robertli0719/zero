@@ -17,16 +17,16 @@ import robertli.zero.test.StressTest;
  * @author Robert Li
  */
 public class UserDaoTest {
-    
+
     private final RandomCodeCreater randomCodeCreater;
     private final UserDao userDao;
-    
+
     public UserDaoTest() {
         ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
         userDao = (UserDao) context.getBean("userDao");
         randomCodeCreater = (RandomCodeCreater) context.getBean("randomCodeCreater");
     }
-    
+
     public void testRegister1() {
         SearchResult<User> result = userDao.paging(2, 10);
         System.out.println(result.getCount());
@@ -37,9 +37,9 @@ public class UserDaoTest {
         for (User user : result.getList()) {
             System.out.println(user.getId() + "\t" + user.getName());
         }
-        
+
     }
-    
+
     public void testList() {
         userDao.list().size();
         userDao.list(3, 40).size();
@@ -48,23 +48,26 @@ public class UserDaoTest {
         userDao.listDesc("id", 3).size();
         userDao.listDesc("id", 3, 40).size();
         System.out.println("last user:" + userDao.getLast("id"));
+        System.out.println("error id user:" + userDao.get(9999999));
+        System.out.println("count user:" + userDao.count());
+
     }
-    
+
     public void test() {
         testRegister1();
         testList();
     }
-    
+
     public void stressTest() throws InterruptedException {
         StressTest stressTest = new StressTest();
         stressTest.setNumberOfGroup(10);
         stressTest.setThreadNumberPerGroup(8);
-        
+
         stressTest.test("myTest", () -> {
             test();
         });
     }
-    
+
     public static void main(String args[]) throws Exception {
         UserDaoTest userDaoTest = new UserDaoTest();
 //        userDaoTest.stressTest();

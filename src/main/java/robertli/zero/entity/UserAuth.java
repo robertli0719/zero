@@ -24,12 +24,12 @@ import javax.persistence.Table;
  * user use telephone to login, the username is the phone number.<br>
  *
  * username can't include ':' and '.' usertype <br>
- * authId = userType:clientId:username<br>
+ * authId = userType:platformName:username<br>
  *
  * authId can be email, phone, and any account name for login<br>
  * label is for showing. ex: email address can include point<br>
  *
- * @version 1.0.4 2016-12-09
+ * @version 1.0.5 2016-12-29
  * @author Robert Li
  */
 @Entity

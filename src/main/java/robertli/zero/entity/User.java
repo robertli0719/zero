@@ -22,7 +22,7 @@ import javax.persistence.Table;
  *
  * Each line of this table is a signed user.
  *
- * @version 1.03 2016-12-08
+ * @version 1.0.4 2016-12-29
  * @author Robert Li
  */
 @Entity
@@ -30,11 +30,12 @@ import javax.persistence.Table;
 public class User implements Serializable {
 
     private int id;
-    private UserType userType;
+    private UserPlatform userPlatform;
     private String password;
     private String passwordSalt;
     private String name;
     private String telephone;
+    private boolean locked;
     private List<UserAuth> userAuthList;
 
     @Id
@@ -49,12 +50,12 @@ public class User implements Serializable {
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    public UserType getUserType() {
-        return userType;
+    public UserPlatform getUserPlatform() {
+        return userPlatform;
     }
 
-    public void setUserType(UserType userType) {
-        this.userType = userType;
+    public void setUserPlatform(UserPlatform userPlatform) {
+        this.userPlatform = userPlatform;
     }
 
     @Column(nullable = false, length = 50)
@@ -93,6 +94,14 @@ public class User implements Serializable {
         this.telephone = telephone;
     }
 
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
+    }
+
     @OneToMany(mappedBy = "user")
     public List<UserAuth> getUserAuthList() {
         return userAuthList;
@@ -104,7 +113,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", userType=" + userType + ", name=" + name + ", telephone=" + telephone + '}';
+        return "User{" + "id=" + id + ", userPlatform=" + userPlatform + ", password=" + password + ", passwordSalt=" + passwordSalt + ", name=" + name + ", telephone=" + telephone + '}';
     }
 
 }

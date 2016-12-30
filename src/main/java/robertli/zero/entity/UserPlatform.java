@@ -10,25 +10,22 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
- * This is a Hibernate entity class which is mapped to a relevant database
- * table.<br>
  *
- * Each line of this table is kind of type for user.<br>
- * ex. common, admin, manager
- *
- * @version 1.0.1 2016-12-29
+ * @version 1.0 2016-12-29
  * @author Robert Li
  */
 @Entity
-@Table(name = "users_type")
-public class UserType implements Serializable {
+@Table(name = "users_platform")
+public class UserPlatform implements Serializable {
 
     private String name;
-    private List<UserPlatform> userPlatform;
+    private UserType userType;
+    private List<User> userList;
 
     @Id
     @Column(length = 50)
@@ -40,13 +37,22 @@ public class UserType implements Serializable {
         this.name = name;
     }
 
-    @OneToMany(mappedBy = "userType")
-    public List<UserPlatform> getUserPlatform() {
-        return userPlatform;
+    @ManyToOne
+    public UserType getUserType() {
+        return userType;
     }
 
-    public void setUserPlatform(List<UserPlatform> userPlatform) {
-        this.userPlatform = userPlatform;
+    public void setUserType(UserType userType) {
+        this.userType = userType;
+    }
+
+    @OneToMany(mappedBy = "userPlatform")
+    public List<User> getUserList() {
+        return userList;
+    }
+
+    public void setUserList(List<User> userList) {
+        this.userList = userList;
     }
 
 }

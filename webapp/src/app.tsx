@@ -11,6 +11,11 @@ import { Test } from "./pages/Test"
 import { UserRegister } from "./pages/auth/UserRegister"
 import { UserRegisterVerifiy } from "./pages/auth/UserRegisterVerifiy"
 import { UserLogin } from "./pages/auth/UserLogin"
+import { InventoryView } from "./pages/dashboard/InventoryView"
+import { ReportView } from "./pages/dashboard/ReportView"
+import { StaffApp } from "./pages/dashboard/StaffApp"
+import { StaffIndex } from "./pages/dashboard/StaffIndex"
+import { StaffLogin } from "./pages/dashboard/StaffLogin"
 import { AdminApp } from "./pages/admin/AdminApp"
 import { AppInit } from "./pages/admin/AppInit"
 import { AdminLogin } from "./pages/admin/AdminLogin"
@@ -69,6 +74,12 @@ let template = (
                         <Route path="register/verifiy/:code" component={UserRegisterVerifiy} />
                         <Route path="login" component={UserLogin} />
                     </Route>
+                </Route>
+                <Route path="dashboard/:platform" component={StaffApp}>
+                    <Route path="index" component={StaffIndex} />
+                    <Route path="inventory" component={InventoryView} />
+                    <Route path="report" component={ReportView} />
+                    <Route path="login" component={StaffLogin} />
                 </Route>
                 <Route path="admin" component={AdminApp}>
                     <Route path="init" component={AppInit} />

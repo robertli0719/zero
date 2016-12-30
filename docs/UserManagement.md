@@ -1,7 +1,7 @@
 # Zero 用户管理系统
 
 我的设计目标是打造一个完善的，可扩展的，灵活的，可复用的用户管理系统。该系统的组织结构为如下树形结构：
-UserType -> Platform -> User -> UserAuth
+UserType -> UserPlatform -> User -> UserAuth
 （符号“->”表示“一对多”）
 
 ## 用户 User
@@ -19,7 +19,7 @@ UserType -> Platform -> User -> UserAuth
 ### 系统管理员 Admin
 系统管理员是系统运营者和管理者，他们控制全套系统。
 
-## 用户平台名 platformName
+## 用户平台名 UserPlatform
 每个用户类别下都允许存在多个相互独立的用户平台。举例来说，假设存在A和B两家餐厅，每家餐厅的员工用户的用户类别UserType都属于企业员工用户Staff，但他们有各自的员工登陆页面，并且A餐厅的员工账户用户名可能和B餐厅的重名，因此他们是两个不同的用户平台。
 
 * 用户平台名只允许包括大小字母加数字
@@ -30,7 +30,7 @@ UserType -> Platform -> User -> UserAuth
 每一个用户平台下都可包含多名用户，而每个用户都可能包含多个用户授权。换句话说，某用户可能同时具备多种登陆方式，比如邮件登陆，微信登陆，电话号登陆等。每一种登陆方式对应于一个用户授权。
 
 * 每一个用户授权在全系统中都是唯一的，并且具备唯一主键userAuthId
-* userAuthId的格式为{UserType}:{platformName}:{username}
+* userAuthId的格式为{UserType}:{userPlatformName}:{username}
 * 当username为email时必须去掉其中的“.”并且转化为全小写
 * 当username为telephone时，需要添加区号前缀以解决国际化问题
 * google登陆和facebook登陆等可获得email的第三方登陆方式都一并归类为邮件授权

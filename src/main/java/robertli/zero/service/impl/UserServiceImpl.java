@@ -19,20 +19,22 @@ import robertli.zero.dto.user.UserProfileDto;
 import robertli.zero.entity.AccessToken;
 import robertli.zero.entity.User;
 import robertli.zero.entity.UserAuth;
+import robertli.zero.entity.UserPlatform;
+import robertli.zero.entity.UserType;
 import robertli.zero.service.UserService;
 
 @Component("userService")
 public class UserServiceImpl implements UserService {
-    
+
     @Resource
     private UserAuthDao userAuthDao;
-    
+
     @Resource
     private AccessTokenDao accessTokenDao;
-    
+
     @Resource
     private SecurityService securityService;
-    
+
     @Override
     public UserProfileDto getUserProfile(String token) {
         if (token == null) {
@@ -48,10 +50,11 @@ public class UserServiceImpl implements UserService {
         UserProfileDto userProfileDto = new UserProfileDto();
         userProfileDto.setName(user.getName());
         userProfileDto.setAuthLabel(user.getName());
-        userProfileDto.setUserType(user.getUserType().getName());
+        userProfileDto.setUserPlatformName(user.getUserPlatform().getName());
+        userProfileDto.setUserTypeName(user.getUserPlatform().getUserType().getName());
         return userProfileDto;
     }
-    
+
     private boolean isValidPassword(UserAuthDto userAuthDto, UserAuth userAuth) {
         String orginealPassword = userAuthDto.getPassword();
         User user = userAuth.getUser();
@@ -59,12 +62,12 @@ public class UserServiceImpl implements UserService {
         String password = securityService.uglifyPassoword(orginealPassword, salt);
         return password.equals(user.getPassword());
     }
-    
+
     private void recordAccessToken(String token, User user) {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.MONTH, 1);
         Date expiryDate = cal.getTime();
-        
+
         AccessToken accessToken = new AccessToken();
         accessToken.setCreatedDate(new Date());
         accessToken.setExpiryDate(expiryDate);
@@ -72,21 +75,29 @@ public class UserServiceImpl implements UserService {
         accessToken.setUser(user);
         accessTokenDao.save(accessToken);
     }
-    
+
     @Override
     public void putAuth(String token, UserAuthDto userAuthDto) {
-        String userType = userAuthDto.getUserType();
+        String userTypeName = userAuthDto.getUserType();
         String username = userAuthDto.getUsername().trim();
-        String authId = userAuthDao.makeAuthId(userType, userAuthDto.getPlatform(), username);
+        String userPlatformName = userAuthDto.getPlatform();
+        String authId = userAuthDao.makeAuthId(userTypeName, userAuthDto.getPlatform(), username);
         UserAuth userAuth = userAuthDao.get(authId);
-        switch (userType) {
+        switch (userTypeName) {
             case UserService.USER_TYPE_ADMIN:
             case UserService.USER_TYPE_GENERAL:
             case UserService.USER_TYPE_STAFF:
                 if (userAuth == null) {
                     throw new RestException("WRONG_AUTH_ID", "username or password wrong", "for this authId, the userAuth is null", HttpStatus.FORBIDDEN);
                 }
-                if (userAuth.getUser().getUserType().getName().equals(userType) == false) {
+
+                UserPlatform userPlatform = userAuth.getUser().getUserPlatform();
+                if (userPlatform.getName().equals(userPlatformName) == false) {
+                    throw new RestException("WRONG_AUTH_USER_PLATFORM", "userPlatform wrong", "for this authId, userPlatform is not equals", HttpStatus.FORBIDDEN);
+                }
+
+                UserType userType = userPlatform.getUserType();
+                if (userType.getName().equals(userTypeName) == false) {
                     throw new RestException("WRONG_AUTH_USER_TYPE", "userType wrong", "for this authId, userType is not equals", HttpStatus.FORBIDDEN);
                 }
                 if (isValidPassword(userAuthDto, userAuth) == false) {
@@ -97,14 +108,14 @@ public class UserServiceImpl implements UserService {
             default:
                 String state = "USER_TYPE_NOT_SUPPORT";
                 String message = "this user type is not support";
-                String detail = "can't support this userType:" + userType;
+                String detail = "can't support this userType:" + userTypeName;
                 throw new RestException(state, message, detail);
         }
     }
-    
+
     @Override
     public void deleteAuth(String token) {
         accessTokenDao.deleteById(token);
     }
-    
+
 }

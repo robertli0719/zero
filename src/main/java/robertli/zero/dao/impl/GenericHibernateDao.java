@@ -19,7 +19,7 @@ import robertli.zero.dto.SearchResult;
 
 /**
  *
- * @version 1.0.2 2016-12-28
+ * @version 1.0.3 2016-12-29
  * @author Robert Li
  * @param <T> The Entity Class
  * @param <PK> The Type of ID
@@ -61,7 +61,11 @@ public class GenericHibernateDao<T extends Serializable, PK extends Serializable
 
     @Override
     public T getLast(String colName) {
-        return (T) makeTypedQueryDesc(colName).setMaxResults(1).getSingleResult();
+        List<T> resultList = makeTypedQueryDesc(colName).setMaxResults(1).getResultList();
+        if (resultList.isEmpty()) {
+            return null;
+        }
+        return resultList.get(0);
     }
 
     @Override
@@ -91,7 +95,16 @@ public class GenericHibernateDao<T extends Serializable, PK extends Serializable
 
     @Override
     public void deleteById(PK id) {
-        getSession().delete(get(id));
+        T entity = get(id);
+        if (entity != null) {
+            getSession().delete(entity);
+        }
+    }
+
+    @Override
+    public long count() {
+        Number number = (Number) getSession().createQuery("select count(u) from " + entityClass.getName() + " u").getSingleResult();
+        return number.longValue();
     }
 
     @Override

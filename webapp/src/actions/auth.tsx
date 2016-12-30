@@ -3,7 +3,7 @@ import { Dispatch } from "redux"
 import { store, AppState, Action, UPDATE_AUTH } from "../Store"
 import * as forms from "../actions/forms"
 import { FormState } from "../reducers/forms"
-import { hashHistory } from 'react-router';
+import { hashHistory } from 'react-router'
 
 export type UserAuthDto = {
     userType: string
@@ -14,7 +14,8 @@ export type UserAuthDto = {
 
 export type UserProfileDto = {
     authLabel: string
-    userType: string
+    userTypeName: string
+    userPlatformName: string
     name: string
     telephone: string
 }
@@ -43,7 +44,7 @@ export function loadProfile() {
             })
             .catch((restError: RestErrorDto) => {
                 console.log("Error happened when loadProfile:", restError);
-                let nullAuth: UserProfileDto = { authLabel: null, userType: null, name: null, telephone: null }
+                let nullAuth: UserProfileDto = { authLabel: null, userTypeName: null, userPlatformName: null, name: null, telephone: null }
                 dispatch(updateAuth(nullAuth));
                 throw restError;
             });
@@ -74,9 +75,6 @@ export function triggerLogout() {
         return http.delete("me/auth")
             .then(() => {
                 return dispatch(loadProfile());
-            }).then(() => {
-
-                hashHistory.replace("admin/login");
             })
             .catch((restError: RestErrorDto) => {
                 document.cookie = 'access_token_p=; expires=Thu, 01-Jan-70 00:00:01 GMT;';

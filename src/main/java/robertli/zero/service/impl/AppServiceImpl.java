@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Component;
 import robertli.zero.core.AppConfiguration;
 import robertli.zero.dao.UserTypeDao;
-import robertli.zero.entity.UserType;
+import robertli.zero.dto.user.UserDto;
 import robertli.zero.service.AppService;
 import robertli.zero.service.UserManagementService;
 import robertli.zero.service.UserService;
@@ -26,13 +26,6 @@ public class AppServiceImpl implements AppService {
     @Resource
     private AppConfiguration appConfiguration;
 
-    private UserType addUserType(String type) {
-        UserType userType = new UserType();
-        userType.setName(type);
-        userTypeDao.save(userType);
-        return userType;
-    }
-
     @Override
     public void init() {
         if (userTypeDao.list().isEmpty() == false) {
@@ -42,10 +35,24 @@ public class AppServiceImpl implements AppService {
         String initAdminName = appConfiguration.getInitAdminName();
         String initAdminPassword = appConfiguration.getInitAdminPassword();
 
-        addUserType(UserService.USER_TYPE_GENERAL);
-        addUserType(UserService.USER_TYPE_STAFF);
-        addUserType(UserService.USER_TYPE_ADMIN);
-        userManagementService.addUser(UserService.USER_TYPE_ADMIN, "default", "string", initAdminName, initAdminPassword, initAdminName);
+        userManagementService.addUserType(UserService.USER_TYPE_GENERAL);
+        userManagementService.addUserType(UserService.USER_TYPE_ADMIN);
+        userManagementService.addUserType(UserService.USER_TYPE_STAFF);
+
+        userManagementService.addUserPlatform(UserService.USER_TYPE_GENERAL, UserService.USER_PLATFORM_GENERAL);
+        userManagementService.addUserPlatform(UserService.USER_TYPE_ADMIN, UserService.USER_PLATFORM_ADMIN);
+
+        UserDto userDto = new UserDto();
+        userDto.setLabel(initAdminName);
+        userDto.setLocked(false);
+        userDto.setName(initAdminName);
+        userDto.setPassword(initAdminPassword);
+        userDto.setTelephone(null);
+        userDto.setUserPlatformName(UserService.USER_PLATFORM_ADMIN);
+        userDto.setUsername(initAdminName);
+        userDto.setUsernameType(UserService.USERNAME_TYPE_STRING);
+
+        userManagementService.addUser(userDto);
     }
 
 }
