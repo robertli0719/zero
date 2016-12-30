@@ -15,28 +15,28 @@ import org.hibernate.validator.constraints.NotBlank;
 public class UserAuthDto {
 
     @NotBlank
-    private String userType;
+    private String userTypeName;
     @NotBlank
-    private String platform;
+    private String userPlatformName;
     @NotBlank
     private String username;
     @NotBlank
     private String password;
 
-    public String getUserType() {
-        return userType;
+    public String getUserTypeName() {
+        return userTypeName;
     }
 
-    public void setUserType(String userType) {
-        this.userType = userType;
+    public void setUserTypeName(String userTypeName) {
+        this.userTypeName = userTypeName;
     }
 
-    public String getPlatform() {
-        return platform;
+    public String getUserPlatformName() {
+        return userPlatformName;
     }
 
-    public void setPlatform(String platform) {
-        this.platform = platform;
+    public void setUserPlatformName(String userPlatformName) {
+        this.userPlatformName = userPlatformName;
     }
 
     public String getUsername() {

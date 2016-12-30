@@ -35,7 +35,7 @@ export class StaffLoginPage extends React.Component<Props, StaffLoginState>{
         super(props);
         let platform = this.props.params['platform'];
         this.state = {
-            userAuthDto: { username: "", password: "", platform: platform, userType: "staff" },
+            userAuthDto: { username: "", password: "", userPlatformName: platform, userTypeName: "staff" },
             platform: platform
         }
         console.log("staffLogin:", platform);

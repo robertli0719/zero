@@ -4,14 +4,14 @@ let valState: number;
 
 export interface Auth {
     authLabel: string
-    userType: string
+    userTypeName: string
     name: string
     telephone: string
 }
 
 let initState: Auth = {
     authLabel: null,
-    userType: null,
+    userTypeName: null,
     name: null,
     telephone: null
 }

@@ -6,8 +6,8 @@ import { FormState } from "../reducers/forms"
 import { hashHistory } from 'react-router'
 
 export type UserAuthDto = {
-    userType: string
-    platform: string
+    userTypeName: string
+    userPlatformName: string
     username: string
     password: string
 }
@@ -22,7 +22,7 @@ export type UserProfileDto = {
 
 export function isAdmin() {
     let state: AppState = store.getState();
-    if (state.auth != null && state.auth.userType == "admin") {
+    if (state.auth != null && state.auth.userTypeName == "admin") {
         return true;
     }
     return false;

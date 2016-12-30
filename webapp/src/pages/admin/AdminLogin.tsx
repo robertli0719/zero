@@ -32,7 +32,7 @@ export class AdminLoginPage extends React.Component<Prop, AdminLoginState>{
 
     componentWillMount() {
         this.state = {
-            userAuthDto: { username: "", password: "", platform: "default", userType: "admin" },
+            userAuthDto: { username: "", password: "", userPlatformName: "admin", userTypeName: "admin" },
         }
         let formState: FormState = { processing: false, restError: null }
         store.dispatch(forms.updateForm(LOGIN_FORM_ID, formState));
@@ -122,6 +122,7 @@ export class AdminLoginPage extends React.Component<Prop, AdminLoginState>{
 }
 
 function select(state: AppState): Prop {
+    console.log("AdminLogin select", state);
     return { loginForm: state.forms[LOGIN_FORM_ID], auth: state.auth };
 }
 

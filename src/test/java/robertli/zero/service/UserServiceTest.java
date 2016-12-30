@@ -77,9 +77,9 @@ public class UserServiceTest {
 
         UserAuthDto userAuthDto = new UserAuthDto();
         userAuthDto.setUsername(username);
-        userAuthDto.setPlatform(platformName);
+        userAuthDto.setUserPlatformName(platformName);
         userAuthDto.setPassword(password);
-        userAuthDto.setUserType(UserService.USER_TYPE_GENERAL);
+        userAuthDto.setUserTypeName(UserService.USER_TYPE_GENERAL);
         String token = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
         userService.putAuth(token, userAuthDto);
         assertTrue(token != null);
@@ -104,7 +104,7 @@ public class UserServiceTest {
         final String username = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
         final String password1 = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
         final String password2 = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
-        
+
         UserDto userDto1 = new UserDto();
         userDto1.setLabel(username);
         userDto1.setName("testUser1");
@@ -112,7 +112,7 @@ public class UserServiceTest {
         userDto1.setUserPlatformName(UserService.USER_PLATFORM_ADMIN);
         userDto1.setUsername(username);
         userDto1.setUsernameType(UserService.USERNAME_TYPE_STRING);
-        
+
         UserDto userDto2 = new UserDto();
         userDto2.setLabel(username);
         userDto2.setName("testUser2");
@@ -126,18 +126,18 @@ public class UserServiceTest {
 
         UserAuthDto userAuthDto1 = new UserAuthDto();
         userAuthDto1.setUsername(username);
-        userAuthDto1.setPlatform(UserService.USER_PLATFORM_ADMIN);
+        userAuthDto1.setUserPlatformName(UserService.USER_PLATFORM_ADMIN);
         userAuthDto1.setPassword(password1);
-        userAuthDto1.setUserType(UserService.USER_TYPE_ADMIN);
+        userAuthDto1.setUserTypeName(UserService.USER_TYPE_ADMIN);
         String token1 = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
         userService.putAuth(token1, userAuthDto1);
         assertTrue(userService.getUserProfile(token1).getName().equals("testUser1"));
 
         UserAuthDto userAuthDto2 = new UserAuthDto();
         userAuthDto2.setUsername(username);
-        userAuthDto2.setPlatform(UserService.USER_PLATFORM_GENERAL);
+        userAuthDto2.setUserPlatformName(UserService.USER_PLATFORM_GENERAL);
         userAuthDto2.setPassword(password2);
-        userAuthDto2.setUserType(UserService.USER_TYPE_GENERAL);
+        userAuthDto2.setUserTypeName(UserService.USER_TYPE_GENERAL);
         String token2 = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
         userService.putAuth(token2, userAuthDto2);
         assertTrue(userService.getUserProfile(token2).getName().equals("testUser2"));

@@ -78,10 +78,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void putAuth(String token, UserAuthDto userAuthDto) {
-        String userTypeName = userAuthDto.getUserType();
+        String userTypeName = userAuthDto.getUserTypeName();
         String username = userAuthDto.getUsername().trim();
-        String userPlatformName = userAuthDto.getPlatform();
-        String authId = userAuthDao.makeAuthId(userTypeName, userAuthDto.getPlatform(), username);
+        String userPlatformName = userAuthDto.getUserPlatformName();
+        String authId = userAuthDao.makeAuthId(userTypeName, userPlatformName, username);
         UserAuth userAuth = userAuthDao.get(authId);
         switch (userTypeName) {
             case UserService.USER_TYPE_ADMIN:
