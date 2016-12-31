@@ -37,6 +37,7 @@ public class User implements Serializable {
     private String telephone;
     private boolean locked;
     private List<UserAuth> userAuthList;
+    private List<UserRoleItem> userRoleItemList;
 
     @Id
     @GeneratedValue
@@ -109,6 +110,15 @@ public class User implements Serializable {
 
     public void setUserAuthList(List<UserAuth> userAuthList) {
         this.userAuthList = userAuthList;
+    }
+
+    @OneToMany(mappedBy = "user")
+    public List<UserRoleItem> getUserRoleItemList() {
+        return userRoleItemList;
+    }
+
+    public void setUserRoleItemList(List<UserRoleItem> userRoleItemList) {
+        this.userRoleItemList = userRoleItemList;
     }
 
     @Override

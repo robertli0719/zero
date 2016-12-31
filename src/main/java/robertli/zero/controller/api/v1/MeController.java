@@ -17,7 +17,7 @@ import robertli.zero.core.ClientAccessTokenManager;
 import robertli.zero.core.RandomCodeCreater;
 import robertli.zero.dto.user.UserAuthDto;
 import robertli.zero.dto.user.UserProfileDto;
-import robertli.zero.service.UserService;
+import robertli.zero.service.AuthService;
 
 /**
  *
@@ -28,7 +28,7 @@ import robertli.zero.service.UserService;
 public class MeController {
 
     @Resource
-    private UserService userService;
+    private AuthService authService;
 
     @Resource
     private RandomCodeCreater randomCodeCreater;
@@ -38,7 +38,7 @@ public class MeController {
 
     @RequestMapping(method = RequestMethod.GET)
     public UserProfileDto getMe(@RequestAttribute(required = false) String accessToken) {
-        return userService.getUserProfile(accessToken);
+        return authService.getUserProfile(accessToken);
     }
 
     @RequestMapping(path = "auth", method = RequestMethod.PUT)
@@ -46,7 +46,7 @@ public class MeController {
         String accessTokenO = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
         String accessToken = clientAccessTokenManager.countAccessToken(accessTokenO);
 
-        userService.putAuth(accessToken, userAuthDto);
+        authService.putAuth(accessToken, userAuthDto);
         clientAccessTokenManager.putAccessTokenO(response, accessTokenO);
     }
 
@@ -55,7 +55,7 @@ public class MeController {
         if (accessToken == null) {
             return;
         }
-        userService.deleteAuth(accessToken);
+        authService.deleteAuth(accessToken);
         clientAccessTokenManager.deleteAccessToken(response);
     }
 

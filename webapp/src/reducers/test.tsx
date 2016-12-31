@@ -1,7 +1,5 @@
 import { Action, ADD_NUMBER } from "../Store"
 
-let valState: number;
-
 export interface TestState {
     val: number
 }

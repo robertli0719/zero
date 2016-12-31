@@ -5,13 +5,16 @@
  */
 package robertli.zero.service;
 
-import robertli.zero.dto.user.UserAuthDto;
-import robertli.zero.dto.user.UserProfileDto;
+import java.util.List;
+import robertli.zero.dto.user.UserDto;
+import robertli.zero.dto.user.UserPlatformDto;
+import robertli.zero.dto.user.UserRoleDto;
+import robertli.zero.dto.user.UserTypeDto;
 
 /**
- * The service for users to operate themselves
+ * This service is design for administrators to manage user data.
  *
- * @version 1.0.2 2016-12-29
+ * @version 1.0.3 2016-12-30
  * @author Robert Li
  */
 public interface UserService {
@@ -26,42 +29,39 @@ public interface UserService {
     public static final String USERNAME_TYPE_STRING = "string";
     public static final String USERNAME_TYPE_EMAIL = "email";
 
-    /**
-     * The function is for current online user to get info for self.<br>
-     * If the user has not logged in, this function should return a
-     * userProfileDto with authLabel=null
-     *
-     * @param token the access_token
-     * @return UserProfileDto and never be null
-     */
-    public UserProfileDto getUserProfile(String token);
+    public static final String USER_ROLE_ADMIN_ROOT = "admin_root";
+    public static final String USER_ROLE_PLATFORM_ROOT = "platform_root";
 
-    /**
-     * For user login
-     *
-     * @param token the accessToken which we will use
-     * @param userAuthDto user login form
-     */
-    public void putAuth(String token, UserAuthDto userAuthDto);
+    public void addUserType(String name);
 
-    /**
-     * For user logout
-     *
-     * @param token access_token
-     */
-    public void deleteAuth(String token);
+    public void deleteUserType(String name);
 
-    // add google login in the future
-    /*
-      user can login directly by Google account:
-      https://developers.google.com/identity/sign-in/web/backend-auth
-      
-      Only the users who have verified email within their Google account can
-      use Google to login our system. (I think almost all the Google account
-      have verified email). If the email has registered in our system before,
-      we just login using this email. If the email never register before, the
-      system will help he or she to uses this email to register automatically
-      with a random password and login using the email.
-     */
-    // add facebook login in the future
+    public void addUserPlatform(String userTypeName, String name);
+
+    public void deleteUserPlatform(String name);
+
+    public void addUserRole(String name);
+
+    public void deleteUserRole(String name);
+
+    public void putRoleForUser(int userId, String roleName);
+
+    public void deleteRoleForUser(int userId, String roleName);
+
+    public void addUser(UserDto userDto);
+
+    public void deleteUser(int userId);
+
+    public void updateUser(UserDto userDto);
+
+    public void setLock(int userId, boolean locked);
+
+    public List<UserTypeDto> getUserTypeList();
+
+    public List<UserPlatformDto> getUserPlatformList();
+
+    public List<UserDto> getUserList();
+
+    public List<UserRoleDto> getUserRoleList();
+
 }

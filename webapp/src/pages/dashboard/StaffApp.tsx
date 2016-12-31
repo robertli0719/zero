@@ -3,11 +3,11 @@ import { connect } from "react-redux"
 import { hashHistory } from 'react-router'
 import { store, AppState } from "../../Store"
 import { AppNavbar, NavbarItem } from "../../components/zero/AppNavbar"
-import { Auth } from "../../reducers/auth"
-import * as auth from "../../actions/auth"
+import { UserProfile } from "../../reducers/me"
+import * as me from "../../actions/me"
 
 function logout(redirect: string) {
-    store.dispatch(auth.triggerLogout()).then(() => {
+    store.dispatch(me.triggerLogout()).then(() => {
         hashHistory.replace(redirect);
     });
 }
@@ -30,7 +30,7 @@ function makeRightNavbarItemList(platform: string): NavbarItem[] {
 }
 
 type ReduxProp = {
-    auth: Auth
+    me: UserProfile
 }
 
 type CommonProp = {
@@ -54,7 +54,7 @@ class StaffAppComponent extends React.Component<Props, State>{
         let rightNavbarItemList = makeRightNavbarItemList(platform);
         let indexUrl = "dashboard/" + platform + "/index";
         this.state = { platform: platform, navbarItemList: navbarItemList, rightNavbarItemList: rightNavbarItemList, indexUrl: indexUrl }
-        store.dispatch(auth.loadProfile());
+        store.dispatch(me.loadProfile());
     }
 
     render() {
@@ -71,7 +71,7 @@ class StaffAppComponent extends React.Component<Props, State>{
 }
 
 function select(state: AppState): ReduxProp {
-    return { auth: state.auth };
+    return { me: state.me };
 }
 
 export let StaffApp = connect(select)(StaffAppComponent);

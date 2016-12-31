@@ -3,11 +3,11 @@ import { connect } from "react-redux"
 import { hashHistory } from 'react-router'
 import { store, AppState } from "../../Store"
 import { AppNavbar, NavbarItem } from "../../components/zero/AppNavbar"
-import { Auth } from "../../reducers/auth"
-import * as auth from "../../actions/auth"
+import { UserProfile } from "../../reducers/me"
+import * as me from "../../actions/me"
 
 function logout() {
-    store.dispatch(auth.triggerLogout()).then(()=>{
+    store.dispatch(me.triggerLogout()).then(() => {
         hashHistory.replace("admin/login");
     });
 }
@@ -24,14 +24,14 @@ let rightNavBarItemList = [
 ] as NavbarItem[];
 
 interface Prop {
-    auth: Auth
+    me: UserProfile
 }
 
 class AdminAppComponent extends React.Component<Prop, {}>{
 
     constructor() {
         super();
-        store.dispatch(auth.loadProfile());
+        store.dispatch(me.loadProfile());
     }
 
     render() {
@@ -45,7 +45,7 @@ class AdminAppComponent extends React.Component<Prop, {}>{
 }
 
 function select(state: AppState): Prop {
-    return { auth: state.auth };
+    return { me: state.me };
 }
 
 export let AdminApp = connect(select)(AdminAppComponent);

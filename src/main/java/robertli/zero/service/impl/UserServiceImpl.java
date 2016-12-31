@@ -5,21 +5,24 @@
  */
 package robertli.zero.service.impl;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.util.List;
 import javax.annotation.Resource;
-import org.springframework.http.HttpStatus;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Component;
-import robertli.zero.controller.RestException;
 import robertli.zero.core.SecurityService;
-import robertli.zero.dao.AccessTokenDao;
 import robertli.zero.dao.UserAuthDao;
-import robertli.zero.dto.user.UserAuthDto;
-import robertli.zero.dto.user.UserProfileDto;
-import robertli.zero.entity.AccessToken;
-import robertli.zero.entity.User;
-import robertli.zero.entity.UserAuth;
+import robertli.zero.dao.UserDao;
+import robertli.zero.dao.UserPlatformDao;
+import robertli.zero.dao.UserRoleDao;
+import robertli.zero.dao.UserTypeDao;
+import robertli.zero.dto.user.UserDto;
+import robertli.zero.dto.user.UserPlatformDto;
+import robertli.zero.dto.user.UserRoleDto;
+import robertli.zero.dto.user.UserTypeDto;
 import robertli.zero.entity.UserPlatform;
+import robertli.zero.entity.User;
+import robertli.zero.entity.UserRole;
 import robertli.zero.entity.UserType;
 import robertli.zero.service.UserService;
 
@@ -27,95 +30,138 @@ import robertli.zero.service.UserService;
 public class UserServiceImpl implements UserService {
 
     @Resource
+    private SecurityService securityService;
+
+    @Resource
+    private UserTypeDao userTypeDao;
+
+    @Resource
+    private UserPlatformDao userPlatformDao;
+
+    @Resource
+    private UserDao userDao;
+
+    @Resource
     private UserAuthDao userAuthDao;
 
     @Resource
-    private AccessTokenDao accessTokenDao;
+    private UserRoleDao userRoleDao;
 
     @Resource
-    private SecurityService securityService;
+    private ModelMapper modelMapper;
 
     @Override
-    public UserProfileDto getUserProfile(String token) {
-        if (token == null) {
-            return new UserProfileDto();
-        }
-        AccessToken accessToken = accessTokenDao.get(token);
-        if (accessToken == null) {
-            return new UserProfileDto();
-        } else if (accessToken.getExpiryDate().before(new Date())) {
-            return new UserProfileDto();
-        }
-        User user = accessToken.getUser();
-        UserProfileDto userProfileDto = new UserProfileDto();
-        userProfileDto.setName(user.getName());
-        userProfileDto.setAuthLabel(user.getName());
-        userProfileDto.setUserPlatformName(user.getUserPlatform().getName());
-        userProfileDto.setUserTypeName(user.getUserPlatform().getUserType().getName());
-        return userProfileDto;
+    public void addUserType(String name) {
+        UserType userType = new UserType();
+        userType.setName(name);
+        userTypeDao.save(userType);
     }
 
-    private boolean isValidPassword(UserAuthDto userAuthDto, UserAuth userAuth) {
-        String orginealPassword = userAuthDto.getPassword();
-        User user = userAuth.getUser();
-        String salt = user.getPasswordSalt();
+    @Override
+    public void deleteUserType(String name) {
+        userTypeDao.deleteById(name);
+    }
+
+    @Override
+    public void addUserPlatform(String userTypeName, String name) {
+        UserType userType = userTypeDao.get(userTypeName);
+        UserPlatform userPlatform = new UserPlatform();
+        userPlatform.setName(name);
+        userPlatform.setUserType(userType);
+        userPlatformDao.save(userPlatform);
+    }
+
+    @Override
+    public void deleteUserPlatform(String name) {
+        userPlatformDao.deleteById(name);
+    }
+
+    @Override
+    public void addUserRole(String name) {
+        UserRole userRole = new UserRole();
+        userRole.setName(name);
+        userRoleDao.save(userRole);
+    }
+
+    @Override
+    public void deleteUserRole(String name) {
+        userRoleDao.deleteById(name);
+    }
+
+    @Override
+    public void putRoleForUser(int userId, String roleName) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void deleteRoleForUser(int userId, String roleName) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void addUser(UserDto userDto) {
+        String orginealPassword = userDto.getPassword();
+        String userPlatformName = userDto.getUserPlatformName();
+        String name = userDto.getName();
+        String username = userDto.getUsername();
+        String usernameType = userDto.getUsernameType();
+        String label = userDto.getLabel();
+        String salt = securityService.createPasswordSalt();
         String password = securityService.uglifyPassoword(orginealPassword, salt);
-        return password.equals(user.getPassword());
-    }
 
-    private void recordAccessToken(String token, User user) {
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.MONTH, 1);
-        Date expiryDate = cal.getTime();
+        UserPlatform userPlatform = userPlatformDao.get(userPlatformName);
+        User user = new User();
+        user.setName(name);
+        user.setPassword(password);
+        user.setPasswordSalt(salt);
+        user.setUserPlatform(userPlatform);
+        userDao.save(user);
 
-        AccessToken accessToken = new AccessToken();
-        accessToken.setCreatedDate(new Date());
-        accessToken.setExpiryDate(expiryDate);
-        accessToken.setToken(token);
-        accessToken.setUser(user);
-        accessTokenDao.save(accessToken);
+        userAuthDao.saveUserAuth(userPlatformName, username, label, usernameType, user);
     }
 
     @Override
-    public void putAuth(String token, UserAuthDto userAuthDto) {
-        String userTypeName = userAuthDto.getUserTypeName();
-        String username = userAuthDto.getUsername().trim();
-        String userPlatformName = userAuthDto.getUserPlatformName();
-        String authId = userAuthDao.makeAuthId(userTypeName, userPlatformName, username);
-        UserAuth userAuth = userAuthDao.get(authId);
-        switch (userTypeName) {
-            case UserService.USER_TYPE_ADMIN:
-            case UserService.USER_TYPE_GENERAL:
-            case UserService.USER_TYPE_STAFF:
-                if (userAuth == null) {
-                    throw new RestException("WRONG_AUTH_ID", "username or password wrong", "for this authId, the userAuth is null", HttpStatus.FORBIDDEN);
-                }
-
-                UserPlatform userPlatform = userAuth.getUser().getUserPlatform();
-                if (userPlatform.getName().equals(userPlatformName) == false) {
-                    throw new RestException("WRONG_AUTH_USER_PLATFORM", "userPlatform wrong", "for this authId, userPlatform is not equals", HttpStatus.FORBIDDEN);
-                }
-
-                UserType userType = userPlatform.getUserType();
-                if (userType.getName().equals(userTypeName) == false) {
-                    throw new RestException("WRONG_AUTH_USER_TYPE", "userType wrong", "for this authId, userType is not equals", HttpStatus.FORBIDDEN);
-                }
-                if (isValidPassword(userAuthDto, userAuth) == false) {
-                    throw new RestException("WRONG_AUTH_ID", "username or password wrong", "for this authId, the userAuth is null", HttpStatus.FORBIDDEN);
-                }
-                recordAccessToken(token, userAuth.getUser());
-                return;
-            default:
-                String state = "USER_TYPE_NOT_SUPPORT";
-                String message = "this user type is not support";
-                String detail = "can't support this userType:" + userTypeName;
-                throw new RestException(state, message, detail);
-        }
+    public void deleteUser(int userId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void deleteAuth(String token) {
-        accessTokenDao.deleteById(token);
+    public void updateUser(UserDto userDto) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setLock(int userId, boolean locked) {
+        User user = userDao.get(userId);
+        user.setLocked(locked);
+    }
+
+    @Override
+    public List<UserTypeDto> getUserTypeList() {
+        List<UserType> userTypeList = userTypeDao.list();
+        return modelMapper.map(userTypeList, new TypeToken<List<UserTypeDto>>() {
+        }.getType());
+    }
+
+    @Override
+    public List<UserPlatformDto> getUserPlatformList() {
+        List<UserPlatform> userPlatformList = userPlatformDao.list();
+        return modelMapper.map(userPlatformList, new TypeToken<List<UserPlatformDto>>() {
+        }.getType());
+    }
+
+    @Override
+    public List<UserDto> getUserList() {
+        List<User> userList = userDao.list();
+        return modelMapper.map(userList, new TypeToken<List<UserDto>>() {
+        }.getType());
+    }
+
+    @Override
+    public List<UserRoleDto> getUserRoleList() {
+        List<UserRole> userRoleList = userRoleDao.list();
+        return modelMapper.map(userRoleList, new TypeToken<List<UserRoleDto>>() {
+        }.getType());
     }
 
 }

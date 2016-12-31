@@ -16,4 +16,19 @@ import robertli.zero.entity.UserRoleItem;
 @Component("userRoleItemDao")
 public class UserRoleItemDaoImpl extends GenericHibernateDao<UserRoleItem, Integer> implements UserRoleItemDao {
 
+    @Override
+    public boolean isExist(int userId, String userRoleName) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void put(int userId, String userRoleName) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void remove(int userId, String uerRoleName) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

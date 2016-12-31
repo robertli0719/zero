@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import robertli.zero.dto.user.UserTypeDto;
-import robertli.zero.service.UserManagementService;
+import robertli.zero.service.UserService;
 
 /**
  *
@@ -25,21 +25,21 @@ import robertli.zero.service.UserManagementService;
 public class UserTypeController {
 
     @Resource
-    private UserManagementService userManagementService;
+    private UserService userService;
 
     @RequestMapping(method = RequestMethod.GET)
     public List<UserTypeDto> getUserTypes() {
-        return userManagementService.getUserTypeList();
+        return userService.getUserTypeList();
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public void postUserType(@Valid @RequestBody UserTypeDto userTypeDto) {
         String userTypeName = userTypeDto.getName();
-        userManagementService.addUserType(userTypeName);
+        userService.addUserType(userTypeName);
     }
 
     @RequestMapping(path = "/{name}", method = RequestMethod.DELETE)
     public void deleteUserType(@PathVariable String name) {
-        userManagementService.deleteUserType(name);
+        userService.deleteUserType(name);
     }
 }

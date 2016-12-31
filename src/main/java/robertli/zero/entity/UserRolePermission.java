@@ -9,6 +9,7 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -19,11 +20,13 @@ import javax.persistence.Table;
  *
  * This is the cross table between UserRole and Permission
  *
- * @version 1.0 2016-12-08
+ * @version 1.0.1 2016-12-30
  * @author Robert Li
  */
 @Entity
-@Table(name = "users_role_permission")
+@Table(name = "users_role_permission", indexes = {
+    @Index(name = "combined_index", columnList = "userRole_name,permission_name")
+})
 public class UserRolePermission implements Serializable {
 
     private int id;

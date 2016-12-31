@@ -21,11 +21,22 @@
             <bean class="robertli.zero.interceptor.AuthInterceptor"></bean>
         </mvc:interceptor>
         
+        <!--For Admin GET-->
         <mvc:interceptor>
             <mvc:mapping path="/api/v1/**"/>
             <mvc:exclude-mapping path="/api/v1/me/**"/>
             <mvc:exclude-mapping path="/api/v1/images/**"/>
-            <bean class="robertli.zero.interceptor.AdminPermissionInterceptor"></bean>
+            <mvc:exclude-mapping path="/api/v1/user-types/**"/>
+            <mvc:exclude-mapping path="/api/v1/user-platforms/**"/>
+            <bean class="robertli.zero.interceptor.AdminReadPermissionInterceptor"></bean>
+        </mvc:interceptor>
+        
+        <!--For Admin POST PUT DELETE-->
+        <mvc:interceptor>
+            <mvc:mapping path="/api/v1/**"/>
+            <mvc:exclude-mapping path="/api/v1/me/**"/>
+            <mvc:exclude-mapping path="/api/v1/images/**"/>
+            <bean class="robertli.zero.interceptor.AdminEditPermissionInterceptor"></bean>
         </mvc:interceptor>
         
     </mvc:interceptors>

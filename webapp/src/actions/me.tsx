@@ -1,8 +1,9 @@
 import { http, RestErrorDto } from "../utilities/http"
 import { Dispatch } from "redux"
-import { store, AppState, Action, UPDATE_AUTH } from "../Store"
+import { store, AppState, Action, UPDATE_ME } from "../Store"
 import * as forms from "../actions/forms"
 import { FormState } from "../reducers/forms"
+import { UserProfile } from "../reducers/me"
 import { hashHistory } from 'react-router'
 
 export type UserAuthDto = {
@@ -22,15 +23,15 @@ export type UserProfileDto = {
 
 export function isAdmin() {
     let state: AppState = store.getState();
-    if (state.auth != null && state.auth.userTypeName == "admin") {
+    if (state.me != null && state.me.userTypeName == "admin") {
         return true;
     }
     return false;
 }
 
-export function updateAuth(userProfile: UserProfileDto): Action {
+export function updateMe(userProfile: UserProfile): Action {
     return {
-        type: UPDATE_AUTH,
+        type: UPDATE_ME,
         payload: userProfile,
         meta: "update userProfile in state"
     }
@@ -40,12 +41,12 @@ export function loadProfile() {
     return (dispatch: Dispatch<AppState>) => {
         return http.get("me")
             .then((userProfileDto: UserProfileDto) => {
-                dispatch(updateAuth(userProfileDto));
+                dispatch(updateMe(userProfileDto));
             })
             .catch((restError: RestErrorDto) => {
                 console.log("Error happened when loadProfile:", restError);
-                let nullAuth: UserProfileDto = { authLabel: null, userTypeName: null, userPlatformName: null, name: null, telephone: null }
-                dispatch(updateAuth(nullAuth));
+                let nullUserProfile: UserProfile = { authLabel: null, userTypeName: null, userPlatformName: null, name: null, telephone: null }
+                dispatch(updateMe(nullUserProfile));
                 throw restError;
             });
     }

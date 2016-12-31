@@ -15,12 +15,12 @@ import javax.persistence.Table;
 
 /**
  *
- * @version 1.0.1 2016-11-19
+ * @version 1.0.2 2016-12-30
  * @author Robert Li
  */
 @Entity
 @Table(name = "value_config", indexes = {
-    @Index(name = "combine_index", columnList = "namespace,pageName,name")
+    @Index(name = "combined_index", columnList = "namespace,pageName,name")
 })
 public class ValueConfig implements Serializable {
 

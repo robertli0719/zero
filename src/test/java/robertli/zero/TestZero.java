@@ -238,7 +238,7 @@ public class TestZero {
         //service 自身存储成功后，调用Dao的方法抛出异常，测试rollback
         test8(testService);
 
-        //userService.login(sessionId, userAuthId, orginealPassword);
+        //authService.login(sessionId, userAuthId, orginealPassword);
         System.out.println("Test start");
     }
 

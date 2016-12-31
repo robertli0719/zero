@@ -2,23 +2,23 @@ import * as React from "react";
 import { connect } from "react-redux"
 import { Button, ButtonToolbar, ControlLabel, FormControl, Form, FormGroup, Checkbox, Col, Row, Panel } from "react-bootstrap"
 import { Link } from "react-router"
-import * as auth from "../../actions/auth"
+import * as me from "../../actions/me"
 import * as forms from "../../actions/forms"
 import * as utilities from "../../utilities/random-coder"
 import { store, AppState } from "../../Store"
 import { FormState } from "../../reducers/forms"
-import { Auth } from "../../reducers/auth"
+import { UserProfile } from "../../reducers/me"
 import { RestErrorDto } from "../../utilities/http"
 import { FormErrorPanel } from "../../components/FormErrorPanel"
 
 
 interface Prop {
     loginForm: FormState
-    auth: Auth
+    me: UserProfile
 }
 
 interface AdminLoginState {
-    userAuthDto: auth.UserAuthDto
+    userAuthDto: me.UserAuthDto
 }
 
 let LOGIN_FORM_ID = utilities.makeRandomString(32);
@@ -70,7 +70,7 @@ export class AdminLoginPage extends React.Component<Prop, AdminLoginState>{
         if (this.props.loginForm.processing) {
             return;
         }
-        store.dispatch(auth.triggerLogin(this.state.userAuthDto, LOGIN_FORM_ID));
+        store.dispatch(me.triggerLogin(this.state.userAuthDto, LOGIN_FORM_ID));
     }
 
     render() {
@@ -111,7 +111,7 @@ export class AdminLoginPage extends React.Component<Prop, AdminLoginState>{
             </Panel>
         );
 
-        let panel = auth.isAdmin() ? redirectPanel : loginForm;
+        let panel = me.isAdmin() ? redirectPanel : loginForm;
         return (
             <div className="container">
                 <h1>Admin Login</h1>
@@ -123,7 +123,7 @@ export class AdminLoginPage extends React.Component<Prop, AdminLoginState>{
 
 function select(state: AppState): Prop {
     console.log("AdminLogin select", state);
-    return { loginForm: state.forms[LOGIN_FORM_ID], auth: state.auth };
+    return { loginForm: state.forms[LOGIN_FORM_ID], me: state.me };
 }
 
 export let AdminLogin = connect(select)(AdminLoginPage);

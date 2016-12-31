@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import robertli.zero.dto.user.UserPlatformDto;
-import robertli.zero.service.UserManagementService;
+import robertli.zero.service.UserService;
 
 /**
  *
@@ -25,22 +25,22 @@ import robertli.zero.service.UserManagementService;
 public class UserPlatformController {
 
     @Resource
-    private UserManagementService userManagementService;
+    private UserService userService;
 
     @RequestMapping(method = RequestMethod.GET)
     public List<UserPlatformDto> getUserPlatforms() {
-        return userManagementService.getUserPlatformList();
+        return userService.getUserPlatformList();
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public void postUserPlatform(@Valid @RequestBody UserPlatformDto userPlatformDto) {
         String userTypeName = userPlatformDto.getUserTypeName();
         String name = userPlatformDto.getName();
-        userManagementService.addUserPlatform(userTypeName, name);
+        userService.addUserPlatform(userTypeName, name);
     }
 
     @RequestMapping(path = "/{name}", method = RequestMethod.DELETE)
     public void deleteUserPlatform(@PathVariable String name) {
-        userManagementService.deleteUserPlatform(name);
+        userService.deleteUserPlatform(name);
     }
 }

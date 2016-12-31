@@ -13,31 +13,37 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import robertli.zero.controller.RestException;
 import robertli.zero.dto.user.UserProfileDto;
+import robertli.zero.service.AuthService;
 import robertli.zero.service.UserService;
 
 /**
  * @version 1.0 2016-12-30
  * @author Robert Li
  */
-public class AdminPermissionInterceptor implements HandlerInterceptor {
+public class AdminReadPermissionInterceptor implements HandlerInterceptor {
 
     @Resource
-    private UserService userService;
+    private AuthService authService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
+        final String method = request.getMethod();
+        if (method.equals("GET") == false) {
+            return true;
+        }
+
         String accessToken = (String) request.getAttribute("accessToken");
         if (accessToken == null) {
-            throw new RestException("UNAUTHORIZED", "you should login", "AdminPermissionInterceptor: can't get access_token", HttpStatus.UNAUTHORIZED);
+            throw new RestException("UNAUTHORIZED", "you should login", "AdminReadPermissionInterceptor: can't get access_token", HttpStatus.UNAUTHORIZED);
         }
-        UserProfileDto userProfile = userService.getUserProfile(accessToken);
+        UserProfileDto userProfile = authService.getUserProfile(accessToken);
         if (userProfile == null) {
-            throw new RestException("UNAUTHORIZED", "you should login again", "AdminPermissionInterceptor: access_token don't work", HttpStatus.UNAUTHORIZED);
+            throw new RestException("UNAUTHORIZED", "you should login again", "AdminReadPermissionInterceptor: access_token don't work", HttpStatus.UNAUTHORIZED);
         }
 
         String userTypeName = userProfile.getUserTypeName();
         if (UserService.USER_TYPE_ADMIN.equals(userTypeName) == false) {
-            throw new RestException("NO_ADMIN_PERMISSION", "you need admin permission", "AdminPermissionInterceptor: this userType is not admin", HttpStatus.FORBIDDEN);
+            throw new RestException("NO_ADMIN_PERMISSION", "you need admin permission", "AdminReadPermissionInterceptor: this userType is not admin", HttpStatus.FORBIDDEN);
         }
 
         System.out.println("AdminPermissionInterceptor: " + accessToken);

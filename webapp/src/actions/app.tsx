@@ -1,7 +1,7 @@
 import { http, RestErrorDto } from "../utilities/http"
 import { store, AppState } from "../Store"
 import { Dispatch } from "redux"
-import { Auth } from "../reducers/auth"
+import { UserProfile } from "../reducers/me"
 
 export function initApp() {
     return () => {
@@ -29,7 +29,7 @@ export function initApp() {
 // }
 
 // http.get("test/demos")
-//     .then((user: Auth) => {
+//     .then((user: UserProfile) => {
 //         console.log(user);
 //     })
 //     .catch((error: RestErrorDto) => {

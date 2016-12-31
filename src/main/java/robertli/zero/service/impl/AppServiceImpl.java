@@ -11,14 +11,13 @@ import robertli.zero.core.AppConfiguration;
 import robertli.zero.dao.UserTypeDao;
 import robertli.zero.dto.user.UserDto;
 import robertli.zero.service.AppService;
-import robertli.zero.service.UserManagementService;
 import robertli.zero.service.UserService;
 
 @Component("appService")
 public class AppServiceImpl implements AppService {
 
     @Resource
-    private UserManagementService userManagementService;
+    private UserService userService;
 
     @Resource
     private UserTypeDao userTypeDao;
@@ -35,12 +34,15 @@ public class AppServiceImpl implements AppService {
         String initAdminName = appConfiguration.getInitAdminName();
         String initAdminPassword = appConfiguration.getInitAdminPassword();
 
-        userManagementService.addUserType(UserService.USER_TYPE_GENERAL);
-        userManagementService.addUserType(UserService.USER_TYPE_ADMIN);
-        userManagementService.addUserType(UserService.USER_TYPE_STAFF);
+        userService.addUserType(UserService.USER_TYPE_GENERAL);
+        userService.addUserType(UserService.USER_TYPE_ADMIN);
+        userService.addUserType(UserService.USER_TYPE_STAFF);
 
-        userManagementService.addUserPlatform(UserService.USER_TYPE_GENERAL, UserService.USER_PLATFORM_GENERAL);
-        userManagementService.addUserPlatform(UserService.USER_TYPE_ADMIN, UserService.USER_PLATFORM_ADMIN);
+        userService.addUserPlatform(UserService.USER_TYPE_GENERAL, UserService.USER_PLATFORM_GENERAL);
+        userService.addUserPlatform(UserService.USER_TYPE_ADMIN, UserService.USER_PLATFORM_ADMIN);
+
+        userService.addUserRole(UserService.USER_ROLE_ADMIN_ROOT);
+        userService.addUserRole(UserService.USER_ROLE_PLATFORM_ROOT);
 
         UserDto userDto = new UserDto();
         userDto.setLabel(initAdminName);
@@ -52,7 +54,7 @@ public class AppServiceImpl implements AppService {
         userDto.setUsername(initAdminName);
         userDto.setUsernameType(UserService.USERNAME_TYPE_STRING);
 
-        userManagementService.addUser(userDto);
+        userService.addUser(userDto);
     }
 
 }
