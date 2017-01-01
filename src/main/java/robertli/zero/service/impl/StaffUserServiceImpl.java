@@ -15,16 +15,16 @@ import robertli.zero.dao.UserAuthDao;
 import robertli.zero.dao.UserDao;
 import robertli.zero.dao.UserPlatformDao;
 import robertli.zero.dao.UserRoleItemDao;
-import robertli.zero.dto.user.AdminUserDto;
+import robertli.zero.dto.user.StaffUserDto;
 import robertli.zero.entity.User;
 import robertli.zero.entity.UserAuth;
 import robertli.zero.entity.UserPlatform;
 import robertli.zero.entity.UserRoleItem;
-import robertli.zero.service.AdminUserService;
+import robertli.zero.service.StaffUserService;
 import robertli.zero.service.UserService;
 
-@Component("adminUserService")
-public class AdminUserServiceImpl implements AdminUserService {
+@Component("staffUserService")
+public class StaffUserServiceImpl implements StaffUserService {
 
     @Resource
     private ModelMapper modelMapper;
@@ -45,15 +45,15 @@ public class AdminUserServiceImpl implements AdminUserService {
     private UserAuthDao userAuthDao;
 
     @Override
-    public List<AdminUserDto> getAdminUserList() {
-        UserPlatform userPlatform = userPlatformDao.get(UserService.USER_PLATFORM_ADMIN);
+    public List<StaffUserDto> getStaffUserList(final String userPlatformName) {
+        UserPlatform userPlatform = userPlatformDao.get(userPlatformName);
         List<User> userList = userPlatform.getUserList();
-        return modelMapper.map(userList, new TypeToken<List<AdminUserDto>>() {
+        return modelMapper.map(userList, new TypeToken<List<StaffUserDto>>() {
         }.getType());
     }
 
     @Override
-    public boolean isAdminUser(int userId) {
+    public boolean isStaffUser(final String userPlatformName, int userId) {
         User user = userDao.get(userId);
         if (user == null) {
             return false;
@@ -62,24 +62,24 @@ public class AdminUserServiceImpl implements AdminUserService {
         if (userPlatform == null || userPlatform.getName() == null) {
             return false;
         }
-        return userPlatform.getName().equals(UserService.USER_PLATFORM_ADMIN);
+        return userPlatform.getName().equals(userPlatformName);
     }
 
     @Override
-    public boolean isRoot(int userId) {
-        if (isAdminUser(userId) == false) {
+    public boolean isPlatformRoot(final String userPlatformName, int userId) {
+        if (isStaffUser(userPlatformName, userId) == false) {
             return false;
         }
-        return userRoleItemDao.isExist(userId, UserService.USER_ROLE_ADMIN_ROOT);
+        return userRoleItemDao.isExist(userId, UserService.USER_ROLE_PLATFORM_ROOT);
     }
 
     @Override
-    public void addAdminUser(AdminUserDto adminUserDto) {
-        String orginealPassword = adminUserDto.getPassword();
-        String username = adminUserDto.getUsername();
-        boolean locked = adminUserDto.isLocked();
+    public void addStaffUser(final StaffUserDto staffUserDto) {
+        String orginealPassword = staffUserDto.getPassword();
+        String username = staffUserDto.getUsername();
+        boolean locked = staffUserDto.isLocked();
+        String userPlatformName = staffUserDto.getUserPlatformName();
 
-        String userPlatformName = UserService.USER_PLATFORM_ADMIN;
         String usernameType = UserService.USERNAME_TYPE_STRING;
         String name = username;
         String label = username;
@@ -99,9 +99,9 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
 
     @Override
-    public void deleteAdminUser(int userId) {
-        if (isAdminUser(userId) == false) {
-            return;
+    public void deleteStaffUser(final String userPlatformName, final int userId) {
+        if (isStaffUser(userPlatformName, userId) == false) {
+            throw new RuntimeException("no this staff in this platform");
         }
         User user = userDao.get(userId);
         for (UserAuth userAuth : user.getUserAuthList()) {
@@ -114,25 +114,25 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
 
     @Override
-    public void addRootRole(int userId) {
-        if (isAdminUser(userId) == false) {
-            throw new RuntimeException("this user is not adminUser");
+    public void addPlatformRootRole(final String userPlatformName, final int userId) {
+        if (isStaffUser(userPlatformName, userId) == false) {
+            throw new RuntimeException("this user is not in this platform");
         }
-        userRoleItemDao.put(userId, UserService.USER_ROLE_ADMIN_ROOT);
+        userRoleItemDao.put(userId, UserService.USER_ROLE_PLATFORM_ROOT);
     }
 
     @Override
-    public void removeRootRole(int userId) {
-        if (isAdminUser(userId) == false) {
-            throw new RuntimeException("this user is not adminUser");
+    public void removePlatformRootRole(final String userPlatformName, final int userId) {
+        if (isStaffUser(userPlatformName, userId) == false) {
+            throw new RuntimeException("this user is not in this platform");
         }
-        userRoleItemDao.remove(userId, UserService.USER_ROLE_ADMIN_ROOT);
+        userRoleItemDao.remove(userId, UserService.USER_ROLE_PLATFORM_ROOT);
     }
 
     @Override
-    public void resetPassword(int userId, String orginealPassword) {
-        if (isAdminUser(userId) == false) {
-            throw new RuntimeException("this user is not adminUser");
+    public void resetPassword(final String userPlatformName, int userId, final String orginealPassword) {
+        if (isStaffUser(userPlatformName, userId) == false) {
+            throw new RuntimeException("this user is not in this platform");
         }
         String salt = securityService.createPasswordSalt();
         String password = securityService.uglifyPassoword(orginealPassword, salt);
@@ -142,18 +142,18 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
 
     @Override
-    public void lockAdminUser(int userId) {
-        if (isAdminUser(userId) == false) {
-            return;
+    public void lockStaffUser(final String userPlatformName, final int userId) {
+        if (isStaffUser(userPlatformName, userId) == false) {
+            throw new RuntimeException("this user is not in this platform");
         }
         User user = userDao.get(userId);
         user.setLocked(true);
     }
 
     @Override
-    public void unlockAdminUser(int userId) {
-        if (isAdminUser(userId) == false) {
-            return;
+    public void unlockStaffUser(String userPlatformName, int userId) {
+        if (isStaffUser(userPlatformName, userId) == false) {
+            throw new RuntimeException("this user is not in this platform");
         }
         User user = userDao.get(userId);
         user.setLocked(false);

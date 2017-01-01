@@ -13,4 +13,5 @@ import robertli.zero.entity.UserRole;
  */
 public interface UserRoleDao extends GenericDao<UserRole, String> {
 
+    public void addUserRole(String name);
 }

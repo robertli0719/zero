@@ -15,6 +15,7 @@ import robertli.zero.dao.UserAuthDao;
 import robertli.zero.dao.UserDao;
 import robertli.zero.dao.UserPlatformDao;
 import robertli.zero.dao.UserRoleDao;
+import robertli.zero.dao.UserRoleItemDao;
 import robertli.zero.dao.UserTypeDao;
 import robertli.zero.dto.user.UserDto;
 import robertli.zero.dto.user.UserPlatformDto;
@@ -46,6 +47,9 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private UserRoleDao userRoleDao;
+
+    @Resource
+    private UserRoleItemDao userRoleItemDao;
 
     @Resource
     private ModelMapper modelMapper;
@@ -90,44 +94,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void putRoleForUser(int userId, String roleName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        userRoleItemDao.put(userId, roleName);
     }
 
     @Override
     public void deleteRoleForUser(int userId, String roleName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void addUser(UserDto userDto) {
-        String orginealPassword = userDto.getPassword();
-        String userPlatformName = userDto.getUserPlatformName();
-        String name = userDto.getName();
-        String username = userDto.getUsername();
-        String usernameType = userDto.getUsernameType();
-        String label = userDto.getLabel();
-        String salt = securityService.createPasswordSalt();
-        String password = securityService.uglifyPassoword(orginealPassword, salt);
-
-        UserPlatform userPlatform = userPlatformDao.get(userPlatformName);
-        User user = new User();
-        user.setName(name);
-        user.setPassword(password);
-        user.setPasswordSalt(salt);
-        user.setUserPlatform(userPlatform);
-        userDao.save(user);
-
-        userAuthDao.saveUserAuth(userPlatformName, username, label, usernameType, user);
-    }
-
-    @Override
-    public void deleteUser(int userId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void updateUser(UserDto userDto) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        userRoleItemDao.remove(userId, roleName);
     }
 
     @Override

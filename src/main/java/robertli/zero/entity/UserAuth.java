@@ -29,7 +29,7 @@ import javax.persistence.Table;
  * authId can be email, phone, and any account name for login<br>
  * label is for showing. ex: email address can include point<br>
  *
- * @version 1.0.5 2016-12-29
+ * @version 1.0.6 2016-12-31
  * @author Robert Li
  */
 @Entity
@@ -42,7 +42,7 @@ public class UserAuth implements Serializable {
     private User user;
 
     @Id
-    @Column(length = 50)
+    @Column(length = 150)
     public String getAuthId() {
         return authId;
     }

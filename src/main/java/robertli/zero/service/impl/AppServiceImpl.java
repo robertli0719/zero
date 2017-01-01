@@ -9,7 +9,9 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Component;
 import robertli.zero.core.AppConfiguration;
 import robertli.zero.dao.UserTypeDao;
+import robertli.zero.dto.user.AdminUserDto;
 import robertli.zero.dto.user.UserDto;
+import robertli.zero.service.AdminUserService;
 import robertli.zero.service.AppService;
 import robertli.zero.service.UserService;
 
@@ -18,6 +20,9 @@ public class AppServiceImpl implements AppService {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private AdminUserService adminUserService;
 
     @Resource
     private UserTypeDao userTypeDao;
@@ -44,17 +49,11 @@ public class AppServiceImpl implements AppService {
         userService.addUserRole(UserService.USER_ROLE_ADMIN_ROOT);
         userService.addUserRole(UserService.USER_ROLE_PLATFORM_ROOT);
 
-        UserDto userDto = new UserDto();
-        userDto.setLabel(initAdminName);
-        userDto.setLocked(false);
-        userDto.setName(initAdminName);
-        userDto.setPassword(initAdminPassword);
-        userDto.setTelephone(null);
-        userDto.setUserPlatformName(UserService.USER_PLATFORM_ADMIN);
-        userDto.setUsername(initAdminName);
-        userDto.setUsernameType(UserService.USERNAME_TYPE_STRING);
+        AdminUserDto adminUserDto = new AdminUserDto();
 
-        userService.addUser(userDto);
+        adminUserDto.setUsername(initAdminName);
+        adminUserDto.setPassword(initAdminPassword);
+        adminUserService.addAdminUser(adminUserDto);
     }
 
 }

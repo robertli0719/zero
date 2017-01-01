@@ -16,4 +16,11 @@ import robertli.zero.entity.UserRole;
 @Component("userRoleDao")
 public class UserRoleDaoImpl extends GenericHibernateDao<UserRole, String> implements UserRoleDao {
 
+    @Override
+    public void addUserRole(String name) {
+        UserRole userRole = new UserRole();
+        userRole.setName(name);
+        this.save(userRole);
+    }
+
 }

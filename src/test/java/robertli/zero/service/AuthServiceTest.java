@@ -12,8 +12,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import robertli.zero.controller.RestException;
 import robertli.zero.core.RandomCodeCreater;
+import robertli.zero.dto.user.StaffUserDto;
 import robertli.zero.dto.user.UserAuthDto;
-import robertli.zero.dto.user.UserDto;
 import robertli.zero.dto.user.UserProfileDto;
 
 /**
@@ -25,12 +25,14 @@ public class AuthServiceTest {
     private final AuthService authService;
     private final RandomCodeCreater randomCodeCreater;
     private final UserService userService;
+    private final StaffUserService staffUserService;
     private final Random rand;
 
     public AuthServiceTest() {
         ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
         authService = (AuthService) context.getBean("authService");
         userService = (UserService) context.getBean("userService");
+        staffUserService = (StaffUserService) context.getBean("staffUserService");
         randomCodeCreater = (RandomCodeCreater) context.getBean("randomCodeCreater");
         rand = new Random();
     }
@@ -58,32 +60,28 @@ public class AuthServiceTest {
 
     //常规登陆登出测试
     public void test3() {
+        final String platformName = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
+        userService.addUserPlatform(UserService.USER_TYPE_STAFF, platformName);
+
         final String username = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
         final String password = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
-        final String nickname = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
-        final String platformName = UserService.USER_PLATFORM_GENERAL;
-        final String usernameType = UserService.USERNAME_TYPE_STRING;
 
-        UserDto userDto = new UserDto();
-        userDto.setLabel(username);
-        userDto.setName(nickname);
-        userDto.setPassword(password);
-        userDto.setTelephone(null);
-        userDto.setUserPlatformName(platformName);
-        userDto.setUsername(username);
-        userDto.setUsernameType(usernameType);
-
-        userService.addUser(userDto);
+        StaffUserDto staffUserDto = new StaffUserDto();
+        staffUserDto.setLocked(false);
+        staffUserDto.setPassword(password);
+        staffUserDto.setUserPlatformName(platformName);
+        staffUserDto.setUsername(username);
+        staffUserService.addStaffUser(staffUserDto);
 
         UserAuthDto userAuthDto = new UserAuthDto();
         userAuthDto.setUsername(username);
         userAuthDto.setUserPlatformName(platformName);
         userAuthDto.setPassword(password);
-        userAuthDto.setUserTypeName(UserService.USER_TYPE_GENERAL);
+        userAuthDto.setUserTypeName(UserService.USER_TYPE_STAFF);
         String token = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
         authService.putAuth(token, userAuthDto);
         assertTrue(token != null);
-        assertTrue(authService.getUserProfile(token).getName().equals(nickname));
+        assertTrue(authService.getUserProfile(token).getName().equals(username));
         authService.deleteAuth(token);
         assertTrue(authService.getUserProfile(token).getName() == null);
 
@@ -101,46 +99,46 @@ public class AuthServiceTest {
 
     //多平台重用username测试
     public void test4() {
+        final String platformName1 = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
+        final String platformName2 = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
+        userService.addUserPlatform(UserService.USER_TYPE_STAFF, platformName1);
+        userService.addUserPlatform(UserService.USER_TYPE_STAFF, platformName2);
+
         final String username = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
         final String password1 = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
         final String password2 = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
 
-        UserDto userDto1 = new UserDto();
-        userDto1.setLabel(username);
-        userDto1.setName("testUser1");
-        userDto1.setPassword(password1);
-        userDto1.setUserPlatformName(UserService.USER_PLATFORM_ADMIN);
-        userDto1.setUsername(username);
-        userDto1.setUsernameType(UserService.USERNAME_TYPE_STRING);
+        StaffUserDto staffUserDto1 = new StaffUserDto();
+        staffUserDto1.setLocked(false);
+        staffUserDto1.setPassword(password1);
+        staffUserDto1.setUserPlatformName(platformName1);
+        staffUserDto1.setUsername(username);
+        staffUserService.addStaffUser(staffUserDto1);
 
-        UserDto userDto2 = new UserDto();
-        userDto2.setLabel(username);
-        userDto2.setName("testUser2");
-        userDto2.setPassword(password2);
-        userDto2.setUserPlatformName(UserService.USER_PLATFORM_GENERAL);
-        userDto2.setUsername(username);
-        userDto2.setUsernameType(UserService.USERNAME_TYPE_STRING);
-
-        userService.addUser(userDto1);
-        userService.addUser(userDto2);
+        StaffUserDto staffUserDto2 = new StaffUserDto();
+        staffUserDto2.setLocked(false);
+        staffUserDto2.setPassword(password2);
+        staffUserDto2.setUserPlatformName(platformName2);
+        staffUserDto2.setUsername(username);
+        staffUserService.addStaffUser(staffUserDto2);
 
         UserAuthDto userAuthDto1 = new UserAuthDto();
         userAuthDto1.setUsername(username);
-        userAuthDto1.setUserPlatformName(UserService.USER_PLATFORM_ADMIN);
+        userAuthDto1.setUserPlatformName(platformName1);
         userAuthDto1.setPassword(password1);
-        userAuthDto1.setUserTypeName(UserService.USER_TYPE_ADMIN);
+        userAuthDto1.setUserTypeName(UserService.USER_TYPE_STAFF);
         String token1 = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
         authService.putAuth(token1, userAuthDto1);
-        assertTrue(authService.getUserProfile(token1).getName().equals("testUser1"));
+        assertTrue(authService.getUserProfile(token1).getName().equals(username));
 
         UserAuthDto userAuthDto2 = new UserAuthDto();
         userAuthDto2.setUsername(username);
-        userAuthDto2.setUserPlatformName(UserService.USER_PLATFORM_GENERAL);
+        userAuthDto2.setUserPlatformName(platformName2);
         userAuthDto2.setPassword(password2);
-        userAuthDto2.setUserTypeName(UserService.USER_TYPE_GENERAL);
+        userAuthDto2.setUserTypeName(UserService.USER_TYPE_STAFF);
         String token2 = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
         authService.putAuth(token2, userAuthDto2);
-        assertTrue(authService.getUserProfile(token2).getName().equals("testUser2"));
+        assertTrue(authService.getUserProfile(token2).getName().equals(username));
     }
 
     public void test() throws UnsupportedEncodingException {

@@ -12,9 +12,9 @@ import robertli.zero.dto.user.UserRoleDto;
 import robertli.zero.dto.user.UserTypeDto;
 
 /**
- * This service is design for administrators to manage user data.
+ * This service is design to manage user data.
  *
- * @version 1.0.3 2016-12-30
+ * @version 1.0.4 2016-12-31
  * @author Robert Li
  */
 public interface UserService {
@@ -47,12 +47,6 @@ public interface UserService {
     public void putRoleForUser(int userId, String roleName);
 
     public void deleteRoleForUser(int userId, String roleName);
-
-    public void addUser(UserDto userDto);
-
-    public void deleteUser(int userId);
-
-    public void updateUser(UserDto userDto);
 
     public void setLock(int userId, boolean locked);
 

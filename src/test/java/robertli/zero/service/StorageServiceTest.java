@@ -54,9 +54,9 @@ public class StorageServiceTest {
         Thread.sleep(rand.nextInt(1000));
         String uuid = storageService.register(name, type);
         storageService.store(uuid, data);
-        
+
         while (rand.nextDouble() > 0.2) {
-            if(rand.nextDouble()<0.1){
+            if (rand.nextDouble() < 0.1) {
                 storageService.clean();
             }
             byte result[] = storageService.get(uuid);
@@ -76,9 +76,7 @@ public class StorageServiceTest {
         stressTest.test("myTest", () -> {
             try {
                 testProcess();
-            } catch (InterruptedException ex) {
-                Logger.getLogger(StorageServiceTest.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
+            } catch (InterruptedException | IOException ex) {
                 Logger.getLogger(StorageServiceTest.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
