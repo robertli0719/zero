@@ -12,10 +12,23 @@ function logout() {
     });
 }
 
+function testFun() {
+    console.log("testFum run");
+}
+
+let userMenuList = [
+    { name: "Platform", url: "admin/user-platform" },
+    { name: "Role", url: "admin/user-role" },
+    { name: "Promission" },
+] as NavbarItem[];
+
 let navBarItemList = [
     { name: "Index", url: "admin/index" },
-    { name: "Users", url: "admin/user" },
-];
+    { name: "User", childs: userMenuList },
+    { name: "Items1" },
+    { name: "Items2" },
+    { name: "Items3" }
+] as NavbarItem[];
 
 let rightNavBarItemList = [
     { name: "Logout", onClick: logout }
@@ -35,9 +48,20 @@ class AdminAppComponent extends React.Component<Prop, {}>{
     }
 
     render() {
+        let navbar = <AppNavbar name="Admin Dashboard" inverse={true} brandUrl="admin/index" itemList={navBarItemList} rightItemList={rightNavBarItemList} />
+        if (this.props.me.userPlatformName == null) {
+            navbar = <div></div>
+        } else if (this.props.me.userPlatformName != "admin") {
+            return (
+                <div>
+                    {navbar}
+                    <p>A user who is not an admin is logged in now, please logout first.</p>
+                </div>
+            )
+        }
         return (
             <div>
-                <AppNavbar name="Admin Dashboard" brandUrl="admin/index" itemList={navBarItemList} rightItemList={rightNavBarItemList} />
+                {navbar}
                 {this.props.children}
             </div>
         )

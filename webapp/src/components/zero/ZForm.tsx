@@ -1,134 +1,166 @@
 /*
- * Copyright 2016 Robert Li.
+ * Copyright 2017 Robert Li.
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
+ * 
+ * version 1.0 2017-01-01
  */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { Button, ButtonToolbar, FormControl, FormGroup, ControlLabel } from "react-bootstrap";
+import { Button, ButtonToolbar, FormControl, FormGroup, ControlLabel, Checkbox } from "react-bootstrap";
+import * as rb from "react-bootstrap"
 import { LinkContainer } from 'react-router-bootstrap';
-import './zero.scss';
 
-export interface Field {
+export type FieldProps = {
     label: string
     name: string
-    type: string
-    value: string
+    value?: string
+    multiple?: boolean
+    errorMessage?: string
+    onChange?: React.FormEventHandler<FormControl>;
+    valMap?: { [key: string]: any }
 }
 
-interface ZFormProps {
-    action: string
-    submit: string
-    fields: Field[]
-    onSuccess: Function
+export type FormProps = {
+    onSubmit?: (data: any) => {}
 }
 
-interface ZFormState {
-    fieldVals: { [key: string]: string },
-    fieldErrors: { [key: string]: string },
-    globalErrors: string[]
+export type FormState = {
+    valMap: { [key: string]: any }
 }
 
-export class Form extends React.Component<ZFormProps, ZFormState>{
+export type SubmitProps = {
+    onSubmit?: () => {}
+}
 
-    constructor(props: ZFormProps) {
+
+export class Form extends React.Component<FormProps, FormState>{
+
+    constructor(props: FormProps) {
         super(props);
-        this.state = { fieldVals: {}, fieldErrors: {}, globalErrors: [] };
-        for (let field of this.props.fields) {
-            this.state.fieldVals[field.name] = "";
-        }
+        this.state = { valMap: {} }
     }
 
-    fieldChangeHandler(event: React.FormEvent<HTMLInputElement>) {
-        let target = event.currentTarget;
-        let name = target.name;
-        let val = target.value;
-        this.state.fieldVals[name] = val;
-        this.setState(this.state);
-    }
+    inputChange(event: React.FormEvent<HTMLInputElement>) {
+        let key = event.currentTarget.name;
+        let type = event.currentTarget.type;
 
-    formSubmitSuccessHandler(feedback: any) {
-        console.log("success:", feedback, feedback.length);
-        this.state.fieldErrors = {};
-        this.state.globalErrors = [];
-        this.setState(this.state);
-        this.props.onSuccess(feedback);
-    }
-
-    makeFieldNameSet() {
-        let nameSet: { [key: string]: Boolean } = {};
-        this.props.fields.map((item) => {
-            nameSet[item.name] = true;
-        });
-        return nameSet;
-    }
-
-    formSubmitErrorHandler(feedback: any) {
-        this.state.fieldErrors = {};
-        this.state.globalErrors = [];
-
-        let fieldNameSet = this.makeFieldNameSet();
-        let result = JSON.parse(feedback.responseText);
-        let errors = result["errors"];
-        for (let field in errors) {
-            let error = errors[field];
-            let msg = error['message'];
-            switch (error['type']) {
-                case 'FIELD_ERROR':
-                    let field = error["source"];
-                    if (field in fieldNameSet) {
-                        this.state.fieldErrors[field] = msg;
-                    } else {
-                        this.state.globalErrors.push(msg);
-                    }
-                    break;
-                default:
-                    console.log(error);
-                    this.state.globalErrors.push(msg);
-            }
+        if (type == "checkbox") {
+            const checked: boolean = event.currentTarget.checked;
+            this.state.valMap[key] = checked;
+        } else {
+            const val = event.currentTarget.value;
+            this.state.valMap[key] = val;
         }
         this.setState(this.state);
     }
 
-    submit() {
-        let json = JSON.stringify(this.state.fieldVals);
-        $.ajax({
-            url: this.props.action,
-            method: "post",
-            contentType: "application/json;charset=UTF-8",
-            data: json,
-            success: this.formSubmitSuccessHandler.bind(this),
-            error: this.formSubmitErrorHandler.bind(this)
-        });
+    onSubmit() {
+        this.props.onSubmit(this.state.valMap);
     }
 
     render() {
-        return <form>
-            {
-                this.state.globalErrors.map((val) => {
-                    return <p>{val}</p>
+        const children = React.Children.map(this.props.children,
+            (child: any) => {
+                let key = child.props.name;
+                if (key && !this.state.valMap[key]) {
+                    this.state.valMap[key] = "";
+                }
+                return React.cloneElement(child, {
+                    onChange: this.inputChange.bind(this),
+                    valMap: this.state.valMap,
+                    onSubmit: this.onSubmit.bind(this)
                 })
             }
-            {
-                this.props.fields.map((item) => {
-                    return (
-                        <FormGroup>
-                            <ControlLabel>{item.label}</ControlLabel>
-                            <FormControl
-                                type={item.type}
-                                name={item.name}
-                                value={this.state.fieldVals[item.name]}
-                                onChange={this.fieldChangeHandler.bind(this)}
-                                />
-                            <FormControl.Feedback />
-                            <p>{this.state.fieldErrors[item.name]}</p>
-                        </FormGroup>
-                    )
-                })
-            }
-            <Button bsStyle="success" className="pull-right" onClick={this.submit.bind(this)}>
-                {this.props.submit}
-            </Button>
-        </form>
+        );
+        return <div>{children}</div>
+    }
+}
+
+export class TextField extends React.Component<FieldProps, {}>{
+    render() {
+        return (
+            <FormGroup>
+                <ControlLabel>{this.props.label}</ControlLabel>
+                <FormControl type="text"
+                    name={this.props.name}
+                    value={this.props.valMap[this.props.name]}
+                    onChange={this.props.onChange}
+                    />
+                <FormControl.Feedback />
+                <p>{this.props.errorMessage}</p>
+            </FormGroup>
+        )
+    }
+}
+
+export class Password extends React.Component<FieldProps, {}>{
+    render() {
+        return (
+            <FormGroup>
+                <ControlLabel>{this.props.label}</ControlLabel>
+                <FormControl type="password"
+                    name={this.props.name}
+                    value={this.props.valMap[this.props.name]}
+                    onChange={this.props.onChange}
+                    />
+                <FormControl.Feedback />
+                <p>{this.props.errorMessage}</p>
+            </FormGroup>
+        )
+    }
+}
+
+export class File extends React.Component<FieldProps, {}>{
+    render() {
+        return (
+            <FormGroup>
+                <ControlLabel>{this.props.label}</ControlLabel>
+                <FormControl type="file"
+                    name={this.props.name}
+                    value={this.props.valMap[this.props.name]}
+                    onChange={this.props.onChange}
+                    multiple={this.props.multiple}
+                    />
+                <FormControl.Feedback />
+                <p>{this.props.errorMessage}</p>
+            </FormGroup>
+        )
+    }
+}
+
+export class CheckBox extends React.Component<FieldProps, {}>{
+    render() {
+        return (
+            <Checkbox
+                name={this.props.name}
+                onChange={this.props.onChange}>
+                {this.props.label}
+            </Checkbox>
+        )
+    }
+}
+
+export class Radio extends React.Component<FieldProps, {}>{
+    render() {
+        return (
+            <rb.Radio
+                name={this.props.name}
+                value={this.props.value}
+                onChange={this.props.onChange}>
+                {this.props.label}
+            </rb.Radio>
+        )
+    }
+}
+
+export class Submit extends React.Component<SubmitProps, {}>{
+
+    onSubmit() {
+        this.props.onSubmit();
+    }
+
+    render() {
+        return <Button type="submit" onClick={this.onSubmit.bind(this)}>Submit</Button>
     }
 }

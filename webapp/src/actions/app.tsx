@@ -5,7 +5,7 @@ import { UserProfile } from "../reducers/me"
 
 export function initApp() {
     return () => {
-        return http.put("admin/init", null)
+        return http.put("app/init", null)
             .then(() => {
                 console.log("init success:");
             }).catch(error => {

@@ -34,7 +34,7 @@
         <!--For Admin POST PUT DELETE-->
         <mvc:interceptor>
             <mvc:mapping path="/api/v1/**"/>
-            <mvc:exclude-mapping path="/api/v1/admin/init"/>
+            <mvc:exclude-mapping path="/api/v1/app/**"/>
             <mvc:exclude-mapping path="/api/v1/me/**"/>
             <mvc:exclude-mapping path="/api/v1/images/**"/>
             <bean class="robertli.zero.interceptor.AdminEditPermissionInterceptor"></bean>

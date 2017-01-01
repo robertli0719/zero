@@ -124,7 +124,7 @@ export class StaffLoginPage extends React.Component<Props, StaffLoginState>{
         let panel = me.isAdmin() ? redirectPanel : loginForm;
         return (
             <div className="container">
-                <h1>Admin Login</h1>
+                <h1>Store User Login</h1>
                 {panel}
             </div>
         );

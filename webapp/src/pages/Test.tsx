@@ -3,80 +3,58 @@ import * as ReactDOM from "react-dom"
 import { store } from "../Store"
 import { Button, ButtonToolbar, FormControl, FormGroup } from "react-bootstrap"
 import * as test from "../actions/test"
+import * as zform from "../components/zero/ZForm"
 
 interface TestState {
-    url: string,
-    dateTime: string
+}
+
+type TestDto = {
+    username: string,
+    password: string,
+    like: boolean,
+    agree: boolean
 }
 
 export class Test extends React.Component<{}, TestState>{
 
     constructor(props: {}) {
         super(props);
-        this.state = { url: "demo/fun", dateTime: null };
+        this.state = {};
     }
 
-    urlInputChange(event: React.FormEvent<HTMLInputElement>) {
-        let val = event.currentTarget.value;
-        this.state.url = val;
-        this.setState(this.state);
-    }
+    submit(data: TestDto) {
+        console.log(data);
+        console.log(data.username);
+        console.log(data.password);
+        console.log(data.agree);
+        console.log(data.like);
 
-    dateInputChange(event: React.FormEvent<HTMLInputElement>) {
-        let val = event.currentTarget.value;
-        this.state.dateTime = val;
-        this.setState(this.state);
-    }
-
-    execute(method: string) {
-
-        let data = {
-            name: "asdd",
-        };
-        let json = JSON.stringify(data);
-        $.ajax({
-            url: this.state.url,
-            method: method,
-            contentType: "application/json;charset=UTF-8",
-            data: json,
-            success: function (feedback) {
-                console.log("success:", feedback, feedback.length);
-            },
-            error: function (feedback) {
-                console.log("error:", feedback);
-            }
-        });
-    }
-
-    test() {
-        console.log("before store.dispatch");
-        store.dispatch(test.demo());
-        console.log("after store.dispatch");
     }
 
     render() {
         return (
             <div className="container">
                 <h1>Test</h1>
-                <p>url: {this.state.url}</p>
-                <FormGroup>
-                    <label>URL</label>
-                    <FormControl type="text" value={this.state.url} onChange={this.urlInputChange.bind(this)} />
-                </FormGroup>
-                <ButtonToolbar>
-                    <Button onClick={this.execute.bind(this, "GET")}>GET</Button>
-                    <Button onClick={this.execute.bind(this, "POST")}>POST</Button>
-                    <Button onClick={this.execute.bind(this, "PUT")}>PUT</Button>
-                    <Button onClick={this.execute.bind(this, "DELETE")}>DELETE</Button>
-                </ButtonToolbar>
-                <ButtonToolbar>
-                    <Button onClick={this.test}>Test</Button>
-                </ButtonToolbar>
-                <form action="api/v1/images" method="POST" encType="multipart/form-data">
-                    <input name="file" type="file" multiple={true} />
-                    <input type="submit" />
-                </form>
+
+                <zform.Form onSubmit={this.submit.bind(this)}>
+                    <zform.TextField label="username" name="username" />
+                    <zform.Password label="password" name="password" />
+                    <zform.CheckBox label="I like it" name="like" />
+                    <zform.CheckBox label="agree to get email" name="agree" />
+
+                    <zform.Radio label="item1" name="item" value="v1" />
+                    <zform.Radio label="item2" name="item" value="v2" />
+                    <zform.Radio label="item3" name="item" value="v3" />
+
+                    <zform.File label="image" name="image" multiple={true} />
+                    <zform.Submit />
+                </zform.Form>
             </div>
         );
     }
 }
+
+// <form action="api/v1/images" method="POST" encType="multipart/form-data">
+//     <input name="file" type="file" multiple={true} />
+//     <input type="submit" />
+// </form>

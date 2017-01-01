@@ -8,9 +8,6 @@ import * as me from "./actions/me"
 import { Index } from "./pages/Index"
 import { About } from "./pages/About"
 import { Test } from "./pages/Test"
-import { UserRegister } from "./pages/auth/UserRegister"
-import { UserRegisterVerifiy } from "./pages/auth/UserRegisterVerifiy"
-import { UserLogin } from "./pages/auth/UserLogin"
 import { InventoryView } from "./pages/dashboard/InventoryView"
 import { ReportView } from "./pages/dashboard/ReportView"
 import { StaffApp } from "./pages/dashboard/StaffApp"
@@ -21,6 +18,8 @@ import { AppInit } from "./pages/admin/AppInit"
 import { AdminLogin } from "./pages/admin/AdminLogin"
 import { AdminIndex } from "./pages/admin/AdminIndex"
 import { AdminUserManagement } from "./pages/admin/AdminUserManagement"
+import { AdminUserRole } from "./pages/admin/AdminUserRole"
+import { AdminUserPlatform } from "./pages/admin/AdminUserPlatform"
 
 
 let navBarItemList = [
@@ -69,11 +68,6 @@ let template = (
                     <Route path="index" component={Index} />
                     <Route path="about" component={About} />
                     <Route path="test" component={Test} />
-                    <Route path="auth">
-                        <Route path="register" component={UserRegister} />
-                        <Route path="register/verifiy/:code" component={UserRegisterVerifiy} />
-                        <Route path="login" component={UserLogin} />
-                    </Route>
                 </Route>
                 <Route path="dashboard/:platform" component={StaffApp}>
                     <Route path="index" component={StaffIndex} />
@@ -85,6 +79,8 @@ let template = (
                     <Route path="init" component={AppInit} />
                     <Route path="index" component={AdminIndex} onEnter={requireRoleAdmin} />
                     <Route path="user" component={AdminUserManagement} onEnter={requireRoleAdmin} />
+                    <Route path="user-platform" component={AdminUserPlatform} onEnter={requireRoleAdmin} />
+                    <Route path="user-role" component={AdminUserRole} onEnter={requireRoleAdmin} />
                     <Route path="login" component={AdminLogin} />
                 </Route>
             </Route>

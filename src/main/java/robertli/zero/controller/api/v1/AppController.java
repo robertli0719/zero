@@ -18,15 +18,15 @@ import robertli.zero.service.AppService;
  * @author Robert Li
  */
 @RestController
-@RequestMapping("api/v1/admin")
-public class AdminController {
+@RequestMapping("api/v1/app")
+public class AppController {
 
     @Resource
     private AppService appService;
 
     @RequestMapping(path = "init", method = RequestMethod.PUT)
     public void init() {
-        Logger logger = Logger.getLogger("AdminController");
+        Logger logger = Logger.getLogger("AppController");
         logger.log(Level.INFO, "init database");
         appService.init();
     }

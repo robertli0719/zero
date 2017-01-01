@@ -15,20 +15,12 @@ export class AppInit extends React.Component<{}, {}>{
         store.dispatch(app.initApp());
     }
 
-    test() {
-    }
-
-    testLogout() {
-    }
-
     render() {
         return (
             <div className="container">
-                <h1>App Init 2</h1>
+                <h1>App Init</h1>
                 <ButtonToolbar>
                     <Button bsStyle="success" onClick={this.appInit.bind(this)}>Init</Button>
-                    <Button bsStyle="success" onClick={this.test.bind(this)}>Test</Button>
-                    <Button bsStyle="success" onClick={this.testLogout.bind(this)}>testLogout</Button>
                 </ButtonToolbar>
             </div>
         );
