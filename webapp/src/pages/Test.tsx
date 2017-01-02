@@ -32,12 +32,8 @@ export class Test extends React.Component<{}, TestState>{
 
     }
 
-    responseBack(p: Promise<never>) {
-        return p.then((data: any) => {
-            console.log("success", data);
-        }).catch((e: RestErrorDto) => {
-            console.log("error:", e)
-        });
+    onSuccess(data: any) {
+        console.log("success", data);
     }
 
     render() {
@@ -66,7 +62,7 @@ export class Test extends React.Component<{}, TestState>{
                     </zform.Form>
                     <hr />
 
-                    <zform.Form action="test/demos" method="POST" onRespond={this.responseBack.bind(this)}>
+                    <zform.Form action="test/demos" method="POST" onSuccess={this.onSuccess.bind(this)}>
                         <p>POST Demo</p>
                         <zform.TextField label="name" name="name" />
                         <zform.Submit />

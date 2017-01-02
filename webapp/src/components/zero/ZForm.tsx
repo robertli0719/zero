@@ -3,22 +3,22 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.0.1 2017-01-01
+ * version 1.0.2 2017-01-02
  */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { Button, ButtonToolbar, FormControl, FormGroup, ControlLabel, Checkbox } from "react-bootstrap";
+import { Alert, Button, ButtonToolbar, FormControl, FormGroup, ControlLabel, Checkbox, HelpBlock } from "react-bootstrap";
 import * as rb from "react-bootstrap"
 import { LinkContainer } from 'react-router-bootstrap';
 import { makeRandomString } from "../../utilities/random-coder"
-import { http } from "../../utilities/http"
+import { http, RestErrorDto, RestErrorItemDto } from "../../utilities/http"
 
 export type FieldProps = {
     label: string
     name: string
     value?: string
     multiple?: boolean
-    errorMessage?: string
+    errorMap?: { [key: string]: any }
     onChange?: React.FormEventHandler<FormControl>
     valMap?: { [key: string]: any }
 }
@@ -35,16 +35,19 @@ export type SelectFieldProps = FieldProps & {
 export type FormProps = {
     action?: string
     method?: string
-    onRespond?: (promise: Promise<any>) => Promise<any>
-    onSubmit?: (data: any) => {}
+    onSuccess?: (data: any) => Promise<never>
+    onSubmit?: (data: any) => Promise<never>
 }
 
 export type FormState = {
     valMap: { [key: string]: any }
+    errorMap: { [key: string]: any }
+    actionErrors: [string]
 }
 
 export type SubmitProps = {
     onSubmit?: () => {}
+    value?: string
 }
 
 
@@ -52,7 +55,7 @@ export class Form extends React.Component<FormProps, FormState>{
 
     constructor(props: FormProps) {
         super(props);
-        this.state = { valMap: {} }
+        this.state = { valMap: {}, errorMap: {}, actionErrors: [] as [string] }
     }
 
     inputChange(event: React.FormEvent<HTMLInputElement>) {
@@ -107,28 +110,55 @@ export class Form extends React.Component<FormProps, FormState>{
         console.log("after promise:");
     }
 
-    onSubmit() {
-        if (this.props.onSubmit) {
-            this.props.onSubmit(this.state.valMap);
+    onSuccess(dto: any) {
+        if (!this.props.onSuccess) {
             return;
         }
-        if (!this.props.action) {
-            return;
-        }
-        let promise = this.submit();
-        if (this.props.onRespond) {
-            const newPromise = this.props.onRespond(promise);
-            if (newPromise instanceof Promise) {
-                promise = newPromise;
-            }
+        let promise = this.props.onSuccess(dto);
+        if (promise instanceof Promise == false) {
+            promise = new Promise((resolve, reject) => { resolve(); });
         }
         promise.then(() => {
             this.afterSubmit();
         });
     }
 
-    render() {
-        const children = React.Children.map(this.props.children,
+    onError(restError: RestErrorDto) {
+        for (let id in restError.errors) {
+            let item: RestErrorItemDto = restError.errors[id];
+            switch (item.type) {
+                case "FIELD_ERROR":
+                    this.state.errorMap[item.source] = item.message;
+                    this.setState(this.state);
+                    break;
+                default:
+                    this.state.actionErrors.push(item.message);
+                    this.setState(this.state);
+            }
+        }
+    }
+
+    onSubmit() {
+        this.state.errorMap = {};
+        this.state.actionErrors = [] as [string];
+        this.setState(this.state);
+        if (this.props.onSubmit) {
+            this.props.onSubmit(this.state.valMap);
+        }
+        if (!this.props.action) {
+            return;
+        }
+        this.submit()
+            .then((dto: any) => {
+                this.onSuccess(dto);
+            })
+            .catch((restError: RestErrorDto) => {
+                this.onError(restError);
+            })
+    }
+
+    getChildren() {
+        return React.Children.map(this.props.children,
             (child: any) => {
                 let key = child.props.name;
                 if (key && !this.state.valMap[key]) {
@@ -138,18 +168,35 @@ export class Form extends React.Component<FormProps, FormState>{
                 return React.cloneElement(child, {
                     onChange: this.inputChange.bind(this),
                     valMap: this.state.valMap,
+                    errorMap: this.state.errorMap,
                     onSubmit: this.onSubmit.bind(this)
                 })
             }
-        );
-        return <div>{children}</div>
+        )
+    }
+
+    render() {
+        const children = this.getChildren();
+        console.log("render:", this.state.actionErrors.length);
+        return (
+            <div>
+                {
+                    this.state.actionErrors.map((msg) => {
+                        return <Alert bsStyle="danger"><strong>Error!</strong> {msg}</Alert>
+                    })
+                }
+                {children}
+            </div>
+        )
     }
 }
 
 export class TextField extends React.Component<FieldProps, {}>{
     render() {
+        const error = this.props.errorMap[this.props.name];
+        const validateState = error ? "error" : null;
         return (
-            <FormGroup>
+            <FormGroup validationState={validateState}>
                 <ControlLabel>{this.props.label}</ControlLabel>
                 <FormControl type="text"
                     name={this.props.name}
@@ -157,7 +204,7 @@ export class TextField extends React.Component<FieldProps, {}>{
                     onChange={this.props.onChange}
                     />
                 <FormControl.Feedback />
-                <p>{this.props.errorMessage}</p>
+                <HelpBlock>{error}</HelpBlock>
             </FormGroup>
         )
     }
@@ -165,8 +212,10 @@ export class TextField extends React.Component<FieldProps, {}>{
 
 export class Password extends React.Component<FieldProps, {}>{
     render() {
+        const error = this.props.errorMap[this.props.name];
+        const validateState = error ? "error" : null;
         return (
-            <FormGroup>
+            <FormGroup validationState={validateState}>
                 <ControlLabel>{this.props.label}</ControlLabel>
                 <FormControl type="password"
                     name={this.props.name}
@@ -174,7 +223,7 @@ export class Password extends React.Component<FieldProps, {}>{
                     onChange={this.props.onChange}
                     />
                 <FormControl.Feedback />
-                <p>{this.props.errorMessage}</p>
+                <HelpBlock>{error}</HelpBlock>
             </FormGroup>
         )
     }
@@ -185,14 +234,17 @@ export class Textarea extends React.Component<FieldProps, {}>{
     private controlId = makeRandomString(32);
 
     render() {
+        const error = this.props.errorMap[this.props.name];
+        const validateState = error ? "error" : null;
         return (
-            <FormGroup controlId={this.controlId}>
+            <FormGroup controlId={this.controlId} validationState={validateState}>
                 <ControlLabel>{this.props.label}</ControlLabel>
                 <FormControl componentClass="textarea" placeholder="textarea"
                     name={this.props.name}
                     value={this.props.valMap[this.props.name]}
                     onChange={this.props.onChange}
                     />
+                <HelpBlock>{error}</HelpBlock>
             </FormGroup>
         )
     }
@@ -200,8 +252,10 @@ export class Textarea extends React.Component<FieldProps, {}>{
 
 export class File extends React.Component<FieldProps, {}>{
     render() {
+        const error = this.props.errorMap[this.props.name];
+        const validateState = error ? "error" : null;
         return (
-            <FormGroup>
+            <FormGroup validationState={validateState}>
                 <ControlLabel>{this.props.label}</ControlLabel>
                 <FormControl type="file"
                     name={this.props.name}
@@ -210,7 +264,7 @@ export class File extends React.Component<FieldProps, {}>{
                     multiple={this.props.multiple}
                     />
                 <FormControl.Feedback />
-                <p>{this.props.errorMessage}</p>
+                <HelpBlock>{error}</HelpBlock>
             </FormGroup>
         )
     }
@@ -285,6 +339,7 @@ export class Submit extends React.Component<SubmitProps, {}>{
     }
 
     render() {
-        return <Button type="submit" onClick={this.onSubmit.bind(this)}>Submit</Button>
+        const label = this.props.value ? this.props.value : "Submit";
+        return <Button type="submit" onClick={this.onSubmit.bind(this)}>{label}</Button>
     }
 }

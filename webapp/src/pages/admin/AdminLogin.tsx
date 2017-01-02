@@ -4,6 +4,7 @@ import { Button, ButtonToolbar, ControlLabel, FormControl, Form, FormGroup, Chec
 import { Link } from "react-router"
 import * as me from "../../actions/me"
 import * as forms from "../../actions/forms"
+import * as zform from "../../components/zero/ZForm"
 import * as utilities from "../../utilities/random-coder"
 import { store, AppState } from "../../Store"
 import { FormState } from "../../reducers/forms"
@@ -13,15 +14,12 @@ import { FormErrorPanel } from "../../components/FormErrorPanel"
 
 
 interface Prop {
-    loginForm: FormState
     me: UserProfile
 }
 
 interface AdminLoginState {
-    userAuthDto: me.UserAuthDto
 }
 
-let LOGIN_FORM_ID = utilities.makeRandomString(32);
 
 export class AdminLoginPage extends React.Component<Prop, AdminLoginState>{
 
@@ -30,100 +28,48 @@ export class AdminLoginPage extends React.Component<Prop, AdminLoginState>{
         console.log("AdminLoginPage constructor");
     }
 
-    componentWillMount() {
-        this.state = {
-            userAuthDto: { username: "", password: "", userPlatformName: "admin", userTypeName: "admin" },
-        }
-        let formState: FormState = { processing: false, restError: null }
-        store.dispatch(forms.updateForm(LOGIN_FORM_ID, formState));
-    }
-
-    componentWillUnmount() {
-        store.dispatch(forms.deleteForm(LOGIN_FORM_ID));
-    }
-
-    isDisabledUI() {
-        return this.props.loginForm && this.props.loginForm.processing;
-    }
-
-    fieldOnChange(event: React.FormEvent<HTMLInputElement>) {
-        let name = event.currentTarget.name;
-        let val = event.currentTarget.value;
-        switch (name) {
-            case "username":
-                this.state.userAuthDto.username = val;
-                break;
-            case "password":
-                this.state.userAuthDto.password = val;
-                break;
-        }
-        this.setState(this.state);
-    }
-
     passwordKeyUp(event: KeyboardEvent) {
         if (event.keyCode == 13) {
-            this.submit();
+            //this.submit();
         }
     }
 
-    submit() {
-        if (this.props.loginForm.processing) {
-            return;
-        }
-        store.dispatch(me.triggerLogin(this.state.userAuthDto, LOGIN_FORM_ID));
+    onSuccess() {
+        store.dispatch(me.loadProfile());
     }
 
     render() {
         let loginForm = (
-            <div>
-                <FormErrorPanel formState={this.props.loginForm} />
-                <Row>
-                    <Col xs={12} sm={6} md={4}>
-                        <Form horizontal>
-                            <FormGroup controlId="formHorizontalUsername">
-                                <Col componentClass={ControlLabel} sm={3}>Username</Col>
-                                <Col sm={9}>
-                                    <FormControl name="username" type="text" placeholder="Username" onChange={this.fieldOnChange.bind(this)} />
-                                </Col>
-                            </FormGroup>
-
-                            <FormGroup controlId="formHorizontalPassword">
-                                <Col componentClass={ControlLabel} sm={3}>Password</Col>
-                                <Col sm={9}>
-                                    <FormControl name="password" type="password" placeholder="Password" onChange={this.fieldOnChange.bind(this)} onKeyUp={this.passwordKeyUp.bind(this)} />
-                                </Col>
-                            </FormGroup>
-
-                            <FormGroup>
-                                <Col smOffset={3} sm={9}>
-                                    <a className="btn btn-default" disabled={this.isDisabledUI()} onClick={this.submit.bind(this)}>Login</a>
-                                </Col>
-                            </FormGroup>
-                        </Form>
-                    </Col>
-                </Row>
-            </div>
-        );
-
+            <Row>
+                <Col xs={12} sm={4} md={3}>
+                    <zform.Form action="me/auth" method="PUT" onSuccess={this.onSuccess.bind(this)}>
+                        <zform.Hidden name="userTypeName" value="admin" />
+                        <zform.Hidden name="userPlatformName" value="admin" />
+                        <zform.TextField name="username" label="Username" />
+                        <zform.Password name="password" label="Password" />
+                        <zform.Submit value="Login" />
+                    </zform.Form>
+                </Col>
+            </Row>
+        )
         let redirectPanel = (
             <Panel header="current logged in">
                 <Link to="admin/index">Click here to dashboard</Link>
             </Panel>
-        );
-
+        )
         let panel = me.isAdmin() ? redirectPanel : loginForm;
         return (
             <div className="container">
                 <h1>Admin Login</h1>
                 {panel}
             </div>
-        );
+        )
     }
 }
 
 function select(state: AppState): Prop {
     console.log("AdminLogin select", state);
-    return { loginForm: state.forms[LOGIN_FORM_ID], me: state.me };
+    return { me: state.me };
 }
 
 export let AdminLogin = connect(select)(AdminLoginPage);
