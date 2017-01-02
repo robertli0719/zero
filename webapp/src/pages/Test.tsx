@@ -1,9 +1,10 @@
 import * as React from "react"
 import * as ReactDOM from "react-dom"
 import { store } from "../Store"
-import { Button, ButtonToolbar, FormControl, FormGroup } from "react-bootstrap"
+import { Button, ButtonToolbar, FormControl, FormGroup, Col } from "react-bootstrap"
 import * as test from "../actions/test"
 import * as zform from "../components/zero/ZForm"
+import { http, RestErrorDto } from "../utilities/http"
 
 interface TestState {
 }
@@ -31,24 +32,49 @@ export class Test extends React.Component<{}, TestState>{
 
     }
 
+    responseBack(p: Promise<never>) {
+        return p.then((data: any) => {
+            console.log("success", data);
+        }).catch((e: RestErrorDto) => {
+            console.log("error:", e)
+        });
+    }
+
     render() {
+        let options = { "1": "apple", "2": "orange" }
         return (
             <div className="container">
                 <h1>Test</h1>
 
-                <zform.Form onSubmit={this.submit.bind(this)}>
-                    <zform.TextField label="username" name="username" />
-                    <zform.Password label="password" name="password" />
-                    <zform.CheckBox label="I like it" name="like" />
-                    <zform.CheckBox label="agree to get email" name="agree" />
+                <Col sm={3}>
+                    <zform.Form onSubmit={this.submit.bind(this)}>
+                        <zform.Hidden name="hiddenValue" value="123" />
+                        <zform.TextField label="username" name="username" />
+                        <zform.Password label="password" name="password" />
+                        <zform.CheckBox label="I like it" name="like" />
+                        <zform.CheckBox label="agree to get email" name="agree" />
+                        <hr />
+                        <zform.Radio label="item1" name="item" value="v1" />
+                        <zform.Radio label="item2" name="item" value="v2" />
+                        <zform.Radio label="item3" name="item" value="v3" />
+                        <hr />
+                        <zform.Select label="Select Type" name="type" options={options} />
+                        <zform.Textarea label="your feedback" name="feedback" />
+                        <hr />
+                        <zform.File label="image" name="image" multiple={true} />
+                        <zform.Submit />
+                    </zform.Form>
+                    <hr />
 
-                    <zform.Radio label="item1" name="item" value="v1" />
-                    <zform.Radio label="item2" name="item" value="v2" />
-                    <zform.Radio label="item3" name="item" value="v3" />
+                    <zform.Form action="test/demos" method="POST" onRespond={this.responseBack.bind(this)}>
+                        <p>POST Demo</p>
+                        <zform.TextField label="name" name="name" />
+                        <zform.Submit />
+                    </zform.Form>
+                </Col>
+                <Col sm={9}></Col>
 
-                    <zform.File label="image" name="image" multiple={true} />
-                    <zform.Submit />
-                </zform.Form>
+
             </div>
         );
     }

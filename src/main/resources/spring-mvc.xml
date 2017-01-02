@@ -26,6 +26,7 @@
             <mvc:mapping path="/api/v1/**"/>
             <mvc:exclude-mapping path="/api/v1/me/**"/>
             <mvc:exclude-mapping path="/api/v1/images/**"/>
+            <mvc:exclude-mapping path="/api/v1/test/**"/>
             <mvc:exclude-mapping path="/api/v1/user-types/**"/>
             <mvc:exclude-mapping path="/api/v1/user-platforms/**"/>
             <bean class="robertli.zero.interceptor.AdminReadPermissionInterceptor"></bean>
@@ -37,6 +38,7 @@
             <mvc:exclude-mapping path="/api/v1/app/**"/>
             <mvc:exclude-mapping path="/api/v1/me/**"/>
             <mvc:exclude-mapping path="/api/v1/images/**"/>
+            <mvc:exclude-mapping path="/api/v1/test/**"/>
             <bean class="robertli.zero.interceptor.AdminEditPermissionInterceptor"></bean>
         </mvc:interceptor>
         
