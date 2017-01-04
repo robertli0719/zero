@@ -1,12 +1,17 @@
 import * as React from "react";
-import * as ReactDOM from "react-dom";
+import { connect } from "react-redux"
+import { store, AppState } from "../../Store"
+import { UserProfile } from "../../reducers/me"
 import { Button, ButtonToolbar } from "react-bootstrap";
 
-export class AdminIndex extends React.Component<{}, {}>{
+interface Props {
+    me: UserProfile
+}
+
+export class AdminIndexPage extends React.Component<Props, {}>{
 
     constructor() {
         super();
-        
     }
 
     appInit() {
@@ -16,6 +21,7 @@ export class AdminIndex extends React.Component<{}, {}>{
         return (
             <div className="container">
                 <h1>Admin Management System</h1>
+                <p>Admin: {this.props.me.authLabel}</p>
                 <ButtonToolbar>
                     <Button bsStyle="success" onClick={this.appInit.bind(this)}>OK</Button>
                 </ButtonToolbar>
@@ -23,3 +29,10 @@ export class AdminIndex extends React.Component<{}, {}>{
         );
     }
 }
+
+function select(state: AppState): Props {
+    console.log("AdminLogin select", state);
+    return { me: state.me };
+}
+
+export let AdminIndex = connect(select)(AdminIndexPage);

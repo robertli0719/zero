@@ -1,10 +1,10 @@
 import * as React from "react"
 import * as ReactDOM from "react-dom"
-import { store } from "../Store"
+import { store } from "../../Store"
 import { Button, ButtonToolbar, FormControl, FormGroup, Col } from "react-bootstrap"
-import * as test from "../actions/test"
-import * as zform from "../components/zero/ZForm"
-import { http, RestErrorDto } from "../utilities/http"
+import * as test from "../../actions/test"
+import * as zform from "../../components/zero/ZForm"
+import { http, RestErrorDto } from "../../utilities/http"
 
 interface TestState {
 }
@@ -16,11 +16,15 @@ type TestDto = {
     agree: boolean
 }
 
-export class Test extends React.Component<{}, TestState>{
+export class TestIndex extends React.Component<{}, TestState>{
 
     constructor(props: {}) {
         super(props);
         this.state = {};
+        zform.fetchSelectOptions("user-types")
+            .catch((options) => {
+                console.log("options:", options);
+            });
     }
 
     submit(data: TestDto) {
@@ -45,7 +49,7 @@ export class Test extends React.Component<{}, TestState>{
                 <Col sm={3}>
                     <zform.Form onSubmit={this.submit.bind(this)}>
                         <zform.Hidden name="hiddenValue" value="123" />
-                        <zform.TextField label="username" name="username" />
+                        <zform.TextField label="username" name="username" enterSubmit={true} />
                         <zform.Password label="password" name="password" />
                         <zform.CheckBox label="I like it" name="like" />
                         <zform.CheckBox label="agree to get email" name="agree" />
@@ -65,12 +69,13 @@ export class Test extends React.Component<{}, TestState>{
                     <zform.Form action="test/demos" method="POST" onSuccess={this.onSuccess.bind(this)}>
                         <p>POST Demo</p>
                         <zform.TextField label="name" name="name" />
+                        <zform.TextField label="name1" name="name1" />
+                        <zform.TextField label="name2" name="name2" />
+                        <zform.TextField label="name3" name="name3" enterSubmit={true} />
                         <zform.Submit />
                     </zform.Form>
                 </Col>
                 <Col sm={9}></Col>
-
-
             </div>
         );
     }

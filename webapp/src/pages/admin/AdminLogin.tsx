@@ -3,14 +3,11 @@ import { connect } from "react-redux"
 import { Button, ButtonToolbar, ControlLabel, FormControl, Form, FormGroup, Checkbox, Col, Row, Panel } from "react-bootstrap"
 import { Link } from "react-router"
 import * as me from "../../actions/me"
-import * as forms from "../../actions/forms"
 import * as zform from "../../components/zero/ZForm"
 import * as utilities from "../../utilities/random-coder"
 import { store, AppState } from "../../Store"
-import { FormState } from "../../reducers/forms"
 import { UserProfile } from "../../reducers/me"
 import { RestErrorDto } from "../../utilities/http"
-import { FormErrorPanel } from "../../components/FormErrorPanel"
 
 
 interface Prop {
@@ -28,12 +25,6 @@ export class AdminLoginPage extends React.Component<Prop, AdminLoginState>{
         console.log("AdminLoginPage constructor");
     }
 
-    passwordKeyUp(event: KeyboardEvent) {
-        if (event.keyCode == 13) {
-            //this.submit();
-        }
-    }
-
     onSuccess() {
         store.dispatch(me.loadProfile());
     }
@@ -46,7 +37,7 @@ export class AdminLoginPage extends React.Component<Prop, AdminLoginState>{
                         <zform.Hidden name="userTypeName" value="admin" />
                         <zform.Hidden name="userPlatformName" value="admin" />
                         <zform.TextField name="username" label="Username" />
-                        <zform.Password name="password" label="Password" />
+                        <zform.Password name="password" label="Password" enterSubmit={true} />
                         <zform.Submit value="Login" />
                     </zform.Form>
                 </Col>

@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.0.2 2017-01-02
+ * version 1.0.3 2017-01-03
  */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
@@ -18,6 +18,8 @@ export type FieldProps = {
     name: string
     value?: string
     multiple?: boolean
+    enterSubmit?: boolean
+    onSubmit?: () => {}
     errorMap?: { [key: string]: any }
     onChange?: React.FormEventHandler<FormControl>
     valMap?: { [key: string]: any }
@@ -32,6 +34,14 @@ export type SelectFieldProps = FieldProps & {
     options: { [value: string]: any }
 }
 
+export type SubmitProps = {
+    onSubmit?: () => {}
+    value?: string
+    block?: boolean
+    bsStyle?: string
+
+}
+
 export type FormProps = {
     action?: string
     method?: string
@@ -44,12 +54,6 @@ export type FormState = {
     errorMap: { [key: string]: any }
     actionErrors: [string]
 }
-
-export type SubmitProps = {
-    onSubmit?: () => {}
-    value?: string
-}
-
 
 export class Form extends React.Component<FormProps, FormState>{
 
@@ -128,7 +132,11 @@ export class Form extends React.Component<FormProps, FormState>{
             let item: RestErrorItemDto = restError.errors[id];
             switch (item.type) {
                 case "FIELD_ERROR":
-                    this.state.errorMap[item.source] = item.message;
+                    if (this.state.valMap[item.source] !== undefined) {
+                        this.state.errorMap[item.source] = item.message;
+                    } else {
+                        this.state.actionErrors.push(item.source + ":" + item.message);
+                    }
                     this.setState(this.state);
                     break;
                 default:
@@ -148,6 +156,10 @@ export class Form extends React.Component<FormProps, FormState>{
         if (!this.props.action) {
             return;
         }
+        if (!this.props.onSuccess) {
+            throw "ZFrom can't find onSuccess when using action";
+        }
+        console.log("onSuccess:", this.props.onSuccess);
         this.submit()
             .then((dto: any) => {
                 this.onSuccess(dto);
@@ -177,7 +189,6 @@ export class Form extends React.Component<FormProps, FormState>{
 
     render() {
         const children = this.getChildren();
-        console.log("render:", this.state.actionErrors.length);
         return (
             <div>
                 {
@@ -192,6 +203,13 @@ export class Form extends React.Component<FormProps, FormState>{
 }
 
 export class TextField extends React.Component<FieldProps, {}>{
+
+    onKeyUp(event: KeyboardEvent) {
+        if (this.props.enterSubmit && event.keyCode == 13) {
+            this.props.onSubmit();
+        }
+    }
+
     render() {
         const error = this.props.errorMap[this.props.name];
         const validateState = error ? "error" : null;
@@ -202,6 +220,7 @@ export class TextField extends React.Component<FieldProps, {}>{
                     name={this.props.name}
                     value={this.props.valMap[this.props.name]}
                     onChange={this.props.onChange}
+                    onKeyUp={this.onKeyUp.bind(this)}
                     />
                 <FormControl.Feedback />
                 <HelpBlock>{error}</HelpBlock>
@@ -211,6 +230,13 @@ export class TextField extends React.Component<FieldProps, {}>{
 }
 
 export class Password extends React.Component<FieldProps, {}>{
+
+    onKeyUp(event: KeyboardEvent) {
+        if (this.props.enterSubmit && event.keyCode == 13) {
+            this.props.onSubmit();
+        }
+    }
+
     render() {
         const error = this.props.errorMap[this.props.name];
         const validateState = error ? "error" : null;
@@ -221,6 +247,7 @@ export class Password extends React.Component<FieldProps, {}>{
                     name={this.props.name}
                     value={this.props.valMap[this.props.name]}
                     onChange={this.props.onChange}
+                    onKeyUp={this.onKeyUp.bind(this)}
                     />
                 <FormControl.Feedback />
                 <HelpBlock>{error}</HelpBlock>
@@ -311,8 +338,10 @@ export class Select extends React.Component<SelectFieldProps, {}>{
     private controlId = makeRandomString(32);
 
     render() {
+        const error = this.props.errorMap[this.props.name];
+        const validateState = error ? "error" : null;
         return (
-            <FormGroup controlId={this.controlId}>
+            <FormGroup validationState={validateState} controlId={this.controlId}>
                 <ControlLabel>{this.props.label}</ControlLabel>
                 <FormControl componentClass="select"
                     name={this.props.name}
@@ -327,6 +356,7 @@ export class Select extends React.Component<SelectFieldProps, {}>{
                         })
                     }
                 </FormControl>
+                <HelpBlock>{error}</HelpBlock>
             </FormGroup>
         )
     }
@@ -340,6 +370,23 @@ export class Submit extends React.Component<SubmitProps, {}>{
 
     render() {
         const label = this.props.value ? this.props.value : "Submit";
-        return <Button type="submit" onClick={this.onSubmit.bind(this)}>{label}</Button>
+        return <Button type="submit" onClick={this.onSubmit.bind(this)} bsStyle={this.props.bsStyle} block={this.props.block}>{label}</Button>
     }
+}
+
+export function fetchSelectOptions(url: string, keyName = "name", labelName = keyName) {
+    return http.get(url)
+        .then((dtoList: any) => {
+            let options: { [key: string]: any } = {}
+            for (const id in dtoList) {
+                const dto = dtoList[id];
+                const value = dto[keyName];
+                const label = dto[labelName];
+                options[value] = label;
+            }
+            return options;
+        }).catch((error: RestErrorDto) => {
+            console.log("Error:", error);
+            throw error;
+        });
 }

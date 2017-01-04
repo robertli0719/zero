@@ -3,15 +3,15 @@ import { connect } from "react-redux"
 import { store, AppState } from "../../Store"
 import { Button, ButtonToolbar } from "react-bootstrap";
 
-interface Prop {
+interface Props {
 }
 
 interface State {
 }
 
-class AdminDemoComponent extends React.Component<Prop, State>{
+class AdminDemoComponent extends React.Component<Props, State>{
 
-    constructor(prop: Prop) {
+    constructor(prop: Props) {
         super(prop);
     }
 
@@ -30,7 +30,7 @@ class AdminDemoComponent extends React.Component<Prop, State>{
     }
 }
 
-function select(state: AppState): Prop {
+function select(state: AppState): Props {
     return {};
 }
 

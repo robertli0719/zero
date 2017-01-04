@@ -12,15 +12,7 @@ function logout() {
     });
 }
 
-let userMenuList = [
-    { name: "Platform Editor", url: "admin/user-platform" },
-    { name: "Role", url: "admin/user-role" },
-    { name: "Promission" },
-] as NavbarItem[];
-
 let navBarItemList = [
-    { name: "Index", url: "admin/index" },
-    { name: "User", childs: userMenuList },
     { name: "Items1" },
     { name: "Items2" },
     { name: "Items3" }
@@ -36,7 +28,7 @@ interface Prop {
     me: UserProfile
 }
 
-class AdminAppComponent extends React.Component<Prop, {}>{
+class TestAppComponent extends React.Component<Prop, {}>{
 
     constructor() {
         super();
@@ -44,17 +36,7 @@ class AdminAppComponent extends React.Component<Prop, {}>{
     }
 
     render() {
-        let navbar = <AppNavbar name="Admin Dashboard" inverse={true} brandUrl="admin/index" itemList={navBarItemList} rightItemList={rightNavBarItemList} />
-        if (this.props.me.userPlatformName == null) {
-            navbar = <div></div>
-        } else if (this.props.me.userPlatformName != "admin") {
-            return (
-                <div>
-                    {navbar}
-                    <p>A user who is not an admin is logged in now, please logout first.</p>
-                </div>
-            )
-        }
+        let navbar = <AppNavbar name="Test" brandUrl="test/index" itemList={navBarItemList} rightItemList={rightNavBarItemList} />
         return (
             <div>
                 {navbar}
@@ -68,4 +50,4 @@ function select(state: AppState): Prop {
     return { me: state.me };
 }
 
-export let AdminApp = connect(select)(AdminAppComponent);
+export let TestApp = connect(select)(TestAppComponent);

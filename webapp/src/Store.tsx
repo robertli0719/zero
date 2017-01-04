@@ -2,7 +2,6 @@ import { createStore, applyMiddleware, combineReducers, Store } from "redux"
 import thunkMiddleware from "redux-thunk"
 import { testReducer, TestState } from "./reducers/test"
 import { meReducer, UserProfile } from "./reducers/me"
-import { formsReducer, Forms } from "./reducers/forms"
 
 export const UPDATE_FORM = "UPDATE_FORM"
 export const DELETE_FORM = "DELETE_FORM"
@@ -18,13 +17,11 @@ export interface Action {
 }
 
 export interface AppState {
-    forms: Forms
     me: UserProfile
     test: TestState
 }
 
 const reducer = combineReducers<AppState>({
-    forms: formsReducer,
     me: meReducer,
     test: testReducer
 })

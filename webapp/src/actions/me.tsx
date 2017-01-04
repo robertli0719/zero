@@ -1,8 +1,6 @@
 import { http, RestErrorDto } from "../utilities/http"
 import { Dispatch } from "redux"
 import { store, AppState, Action, UPDATE_ME } from "../Store"
-import * as forms from "../actions/forms"
-import { FormState } from "../reducers/forms"
 import { UserProfile } from "../reducers/me"
 import { hashHistory } from 'react-router'
 
@@ -47,25 +45,6 @@ export function loadProfile() {
                 console.log("Error happened when loadProfile:", restError);
                 let nullUserProfile: UserProfile = { authLabel: null, userTypeName: null, userPlatformName: null, name: null, telephone: null }
                 dispatch(updateMe(nullUserProfile));
-                throw restError;
-            });
-    }
-}
-
-export function triggerLogin(userAuth: UserAuthDto, formId: string) {
-    return (dispatch: Dispatch<AppState>, getState: () => AppState) => {
-        if (forms.isProcessing(formId)) {
-            return;
-        }
-        dispatch(forms.markFromAsProcessing(formId));
-        return http.put("me/auth", userAuth)
-            .then(() => {
-                return dispatch(loadProfile());
-            }).then(() => {
-                dispatch(forms.unmarkFromAsProcessing(formId));
-            }).catch((restError: RestErrorDto) => {
-                let form: FormState = { processing: false, restError: restError }
-                dispatch(forms.updateForm(formId, form));
                 throw restError;
             });
     }

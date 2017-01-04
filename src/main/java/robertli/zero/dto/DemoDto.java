@@ -8,6 +8,7 @@ package robertli.zero.dto;
 import java.util.Date;
 import javax.validation.constraints.Past;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
 
 /**
@@ -30,6 +31,7 @@ public class DemoDto {
     }
 
     @Length(min = 3)
+    @NotBlank
     public String getName() {
         return name;
     }

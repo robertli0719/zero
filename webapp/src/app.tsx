@@ -5,14 +5,20 @@ import { Router, Route, hashHistory, IndexRoute, RouterState, RedirectFunction }
 import { store, AppState } from "./Store"
 import { AppNavbar, NavbarItem } from "./components/zero/AppNavbar"
 import * as me from "./actions/me"
+
+// -- Pages --
+// defalt pages
 import { Index } from "./pages/Index"
 import { About } from "./pages/About"
-import { Test } from "./pages/Test"
+
+//dashboard pages
 import { InventoryView } from "./pages/dashboard/InventoryView"
 import { ReportView } from "./pages/dashboard/ReportView"
 import { StaffApp } from "./pages/dashboard/StaffApp"
 import { StaffIndex } from "./pages/dashboard/StaffIndex"
 import { StaffLogin } from "./pages/dashboard/StaffLogin"
+
+//admin pages
 import { AdminApp } from "./pages/admin/AdminApp"
 import { AppInit } from "./pages/admin/AppInit"
 import { AdminLogin } from "./pages/admin/AdminLogin"
@@ -22,10 +28,14 @@ import { AdminUserRole } from "./pages/admin/AdminUserRole"
 import { AdminUserPlatform } from "./pages/admin/AdminUserPlatform"
 
 
+//test pages
+import { TestApp } from "./pages/test/TestApp"
+import { TestIndex } from "./pages/test/TestIndex"
+
 let navBarItemList = [
     { name: "Index", url: "/index" },
     { name: "About", url: "/about" },
-    { name: "Test", url: "/test" }
+    { name: "Test", url: "/test/index" }
 ];
 
 let rightNavBarItemList = [
@@ -67,7 +77,6 @@ let template = (
                     <IndexRoute component={Index} />
                     <Route path="index" component={Index} />
                     <Route path="about" component={About} />
-                    <Route path="test" component={Test} />
                 </Route>
                 <Route path="dashboard/:platform" component={StaffApp}>
                     <Route path="index" component={StaffIndex} />
@@ -82,6 +91,9 @@ let template = (
                     <Route path="user-platform" component={AdminUserPlatform} onEnter={requireRoleAdmin} />
                     <Route path="user-role" component={AdminUserRole} onEnter={requireRoleAdmin} />
                     <Route path="login" component={AdminLogin} />
+                </Route>
+                <Route path="test" component={TestApp}>
+                    <Route path="index" component={TestIndex} />
                 </Route>
             </Route>
         </Router>
