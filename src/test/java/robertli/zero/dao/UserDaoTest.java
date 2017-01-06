@@ -5,11 +5,13 @@
  */
 package robertli.zero.dao;
 
+import java.util.List;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import robertli.zero.core.RandomCodeCreater;
 import robertli.zero.entity.User;
 import robertli.zero.dto.SearchResult;
+import robertli.zero.service.UserService;
 import robertli.zero.test.StressTest;
 
 /**
@@ -41,20 +43,24 @@ public class UserDaoTest {
     }
 
     public void testList() {
-        userDao.list().size();
-        userDao.list(3, 40).size();
-        userDao.list(3).size();
-        userDao.listDesc("id").size();
-        userDao.listDesc("id", 3).size();
-        userDao.listDesc("id", 3, 40).size();
-        System.out.println("last user:" + userDao.getLast("id"));
-        System.out.println("error id user:" + userDao.get(9999999));
-        System.out.println("count user:" + userDao.count());
+//        userDao.list().size();
+//        userDao.list(3, 40).size();
+//        userDao.list(3).size();
+//        userDao.listDesc("id").size();
+//        userDao.listDesc("id", 3).size();
+//        userDao.listDesc("id", 3, 40).size();
+//        System.out.println("last user:" + userDao.getLast("id"));
+//        System.out.println("error id user:" + userDao.get(9999999));
+//        System.out.println("count user:" + userDao.count());
+
+        List<User> userList = userDao.getUserListByPlatform(UserService.USER_PLATFORM_ADMIN);
+        System.out.println("size:" + userList.size());
+//        userDao.getUserListByRole(UserService.USER_ROLE_ADMIN_ROOT);
 
     }
 
     public void test() {
-        testRegister1();
+//        testRegister1();
         testList();
     }
 

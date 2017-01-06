@@ -6,9 +6,13 @@
 package robertli.zero.service.impl;
 
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 import org.modelmapper.TypeToken;
+import org.modelmapper.spi.MappingContext;
 import org.springframework.stereotype.Component;
 import robertli.zero.core.SecurityService;
 import robertli.zero.dao.UserAuthDao;
@@ -44,12 +48,62 @@ public class AdminUserServiceImpl implements AdminUserService {
     @Resource
     private UserAuthDao userAuthDao;
 
+    @PostConstruct
+    public void init() {
+
+        Converter userToRootConverter = (Converter<User, Boolean>) (MappingContext<User, Boolean> mc) -> {
+            User user = mc.getSource();
+            if (user == null || user.getUserRoleItemList() == null) {
+                throw new RuntimeException("Converter can't get UserRoleItemList");
+            }
+            for (UserRoleItem item : user.getUserRoleItemList()) {
+                if (item.getUserRole().getName().equals(UserService.USER_ROLE_ADMIN_ROOT)) {
+                    return true;
+                }
+            }
+            return false;
+        };
+
+        modelMapper.addMappings(new PropertyMap<User, AdminUserDto>() {
+
+            @Override
+            protected void configure() {
+                map().setId(source.getId());
+                map().setUsername(source.getName());
+                map().setLocked(source.isLocked());
+                map().setPassword(source.getPassword());
+                // Note: Since a source object is given, the "false"value passed to set[Method] is unused.
+                using(userToRootConverter).map(source).setRoot(false);
+            }
+        });
+
+    }
+
     @Override
     public List<AdminUserDto> getAdminUserList() {
-        UserPlatform userPlatform = userPlatformDao.get(UserService.USER_PLATFORM_ADMIN);
-        List<User> userList = userPlatform.getUserList();
+        List<User> userList = userDao.getUserListByPlatform(UserService.USER_PLATFORM_ADMIN);
+        System.out.println("getAdminUserList userList size:" + userList.size());
+        List<AdminUserDto> dtoList = modelMapper.map(userList, new TypeToken<List<AdminUserDto>>() {
+        }.getType());
+        return dtoList;
+    }
+
+    @Override
+    public List<AdminUserDto> getAdminRootUserList() {
+        final String roleName = UserService.USER_ROLE_ADMIN_ROOT;
+        List<User> userList = userDao.getUserListByRole(roleName);
         return modelMapper.map(userList, new TypeToken<List<AdminUserDto>>() {
         }.getType());
+    }
+
+    @Override
+    public AdminUserDto getAdminUser(int userId) {
+        System.out.println("getAdminUser() run");
+        if (isAdminUser(userId) == false) {
+            return null;
+        }
+        User user = userDao.get(userId);
+        return modelMapper.map(user, AdminUserDto.class);
     }
 
     @Override
@@ -74,7 +128,7 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
 
     @Override
-    public void addAdminUser(AdminUserDto adminUserDto) {
+    public int addAdminUser(AdminUserDto adminUserDto) {
         String orginealPassword = adminUserDto.getPassword();
         String username = adminUserDto.getUsername();
         boolean locked = adminUserDto.isLocked();
@@ -96,6 +150,7 @@ public class AdminUserServiceImpl implements AdminUserService {
         userDao.save(adminUser);
 
         userAuthDao.saveUserAuth(userPlatformName, username, label, usernameType, adminUser);
+        return adminUser.getId();
     }
 
     @Override

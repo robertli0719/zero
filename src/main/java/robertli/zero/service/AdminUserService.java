@@ -10,18 +10,22 @@ import robertli.zero.dto.user.AdminUserDto;
 
 /**
  *
- * @version 1.0 2016-12-30
+ * @version 1.0.1 2017-01-04
  * @author Robert Li
  */
 public interface AdminUserService {
 
     public List<AdminUserDto> getAdminUserList();
 
+    public List<AdminUserDto> getAdminRootUserList();
+
+    public AdminUserDto getAdminUser(int userId);
+
     public boolean isAdminUser(int userId);
 
     public boolean isRoot(int userId);
 
-    public void addAdminUser(AdminUserDto adminUserDto);
+    public int addAdminUser(AdminUserDto adminUserDto);
 
     public void deleteAdminUser(int userId);
 

@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.0.3 2017-01-03
+ * version 1.0.4 2017-01-04
  */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
@@ -111,7 +111,10 @@ export class Form extends React.Component<FormProps, FormState>{
     }
 
     afterSubmit() {
-        console.log("after promise:");
+        this.state.errorMap = {}
+        this.state.valMap = {}
+        this.state.actionErrors = [] as [string];
+        this.setState(this.state);
     }
 
     onSuccess(dto: any) {
@@ -302,7 +305,9 @@ export class CheckBox extends React.Component<FieldProps, {}>{
         return (
             <Checkbox
                 name={this.props.name}
-                onChange={this.props.onChange}>
+                checked={this.props.valMap[this.props.name]}
+                onChange={this.props.onChange}
+                >
                 {this.props.label}
             </Checkbox>
         )
@@ -311,9 +316,11 @@ export class CheckBox extends React.Component<FieldProps, {}>{
 
 export class Radio extends React.Component<FieldProps, {}>{
     render() {
+        console.log(this.props.value, this.props.valMap[this.props.name])
         return (
             <rb.Radio
                 name={this.props.name}
+                checked={this.props.valMap[this.props.name] == this.props.value}
                 value={this.props.value}
                 onChange={this.props.onChange}>
                 {this.props.label}
@@ -347,6 +354,7 @@ export class Select extends React.Component<SelectFieldProps, {}>{
                     name={this.props.name}
                     onChange={this.props.onChange}
                     multiple={this.props.multiple}
+                    value={this.props.valMap[this.props.name]}
                     >
                     <option value="">-- please select --</option>
                     {
@@ -374,17 +382,21 @@ export class Submit extends React.Component<SubmitProps, {}>{
     }
 }
 
+export function dtoListToOptions(dtoList: Array<any>, keyName = "name", labelName = keyName) {
+    let options: { [key: string]: any } = {}
+    for (const id in dtoList) {
+        const dto = dtoList[id];
+        const value = dto[keyName];
+        const label = dto[labelName];
+        options[value] = label;
+    }
+    return options;
+}
+
 export function fetchSelectOptions(url: string, keyName = "name", labelName = keyName) {
     return http.get(url)
         .then((dtoList: any) => {
-            let options: { [key: string]: any } = {}
-            for (const id in dtoList) {
-                const dto = dtoList[id];
-                const value = dto[keyName];
-                const label = dto[labelName];
-                options[value] = label;
-            }
-            return options;
+            return dtoListToOptions(dtoList, keyName, labelName);
         }).catch((error: RestErrorDto) => {
             console.log("Error:", error);
             throw error;

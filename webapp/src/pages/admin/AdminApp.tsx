@@ -13,6 +13,7 @@ function logout() {
 }
 
 let userMenuList = [
+    { name: "Admin Editor", url: "admin/user-admin" },
     { name: "Platform Editor", url: "admin/user-platform" },
     { name: "Role", url: "admin/user-role" },
     { name: "Promission" },

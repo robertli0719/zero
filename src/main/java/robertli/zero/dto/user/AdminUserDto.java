@@ -18,6 +18,7 @@ public class AdminUserDto {
     private String username;
     private String password;
     private boolean locked;
+    private boolean root;
 
     public Integer getId() {
         return id;
@@ -52,4 +53,18 @@ public class AdminUserDto {
     public void setLocked(boolean locked) {
         this.locked = locked;
     }
+
+    public boolean isRoot() {
+        return root;
+    }
+
+    public void setRoot(boolean root) {
+        this.root = root;
+    }
+
+    @Override
+    public String toString() {
+        return "AdminUserDto{" + "id=" + id + ", username=" + username + ", password=" + password + ", locked=" + locked + ", root=" + root + '}';
+    }
+
 }

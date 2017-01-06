@@ -23,6 +23,7 @@ import { AdminApp } from "./pages/admin/AdminApp"
 import { AppInit } from "./pages/admin/AppInit"
 import { AdminLogin } from "./pages/admin/AdminLogin"
 import { AdminIndex } from "./pages/admin/AdminIndex"
+import { AdminUserAdmin } from "./pages/admin/AdminUserAdmin"
 import { AdminUserManagement } from "./pages/admin/AdminUserManagement"
 import { AdminUserRole } from "./pages/admin/AdminUserRole"
 import { AdminUserPlatform } from "./pages/admin/AdminUserPlatform"
@@ -31,6 +32,7 @@ import { AdminUserPlatform } from "./pages/admin/AdminUserPlatform"
 //test pages
 import { TestApp } from "./pages/test/TestApp"
 import { TestIndex } from "./pages/test/TestIndex"
+import { TestCropper } from "./pages/test/TestCropper"
 
 let navBarItemList = [
     { name: "Index", url: "/index" },
@@ -88,12 +90,14 @@ let template = (
                     <Route path="init" component={AppInit} />
                     <Route path="index" component={AdminIndex} onEnter={requireRoleAdmin} />
                     <Route path="user" component={AdminUserManagement} onEnter={requireRoleAdmin} />
+                    <Route path="user-admin" component={AdminUserAdmin} onEnter={requireRoleAdmin} />
                     <Route path="user-platform" component={AdminUserPlatform} onEnter={requireRoleAdmin} />
                     <Route path="user-role" component={AdminUserRole} onEnter={requireRoleAdmin} />
                     <Route path="login" component={AdminLogin} />
                 </Route>
                 <Route path="test" component={TestApp}>
                     <Route path="index" component={TestIndex} />
+                    <Route path="cropper" component={TestCropper} />
                 </Route>
             </Route>
         </Router>

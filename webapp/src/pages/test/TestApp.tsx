@@ -13,7 +13,7 @@ function logout() {
 }
 
 let navBarItemList = [
-    { name: "Items1" },
+    { name: "Cropper", url: "test/cropper" },
     { name: "Items2" },
     { name: "Items3" }
 ] as NavbarItem[];

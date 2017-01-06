@@ -5,6 +5,7 @@
  */
 package robertli.zero.service;
 
+import java.util.List;
 import java.util.Random;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -112,12 +113,25 @@ public class AdminUserServiceTest {
         assertTrue(userProfile.getTelephone() == null);
         assertTrue(userProfile.getUserPlatformName().equals(UserService.USER_PLATFORM_ADMIN));
         assertTrue(userProfile.getUserTypeName().equals(UserService.USER_TYPE_ADMIN));
+    }
 
+    public void test3() {
+        List<AdminUserDto> adminUserList = adminUserService.getAdminUserList();
+        for (AdminUserDto user : adminUserList) {
+            System.out.println(user.getUsername() + " " + user.isRoot());
+        }
+    }
+    
+    public void test4(){
+        AdminUserDto admin = adminUserService.getAdminUser(8);
+        System.out.println(admin);
     }
 
     public void test() {
-        test1();
-        test2();
+//        test1();
+//        test2();
+        test3();
+//        test4();
     }
 
     public static void main(String args[]) {

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import robertli.zero.core.AppConfiguration;
 import robertli.zero.dao.UserTypeDao;
 import robertli.zero.dto.user.AdminUserDto;
-import robertli.zero.dto.user.UserDto;
 import robertli.zero.service.AdminUserService;
 import robertli.zero.service.AppService;
 import robertli.zero.service.UserService;
@@ -53,7 +52,8 @@ public class AppServiceImpl implements AppService {
 
         adminUserDto.setUsername(initAdminName);
         adminUserDto.setPassword(initAdminPassword);
-        adminUserService.addAdminUser(adminUserDto);
+        int userId = adminUserService.addAdminUser(adminUserDto);
+        adminUserService.addRootRole(userId);
     }
 
 }

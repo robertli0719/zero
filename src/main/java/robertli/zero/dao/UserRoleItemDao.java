@@ -9,7 +9,7 @@ import robertli.zero.entity.UserRoleItem;
 
 /**
  *
- * @version 1.0.1 2016-12-31
+ * @version 1.0.3 2016-01-05
  * @author Robert Li
  */
 public interface UserRoleItemDao extends GenericDao<UserRoleItem, Integer> {

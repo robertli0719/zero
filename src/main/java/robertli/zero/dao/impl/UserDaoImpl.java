@@ -84,4 +84,20 @@ public class UserDaoImpl extends GenericHibernateDao<User, Integer> implements U
         return new SearchResult<>(start, max, count, list);
     }
 
+    @Override
+    public List<User> getUserListByPlatform(String userPlatformName) {
+        Session session = sessionFactory.getCurrentSession();
+        TypedQuery<User> query = session.createQuery("select u from User u left join fetch u.userRoleItemList where u.userPlatform.name= :userPlatformName", User.class);
+        query.setParameter("userPlatformName", userPlatformName);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<User> getUserListByRole(String userRoleName) {
+        Session session = sessionFactory.getCurrentSession();
+        TypedQuery<User> query = session.createQuery("select u from User u left join fetch u.userRoleItemList uri where uri.userRole.name = :userRoleName", User.class);
+        query.setParameter("userRoleName", userRoleName);
+        return query.getResultList();
+    }
+
 }

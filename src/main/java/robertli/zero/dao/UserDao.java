@@ -5,11 +5,13 @@
  */
 package robertli.zero.dao;
 
+import java.util.List;
 import robertli.zero.entity.User;
 import robertli.zero.dto.SearchResult;
 
 /**
  *
+ * @version 1.0 2017-01-05
  * @author Robert Li
  */
 public interface UserDao extends GenericDao<User, Integer> {
@@ -21,4 +23,8 @@ public interface UserDao extends GenericDao<User, Integer> {
     public SearchResult<User> searchByName(String name, int pageId, int max);
 
     public SearchResult<User> searchByAuthId(String authId, int pageId, int max);
+
+    public List<User> getUserListByPlatform(String userPlatformName);
+
+    public List<User> getUserListByRole(String userRoleName);
 }

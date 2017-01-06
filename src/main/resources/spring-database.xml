@@ -45,7 +45,7 @@
                 <prop key="hibernate.cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</prop>
                 
                 <!-- Echo all executed SQL to stdout -->
-                <prop key="hibernate.show_sql">false</prop>
+                <prop key="hibernate.show_sql">true</prop>
                 
                 <!-- Drop and re-create the database schema on startup -->
                 <prop key="hibernate.hbm2ddl.auto">update</prop>

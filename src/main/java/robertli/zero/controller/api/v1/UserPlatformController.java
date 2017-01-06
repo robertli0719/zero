@@ -43,4 +43,5 @@ public class UserPlatformController {
     public void deleteUserPlatform(@PathVariable String name) {
         userService.deleteUserPlatform(name);
     }
+
 }

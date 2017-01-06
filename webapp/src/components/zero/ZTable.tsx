@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.0 2017-01-03
+ * version 1.0.1 2017-01-05
  */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
@@ -55,7 +55,7 @@ export class Table extends React.Component<ShowTableProps, ShowTableState>{
     makeAlert(bsStyle: string, strongStr: string, text: string) {
         return (
             <bs.Alert bsStyle={bsStyle}>
-                <strong>strongStr</strong> {text}
+                <strong>Info</strong> {text}
             </bs.Alert>
         );
     }
@@ -69,7 +69,16 @@ export class Table extends React.Component<ShowTableProps, ShowTableState>{
     }
 
     makeBodyRow(heads: string[], dto: any) {
-        return heads.map((name) => { return <td>{dto[name]}</td> });
+        return heads.map((name) => {
+            if (dto[name] instanceof String) {
+                return <td>{dto[name]}</td>
+            } else if (dto[name] === true) {
+                return <td className="text-center">Yes</td>
+            } else if (dto[name] === false) {
+                return <td className="text-center">-</td>
+            }
+            return <td>{dto[name]}</td>
+        });
     }
 
     makeBody(heads: string[]) {
