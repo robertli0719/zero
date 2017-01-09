@@ -21,10 +21,6 @@ export class TestIndex extends React.Component<{}, TestState>{
     constructor(props: {}) {
         super(props);
         this.state = {};
-        zform.fetchSelectOptions("user-types")
-            .catch((options) => {
-                console.log("options:", options);
-            });
     }
 
     submit(data: TestDto) {

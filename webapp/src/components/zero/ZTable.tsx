@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.0.1 2017-01-05
+ * version 1.0.2 2017-01-06
  */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
@@ -12,9 +12,12 @@ import * as rb from "react-bootstrap"
 import { LinkContainer } from 'react-router-bootstrap';
 import { makeRandomString } from "../../utilities/random-coder"
 import { http, RestErrorDto, RestErrorItemDto } from "../../utilities/http"
+import * as _ from "lodash"
 
 export type ShowTableProps = {
     dtoList: any[]
+    heads?: string[]
+    select?: string[]
 }
 
 export type ShowTableState = {
@@ -25,15 +28,35 @@ export class Table extends React.Component<ShowTableProps, ShowTableState>{
 
     constructor(props: ShowTableProps) {
         super(props);
+        let a = this.getBodys();
+    }
 
+    getNames(): string[] {
+        if (this.props.select) {
+            return this.props.select
+        }
+        let array: Array<any> = this.props.dtoList;
+        return Object.keys(array[0])
     }
 
     getHeads(): string[] {
         let array: Array<any> = this.props.dtoList;
         if (array.length == 0) {
             return [];
+        } else if (this.props.heads) {
+            return this.props.heads;
+        }
+        if (this.props.select) {
+            return this.props.select;
         }
         return Object.keys(array[0])
+    }
+
+    getBodys(): any[] {
+        if (this.props.select) {
+            return _.map(this.props.dtoList, (dto) => _.pick(dto, this.props.select))
+        }
+        return this.props.dtoList;
     }
 
     makeAdditionalHeads() {
@@ -68,8 +91,8 @@ export class Table extends React.Component<ShowTableProps, ShowTableState>{
         );
     }
 
-    makeBodyRow(heads: string[], dto: any) {
-        return heads.map((name) => {
+    makeBodyRow(dto: any) {
+        return this.getNames().map((name) => {
             if (dto[name] instanceof String) {
                 return <td>{dto[name]}</td>
             } else if (dto[name] === true) {
@@ -81,11 +104,11 @@ export class Table extends React.Component<ShowTableProps, ShowTableState>{
         });
     }
 
-    makeBody(heads: string[]) {
-        return this.props.dtoList.map((dto, rowIndex) => {
+    makeBody() {
+        return this.getBodys().map((obj, rowIndex) => {
             return (
                 <tr>
-                    {this.makeBodyRow(heads, dto)}
+                    {this.makeBodyRow(obj)}
                     {this.makeAdditionalCol(rowIndex)}
                 </tr>
             )
@@ -93,6 +116,8 @@ export class Table extends React.Component<ShowTableProps, ShowTableState>{
     }
 
     render() {
+        console.log("dtoList", this.props.dtoList)
+        console.log("bodyList", this.getBodys());
         if (!this.props.dtoList) {
             return this.makeAlert("warning", "No data!", "There is no data in this table.");
         } else if (this.props.dtoList instanceof Array == false) {
@@ -110,7 +135,7 @@ export class Table extends React.Component<ShowTableProps, ShowTableState>{
                     </tr>
                 </thead>
                 <tbody>
-                    {this.makeBody(heads)}
+                    {this.makeBody()}
                 </tbody>
             </bs.Table>
         )

@@ -162,7 +162,6 @@ export class Form extends React.Component<FormProps, FormState>{
         if (!this.props.onSuccess) {
             throw "ZFrom can't find onSuccess when using action";
         }
-        console.log("onSuccess:", this.props.onSuccess);
         this.submit()
             .then((dto: any) => {
                 this.onSuccess(dto);
@@ -316,7 +315,6 @@ export class CheckBox extends React.Component<FieldProps, {}>{
 
 export class Radio extends React.Component<FieldProps, {}>{
     render() {
-        console.log(this.props.value, this.props.valMap[this.props.name])
         return (
             <rb.Radio
                 name={this.props.name}

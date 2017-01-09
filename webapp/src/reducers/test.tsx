@@ -1,4 +1,6 @@
 import { Action, ADD_NUMBER } from "../Store"
+import * as _ from "lodash"
+import { http } from "../utilities/http"
 
 export interface TestState {
     val: number

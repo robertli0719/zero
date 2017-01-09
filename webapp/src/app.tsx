@@ -33,6 +33,7 @@ import { AdminUserPlatform } from "./pages/admin/AdminUserPlatform"
 import { TestApp } from "./pages/test/TestApp"
 import { TestIndex } from "./pages/test/TestIndex"
 import { TestCropper } from "./pages/test/TestCropper"
+import { TestImageUpload } from "./pages/test/TestImageUpload"
 
 let navBarItemList = [
     { name: "Index", url: "/index" },
@@ -98,6 +99,7 @@ let template = (
                 <Route path="test" component={TestApp}>
                     <Route path="index" component={TestIndex} />
                     <Route path="cropper" component={TestCropper} />
+                    <Route path="image-upload" component={TestImageUpload} />
                 </Route>
             </Route>
         </Router>

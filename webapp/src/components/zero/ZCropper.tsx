@@ -4,7 +4,7 @@
  * https://opensource.org/licenses/MIT
  * 
  * dependencies: react-cropper 0.10.0
- * version 1.0 2017-01-04
+ * version 1.0.1 2017-01-06
  */
 import * as React from "react"
 import * as ReactDOM from "react-dom"
@@ -16,6 +16,7 @@ export type Props = {
     style?: React.CSSProperties
     aspectRatio?: number
     onChange: (result: CropResult) => never
+    resetFunBack?: (reset: () => void) => {}
 }
 
 type State = {
@@ -29,12 +30,27 @@ export type CropResult = {
     height: number
 }
 
+class MyCropper extends ReactCropper {
+
+    constructor(props: Props) {
+        super(props)
+        let anyProps: any = props;
+        if (anyProps.resetFunThief) {
+            anyProps.resetFunThief(super.reset.bind(this));
+        }
+    }
+}
+
 export class Cropper extends React.Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
-        let cropper = <ReactCropper crop={this.onChange.bind(this)} />
-        cropper.props = $.extend(cropper.props, this.props);
+        let cropper: any = <MyCropper crop={this.onChange.bind(this)} />
+        if (this.props.resetFunBack) {
+            cropper.props = $.extend(cropper.props, this.props, { resetFunThief: this.props.resetFunBack });
+        } else {
+            cropper.props = $.extend(cropper.props, this.props);
+        }
         this.state = { cropper: cropper }
     }
 

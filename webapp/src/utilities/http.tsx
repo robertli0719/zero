@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Robert Li.
+ * Copyright 2017 Robert Li.
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
@@ -10,7 +10,7 @@ import * as fetch from 'isomorphic-fetch'
     I create this code for using REST API for Zero.
     
     author: robert li
-    version: 2016-12-26 1.0
+    version: 2017-01-06 1.0.1
 */
 
 export type RestErrorItemDto = {
@@ -73,6 +73,24 @@ class HttpService {
         }).then((res: IResponse) => {
             if (is2xx(res)) {
                 return;
+            } else if (isJsonBody(res)) {
+                return res.json().then((json) => {
+                    throw json;
+                });
+            }
+            console.log("Oops, we haven't got JSON!");
+            throw createErrorDto("RESULT_IS_NOT_JSON");
+        });
+    }
+
+    public postParams(url: string, params: any) {
+        return fetch(this.prefix + url, {
+            method: "POST",
+            credentials: 'include',
+            body: params
+        }).then((res: IResponse) => {
+            if (is2xx(res)) {
+                return res.text();
             } else if (isJsonBody(res)) {
                 return res.json().then((json) => {
                     throw json;

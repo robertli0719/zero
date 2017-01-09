@@ -6,9 +6,9 @@ import { Button, ButtonToolbar, FormControl, FormGroup, Col } from "react-bootst
 
 export class TestCropper extends React.Component<{}, {}>{
 
-    constructor(props: {}) {
-        super(props);
-    }
+    // constructor(props: {}) {
+    //     super(props);
+    // }
 
     // onChange(result: CropResult) {
     //     console.log("x:y", result.x, result.y)
