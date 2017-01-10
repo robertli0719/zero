@@ -46,7 +46,6 @@ public class AdminReadPermissionInterceptor implements HandlerInterceptor {
             throw new RestException("NO_ADMIN_PERMISSION", "you need admin permission", "AdminReadPermissionInterceptor: this userType is not admin", HttpStatus.FORBIDDEN);
         }
 
-        System.out.println("AdminPermissionInterceptor: " + accessToken);
         return true;
     }
 

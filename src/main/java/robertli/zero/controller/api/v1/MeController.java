@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestAttribute;
 import robertli.zero.core.ClientAccessTokenManager;
 import robertli.zero.core.RandomCodeCreater;
 import robertli.zero.dto.user.UserAuthDto;
+import robertli.zero.dto.user.UserAuthPasswordDto;
 import robertli.zero.dto.user.UserProfileDto;
 import robertli.zero.service.AuthService;
 
@@ -57,6 +58,11 @@ public class MeController {
         }
         authService.deleteAuth(accessToken);
         clientAccessTokenManager.deleteAccessToken(response);
+    }
+
+    @RequestMapping(path = "auth/password", method = RequestMethod.PUT)
+    public void putAuthPassword(@RequestAttribute(required = false) String accessToken, @Valid @RequestBody UserAuthPasswordDto userAuthPasswordDto) {
+        authService.resetPassword(accessToken, userAuthPasswordDto);
     }
 
 }

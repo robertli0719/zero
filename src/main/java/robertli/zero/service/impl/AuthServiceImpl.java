@@ -5,6 +5,7 @@
  */
 package robertli.zero.service.impl;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import javax.annotation.Resource;
@@ -15,11 +16,13 @@ import robertli.zero.core.SecurityService;
 import robertli.zero.dao.AccessTokenDao;
 import robertli.zero.dao.UserAuthDao;
 import robertli.zero.dto.user.UserAuthDto;
+import robertli.zero.dto.user.UserAuthPasswordDto;
 import robertli.zero.dto.user.UserProfileDto;
 import robertli.zero.entity.AccessToken;
 import robertli.zero.entity.User;
 import robertli.zero.entity.UserAuth;
 import robertli.zero.entity.UserPlatform;
+import robertli.zero.entity.UserRoleItem;
 import robertli.zero.entity.UserType;
 import robertli.zero.service.AuthService;
 import robertli.zero.service.UserService;
@@ -53,15 +56,25 @@ public class AuthServiceImpl implements AuthService {
         userProfileDto.setAuthLabel(user.getName());
         userProfileDto.setUserPlatformName(user.getUserPlatform().getName());
         userProfileDto.setUserTypeName(user.getUserPlatform().getUserType().getName());
+        ArrayList<String> roleList = new ArrayList<>();
+        for (UserRoleItem role : user.getUserRoleItemList()) {
+            String name = role.getUserRole().getName();
+            roleList.add(name);
+        }
+        userProfileDto.setRoleList(roleList);
         return userProfileDto;
+    }
+
+    private boolean isValidPassword(User user, String orginealPassword) {
+        String salt = user.getPasswordSalt();
+        String password = securityService.uglifyPassoword(orginealPassword, salt);
+        return password.equals(user.getPassword());
     }
 
     private boolean isValidPassword(UserAuthDto userAuthDto, UserAuth userAuth) {
         String orginealPassword = userAuthDto.getPassword();
         User user = userAuth.getUser();
-        String salt = user.getPasswordSalt();
-        String password = securityService.uglifyPassoword(orginealPassword, salt);
-        return password.equals(user.getPassword());
+        return isValidPassword(user, orginealPassword);
     }
 
     private void recordAccessToken(String token, User user) {
@@ -117,6 +130,27 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void deleteAuth(String token) {
         accessTokenDao.deleteById(token);
+    }
+
+    @Override
+    public void resetPassword(String token, UserAuthPasswordDto userAuthPasswordDto) {
+        if (token == null) {
+            throw new RestException("UNAUTHORIZED", "For reset your password, you should login first", "AuthService resetPassword can't get token", HttpStatus.UNAUTHORIZED);
+        }
+        AccessToken accessToken = accessTokenDao.get(token);
+        if (accessToken == null) {
+            throw new RestException("UNAUTHORIZED", "For reset your password, you should login first", "AuthService.resetPassword gets an invalid token", HttpStatus.UNAUTHORIZED);
+        } else if (accessToken.getExpiryDate().before(new Date())) {
+            throw new RestException("UNAUTHORIZED", "For reset your password, you should login first", "AuthService.resetPassword gets a timeout token", HttpStatus.UNAUTHORIZED);
+        }
+        User user = accessToken.getUser();
+        if (isValidPassword(user, userAuthPasswordDto.getOldPassword()) == false) {
+            throw new RestException("WRONG_AUTH_ID", "current password wrong", "current password wrong", HttpStatus.FORBIDDEN);
+        }
+        final String passwordSalt = securityService.createPasswordSalt();
+        final String password = securityService.uglifyPassoword(userAuthPasswordDto.getNewPassword(), passwordSalt);
+        user.setPassword(password);
+        user.setPasswordSalt(passwordSalt);
     }
 
 }

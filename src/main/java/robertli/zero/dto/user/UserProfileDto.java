@@ -5,10 +5,12 @@
  */
 package robertli.zero.dto.user;
 
+import java.util.List;
+
 /**
  * after user loged in, the font-end system will keep this dto
  *
- * @version 1.0.2 2016-12-29
+ * @version 1.0.3 2016-01-09
  * @author Robert Li
  */
 public class UserProfileDto {
@@ -18,6 +20,7 @@ public class UserProfileDto {
     private String userPlatformName;
     private String name;
     private String telephone;
+    private List<String> roleList;
 
     public String getAuthLabel() {
         return authLabel;
@@ -57,6 +60,14 @@ public class UserProfileDto {
 
     public void setTelephone(String telephone) {
         this.telephone = telephone;
+    }
+
+    public List<String> getRoleList() {
+        return roleList;
+    }
+
+    public void setRoleList(List<String> roleList) {
+        this.roleList = roleList;
     }
 
 }

@@ -1,17 +1,18 @@
 /*
- * Copyright 2016 Robert Li.
+ * Copyright 2017 Robert Li.
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
 package robertli.zero.service;
 
 import robertli.zero.dto.user.UserAuthDto;
+import robertli.zero.dto.user.UserAuthPasswordDto;
 import robertli.zero.dto.user.UserProfileDto;
 
 /**
  * The service for users to operate themselves
  *
- * @version 1.0.3 2016-12-30
+ * @version 1.0.4 2017-01-09
  * @author Robert Li
  */
 public interface AuthService {
@@ -40,6 +41,14 @@ public interface AuthService {
      * @param token access_token
      */
     public void deleteAuth(String token);
+
+    /**
+     * For user to resetPassword
+     *
+     * @param token access_token
+     * @param userAuthPasswordDto password reset form
+     */
+    public void resetPassword(String token, UserAuthPasswordDto userAuthPasswordDto);
 
     // add google login in the future
     /*
