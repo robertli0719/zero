@@ -52,8 +52,8 @@ public class AppServiceImpl implements AppService {
 
         adminUserDto.setUsername(initAdminName);
         adminUserDto.setPassword(initAdminPassword);
-        int userId = adminUserService.addAdminUser(adminUserDto);
-        adminUserService.addRootRole(userId);
+        adminUserService.addAdminUser(adminUserDto);
+        adminUserService.addRootRole(initAdminName);
     }
 
 }

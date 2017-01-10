@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Robert Li.
+ * Copyright 2017 Robert Li.
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
@@ -10,11 +10,12 @@ import robertli.zero.dto.user.UserDto;
 import robertli.zero.dto.user.UserPlatformDto;
 import robertli.zero.dto.user.UserRoleDto;
 import robertli.zero.dto.user.UserTypeDto;
+import robertli.zero.entity.User;
 
 /**
  * This service is design to manage user data.
  *
- * @version 1.0.4 2016-12-31
+ * @version 1.0.5 2017-01-10
  * @author Robert Li
  */
 public interface UserService {
@@ -43,6 +44,12 @@ public interface UserService {
     public void addUserRole(String name);
 
     public void deleteUserRole(String name);
+
+    public User getUser(String userPlatformName, String username);
+
+    public User addUser(String userPlatformName, String username,
+            String usernameType, String label, String orginealPassword,
+            String name, String telephone, boolean locked);
 
     public void putRoleForUser(int userId, String roleName);
 

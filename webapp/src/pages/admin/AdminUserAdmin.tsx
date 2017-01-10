@@ -44,7 +44,7 @@ class AdminUserAdminComponent extends React.Component<Props, State>{
     }
 
     onDelete(adminUser: AdminUserDto) {
-        const url = "admin-users/" + adminUser.id
+        const url = "admin-users/" + adminUser.username
         http.delete(url)
             .then(() => {
                 this.updateData();
@@ -69,15 +69,7 @@ class AdminUserAdminComponent extends React.Component<Props, State>{
                                 <zform.Submit value="add" />
                             </zform.Form>
                         </Panel>
-                        <Panel header="Reset Admin Password" bsStyle="primary">
-                            <zform.Form action="admin-users" method="POST" onSuccess={this.onAddSuccess.bind(this)}>
-                                <zform.TextField label="username" name="username" enterSubmit={false} />
-                                <zform.Password label="password" name="password" enterSubmit={true} />
-                                <zform.Hidden name="locked" value="false" />
-                                <zform.Hidden name="root" value="false" />
-                                <zform.Submit value="add" />
-                            </zform.Form>
-                        </Panel>
+
                     </Col>
                     <Col sm={9}>
                         <Panel header="Admin List" bsStyle="primary">
@@ -91,6 +83,14 @@ class AdminUserAdminComponent extends React.Component<Props, State>{
         );
     }
 }
+
+// <Panel header="Reset Admin Password" bsStyle="primary">
+//     <zform.Form action="admin-users/password" method="PUT" successMessage="reset password">
+//         <zform.TextField label="username" name="username" enterSubmit={false} />
+//         <zform.Password label="password" name="password" enterSubmit={true} />
+//         <zform.Submit value="reset" />
+//     </zform.Form>
+// </Panel>
 
 function select(state: AppState): Props {
     return { me: state.me };

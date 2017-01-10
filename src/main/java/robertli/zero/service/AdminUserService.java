@@ -10,7 +10,7 @@ import robertli.zero.dto.user.AdminUserDto;
 
 /**
  *
- * @version 1.0.1 2017-01-04
+ * @version 1.0.2 2017-01-10
  * @author Robert Li
  */
 public interface AdminUserService {
@@ -19,24 +19,24 @@ public interface AdminUserService {
 
     public List<AdminUserDto> getAdminRootUserList();
 
-    public AdminUserDto getAdminUser(int userId);
+    public AdminUserDto getAdminUser(String username);
 
-    public boolean isAdminUser(int userId);
+    public boolean isAdminUser(String username);
 
-    public boolean isRoot(int userId);
+    public boolean isRoot(String username);
 
     public int addAdminUser(AdminUserDto adminUserDto);
 
-    public void deleteAdminUser(int userId);
+    public void deleteAdminUser(String username);
 
-    public void addRootRole(int userId);
+    public void addRootRole(String username);
 
-    public void removeRootRole(int userId);
+    public void removeRootRole(String username);
 
-    public void resetPassword(int userId, String password);
+    public void resetPassword(String username, String password);
 
-    public void lockAdminUser(int userId);
+    public void lockAdminUser(String username);
 
-    public void unlockAdminUser(int userId);
+    public void unlockAdminUser(String username);
 
 }

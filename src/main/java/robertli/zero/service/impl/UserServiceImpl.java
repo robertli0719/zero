@@ -23,6 +23,7 @@ import robertli.zero.dto.user.UserRoleDto;
 import robertli.zero.dto.user.UserTypeDto;
 import robertli.zero.entity.UserPlatform;
 import robertli.zero.entity.User;
+import robertli.zero.entity.UserAuth;
 import robertli.zero.entity.UserRole;
 import robertli.zero.entity.UserType;
 import robertli.zero.service.UserService;
@@ -90,6 +91,36 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUserRole(String name) {
         userRoleDao.deleteById(name);
+    }
+
+    @Override
+    public User getUser(String userPlatformName, String username) {
+        UserPlatform userPlatform = userPlatformDao.get(userPlatformName);
+        String userTypeName = userPlatform.getUserType().getName();
+        String authId = userAuthDao.makeAuthId(userTypeName, userPlatformName, username);
+        UserAuth userAuth = userAuthDao.get(authId);
+        if (userAuth == null) {
+            return null;
+        }
+        return userAuth.getUser();
+    }
+
+    @Override
+    public User addUser(String userPlatformName, String username, String usernameType, String label, String orginealPassword, String name, String telephone, boolean locked) {
+        String salt = securityService.createPasswordSalt();
+        String password = securityService.uglifyPassoword(orginealPassword, salt);
+
+        UserPlatform userPlatform = userPlatformDao.get(userPlatformName);
+        User user = new User();
+        user.setName(name);
+        user.setPassword(password);
+        user.setPasswordSalt(salt);
+        user.setUserPlatform(userPlatform);
+        user.setLocked(locked);
+        user.setTelephone(telephone);
+        userDao.save(user);
+        userAuthDao.saveUserAuth(userPlatformName, username, label, usernameType, user);
+        return user;
     }
 
     @Override

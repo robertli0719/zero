@@ -69,31 +69,29 @@ public class AdminUserServiceTest {
         final String username = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
         final String password = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
         final int adminListSize = adminUserService.getAdminUserList().size();
-        final int lastUserId = userDao.getLast("id").getId();
-        assertFalse(adminUserService.isAdminUser(lastUserId + 1));
-        assertFalse(adminUserService.isRoot(lastUserId + 1));
+
+        assertFalse(adminUserService.isAdminUser(username));
+        assertFalse(adminUserService.isRoot(username));
 
         addAdmin(username, password);
         int listSizeAfterAdd = adminUserService.getAdminUserList().size();
-        int adminUserId = userDao.getLast("id").getId();
         assertTrue(listSizeAfterAdd == adminListSize + 1);
-        assertTrue(adminUserId > lastUserId);
-        assertTrue(adminUserService.isAdminUser(adminUserId));
-        assertFalse(adminUserService.isRoot(adminUserId));
+        assertTrue(adminUserService.isAdminUser(username));
+        assertFalse(adminUserService.isRoot(username));
 
-        adminUserService.addRootRole(adminUserId);
-        assertTrue(adminUserService.isAdminUser(adminUserId));
-        assertTrue(adminUserService.isRoot(adminUserId));
+        adminUserService.addRootRole(username);
+        assertTrue(adminUserService.isAdminUser(username));
+        assertTrue(adminUserService.isRoot(username));
 
-        adminUserService.removeRootRole(adminUserId);
-        assertTrue(adminUserService.isAdminUser(adminUserId));
-        assertFalse(adminUserService.isRoot(adminUserId));
+        adminUserService.removeRootRole(username);
+        assertTrue(adminUserService.isAdminUser(username));
+        assertFalse(adminUserService.isRoot(username));
 
-        adminUserService.deleteAdminUser(adminUserId);
+        adminUserService.deleteAdminUser(username);
         int listSizeAfterDelete = adminUserService.getAdminUserList().size();
         assertTrue(listSizeAfterDelete == adminListSize);
-        assertFalse(adminUserService.isAdminUser(adminUserId));
-        assertFalse(adminUserService.isRoot(adminUserId));
+        assertFalse(adminUserService.isAdminUser(username));
+        assertFalse(adminUserService.isRoot(username));
     }
 
     //test login
@@ -121,17 +119,11 @@ public class AdminUserServiceTest {
             System.out.println(user.getUsername() + " " + user.isRoot());
         }
     }
-    
-    public void test4(){
-        AdminUserDto admin = adminUserService.getAdminUser(8);
-        System.out.println(admin);
-    }
 
     public void test() {
-//        test1();
-//        test2();
+        test1();
+        test2();
         test3();
-//        test4();
     }
 
     public static void main(String args[]) {
