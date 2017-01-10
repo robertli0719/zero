@@ -2,7 +2,8 @@ import * as React from "react";
 import { connect } from "react-redux"
 import { store, AppState } from "../../Store"
 import { UserProfile } from "../../reducers/me"
-import { Button, ButtonToolbar } from "react-bootstrap";
+import { Button, ButtonToolbar, Row, Col, Panel, Alert } from "react-bootstrap";
+import * as zform from "../../components/zero/ZForm"
 
 interface Props {
     me: UserProfile
@@ -14,17 +15,23 @@ export class AdminIndexPage extends React.Component<Props, {}>{
         super();
     }
 
-    appInit() {
-    }
-
     render() {
         return (
             <div className="container">
                 <h1>Admin Management System</h1>
                 <p>Admin: {this.props.me.authLabel}</p>
-                <ButtonToolbar>
-                    <Button bsStyle="success" onClick={this.appInit.bind(this)}>OK</Button>
-                </ButtonToolbar>
+                <Row>
+                    <Col sm={3}>
+                        <Panel header="Reset Password">
+                            <zform.Form action="me/auth/password" method="PUT" successMessage="reset password" >
+                                <zform.Password name="oldPassword" label="Current password" />
+                                <zform.Password name="newPassword" label="New password" />
+                                <zform.Password name="reenterNewPassword" label="Reenter new password" />
+                                <zform.Submit value="submit" />
+                            </zform.Form>
+                        </Panel>
+                    </Col>
+                </Row>
             </div>
         );
     }

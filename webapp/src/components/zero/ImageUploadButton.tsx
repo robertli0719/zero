@@ -3,15 +3,16 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 2017-01-06 1.0
+ * version 2017-01-09 1.0.1
  */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Sizes, Button, ButtonToolbar, Image, Navbar, Nav, NavItem, NavbarProps, Popover, Tooltip, Modal, OverlayTrigger } from "react-bootstrap";
 import { Cropper, CropResult } from "../../components/zero/ZCropper"
 import { http, RestErrorDto } from "../../utilities/http"
+import "../../../node_modules/cropperjs/dist/cropper.css"
 
-type UploadOption = 'default' | 'cropped' | 'fixed';
+export type UploadOption = 'default' | 'cropped' | 'fixed';
 
 const MODAL_HEIHT: string = "500px"
 
@@ -19,7 +20,7 @@ interface ModalState {
     showModal: boolean
     imgURL: string
     files: FileList
-    val: number
+    option: UploadOption
     reset: () => void
 }
 
@@ -40,21 +41,14 @@ export class ImageUploadButton extends React.Component<Props, ModalState>{
 
     constructor(props: Props) {
         super(props);
-        if (!props.option) {
-            props.option = "default"
-        }
+        let option: UploadOption = props.option ? props.option : "default"
         if (props.option != "fixed" && (props.fixedHeight || props.fixedWidth)) {
             throw "fixedHeight and fixedWidth can only use with option=fixed"
         }
         if (props.option == "fixed" && (!props.fixedHeight || !props.fixedWidth)) {
             throw "need fixedHeight and fixedWidth when using option=fixed"
         }
-        this.state = { showModal: false, files: null, imgURL: null, val: 0, reset: null }
-
-        setInterval(() => {
-            this.state.val++;
-            this.setState(this.state);
-        }, 1000);
+        this.state = { showModal: false, files: null, imgURL: null, reset: null, option: option }
     };
 
     reset() {
@@ -165,7 +159,7 @@ export class ImageUploadButton extends React.Component<Props, ModalState>{
 
     render() {
         let btnBar = <div></div>
-        switch (this.props.option) {
+        switch (this.state.option) {
             case "default":
                 btnBar = <div>
                     <Button bsStyle="success" disabled={!this.state.files} onClick={this.use.bind(this)}>Use</Button>
@@ -194,7 +188,7 @@ export class ImageUploadButton extends React.Component<Props, ModalState>{
                 <input name="file" type="file" onChange={this.fileInputOnChange.bind(this)} multiple={false} />
             </div>
         } else {
-            switch (this.props.option) {
+            switch (this.state.option) {
                 case "default":
                     modalBody = <Image src={this.state.imgURL} responsive />
                     break;
@@ -219,10 +213,9 @@ export class ImageUploadButton extends React.Component<Props, ModalState>{
         }
 
         let headerText = "Image Upload"
-        if (this.props.option == "fixed") {
+        if (this.state.option == "fixed") {
             headerText = "Image Upload for " + this.props.fixedWidth + "X" + this.props.fixedHeight
         }
-
 
         return (
             <div>
@@ -241,7 +234,6 @@ export class ImageUploadButton extends React.Component<Props, ModalState>{
                         <Modal.Title>{headerText}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <p>{this.state.val}</p>
                         {modalBody}
                     </Modal.Body>
                     <Modal.Footer>

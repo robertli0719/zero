@@ -17,6 +17,7 @@ export type UserProfileDto = {
     userPlatformName: string
     name: string
     telephone: string
+    roleList: string[]
 }
 
 export function isAdmin() {

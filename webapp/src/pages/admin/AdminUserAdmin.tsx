@@ -1,6 +1,7 @@
 import * as React from "react";
 import { connect } from "react-redux"
 import { store, AppState } from "../../Store"
+import { UserProfile } from "../../reducers/me"
 import { Button, ButtonToolbar, Row, Col, Panel } from "react-bootstrap";
 import * as zform from "../../components/zero/ZForm"
 import * as ztable from "../../components/zero/ZTable"
@@ -15,6 +16,7 @@ type AdminUserDto = {
 }
 
 interface Props {
+    me: UserProfile
 }
 
 interface State {
@@ -67,6 +69,15 @@ class AdminUserAdminComponent extends React.Component<Props, State>{
                                 <zform.Submit value="add" />
                             </zform.Form>
                         </Panel>
+                        <Panel header="Reset Admin Password" bsStyle="primary">
+                            <zform.Form action="admin-users" method="POST" onSuccess={this.onAddSuccess.bind(this)}>
+                                <zform.TextField label="username" name="username" enterSubmit={false} />
+                                <zform.Password label="password" name="password" enterSubmit={true} />
+                                <zform.Hidden name="locked" value="false" />
+                                <zform.Hidden name="root" value="false" />
+                                <zform.Submit value="add" />
+                            </zform.Form>
+                        </Panel>
                     </Col>
                     <Col sm={9}>
                         <Panel header="Admin List" bsStyle="primary">
@@ -82,7 +93,7 @@ class AdminUserAdminComponent extends React.Component<Props, State>{
 }
 
 function select(state: AppState): Props {
-    return {};
+    return { me: state.me };
 }
 
 export let AdminUserAdmin = connect(select)(AdminUserAdminComponent);

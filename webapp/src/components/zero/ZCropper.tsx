@@ -4,12 +4,11 @@
  * https://opensource.org/licenses/MIT
  * 
  * dependencies: react-cropper 0.10.0
- * version 1.0.1 2017-01-06
+ * version 1.0.2 2017-01-09
  */
 import * as React from "react"
 import * as ReactDOM from "react-dom"
 import ReactCropper from "react-cropper"
-import "../../../node_modules/react-cropper/node_modules/cropperjs/dist/cropper.css"
 
 export type Props = {
     src: string

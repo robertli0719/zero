@@ -20,7 +20,7 @@ export class TestImageUpload extends React.Component<{}, {}>{
         return (
             <div className="container">
                 <h1>Test ImageUpload</h1>
-                <ImageUploadButton bsSize="sm" option="fixed" fixedWidth={800} fixedHeight={600} onSuccess={this.onUploadSuccess.bind(this)} >
+                <ImageUploadButton option="cropped" onSuccess={this.onUploadSuccess.bind(this)} >
                     12345678
                 </ImageUploadButton>
             </div>

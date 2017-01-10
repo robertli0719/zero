@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.0.4 2017-01-04
+ * version 1.0.5 2017-01-09
  */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
@@ -11,6 +11,7 @@ import { Alert, Button, ButtonToolbar, FormControl, FormGroup, ControlLabel, Che
 import * as rb from "react-bootstrap"
 import { LinkContainer } from 'react-router-bootstrap';
 import { makeRandomString } from "../../utilities/random-coder"
+import { ImageUploadButton, UploadOption } from "./ImageUploadButton"
 import { http, RestErrorDto, RestErrorItemDto } from "../../utilities/http"
 
 export type FieldProps = {
@@ -22,6 +23,16 @@ export type FieldProps = {
     onSubmit?: () => {}
     errorMap?: { [key: string]: any }
     onChange?: React.FormEventHandler<FormControl>
+    onFormChange?: (key: string, val: any) => {}
+    valMap?: { [key: string]: any }
+}
+
+export type ImageFieldProps = {
+    label: string
+    name: string
+    option?: UploadOption
+    errorMap?: { [key: string]: any }
+    onFormChange?: (key: string, val: any) => {}
     valMap?: { [key: string]: any }
 }
 
@@ -45,6 +56,7 @@ export type SubmitProps = {
 export type FormProps = {
     action?: string
     method?: string
+    successMessage?: string
     onSuccess?: (data: any) => Promise<never>
     onSubmit?: (data: any) => Promise<never>
 }
@@ -53,27 +65,26 @@ export type FormState = {
     valMap: { [key: string]: any }
     errorMap: { [key: string]: any }
     actionErrors: [string]
+    successAlertDisplay: boolean
 }
 
 export class Form extends React.Component<FormProps, FormState>{
 
     constructor(props: FormProps) {
         super(props);
-        this.state = { valMap: {}, errorMap: {}, actionErrors: [] as [string] }
+        this.state = { valMap: {}, errorMap: {}, actionErrors: [] as [string], successAlertDisplay: false }
+    }
+
+    onFormChange(key: string, val: any) {
+        this.state.valMap[key] = val;
+        this.setState(this.state);
     }
 
     inputChange(event: React.FormEvent<HTMLInputElement>) {
-        let key = event.currentTarget.name;
-        let type = event.currentTarget.type;
-
-        if (type == "checkbox") {
-            const checked: boolean = event.currentTarget.checked;
-            this.state.valMap[key] = checked;
-        } else {
-            const val = event.currentTarget.value;
-            this.state.valMap[key] = val;
-        }
-        this.setState(this.state);
+        const key = event.currentTarget.name;
+        const type = event.currentTarget.type;
+        let val = (type == "checkbox") ? event.currentTarget.checked : event.currentTarget.value;
+        this.onFormChange(key, val)
     }
 
     getSumbitMethod() {
@@ -118,6 +129,10 @@ export class Form extends React.Component<FormProps, FormState>{
     }
 
     onSuccess(dto: any) {
+        if (this.props.successMessage) {
+            this.state.successAlertDisplay = true;
+            this.setState(this.state)
+        }
         if (!this.props.onSuccess) {
             return;
         }
@@ -159,8 +174,8 @@ export class Form extends React.Component<FormProps, FormState>{
         if (!this.props.action) {
             return;
         }
-        if (!this.props.onSuccess) {
-            throw "ZFrom can't find onSuccess when using action";
+        if (!(this.props.onSuccess || this.props.successMessage)) {
+            throw "ZFrom can't find onSuccess or successMessage when using action";
         }
         this.submit()
             .then((dto: any) => {
@@ -180,6 +195,7 @@ export class Form extends React.Component<FormProps, FormState>{
                     this.state.valMap[key] = initValue;
                 }
                 return React.cloneElement(child, {
+                    onFormChange: this.onFormChange.bind(this),
                     onChange: this.inputChange.bind(this),
                     valMap: this.state.valMap,
                     errorMap: this.state.errorMap,
@@ -189,10 +205,25 @@ export class Form extends React.Component<FormProps, FormState>{
         )
     }
 
+    handleAlertDismiss() {
+        this.state.successAlertDisplay = false
+        this.setState(this.state)
+    }
+
+    makeSuccessAlert() {
+        if (this.state.successAlertDisplay) {
+            return <Alert bsStyle="success" onDismiss={this.handleAlertDismiss.bind(this)}>
+                <strong>Success!</strong> {this.props.successMessage}
+            </Alert>
+        }
+        return <div></div>
+    }
+
     render() {
         const children = this.getChildren();
         return (
             <div>
+                {this.makeSuccessAlert()}
                 {
                     this.state.actionErrors.map((msg) => {
                         return <Alert bsStyle="danger"><strong>Error!</strong> {msg}</Alert>
@@ -362,6 +393,39 @@ export class Select extends React.Component<SelectFieldProps, {}>{
                         })
                     }
                 </FormControl>
+                <HelpBlock>{error}</HelpBlock>
+            </FormGroup>
+        )
+    }
+}
+
+export class Image extends React.Component<ImageFieldProps, {}>{
+
+    constructor(props: FieldProps) {
+        super(props)
+        this.state = {}
+    }
+
+    onSuccess(url: string) {
+        console.log("onSuccess:", url)
+        this.props.onFormChange(this.props.name, url)
+    }
+
+    render() {
+        const error = this.props.errorMap[this.props.name];
+        const validateState = error ? "error" : null;
+        return (
+            <FormGroup validationState={validateState}>
+                <ControlLabel>{this.props.label}</ControlLabel>
+                <input
+                    name={this.props.name}
+                    value={this.props.valMap[this.props.name]}
+                    type="hidden" />
+                <ImageUploadButton option={this.props.option} onSuccess={this.onSuccess.bind(this)}>
+                    <span>{this.props.label}</span>
+                    <img src={this.props.valMap[this.props.name]} style={{ width: "26px", "maxHeight": "26px", padding: "3px" }} />
+                </ImageUploadButton>
+                <FormControl.Feedback />
                 <HelpBlock>{error}</HelpBlock>
             </FormGroup>
         )
