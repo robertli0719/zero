@@ -17,4 +17,6 @@ public interface AccessTokenDao extends GenericDao<AccessToken, String> {
      * delete the lines which is out of date.
      */
     public void clear();
+
+    public void deleteByUser(int userId);
 }

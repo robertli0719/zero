@@ -1,5 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux"
+import { hashHistory } from 'react-router'
 import { store, AppState } from "../../Store"
 import { Button, ButtonToolbar, Row, Col, Panel } from "react-bootstrap";
 import * as zform from "../../components/zero/ZForm"
@@ -52,6 +53,10 @@ class AdminUserPlatformComponent extends React.Component<Prop, State>{
             })
     }
 
+    redirectToUserPage(dto: UserPlatformDto, index: number) {
+        hashHistory.replace("admin/user-staff/" + dto.name);
+    }
+
     render() {
         return (
             <div className="container">
@@ -70,6 +75,7 @@ class AdminUserPlatformComponent extends React.Component<Prop, State>{
                         <Panel header="Platform List" bsStyle="primary">
                             <ztable.Table dtoList={this.state.userPlatformList} >
                                 <ztable.ColButton name="delete" bsStyle="danger" bsSize="xs" onAction={this.onDelete.bind(this)} />
+                                <ztable.ColButton name="users" bsStyle="success" bsSize="xs" onAction={this.redirectToUserPage.bind(this)} />
                             </ztable.Table>
                         </Panel>
                     </Col>

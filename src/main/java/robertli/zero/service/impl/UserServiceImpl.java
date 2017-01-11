@@ -11,13 +11,13 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Component;
 import robertli.zero.core.SecurityService;
+import robertli.zero.dao.AccessTokenDao;
 import robertli.zero.dao.UserAuthDao;
 import robertli.zero.dao.UserDao;
 import robertli.zero.dao.UserPlatformDao;
 import robertli.zero.dao.UserRoleDao;
 import robertli.zero.dao.UserRoleItemDao;
 import robertli.zero.dao.UserTypeDao;
-import robertli.zero.dto.user.UserDto;
 import robertli.zero.dto.user.UserPlatformDto;
 import robertli.zero.dto.user.UserRoleDto;
 import robertli.zero.dto.user.UserTypeDto;
@@ -25,6 +25,7 @@ import robertli.zero.entity.UserPlatform;
 import robertli.zero.entity.User;
 import robertli.zero.entity.UserAuth;
 import robertli.zero.entity.UserRole;
+import robertli.zero.entity.UserRoleItem;
 import robertli.zero.entity.UserType;
 import robertli.zero.service.UserService;
 
@@ -51,6 +52,9 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private UserRoleItemDao userRoleItemDao;
+
+    @Resource
+    private AccessTokenDao accessTokenDao;
 
     @Resource
     private ModelMapper modelMapper;
@@ -86,6 +90,28 @@ public class UserServiceImpl implements UserService {
         UserRole userRole = new UserRole();
         userRole.setName(name);
         userRoleDao.save(userRole);
+    }
+
+    @Override
+    public void deleteUser(String userPlatformName, String username) {
+        User user = getUser(userPlatformName, username);
+        for (UserAuth userAuth : user.getUserAuthList()) {
+            userAuthDao.delete(userAuth);
+        }
+        for (UserRoleItem userRoleItem : user.getUserRoleItemList()) {
+            userRoleItemDao.delete(userRoleItem);
+        }
+        accessTokenDao.deleteByUser(user.getId());
+        userDao.delete(user);
+    }
+
+    @Override
+    public void resetPassword(String userPlatformName, String username, String orginealPassword) {
+        String salt = securityService.createPasswordSalt();
+        String password = securityService.uglifyPassoword(orginealPassword, salt);
+        User user = getUser(userPlatformName, username);
+        user.setPassword(password);
+        user.setPasswordSalt(salt);
     }
 
     @Override
@@ -154,10 +180,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getUserList() {
-        List<User> userList = userDao.list();
-        return modelMapper.map(userList, new TypeToken<List<UserDto>>() {
-        }.getType());
+    public List<User> getUserListByPlatform(String userPlatformName) {
+        UserPlatform userPlatform = userPlatformDao.get(userPlatformName);
+        return userPlatform.getUserList();
+    }
+
+    @Override
+    public List<User> getUserListByRole(String roleName) {
+        return userDao.getUserListByRole(roleName);
     }
 
     @Override

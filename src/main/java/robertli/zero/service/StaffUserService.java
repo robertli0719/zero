@@ -10,29 +10,33 @@ import robertli.zero.dto.user.StaffUserDto;
 
 /**
  *
- * @version 1.0.1 2016-12-31
+ * @version 1.0.2 2017-01-10
  * @author Robert Li
  */
 public interface StaffUserService {
 
     public List<StaffUserDto> getStaffUserList(String userPlatformName);
 
-    public boolean isStaffUser(String userPlatformName, int userId);
+    public List<StaffUserDto> getStaffRootUserList(String userPlatformName);
 
-    public boolean isPlatformRoot(String userPlatformName, int userId);
+    public StaffUserDto getStaffUser(String userPlatformName, String username);
 
-    public void addStaffUser(StaffUserDto staffUserDto);
+    public boolean isStaffUser(String userPlatformName, String username);
 
-    public void deleteStaffUser(String userPlatformName, int userId);
+    public boolean isPlatformRoot(String userPlatformName, String username);
 
-    public void addPlatformRootRole(String userPlatformName, int userId);
+    public void addStaffUser(String userPlatformName,StaffUserDto staffUserDto);
 
-    public void removePlatformRootRole(String userPlatformName, int userId);
+    public void deleteStaffUser(String userPlatformName, String username);
 
-    public void resetPassword(String userPlatformName, int userId, String password);
+    public void addPlatformRootRole(String userPlatformName, String username);
 
-    public void lockStaffUser(String userPlatformName, int userId);
+    public void removePlatformRootRole(String userPlatformName, String username);
 
-    public void unlockStaffUser(String userPlatformName, int userId);
+    public void resetPassword(String userPlatformName, String username, String password);
+
+    public void lockStaffUser(String userPlatformName, String username);
+
+    public void unlockStaffUser(String userPlatformName, String username);
 
 }

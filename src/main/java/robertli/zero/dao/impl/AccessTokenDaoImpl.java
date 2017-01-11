@@ -26,8 +26,15 @@ public class AccessTokenDaoImpl extends GenericHibernateDao<AccessToken, String>
     @Override
     public void clear() {
         Session session = sessionFactory.getCurrentSession();
+        TypedQuery<AccessToken> query = session.createQuery("delete from AccessToken token where token.expiryDate<CURRENT_TIMESTAMP");
+        query.executeUpdate();
+    }
 
-        TypedQuery<AccessToken> query = session.createQuery("delete from AccessToken where expiryDate<now()");
+    @Override
+    public void deleteByUser(int userId) {
+        Session session = sessionFactory.getCurrentSession();
+        TypedQuery<AccessToken> query = session.createQuery("delete from AccessToken token where token.user.id = :userId");
+        query.setParameter("userId", userId);
         query.executeUpdate();
     }
 

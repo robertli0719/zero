@@ -10,6 +10,7 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -21,11 +22,13 @@ import javax.persistence.Temporal;
  *
  * Each line of this table is an access token for RESTful API
  *
- * @version 1.0.1 2016-12-11
+ * @version 1.0.2 2017-01-11
  * @author Robert Li
  */
 @Entity
-@Table(name = "access_token")
+@Table(name = "access_token",indexes={
+    @Index(name = "expiryDate", columnList = "expiryDate")
+})
 public class AccessToken implements Serializable {
 
     private String token;

@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.0.5 2017-01-09
+ * version 1.0.6 2017-01-10
  */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
@@ -14,10 +14,13 @@ import { makeRandomString } from "../../utilities/random-coder"
 import { ImageUploadButton, UploadOption } from "./ImageUploadButton"
 import { http, RestErrorDto, RestErrorItemDto } from "../../utilities/http"
 
+export type FieldPlaceOption = 'default' | 'path' | 'pathAndDto';
+
 export type FieldProps = {
     label: string
     name: string
     value?: string
+    place?: FieldPlaceOption
     multiple?: boolean
     enterSubmit?: boolean
     onSubmit?: () => {}
@@ -39,6 +42,7 @@ export type ImageFieldProps = {
 export type HiddenFieldProps = {
     name: string
     value: string
+    place?: FieldPlaceOption
 }
 
 export type SelectFieldProps = FieldProps & {
@@ -64,6 +68,7 @@ export type FormProps = {
 export type FormState = {
     valMap: { [key: string]: any }
     errorMap: { [key: string]: any }
+    placeMap: { [key: string]: any }
     actionErrors: [string]
     successAlertDisplay: boolean
 }
@@ -72,7 +77,7 @@ export class Form extends React.Component<FormProps, FormState>{
 
     constructor(props: FormProps) {
         super(props);
-        this.state = { valMap: {}, errorMap: {}, actionErrors: [] as [string], successAlertDisplay: false }
+        this.state = { valMap: {}, errorMap: {}, placeMap: {}, actionErrors: [] as [string], successAlertDisplay: false }
     }
 
     onFormChange(key: string, val: any) {
@@ -95,10 +100,35 @@ export class Form extends React.Component<FormProps, FormState>{
         return method.toUpperCase();
     }
 
+    getUrl() {
+        if (!this.props.action) {
+            throw "there is no action for this Form"
+        } else if (this.props.action.indexOf('{') < 0) {
+            return this.props.action;
+        }
+        let path = this.props.action
+        for (const key in this.state.placeMap) {
+            const val = this.state.placeMap[key]
+            if (val == "default") {
+                continue
+            }
+            const searchString = "{" + encodeURIComponent(key) + "}"
+            const variable = encodeURIComponent(this.state.valMap[key])
+            path = path.replace(new RegExp(searchString, 'g'), variable)
+        }
+        if (path.indexOf('{') > 0) {
+            throw "ZForm can't match all path variable. please make sure you have set place='path' for action " + this.props.action
+        }
+        return path;
+    }
+
     getParamUrl() {
         let n = 0;
-        let url = this.props.action;
+        let url = this.getUrl();
         for (let key in this.state.valMap) {
+            if (this.state.placeMap[key] != "default") {
+                continue
+            }
             let val = this.state.valMap[key];
             url += (n == 0) ? '?' : '&';
             url += encodeURIComponent(key) + "=" + encodeURIComponent(val);
@@ -107,15 +137,26 @@ export class Form extends React.Component<FormProps, FormState>{
         return url;
     }
 
+    getDto() {
+        let dto: { [key: string]: any } = {}
+        for (let key in this.state.valMap) {
+            if (this.state.placeMap[key] == "path") {
+                continue
+            }
+            dto[key] = this.state.valMap[key];
+        }
+        return dto;
+    }
+
     submit(): Promise<never> {
         const method = this.getSumbitMethod();
         switch (method) {
             case "GET":
                 return http.get(this.getParamUrl());
             case "POST":
-                return http.post(this.props.action, this.state.valMap);
+                return http.post(this.getUrl(), this.getDto());
             case "PUT":
-                return http.put(this.props.action, this.state.valMap);
+                return http.put(this.getUrl(), this.getDto());
             case "DELETE":
                 return http.delete(this.getParamUrl());
         }
@@ -194,6 +235,7 @@ export class Form extends React.Component<FormProps, FormState>{
                     let initValue = child.props.value ? child.props.value : "";
                     this.state.valMap[key] = initValue;
                 }
+                this.state.placeMap[key] = child.props.place ? child.props.place : "default";
                 return React.cloneElement(child, {
                     onFormChange: this.onFormChange.bind(this),
                     onChange: this.inputChange.bind(this),
@@ -385,7 +427,9 @@ export class Select extends React.Component<SelectFieldProps, {}>{
                     multiple={this.props.multiple}
                     value={this.props.valMap[this.props.name]}
                     >
-                    <option value="">-- please select --</option>
+                    <option value="">
+                        <span>-- please select --</span>
+                    </option>
                     {
                         Object.keys(this.props.options).map((value) => {
                             var label = this.props.options[value];

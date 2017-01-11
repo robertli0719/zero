@@ -78,6 +78,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private void recordAccessToken(String token, User user) {
+        accessTokenDao.clear();
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.MONTH, 1);
         Date expiryDate = cal.getTime();

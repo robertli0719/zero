@@ -1,13 +1,12 @@
 import * as React from "react";
 import { connect } from "react-redux"
 import { store, AppState } from "../../Store"
-import { UserProfile } from "../../reducers/me"
 import { Button, ButtonToolbar, Row, Col, Panel } from "react-bootstrap";
 import * as zform from "../../components/zero/ZForm"
 import * as ztable from "../../components/zero/ZTable"
 import { http, RestErrorDto } from "../../utilities/http"
 
-type AdminUserDto = {
+type StaffUserDto = {
     id: number
     username: string
     password: string
@@ -15,26 +14,34 @@ type AdminUserDto = {
     root: boolean
 }
 
-interface Props {
-    me: UserProfile
+type ReduxProp = {
 }
+
+type CommonProp = {
+    params: any
+}
+
+type Props = ReduxProp & CommonProp;
 
 interface State {
-    adminUserList: AdminUserDto[]
+    platform: string
+    staffUserList: StaffUserDto[]
 }
 
-class AdminUserAdminComponent extends React.Component<Props, State>{
+class AdminUserStaffComponent extends React.Component<Props, State>{
 
     constructor(prop: Props) {
         super(prop);
-        this.state = { adminUserList: [] }
+        let platform = this.props.params['platform'];
+        this.state = { platform: platform, staffUserList: [] }
         this.updateData();
     }
 
     updateData() {
-        return http.get("admin-users")
-            .then((adminUserList: AdminUserDto[]) => {
-                this.state.adminUserList = adminUserList;
+        const url = "user-platforms/" + this.state.platform + "/staffs"
+        return http.get(url)
+            .then((staffUserList: StaffUserDto[]) => {
+                this.state.staffUserList = staffUserList;
                 this.setState(this.state);
             });
     }
@@ -43,8 +50,8 @@ class AdminUserAdminComponent extends React.Component<Props, State>{
         this.updateData()
     }
 
-    onDelete(adminUser: AdminUserDto) {
-        const url = "admin-users/" + adminUser.username
+    onDelete(staffUser: StaffUserDto) {
+        const url = "user-platforms/" + this.state.platform + "/staffs/" + staffUser.username
         http.delete(url)
             .then(() => {
                 this.updateData();
@@ -57,11 +64,12 @@ class AdminUserAdminComponent extends React.Component<Props, State>{
     render() {
         return (
             <div className="container">
-                <h1>Admin Editor</h1>
+                <h1>Platform: {this.state.platform}</h1>
                 <Row>
                     <Col sm={3}>
-                        <Panel header="Add Admin" bsStyle="primary">
-                            <zform.Form action="admin-users" method="POST" onSuccess={this.onAddSuccess.bind(this)}>
+                        <Panel header="Add Staff" bsStyle="primary">
+                            <zform.Form action="user-platforms/{userPlatformName}/staffs" method="POST" onSuccess={this.onAddSuccess.bind(this)}>
+                                <zform.Hidden place="path" name="userPlatformName" value={this.state.platform} />
                                 <zform.TextField label="username" name="username" enterSubmit={false} />
                                 <zform.Password label="password" name="password" enterSubmit={true} />
                                 <zform.Hidden name="locked" value="false" />
@@ -69,8 +77,9 @@ class AdminUserAdminComponent extends React.Component<Props, State>{
                                 <zform.Submit value="add" />
                             </zform.Form>
                         </Panel>
-                        <Panel header="Reset Admin Password" bsStyle="primary">
-                            <zform.Form action="admin-users/{username}/password" method="PUT" successMessage="reset password">
+                        <Panel header="Reset Staff Password" bsStyle="primary">
+                            <zform.Form action="user-platforms/{userPlatformName}/staffs/{username}/password" method="PUT" successMessage="reset password">
+                                <zform.Hidden place="path" name="userPlatformName" value={this.state.platform} />
                                 <zform.TextField label="username" name="username" place="pathAndDto" />
                                 <zform.Password label="password" name="password" enterSubmit={true} />
                                 <zform.Submit value="reset" />
@@ -78,8 +87,8 @@ class AdminUserAdminComponent extends React.Component<Props, State>{
                         </Panel>
                     </Col>
                     <Col sm={9}>
-                        <Panel header="Admin List" bsStyle="primary">
-                            <ztable.Table dtoList={this.state.adminUserList} >
+                        <Panel header="Staff List" bsStyle="primary">
+                            <ztable.Table dtoList={this.state.staffUserList} >
                                 <ztable.ColButton name="delete" bsStyle="danger" bsSize="xs" onAction={this.onDelete.bind(this)} />
                             </ztable.Table>
                         </Panel>
@@ -90,8 +99,8 @@ class AdminUserAdminComponent extends React.Component<Props, State>{
     }
 }
 
-function select(state: AppState): Props {
-    return { me: state.me };
+function select(state: AppState): ReduxProp {
+    return {};
 }
 
-export let AdminUserAdmin = connect(select)(AdminUserAdminComponent);
+export let AdminUserStaff = connect(select)(AdminUserStaffComponent);

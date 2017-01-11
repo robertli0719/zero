@@ -15,13 +15,9 @@ import org.modelmapper.TypeToken;
 import org.modelmapper.spi.MappingContext;
 import org.springframework.stereotype.Component;
 import robertli.zero.core.SecurityService;
-import robertli.zero.dao.UserAuthDao;
-import robertli.zero.dao.UserDao;
-import robertli.zero.dao.UserPlatformDao;
 import robertli.zero.dao.UserRoleItemDao;
 import robertli.zero.dto.user.AdminUserDto;
 import robertli.zero.entity.User;
-import robertli.zero.entity.UserAuth;
 import robertli.zero.entity.UserPlatform;
 import robertli.zero.entity.UserRoleItem;
 import robertli.zero.service.AdminUserService;
@@ -34,22 +30,10 @@ public class AdminUserServiceImpl implements AdminUserService {
     private ModelMapper modelMapper;
 
     @Resource
-    private SecurityService securityService;
-
-    @Resource
-    private UserPlatformDao userPlatformDao;
-
-    @Resource
-    private UserDao userDao;
-
-    @Resource
     private UserService userService;
 
     @Resource
     private UserRoleItemDao userRoleItemDao;
-
-    @Resource
-    private UserAuthDao userAuthDao;
 
     @PostConstruct
     public void init() {
@@ -79,22 +63,18 @@ public class AdminUserServiceImpl implements AdminUserService {
                 using(userToRootConverter).map(source).setRoot(false);
             }
         });
-
     }
 
     @Override
     public List<AdminUserDto> getAdminUserList() {
-        List<User> userList = userDao.getUserListByPlatform(UserService.USER_PLATFORM_ADMIN);
-        System.out.println("getAdminUserList userList size:" + userList.size());
-        List<AdminUserDto> dtoList = modelMapper.map(userList, new TypeToken<List<AdminUserDto>>() {
+        List<User> userList = userService.getUserListByPlatform(UserService.USER_PLATFORM_ADMIN);
+        return modelMapper.map(userList, new TypeToken<List<AdminUserDto>>() {
         }.getType());
-        return dtoList;
     }
 
     @Override
     public List<AdminUserDto> getAdminRootUserList() {
-        final String roleName = UserService.USER_ROLE_ADMIN_ROOT;
-        List<User> userList = userDao.getUserListByRole(roleName);
+        List<User> userList = userService.getUserListByRole(UserService.USER_ROLE_ADMIN_ROOT);
         return modelMapper.map(userList, new TypeToken<List<AdminUserDto>>() {
         }.getType());
     }
@@ -140,7 +120,7 @@ public class AdminUserServiceImpl implements AdminUserService {
         String name = username;
         String label = username;
 
-        User adminUser = userService.addUser(userPlatformName, username, usernameType, label, orginealPassword, name, "", locked);
+        User adminUser = userService.addUser(userPlatformName, username, usernameType, label, orginealPassword, name, null, locked);
         return adminUser.getId();
     }
 
@@ -149,14 +129,7 @@ public class AdminUserServiceImpl implements AdminUserService {
         if (isAdminUser(username) == false) {
             return;
         }
-        User user = userService.getUser(UserService.USER_PLATFORM_ADMIN, username);
-        for (UserAuth userAuth : user.getUserAuthList()) {
-            userAuthDao.delete(userAuth);
-        }
-        for (UserRoleItem userRoleItem : user.getUserRoleItemList()) {
-            userRoleItemDao.delete(userRoleItem);
-        }
-        userDao.delete(user);
+        userService.deleteUser(UserService.USER_PLATFORM_ADMIN, username);
     }
 
     @Override
@@ -182,11 +155,7 @@ public class AdminUserServiceImpl implements AdminUserService {
         if (isAdminUser(username) == false) {
             throw new RuntimeException("this user is not adminUser");
         }
-        String salt = securityService.createPasswordSalt();
-        String password = securityService.uglifyPassoword(orginealPassword, salt);
-        User user = userService.getUser(UserService.USER_PLATFORM_ADMIN, username);
-        user.setPassword(password);
-        user.setPasswordSalt(salt);
+        userService.resetPassword(UserService.USER_PLATFORM_ADMIN, username, orginealPassword);
     }
 
     @Override

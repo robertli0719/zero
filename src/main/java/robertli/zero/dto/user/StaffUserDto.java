@@ -7,7 +7,7 @@ package robertli.zero.dto.user;
 
 /**
  *
- * @version 1.0.1 2016-12-31
+ * @version 1.0.3 2017-01-11
  * @author Robert Li
  */
 public class StaffUserDto {
@@ -15,8 +15,8 @@ public class StaffUserDto {
     private Integer id;
     private String username;
     private String password;
-    private String userPlatformName;
     private boolean locked;
+    private boolean root;
 
     public Integer getId() {
         return id;
@@ -42,20 +42,20 @@ public class StaffUserDto {
         this.password = password;
     }
 
-    public String getUserPlatformName() {
-        return userPlatformName;
-    }
-
-    public void setUserPlatformName(String userPlatformName) {
-        this.userPlatformName = userPlatformName;
-    }
-
     public boolean isLocked() {
         return locked;
     }
 
     public void setLocked(boolean locked) {
         this.locked = locked;
+    }
+
+    public boolean isRoot() {
+        return root;
+    }
+
+    public void setRoot(boolean root) {
+        this.root = root;
     }
 
 }

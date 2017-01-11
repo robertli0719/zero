@@ -6,14 +6,16 @@
 package robertli.zero.service;
 
 import java.util.List;
-import robertli.zero.dto.user.UserDto;
 import robertli.zero.dto.user.UserPlatformDto;
 import robertli.zero.dto.user.UserRoleDto;
 import robertli.zero.dto.user.UserTypeDto;
 import robertli.zero.entity.User;
 
 /**
- * This service is design to manage user data.
+ * This service is design to manage user data.<br>
+ *
+ * Don't use this service in controller layer. This service is used for other
+ * services.
  *
  * @version 1.0.5 2017-01-10
  * @author Robert Li
@@ -51,6 +53,10 @@ public interface UserService {
             String usernameType, String label, String orginealPassword,
             String name, String telephone, boolean locked);
 
+    public void deleteUser(String userPlatformName, String username);
+
+    public void resetPassword(String userPlatformName, String username, String orginealPassword);
+
     public void putRoleForUser(int userId, String roleName);
 
     public void deleteRoleForUser(int userId, String roleName);
@@ -59,9 +65,11 @@ public interface UserService {
 
     public List<UserTypeDto> getUserTypeList();
 
-    public List<UserPlatformDto> getUserPlatformList();
+    public List<User> getUserListByPlatform(String userPlatformName);
 
-    public List<UserDto> getUserList();
+    public List<User> getUserListByRole(String roleName);
+
+    public List<UserPlatformDto> getUserPlatformList();
 
     public List<UserRoleDto> getUserRoleList();
 
