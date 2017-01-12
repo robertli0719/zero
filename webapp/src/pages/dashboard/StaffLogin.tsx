@@ -1,5 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux"
+import { hashHistory } from "react-router"
 import { Button, ButtonToolbar, ControlLabel, FormControl, Form, FormGroup, Checkbox, Col, Row, Panel } from "react-bootstrap"
 import { Link } from "react-router"
 import * as me from "../../actions/me"
@@ -21,7 +22,6 @@ type Props = ReduxProps & CommonProps;
 
 type StaffLoginState = {
     userPlatformName: string
-    userTypeName: string
 }
 
 export class StaffLoginPage extends React.Component<Props, StaffLoginState>{
@@ -31,10 +31,8 @@ export class StaffLoginPage extends React.Component<Props, StaffLoginState>{
         let platform = this.props.params['platform'];
         this.state = {
             userPlatformName: platform,
-            userTypeName: "staff"
         }
         console.log("staffLogin:", platform);
-
         console.log("StaffLoginPage constructor");
     }
 
@@ -42,13 +40,20 @@ export class StaffLoginPage extends React.Component<Props, StaffLoginState>{
         store.dispatch(me.loadProfile());
     }
 
+    logout() {
+        store.dispatch(me.triggerLogout()).then(() => {
+            const loginPath = '/dashboard/' + this.state.userPlatformName + "/login";
+            hashHistory.replace(loginPath);
+        })
+    }
+
     render() {
         let loginForm = (
             <Row>
                 <Col xs={12} sm={4} md={3}>
                     <zform.Form action="me/auth" method="PUT" onSuccess={this.onSuccess.bind(this)}>
-                        <zform.Hidden name="userTypeName" value="admin" />
-                        <zform.Hidden name="userPlatformName" value="admin" />
+                        <zform.Hidden name="userTypeName" value="staff" />
+                        <zform.Hidden name="userPlatformName" notNull={true} value={this.state.userPlatformName} />
                         <zform.TextField name="username" label="Username" />
                         <zform.Password name="password" label="Password" enterSubmit={true} />
                         <zform.Submit value="Login" />
@@ -56,15 +61,29 @@ export class StaffLoginPage extends React.Component<Props, StaffLoginState>{
                 </Col>
             </Row>
         )
-        let redirectPanel = (
+        const indexUrl = '/dashboard/' + this.state.userPlatformName + "/index";
+        let onlineRedirectPanel = (
             <Panel header="current logged in">
-                <Link to="admin/index">Click here to dashboard</Link>
+                <Link to={indexUrl}>Click here to dashboard</Link>
             </Panel>
         )
-        let panel = me.isAdmin() ? redirectPanel : loginForm;
+        let wrongUserTypePanel = (
+            <Panel header="current logged in">
+                <p>You have logged in, but you are not a user of {this.state.userPlatformName}</p>
+                <a onClick={this.logout.bind(this)}>Click here to log out.</a>
+            </Panel>
+        )
+        let panel = null;
+        if (me.isLogged() == false) {
+            panel = loginForm;
+        } else if (me.isPlatformUser(this.state.userPlatformName)) {
+            panel = onlineRedirectPanel;
+        } else {
+            panel = wrongUserTypePanel
+        }
         return (
             <div className="container">
-                <h1>Store User Login</h1>
+                <h1>{this.state.userPlatformName} User Login</h1>
                 {panel}
             </div>
         );

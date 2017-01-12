@@ -156,7 +156,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteRoleForUser(int userId, String roleName) {
-        userRoleItemDao.remove(userId, roleName);
+        userRoleItemDao.delete(userId, roleName);
     }
 
     @Override

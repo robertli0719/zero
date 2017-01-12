@@ -5,11 +5,12 @@
  */
 package robertli.zero.dto.user;
 
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
  *
- * @version 1.0 2016-12-30
+ * @version 1.0 2017-01-11
  * @author Robert Li
  */
 public class AdminUserDto {
@@ -29,6 +30,7 @@ public class AdminUserDto {
     }
 
     @NotBlank
+    @Length(min = 3, max = 50)
     public String getUsername() {
         return username;
     }
@@ -38,6 +40,7 @@ public class AdminUserDto {
     }
 
     @NotBlank
+    @Length(min = 8, max = 50)
     public String getPassword() {
         return password;
     }

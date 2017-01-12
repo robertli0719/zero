@@ -63,6 +63,11 @@ public class UserPlatformStaffController {
         staffUserService.addPlatformRootRole(userPlatformName, username);
     }
 
+    @RequestMapping(path = "/{username}/root", method = RequestMethod.DELETE)
+    public void deleteStaffRoot(@PathVariable String userPlatformName, @PathVariable String username) {
+        staffUserService.deletePlatformRootRole(userPlatformName, username);
+    }
+
     @RequestMapping(path = "/{username}/password", method = RequestMethod.PUT)
     public void putPassword(@PathVariable String userPlatformName, @PathVariable String username, @Valid @RequestBody StaffUserPasswordDto staffUserPasswordDto) {
         if (staffUserPasswordDto.getUsername().equals(username) == false) {

@@ -20,10 +20,38 @@ export type UserProfileDto = {
     roleList: string[]
 }
 
+export function isLogged() {
+    let state: AppState = store.getState();
+    if (state.me && state.me.userTypeName) {
+        return true;
+    }
+    return false;
+}
+
 export function isAdmin() {
     let state: AppState = store.getState();
-    if (state.me != null && state.me.userTypeName == "admin") {
+    if (state.me && state.me.userTypeName == "admin") {
         return true;
+    }
+    return false;
+}
+
+export function isAdminRoot() {
+    let state: AppState = store.getState();
+    if (state.me && state.me.roleList != null) {
+        for (const roleName of state.me.roleList) {
+            if (roleName == "admin_root") {
+                return true
+            }
+        }
+    }
+    return false;
+}
+
+export function isPlatformUser(platformName: string) {
+    let state: AppState = store.getState();
+    if (state.me && state.me.userPlatformName) {
+        return state.me.userPlatformName == platformName
     }
     return false;
 }
@@ -44,7 +72,7 @@ export function loadProfile() {
             })
             .catch((restError: RestErrorDto) => {
                 console.log("Error happened when loadProfile:", restError);
-                let nullUserProfile: UserProfile = { authLabel: null, userTypeName: null, userPlatformName: null, name: null, telephone: null }
+                let nullUserProfile: UserProfile = { authLabel: null, userTypeName: null, userPlatformName: null, name: null, telephone: null, roleList: null }
                 dispatch(updateMe(nullUserProfile));
                 throw restError;
             });

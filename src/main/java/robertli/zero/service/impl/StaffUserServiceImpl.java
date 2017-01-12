@@ -138,12 +138,12 @@ public class StaffUserServiceImpl implements StaffUserService {
     }
 
     @Override
-    public void removePlatformRootRole(final String userPlatformName, final String username) {
+    public void deletePlatformRootRole(final String userPlatformName, final String username) {
         if (isStaffUser(userPlatformName, username) == false) {
             throw new RuntimeException("this user is not in this platform");
         }
         User user = userService.getUser(userPlatformName, username);
-        userRoleItemDao.remove(user.getId(), UserService.USER_ROLE_PLATFORM_ROOT);
+        userRoleItemDao.delete(user.getId(), UserService.USER_ROLE_PLATFORM_ROOT);
     }
 
     @Override

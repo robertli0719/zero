@@ -27,35 +27,32 @@ let navBarItemList = [
     { name: "Items3" }
 ] as NavbarItem[];
 
-let rightNavBarItemList = [
-    { name: "Logout", onClick: logout }
-    // { name: "Link", url: "/" },
-    // { name: "Link", url: "/" }
-] as NavbarItem[];
-
 interface Prop {
     me: UserProfile
 }
 
-class AdminAppComponent extends React.Component<Prop, {}>{
+interface State {
+}
+
+class AdminAppComponent extends React.Component<Prop, State>{
 
     constructor() {
         super();
         store.dispatch(me.loadProfile());
     }
 
-    render() {
-        let navbar = <AppNavbar name="Admin Dashboard" inverse={true} brandUrl="admin/index" itemList={navBarItemList} rightItemList={rightNavBarItemList} />
-        if (this.props.me.userPlatformName == null) {
-            navbar = <div></div>
-        } else if (this.props.me.userPlatformName != "admin") {
-            return (
-                <div>
-                    {navbar}
-                    <p>A user who is not an admin is logged in now, please logout first.</p>
-                </div>
-            )
+    makeRightNavbarItems(): NavbarItem[] {
+        if (this.props.me.authLabel) {
+            return [
+                { name: this.props.me.authLabel, url: "/admin/index" },
+                { name: "Logout", onClick: logout }
+            ]
         }
+        return [{ name: "Logout", onClick: logout }]
+    }
+
+    render() {
+        let navbar = <AppNavbar name="Admin Dashboard" inverse={true} brandUrl="admin/index" itemList={navBarItemList} rightItemList={this.makeRightNavbarItems()} />
         return (
             <div>
                 {navbar}

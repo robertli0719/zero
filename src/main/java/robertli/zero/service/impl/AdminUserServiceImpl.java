@@ -14,7 +14,6 @@ import org.modelmapper.PropertyMap;
 import org.modelmapper.TypeToken;
 import org.modelmapper.spi.MappingContext;
 import org.springframework.stereotype.Component;
-import robertli.zero.core.SecurityService;
 import robertli.zero.dao.UserRoleItemDao;
 import robertli.zero.dto.user.AdminUserDto;
 import robertli.zero.entity.User;
@@ -142,12 +141,12 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
 
     @Override
-    public void removeRootRole(String username) {
+    public void deleteRootRole(String username) {
         if (isAdminUser(username) == false) {
             throw new RuntimeException("this user is not adminUser");
         }
         User user = userService.getUser(UserService.USER_PLATFORM_ADMIN, username);
-        userRoleItemDao.remove(user.getId(), UserService.USER_ROLE_ADMIN_ROOT);
+        userRoleItemDao.delete(user.getId(), UserService.USER_ROLE_ADMIN_ROOT);
     }
 
     @Override

@@ -60,7 +60,7 @@ public class UserRoleItemDaoImpl extends GenericHibernateDao<UserRoleItem, Integ
     }
 
     @Override
-    public void remove(int userId, String userRoleName) {
+    public void delete(int userId, String userRoleName) {
         Session session = sessionFactory.getCurrentSession();
         TypedQuery<Integer> query;
         query = session.createQuery("delete from UserRoleItem item where item.user.id=:userId and item.userRole.name=:userRoleName");

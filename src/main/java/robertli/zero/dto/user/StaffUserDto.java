@@ -5,6 +5,9 @@
  */
 package robertli.zero.dto.user;
 
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
  *
  * @version 1.0.3 2017-01-11
@@ -26,6 +29,8 @@ public class StaffUserDto {
         this.id = id;
     }
 
+    @NotBlank
+    @Length(min = 3, max = 50)
     public String getUsername() {
         return username;
     }
@@ -34,6 +39,8 @@ public class StaffUserDto {
         this.username = username;
     }
 
+    @NotBlank
+    @Length(min = 3, max = 50)
     public String getPassword() {
         return password;
     }

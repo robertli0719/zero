@@ -145,6 +145,7 @@ export class Table extends React.Component<ShowTableProps, ShowTableState>{
 export type ColButtonProps = {
     name: string
     onAction: (dto: any, index: number) => {}
+    onRender?: (dto: any, index: number) => boolean
     active?: boolean;
     block?: boolean;
     bsStyle?: string;
@@ -160,6 +161,12 @@ export class ColButton extends React.Component<ColButtonProps, {}>{
     }
 
     render() {
+        if (this.props.onRender) {
+            const display: boolean = this.props.onRender(this.props.dto, this.props.index)
+            if (display == false) {
+                return <span></span>
+            }
+        }
         return (
             <bs.Button
                 active={this.props.active}

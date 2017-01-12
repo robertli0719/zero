@@ -16,7 +16,6 @@ interface Prop {
 }
 
 interface State {
-    userTypesOptions: { [key: string]: any }
     userPlatformList: UserPlatformDto[]
 }
 
@@ -24,7 +23,7 @@ class AdminUserPlatformComponent extends React.Component<Prop, State>{
 
     constructor(prop: Prop) {
         super(prop);
-        this.state = { userTypesOptions: {}, userPlatformList: [] }
+        this.state = { userPlatformList: [] }
         this.updateData();
     }
 
@@ -33,12 +32,7 @@ class AdminUserPlatformComponent extends React.Component<Prop, State>{
             .then((userPlatformList: UserPlatformDto[]) => {
                 this.state.userPlatformList = userPlatformList;
                 this.setState(this.state);
-            }).then(() => {
-                return zform.fetchSelectOptions("user-types")
-            }).then((options) => {
-                this.state.userTypesOptions = options;
-                this.setState(this.state);
-            });
+            })
     }
 
     onAddSuccess() {
@@ -57,6 +51,10 @@ class AdminUserPlatformComponent extends React.Component<Prop, State>{
         hashHistory.replace("admin/user-staff/" + dto.name);
     }
 
+    onTableButtonRender(dto: UserPlatformDto): boolean {
+        return dto.userTypeName == "staff"
+    }
+
     render() {
         return (
             <div className="container">
@@ -65,7 +63,7 @@ class AdminUserPlatformComponent extends React.Component<Prop, State>{
                     <Col sm={3}>
                         <Panel header="Add Platform" bsStyle="primary">
                             <zform.Form action="user-platforms" method="POST" onSuccess={this.onAddSuccess.bind(this)}>
-                                <zform.Select label="type" name="userTypeName" options={this.state.userTypesOptions} />
+                                <zform.Hidden name="userTypeName" value="staff" />
                                 <zform.TextField label="name" name="name" enterSubmit={true} />
                                 <zform.Submit value="add" />
                             </zform.Form>
@@ -74,8 +72,12 @@ class AdminUserPlatformComponent extends React.Component<Prop, State>{
                     <Col sm={9}>
                         <Panel header="Platform List" bsStyle="primary">
                             <ztable.Table dtoList={this.state.userPlatformList} >
-                                <ztable.ColButton name="delete" bsStyle="danger" bsSize="xs" onAction={this.onDelete.bind(this)} />
-                                <ztable.ColButton name="users" bsStyle="success" bsSize="xs" onAction={this.redirectToUserPage.bind(this)} />
+                                <ztable.ColButton name="delete" bsStyle="danger" bsSize="xs"
+                                    onAction={this.onDelete.bind(this)}
+                                    onRender={this.onTableButtonRender.bind(this)} />
+                                <ztable.ColButton name="users" bsStyle="success" bsSize="xs"
+                                    onAction={this.redirectToUserPage.bind(this)}
+                                    onRender={this.onTableButtonRender.bind(this)} />
                             </ztable.Table>
                         </Panel>
                     </Col>

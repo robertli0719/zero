@@ -6,6 +6,7 @@ export interface UserProfile {
     userPlatformName: string
     name: string
     telephone: string
+    roleList: string[]
 }
 
 let initState: UserProfile = {
@@ -13,7 +14,8 @@ let initState: UserProfile = {
     userTypeName: null,
     userPlatformName: null,
     name: null,
-    telephone: null
+    telephone: null,
+    roleList: null
 }
 
 export function meReducer(state: UserProfile = initState, action: Action): any {

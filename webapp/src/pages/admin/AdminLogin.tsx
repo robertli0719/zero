@@ -1,5 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux"
+import { hashHistory } from "react-router"
 import { Button, ButtonToolbar, ControlLabel, FormControl, Form, FormGroup, Checkbox, Col, Row, Panel } from "react-bootstrap"
 import { Link } from "react-router"
 import * as me from "../../actions/me"
@@ -29,6 +30,12 @@ export class AdminLoginPage extends React.Component<Prop, AdminLoginState>{
         store.dispatch(me.loadProfile());
     }
 
+    logout() {
+        store.dispatch(me.triggerLogout()).then(() => {
+            hashHistory.replace("admin/login");
+        })
+    }
+
     render() {
         let loginForm = (
             <Row>
@@ -43,12 +50,25 @@ export class AdminLoginPage extends React.Component<Prop, AdminLoginState>{
                 </Col>
             </Row>
         )
-        let redirectPanel = (
+        let onlineRedirectPanel = (
             <Panel header="current logged in">
                 <Link to="admin/index">Click here to dashboard</Link>
             </Panel>
         )
-        let panel = me.isAdmin() ? redirectPanel : loginForm;
+        let wrongUserTypePanel = (
+            <Panel header="current logged in">
+                <p>You have logged in, but you are not admin</p>
+                <a onClick={this.logout.bind(this)}>Click here to log out.</a>
+            </Panel>
+        )
+        let panel = null;
+        if (me.isLogged() == false) {
+            panel = loginForm;
+        } else if (me.isAdmin()) {
+            panel = onlineRedirectPanel;
+        } else {
+            panel = wrongUserTypePanel
+        }
         return (
             <div className="container">
                 <h1>Admin Login</h1>
@@ -59,7 +79,6 @@ export class AdminLoginPage extends React.Component<Prop, AdminLoginState>{
 }
 
 function select(state: AppState): Prop {
-    console.log("AdminLogin select", state);
     return { me: state.me };
 }
 

@@ -9,7 +9,7 @@ import robertli.zero.entity.UserRoleItem;
 
 /**
  *
- * @version 1.0.3 2016-01-05
+ * @version 1.0.4 2016-01-11
  * @author Robert Li
  */
 public interface UserRoleItemDao extends GenericDao<UserRoleItem, Integer> {
@@ -18,6 +18,6 @@ public interface UserRoleItemDao extends GenericDao<UserRoleItem, Integer> {
 
     public void put(int userId, String userRoleName);
 
-    public void remove(int userId, String userRoleName);
+    public void delete(int userId, String userRoleName);
 
 }

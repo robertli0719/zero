@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.0.6 2017-01-10
+ * version 1.0.7 2017-01-11
  */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
@@ -21,6 +21,7 @@ export type FieldProps = {
     name: string
     value?: string
     place?: FieldPlaceOption
+    notNull?: boolean
     multiple?: boolean
     enterSubmit?: boolean
     onSubmit?: () => {}
@@ -43,6 +44,7 @@ export type HiddenFieldProps = {
     name: string
     value: string
     place?: FieldPlaceOption
+    notNull?: boolean
 }
 
 export type SelectFieldProps = FieldProps & {
@@ -69,6 +71,7 @@ export type FormState = {
     valMap: { [key: string]: any }
     errorMap: { [key: string]: any }
     placeMap: { [key: string]: any }
+    notNullMap: { [key: string]: any }
     actionErrors: [string]
     successAlertDisplay: boolean
 }
@@ -77,7 +80,7 @@ export class Form extends React.Component<FormProps, FormState>{
 
     constructor(props: FormProps) {
         super(props);
-        this.state = { valMap: {}, errorMap: {}, placeMap: {}, actionErrors: [] as [string], successAlertDisplay: false }
+        this.state = { valMap: {}, errorMap: {}, placeMap: {}, notNullMap: {}, actionErrors: [] as [string], successAlertDisplay: false }
     }
 
     onFormChange(key: string, val: any) {
@@ -205,10 +208,29 @@ export class Form extends React.Component<FormProps, FormState>{
         }
     }
 
+    validateForm() {
+        for (let key in this.state.notNullMap) {
+            if (this.state.notNullMap[key] == false) {
+                continue
+            }
+            if (this.state.valMap[key] == '') {
+                this.state.errorMap[key] = "can't be empty"
+                this.state.actionErrors.push("missing info in form");
+                this.setState(this.state)
+                return false;
+            }
+        }
+        return true;
+    }
+
     onSubmit() {
-        this.state.errorMap = {};
-        this.state.actionErrors = [] as [string];
-        this.setState(this.state);
+        this.state.errorMap = {}
+        this.state.actionErrors = [] as [string]
+        this.state.successAlertDisplay = false
+        this.setState(this.state)
+        if (this.validateForm() == false) {
+            return;
+        }
         if (this.props.onSubmit) {
             this.props.onSubmit(this.state.valMap);
         }
@@ -234,6 +256,9 @@ export class Form extends React.Component<FormProps, FormState>{
                 if (key && !this.state.valMap[key]) {
                     let initValue = child.props.value ? child.props.value : "";
                     this.state.valMap[key] = initValue;
+                }
+                if (key && child.props.notNull) {
+                    this.state.notNullMap[key] = true;
                 }
                 this.state.placeMap[key] = child.props.place ? child.props.place : "default";
                 return React.cloneElement(child, {

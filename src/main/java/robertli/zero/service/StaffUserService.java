@@ -31,7 +31,7 @@ public interface StaffUserService {
 
     public void addPlatformRootRole(String userPlatformName, String username);
 
-    public void removePlatformRootRole(String userPlatformName, String username);
+    public void deletePlatformRootRole(String userPlatformName, String username);
 
     public void resetPassword(String userPlatformName, String username, String password);
 

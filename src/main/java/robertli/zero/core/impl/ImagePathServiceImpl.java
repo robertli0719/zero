@@ -22,7 +22,7 @@ public class ImagePathServiceImpl implements ImagePathService {
 
     private Matcher createImageIdMatcher(String content) {
         String imageActionUrl = webConfiguration.getImageActionUrl();
-        String patternStr = imageActionUrl + "images/[0-9a-z]{8}(-[0-9a-z]{4}){3}-[0-9a-z]{12}";
+        String patternStr = imageActionUrl + "/[0-9a-z]{8}(-[0-9a-z]{4}){3}-[0-9a-z]{12}";
         Pattern pattern = Pattern.compile(patternStr);
         return pattern.matcher(content);
     }

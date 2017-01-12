@@ -10,7 +10,7 @@ import robertli.zero.dto.user.AdminUserDto;
 
 /**
  *
- * @version 1.0.2 2017-01-10
+ * @version 1.0.3 2017-01-11
  * @author Robert Li
  */
 public interface AdminUserService {
@@ -31,7 +31,7 @@ public interface AdminUserService {
 
     public void addRootRole(String username);
 
-    public void removeRootRole(String username);
+    public void deleteRootRole(String username);
 
     public void resetPassword(String username, String password);
 

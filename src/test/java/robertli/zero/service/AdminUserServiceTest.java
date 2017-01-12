@@ -26,8 +26,6 @@ public class AdminUserServiceTest {
 
     private final AdminUserService adminUserService;
     private final ClientAccessTokenManager clientAccessTokenManager;
-    private final UserDao userDao;
-    private final UserService userService;
     private final AuthService authService;
     private final RandomCodeCreater randomCodeCreater;
     private final Random rand;
@@ -36,8 +34,6 @@ public class AdminUserServiceTest {
         ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
         adminUserService = (AdminUserService) context.getBean("adminUserService");
         clientAccessTokenManager = (ClientAccessTokenManager) context.getBean("clientAccessTokenManager");
-        userDao = (UserDao) context.getBean("userDao");
-        userService = (UserService) context.getBean("userService");
         authService = (AuthService) context.getBean("authService");
         randomCodeCreater = (RandomCodeCreater) context.getBean("randomCodeCreater");
         rand = new Random();
@@ -83,7 +79,7 @@ public class AdminUserServiceTest {
         assertTrue(adminUserService.isAdminUser(username));
         assertTrue(adminUserService.isRoot(username));
 
-        adminUserService.removeRootRole(username);
+        adminUserService.deleteRootRole(username);
         assertTrue(adminUserService.isAdminUser(username));
         assertFalse(adminUserService.isRoot(username));
 

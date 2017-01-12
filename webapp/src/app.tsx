@@ -64,9 +64,18 @@ class App extends React.Component<{}, {}>{
 }
 
 function requireRoleAdmin(nextState: RouterState, replace: RedirectFunction) {
-    let path = hashHistory.getCurrentLocation().pathname;
     let loginPath = '/admin/login';
     if (me.isAdmin() == false) {
+        replace({
+            pathname: loginPath
+        })
+    }
+}
+
+function requireRoleStaff(nextState: RouterState, replace: RedirectFunction) {
+    let platformName = nextState.params["platform"];
+    let loginPath = '/dashboard/' + platformName + "/login";
+    if (me.isPlatformUser(platformName) == false) {
         replace({
             pathname: loginPath
         })
@@ -83,9 +92,9 @@ let template = (
                     <Route path="about" component={About} />
                 </Route>
                 <Route path="dashboard/:platform" component={StaffApp}>
-                    <Route path="index" component={StaffIndex} />
-                    <Route path="inventory" component={InventoryView} />
-                    <Route path="report" component={ReportView} />
+                    <Route path="index" component={StaffIndex} onEnter={requireRoleStaff} />
+                    <Route path="inventory" component={InventoryView} onEnter={requireRoleStaff} />
+                    <Route path="report" component={ReportView} onEnter={requireRoleStaff} />
                     <Route path="login" component={StaffLogin} />
                 </Route>
                 <Route path="admin" component={AdminApp}>

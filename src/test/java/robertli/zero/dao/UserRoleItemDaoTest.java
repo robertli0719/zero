@@ -51,7 +51,7 @@ public class UserRoleItemDaoTest {
         userRoleItemDao.put(userId, userRoleName);
         assertRoleExist(userId, userRoleName);
 
-        userRoleItemDao.remove(userId, userRoleName);
+        userRoleItemDao.delete(userId, userRoleName);
         assertRoleNotExist(userId, userRoleName);
     }
 
@@ -68,10 +68,10 @@ public class UserRoleItemDaoTest {
         userRoleItemDao.put(userId, userRoleName);
         assertRoleExist(userId, userRoleName);
 
-        userRoleItemDao.remove(userId, userRoleName);
+        userRoleItemDao.delete(userId, userRoleName);
         assertRoleNotExist(userId, userRoleName);
 
-        userRoleItemDao.remove(userId, userRoleName);
+        userRoleItemDao.delete(userId, userRoleName);
         assertRoleNotExist(userId, userRoleName);
     }
 
@@ -97,7 +97,7 @@ public class UserRoleItemDaoTest {
         assertRoleExist(userId, userRoleName2);
         assertRoleNotExist(userId, userRoleName3);
 
-        userRoleItemDao.remove(userId, userRoleName1);
+        userRoleItemDao.delete(userId, userRoleName1);
         userRoleItemDao.put(userId, userRoleName3);
 
         assertRoleNotExist(userId, userRoleName1);
