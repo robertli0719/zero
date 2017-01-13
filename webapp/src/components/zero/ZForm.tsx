@@ -3,10 +3,11 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.0.7 2017-01-11
+ * version 1.0.8.beta 2017-01-12
  */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import * as _ from "lodash"
 import { Alert, Button, ButtonToolbar, FormControl, FormGroup, ControlLabel, Checkbox, HelpBlock } from "react-bootstrap";
 import * as rb from "react-bootstrap"
 import { LinkContainer } from 'react-router-bootstrap';
@@ -36,6 +37,15 @@ export type ImageFieldProps = {
     name: string
     option?: UploadOption
     errorMap?: { [key: string]: any }
+    onFormChange?: (key: string, val: any) => {}
+    valMap?: { [key: string]: any }
+}
+
+export type TextMapProps = {
+    name: string
+    value?: { [key: string]: any }
+    errorMap?: { [key: string]: any }
+    keyList: [string]
     onFormChange?: (key: string, val: any) => {}
     valMap?: { [key: string]: any }
 }
@@ -470,7 +480,7 @@ export class Select extends React.Component<SelectFieldProps, {}>{
 
 export class Image extends React.Component<ImageFieldProps, {}>{
 
-    constructor(props: FieldProps) {
+    constructor(props: ImageFieldProps) {
         super(props)
         this.state = {}
     }
@@ -497,6 +507,75 @@ export class Image extends React.Component<ImageFieldProps, {}>{
                 <FormControl.Feedback />
                 <HelpBlock>{error}</HelpBlock>
             </FormGroup>
+        )
+    }
+}
+
+
+
+export class TextMap extends React.Component<TextMapProps, {}>{
+
+    constructor(props: TextMapProps) {
+        super(props)
+        this.props.onFormChange(this.props.name, this.getValMap())
+    }
+
+    makeSubInputName(name: string) {
+        return this.props.name + "[" + name + "]"
+    }
+
+    getValMap() {
+        let valMap = _.assign({}, this.props.valMap[this.props.name]);
+
+        this.props.keyList.map((key) => {
+            if (valMap[key] == undefined) {
+                valMap[key] = ""
+            }
+        })
+        return valMap;
+    }
+
+    onChange(event: React.FormEvent<HTMLInputElement>) {
+        const target = event.currentTarget;
+        const name = target.name.match(/\[(.*?)\]/)[1]
+        const val = target.value
+
+        const mapVal = this.getValMap()
+        mapVal[name] = val
+        console.log("onChange:", name, val)
+        this.props.onFormChange(this.props.name, mapVal)
+    }
+
+    makeTextField(label: string, name: string, val: string) {
+        return (
+            <FormGroup>
+                <ControlLabel>{label}</ControlLabel>
+                <FormControl type="text"
+                    name={name}
+                    value={val}
+                    onChange={this.onChange.bind(this)}
+                    />
+                <FormControl.Feedback />
+            </FormGroup>
+        )
+    }
+
+    render() {
+        const error = this.props.errorMap[this.props.name];
+        const validateState = error ? "error" : null;
+
+        return (
+            <div>
+                {
+                    this.props.keyList.map((key) => {
+                        const label: string = key
+                        const name: string = this.makeSubInputName(key)
+                        let value: string = this.getValMap()[key]
+                        console.log(this.props.valMap)
+                        return this.makeTextField(label, name, value)
+                    })
+                }
+            </div>
         )
     }
 }
