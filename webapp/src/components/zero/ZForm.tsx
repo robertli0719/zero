@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.0.8.beta 2017-01-12
+ * version 1.0.8 2017-01-16
  */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
@@ -35,6 +35,7 @@ export type FieldProps = {
 export type ImageFieldProps = {
     label: string
     name: string
+    value?: string
     option?: UploadOption
     errorMap?: { [key: string]: any }
     onFormChange?: (key: string, val: any) => {}
@@ -45,7 +46,7 @@ export type TextMapProps = {
     name: string
     value?: { [key: string]: any }
     errorMap?: { [key: string]: any }
-    keyList: [string]
+    keyList: string[]
     onFormChange?: (key: string, val: any) => {}
     valMap?: { [key: string]: any }
 }
@@ -82,7 +83,7 @@ export type FormState = {
     errorMap: { [key: string]: any }
     placeMap: { [key: string]: any }
     notNullMap: { [key: string]: any }
-    actionErrors: [string]
+    actionErrors: string[]
     successAlertDisplay: boolean
 }
 
@@ -90,7 +91,7 @@ export class Form extends React.Component<FormProps, FormState>{
 
     constructor(props: FormProps) {
         super(props);
-        this.state = { valMap: {}, errorMap: {}, placeMap: {}, notNullMap: {}, actionErrors: [] as [string], successAlertDisplay: false }
+        this.state = { valMap: {}, errorMap: {}, placeMap: {}, notNullMap: {}, actionErrors: [], successAlertDisplay: false }
     }
 
     onFormChange(key: string, val: any) {
@@ -178,7 +179,7 @@ export class Form extends React.Component<FormProps, FormState>{
     afterSubmit() {
         this.state.errorMap = {}
         this.state.valMap = {}
-        this.state.actionErrors = [] as [string];
+        this.state.actionErrors = [];
         this.setState(this.state);
     }
 
@@ -235,7 +236,7 @@ export class Form extends React.Component<FormProps, FormState>{
 
     onSubmit() {
         this.state.errorMap = {}
-        this.state.actionErrors = [] as [string]
+        this.state.actionErrors = []
         this.state.successAlertDisplay = false
         this.setState(this.state)
         if (this.validateForm() == false) {
@@ -453,6 +454,10 @@ export class Select extends React.Component<SelectFieldProps, {}>{
     render() {
         const error = this.props.errorMap[this.props.name];
         const validateState = error ? "error" : null;
+        if (this.props.options == null) {
+            console.warn("Zform.Select.options is null now.")
+            this.props.options = {};
+        }
         return (
             <FormGroup validationState={validateState} controlId={this.controlId}>
                 <ControlLabel>{this.props.label}</ControlLabel>
@@ -478,6 +483,19 @@ export class Select extends React.Component<SelectFieldProps, {}>{
     }
 }
 
+export type ImageShowerProps = {
+    name: string
+    valMap?: { [key: string]: any }
+    style?: React.CSSProperties;
+}
+
+export class ImageShower extends React.Component<ImageShowerProps, {}>{
+
+    render() {
+        return <img src={this.props.valMap[this.props.name]} style={this.props.style} />
+    }
+}
+
 export class Image extends React.Component<ImageFieldProps, {}>{
 
     constructor(props: ImageFieldProps) {
@@ -486,7 +504,6 @@ export class Image extends React.Component<ImageFieldProps, {}>{
     }
 
     onSuccess(url: string) {
-        console.log("onSuccess:", url)
         this.props.onFormChange(this.props.name, url)
     }
 
@@ -542,7 +559,6 @@ export class TextMap extends React.Component<TextMapProps, {}>{
 
         const mapVal = this.getValMap()
         mapVal[name] = val
-        console.log("onChange:", name, val)
         this.props.onFormChange(this.props.name, mapVal)
     }
 
@@ -561,6 +577,10 @@ export class TextMap extends React.Component<TextMapProps, {}>{
     }
 
     render() {
+        if (this.props.keyList == null) {
+            this.props.keyList = []
+            console.warn("ZForm.TextMap.keyList is null")
+        }
         const error = this.props.errorMap[this.props.name];
         const validateState = error ? "error" : null;
 
@@ -571,7 +591,6 @@ export class TextMap extends React.Component<TextMapProps, {}>{
                         const label: string = key
                         const name: string = this.makeSubInputName(key)
                         let value: string = this.getValMap()[key]
-                        console.log(this.props.valMap)
                         return this.makeTextField(label, name, value)
                     })
                 }

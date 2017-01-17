@@ -57,7 +57,7 @@ export class TestIndex extends React.Component<{}, TestState>{
                         <zform.Select label="Select Type" name="type" options={options} />
                         <zform.Textarea label="your feedback" name="feedback" />
                         <hr />
-                        <zform.File label="image" name="image" multiple={true} />
+                        <zform.Image label="imgUrl" name="imgUrl" />
                         <zform.Submit />
                     </zform.Form>
                     <hr />
