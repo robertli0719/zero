@@ -4,6 +4,7 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:websocket="http://www.springframework.org/schema/websocket"
        xsi:schemaLocation="
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -12,7 +13,9 @@
         http://www.springframework.org/schema/aop
         http://www.springframework.org/schema/aop/spring-aop.xsd
         http://www.springframework.org/schema/tx
-        http://www.springframework.org/schema/tx/spring-tx.xsd"
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/websocket
+        http://www.springframework.org/schema/websocket/spring-websocket.xsd"
 >
     
     <context:annotation-config/>
@@ -22,10 +25,21 @@
     <!-- app.properties can be save at out of the app by system environment -->
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="location">
-            <value>file:${ZERO_PROPERTIES}</value>
-            <!--<value>classpath:app.properties</value>-->
+            <!--<value>file:${ZERO_PROPERTIES}</value>-->
+            <value>classpath:app.properties</value>
         </property>
     </bean>
+    
+    <bean id="myHandler" class="robertli.zero.handler.MyHandler"/>
+    <bean id="chatHandler" class="robertli.zero.handler.ChatHandler"/>
+    
+    <websocket:handlers>
+        <websocket:mapping path="/hello" handler="myHandler"/>
+        <websocket:mapping path="/chat" handler="chatHandler"/>
+        <websocket:handshake-interceptors>
+            <bean class="robertli.zero.interceptor.WebSocketHandShakeInterceptor"/>
+        </websocket:handshake-interceptors>
+    </websocket:handlers>
     
     <import resource="spring-mvc.xml"/>
     <import resource="spring-database.xml"/>
@@ -47,6 +61,8 @@
     <bean id="appConfiguration" class="robertli.zero.core.impl.AppConfigurationImpl">
         <property name="md5Salt" value="${app.md5_salt}"/>
         <property name="timeZone" value="${app.time_zone}"/>
+        <property name="userIdSeedP" value="${app.user_id_seed_p}"/>
+        <property name="userIdSeedQ" value="${app.user_id_seed_q}"/>
         <property name="initAdminName" value="${app.init_admin_name}"/>
         <property name="initAdminPassword" value="${app.init_admin_password}"/>
     </bean>

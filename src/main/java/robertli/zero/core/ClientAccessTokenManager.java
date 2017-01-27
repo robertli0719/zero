@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Robert Li.
+ * Copyright 2017 Robert Li.
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
@@ -7,6 +7,7 @@ package robertli.zero.core;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.http.server.ServerHttpRequest;
 
 /**
  * The clients of our API should use a access_token to access the system. For
@@ -31,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
  * both access_token_o and access_token_p. Without the salt, the client can't
  * know the real access_token, but the sever know the salt.
  *
- * @version 2016-12-18 1.0
+ * @version 2017-01-26 1.0.1
  * @author Robert Li
  */
 public interface ClientAccessTokenManager {
@@ -59,6 +60,14 @@ public interface ClientAccessTokenManager {
      * @return accessToken or null
      */
     public String getAccessToken(HttpServletRequest request);
+    
+    /**
+     * get accessToken from cookies.
+     *
+     * @param request ServerHttpRequest
+     * @return accessToken or null
+     */
+    public String getAccessToken(ServerHttpRequest request);
 
     /**
      * use accessToken0 to save accessToken to cookies

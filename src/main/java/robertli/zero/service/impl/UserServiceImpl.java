@@ -1,15 +1,17 @@
 /*
- * Copyright 2016 Robert Li.
+ * Copyright 2017 Robert Li.
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
 package robertli.zero.service.impl;
 
 import java.util.List;
+import java.util.UUID;
 import javax.annotation.Resource;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Component;
+import robertli.zero.core.AppConfiguration;
 import robertli.zero.core.SecurityService;
 import robertli.zero.dao.AccessTokenDao;
 import robertli.zero.dao.UserAuthDao;
@@ -31,6 +33,9 @@ import robertli.zero.service.UserService;
 
 @Component("userService")
 public class UserServiceImpl implements UserService {
+
+    @Resource
+    private AppConfiguration appConfiguration;
 
     @Resource
     private SecurityService securityService;
@@ -131,6 +136,14 @@ public class UserServiceImpl implements UserService {
         return userAuth.getUser();
     }
 
+    private String generatUid(int userId) {
+        long p = Integer.parseInt(appConfiguration.getUserIdSeedP());
+        long q = Integer.parseInt(appConfiguration.getUserIdSeedQ());
+        long tail = (userId / q) * q;
+        long val = p * userId % q + tail;
+        return "" + val;
+    }
+
     @Override
     public User addUser(String userPlatformName, String username, String usernameType, String label, String orginealPassword, String name, String telephone, boolean locked) {
         String salt = securityService.createPasswordSalt();
@@ -144,7 +157,10 @@ public class UserServiceImpl implements UserService {
         user.setUserPlatform(userPlatform);
         user.setLocked(locked);
         user.setTelephone(telephone);
+        user.setUid(UUID.randomUUID().toString());
         userDao.save(user);
+        String uid = generatUid(user.getId());
+        user.setUid(uid);
         userAuthDao.saveUserAuth(userPlatformName, username, label, usernameType, user);
         return user;
     }

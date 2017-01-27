@@ -1,16 +1,20 @@
 /*
- * Copyright 2016 Robert Li.
+ * Copyright 2017 Robert Li.
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
 package robertli.zero.core.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import robertli.zero.core.AppConfiguration;
 import robertli.zero.core.ClientAccessTokenManager;
@@ -19,7 +23,7 @@ import robertli.zero.tool.MD5;
 /**
  *
  * @see ClientAccessTokenManager
- * @version 2016-12-18 1.0
+ * @version 2017-01-26 1.0.1
  * @author Robert Li
  */
 @Component("clientAccessTokenManager")
@@ -46,6 +50,25 @@ public class ClientAccessTokenManagerImpl implements ClientAccessTokenManager {
         return cookieMap;
     }
 
+    private Map<String, String> getCookieMap(ServerHttpRequest request) {
+        Map<String, String> cookieMap = new HashMap<>();
+        List<String> cookieValues = request.getHeaders().get("Cookie");
+        if (cookieValues == null || cookieValues.isEmpty()) {
+            return cookieMap;
+        }
+        if (cookieMap.size() > 1) {
+            Logger logger = Logger.getLogger("ClientAccessTokenManager");
+            logger.log(Level.WARNING, "The 'Cookie' lines within Headers are more than one.");
+        }
+        String cookies[] = cookieValues.get(0).split(";");
+        for (String cookie : cookies) {
+            cookie = cookie.trim();
+            String parts[] = cookie.split("=");
+            cookieMap.put(parts[0], parts[1]);
+        }
+        return cookieMap;
+    }
+
     @Override
     public String countAccessToken(String accessTokenO) {
         String salt = appConfiguration.getMd5Salt();
@@ -68,10 +91,7 @@ public class ClientAccessTokenManagerImpl implements ClientAccessTokenManager {
         return p.equals(accessTokenP);
     }
 
-    @Override
-    public String getAccessToken(HttpServletRequest request) {
-        Map<String, String> cookieMap = getCookieMap(request);
-
+    private String getAccessToken(Map<String, String> cookieMap) {
         //get access_token directly, so just use it.
         String accessToken = cookieMap.get("access_token");
         if (accessToken != null) {
@@ -84,6 +104,18 @@ public class ClientAccessTokenManagerImpl implements ClientAccessTokenManager {
             return countAccessToken(accessTokenO);
         }
         return null;
+    }
+
+    @Override
+    public String getAccessToken(HttpServletRequest request) {
+        Map<String, String> cookieMap = getCookieMap(request);
+        return getAccessToken(cookieMap);
+    }
+
+    @Override
+    public String getAccessToken(ServerHttpRequest request) {
+        Map<String, String> cookieMap = getCookieMap(request);
+        return getAccessToken(cookieMap);
     }
 
     private void putCookie(HttpServletResponse response, String name, String val, boolean httpOnly) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Robert Li.
+ * Copyright 2017 Robert Li.
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
@@ -10,17 +10,26 @@ import java.util.List;
 /**
  * after user loged in, the font-end system will keep this dto
  *
- * @version 1.0.3 2016-01-09
+ * @version 1.0.4 2017-01-27
  * @author Robert Li
  */
 public class UserProfileDto {
 
+    private String uid;
     private String authLabel;
     private String userTypeName;
     private String userPlatformName;
     private String name;
     private String telephone;
     private List<String> roleList;
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 
     public String getAuthLabel() {
         return authLabel;

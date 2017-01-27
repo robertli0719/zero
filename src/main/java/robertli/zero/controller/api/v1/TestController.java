@@ -7,7 +7,9 @@ package robertli.zero.controller.api.v1;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +30,15 @@ import robertli.zero.dto.user.UserProfileDto;
 public class TestController {
 
     @RequestMapping(path = "demos/{id}", method = RequestMethod.GET)
-    public DemoDto getDemo(@PathVariable int id) {
+    public DemoDto getDemo(@PathVariable int id, HttpServletRequest request) {
+        System.out.println("\n\ngetDemo:");
+        Enumeration<String> names = request.getHeaderNames();
+        while (names.hasMoreElements()) {
+            String name = names.nextElement();
+            String header = request.getHeader(name);
+            System.out.println(name + " : " + header);
+        }
+
         DemoDto demo = new DemoDto();
         demo.setId(id);
         demo.setDateTime(new Date());

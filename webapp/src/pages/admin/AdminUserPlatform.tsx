@@ -48,7 +48,7 @@ class AdminUserPlatformComponent extends React.Component<Prop, State>{
     }
 
     redirectToUserPage(dto: UserPlatformDto, index: number) {
-        hashHistory.replace("admin/user-staff/" + dto.name);
+        hashHistory.push("admin/user-staff/" + dto.name);
     }
 
     onTableButtonRender(dto: UserPlatformDto): boolean {

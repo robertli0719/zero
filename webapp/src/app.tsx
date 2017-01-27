@@ -35,6 +35,8 @@ import { TestApp } from "./pages/test/TestApp"
 import { TestIndex } from "./pages/test/TestIndex"
 import { TestCropper } from "./pages/test/TestCropper"
 import { TestImageUpload } from "./pages/test/TestImageUpload"
+import { TestCros } from "./pages/test/TestCros"
+import { TestWebsocket } from "./pages/test/TestWebsocket"
 
 let navBarItemList = [
     { name: "Index", url: "/index" },
@@ -111,6 +113,8 @@ let template = (
                     <Route path="index" component={TestIndex} />
                     <Route path="cropper" component={TestCropper} />
                     <Route path="image-upload" component={TestImageUpload} />
+                    <Route path="cros" component={TestCros} />
+                    <Route path="websocket" component={TestWebsocket} />
                 </Route>
             </Route>
         </Router>

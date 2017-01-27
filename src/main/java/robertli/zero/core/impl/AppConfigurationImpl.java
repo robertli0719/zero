@@ -1,18 +1,25 @@
 /*
- * Copyright 2016 Robert Li.
+ * Copyright 2017 Robert Li.
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
 package robertli.zero.core.impl;
 
 import java.util.TimeZone;
+import javax.annotation.Resource;
 import org.springframework.beans.factory.InitializingBean;
 import robertli.zero.core.AppConfiguration;
+import robertli.zero.core.ConfigurationChecker;
 
 public class AppConfigurationImpl implements AppConfiguration, InitializingBean {
 
+    @Resource
+    private ConfigurationChecker configurationChecker;
+
     private String md5Salt;
     private String timeZone;
+    private String userIdSeedP;
+    private String userIdSeedQ;
     private String initAdminName;
     private String initAdminPassword;
 
@@ -35,6 +42,24 @@ public class AppConfigurationImpl implements AppConfiguration, InitializingBean 
     }
 
     @Override
+    public String getUserIdSeedP() {
+        return userIdSeedP;
+    }
+
+    public void setUserIdSeedP(String userIdSeedP) {
+        this.userIdSeedP = userIdSeedP;
+    }
+
+    @Override
+    public String getUserIdSeedQ() {
+        return userIdSeedQ;
+    }
+
+    public void setUserIdSeedQ(String userIdSeedQ) {
+        this.userIdSeedQ = userIdSeedQ;
+    }
+
+    @Override
     public String getInitAdminName() {
         return initAdminName;
     }
@@ -54,6 +79,7 @@ public class AppConfigurationImpl implements AppConfiguration, InitializingBean 
 
     @Override
     public void afterPropertiesSet() {
+        configurationChecker.check();
         TimeZone.setDefault(TimeZone.getTimeZone(timeZone));
     }
 

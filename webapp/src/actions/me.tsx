@@ -12,6 +12,7 @@ export type UserAuthDto = {
 }
 
 export type UserProfileDto = {
+    uid: string
     authLabel: string
     userTypeName: string
     userPlatformName: string
@@ -72,7 +73,7 @@ export function loadProfile() {
             })
             .catch((restError: RestErrorDto) => {
                 console.log("Error happened when loadProfile:", restError);
-                let nullUserProfile: UserProfile = { authLabel: null, userTypeName: null, userPlatformName: null, name: null, telephone: null, roleList: null }
+                let nullUserProfile: UserProfile = { uid: null, authLabel: null, userTypeName: null, userPlatformName: null, name: null, telephone: null, roleList: null }
                 dispatch(updateMe(nullUserProfile));
                 throw restError;
             });

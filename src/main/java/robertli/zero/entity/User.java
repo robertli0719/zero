@@ -30,6 +30,7 @@ import javax.persistence.Table;
 public class User implements Serializable {
 
     private int id;
+    private String uid;
     private UserPlatform userPlatform;
     private String password;
     private String passwordSalt;
@@ -47,6 +48,15 @@ public class User implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Column(nullable = false, length = 50, unique = true)
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     @ManyToOne

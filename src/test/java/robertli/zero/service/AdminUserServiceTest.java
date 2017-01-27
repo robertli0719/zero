@@ -13,7 +13,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import robertli.zero.core.ClientAccessTokenManager;
 import robertli.zero.core.RandomCodeCreater;
-import robertli.zero.dao.UserDao;
 import robertli.zero.dto.user.AdminUserDto;
 import robertli.zero.dto.user.UserAuthDto;
 import robertli.zero.dto.user.UserProfileDto;

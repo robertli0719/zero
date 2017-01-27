@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Robert Li.
+ * Copyright 2017 Robert Li.
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
@@ -52,6 +52,7 @@ public class AuthServiceImpl implements AuthService {
         }
         User user = accessToken.getUser();
         UserProfileDto userProfileDto = new UserProfileDto();
+        userProfileDto.setUid(user.getUid());
         userProfileDto.setName(user.getName());
         userProfileDto.setAuthLabel(user.getName());
         userProfileDto.setUserPlatformName(user.getUserPlatform().getName());

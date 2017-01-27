@@ -1,6 +1,7 @@
 import { Action, UPDATE_ME } from "../Store"
 
 export interface UserProfile {
+    uid: string
     authLabel: string
     userTypeName: string
     userPlatformName: string
@@ -10,6 +11,7 @@ export interface UserProfile {
 }
 
 let initState: UserProfile = {
+    uid: null,
     authLabel: null,
     userTypeName: null,
     userPlatformName: null,
