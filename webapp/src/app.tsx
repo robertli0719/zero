@@ -34,6 +34,7 @@ import { AdminUserStaff } from "./pages/admin/AdminUserStaff"
 import { TestApp } from "./pages/test/TestApp"
 import { TestIndex } from "./pages/test/TestIndex"
 import { TestCropper } from "./pages/test/TestCropper"
+import { TestForm } from "./pages/test/TestForm"
 import { TestImageUpload } from "./pages/test/TestImageUpload"
 import { TestCros } from "./pages/test/TestCros"
 import { TestWebsocket } from "./pages/test/TestWebsocket"
@@ -112,6 +113,7 @@ let template = (
                 <Route path="test" component={TestApp}>
                     <Route path="index" component={TestIndex} />
                     <Route path="cropper" component={TestCropper} />
+                    <Route path="form" component={TestForm} />
                     <Route path="image-upload" component={TestImageUpload} />
                     <Route path="cros" component={TestCros} />
                     <Route path="websocket" component={TestWebsocket} />

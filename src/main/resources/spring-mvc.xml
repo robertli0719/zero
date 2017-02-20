@@ -17,7 +17,6 @@
         
         <mvc:interceptor>
             <mvc:mapping path="/api/v1/**"/>
-            <mvc:exclude-mapping path="/login"/>
             <bean class="robertli.zero.interceptor.AuthInterceptor"></bean>
         </mvc:interceptor>
         

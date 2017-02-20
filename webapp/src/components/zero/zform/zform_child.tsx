@@ -1,0 +1,80 @@
+/*
+ * Copyright 2017 Robert Li.
+ * Released under the MIT license
+ * https://opensource.org/licenses/MIT
+ * 
+ * version 1.1.0 2017-02-19
+ */
+import * as React from "react";
+import { TagSchema, FieldPlaceOption, Selection } from "./zform_schema"
+
+type ObjectProps = {
+    name: string
+    label?: string
+}
+
+export class Object extends React.Component<ObjectProps, {}> { }
+
+type TextFieldProps = {
+    name: string
+    label: string
+    value?: string
+    enterSubmit?: boolean
+    place?: FieldPlaceOption
+}
+
+export class TextField extends React.Component<TextFieldProps, {}> {
+}
+
+export class Password extends React.Component<TextFieldProps, {}> { }
+
+type TextareaProps = {
+    name: string
+    label: string
+    value?: string
+    // notNull?: boolean
+}
+
+export class Textarea extends React.Component<TextareaProps, {}> { }
+
+type FileProps = {
+    name: string
+    label: string
+    // notNull?: boolean
+}
+
+export class File extends React.Component<FileProps, {}> { }
+
+type CheckBoxProps = {
+    name: string
+    label: string
+}
+
+export class CheckBox extends React.Component<CheckBoxProps, {}> { }
+
+type HiddenProps = {
+    name: string
+    value: string
+    place?: FieldPlaceOption
+}
+
+export class Hidden extends React.Component<HiddenProps, {}> { }
+
+type RadiosProps = {
+    name: string
+    label?: string
+    value: string
+    selections?: Selection[]
+}
+
+export class Radios extends React.Component<RadiosProps, {}> { }
+
+export class Select extends React.Component<RadiosProps, {}> { }
+
+type SubmitProps = {
+    value?: string
+    block?: boolean
+    bsStyle?: string
+}
+
+export class Submit extends React.Component<SubmitProps, {}> { }

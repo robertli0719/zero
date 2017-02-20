@@ -6,6 +6,8 @@
 package robertli.zero.dto;
 
 import java.util.Date;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
@@ -20,6 +22,7 @@ public class DemoDto {
     private Integer id;
     private String name;
     private Date dateTime;
+    private DemoSubItem subItem;
 
     @Range(min = 0, max = 30)
     public Integer getId() {
@@ -47,6 +50,16 @@ public class DemoDto {
 
     public void setDateTime(Date dateTime) {
         this.dateTime = dateTime;
+    }
+
+    @NotNull
+    @Valid
+    public DemoSubItem getSubItem() {
+        return subItem;
+    }
+
+    public void setSubItem(DemoSubItem subItem) {
+        this.subItem = subItem;
     }
 
 }

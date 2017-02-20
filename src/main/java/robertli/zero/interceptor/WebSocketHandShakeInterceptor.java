@@ -5,7 +5,6 @@
  */
 package robertli.zero.interceptor;
 
-import java.io.ObjectOutputStream;
 import java.util.Map;
 import javax.annotation.Resource;
 import org.springframework.http.HttpStatus;
@@ -16,7 +15,6 @@ import org.springframework.web.socket.server.HandshakeInterceptor;
 import robertli.zero.core.ClientAccessTokenManager;
 import robertli.zero.dto.user.UserProfileDto;
 import robertli.zero.service.AuthService;
-import robertli.zero.service.UserService;
 
 /**
  *
@@ -38,19 +36,16 @@ public class WebSocketHandShakeInterceptor implements HandshakeInterceptor {
             return false;
         }
         UserProfileDto userProfileDto = authService.getUserProfile(accessToken);
-        if (userProfileDto == null || userProfileDto.getAuthLabel() == null) {
+        if (userProfileDto == null || userProfileDto.getUid() == null) {
+            response.setStatusCode(HttpStatus.UNAUTHORIZED);
             return false;
         }
-
-//        request.setAttribute("accessToken", accessToken);
-        System.out.println("beforeHandshake: " + accessToken);
-
+        map.put("uid", userProfileDto.getUid());
         return true;
     }
 
     @Override
     public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsh, Exception excptn) {
-        System.out.println("afterHandshake");
     }
 
 }

@@ -528,8 +528,6 @@ export class Image extends React.Component<ImageFieldProps, {}>{
     }
 }
 
-
-
 export class TextMap extends React.Component<TextMapProps, {}>{
 
     constructor(props: TextMapProps) {

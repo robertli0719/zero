@@ -4,7 +4,7 @@ import { hashHistory } from "react-router"
 import { Button, ButtonToolbar, ControlLabel, FormControl, Form, FormGroup, Checkbox, Col, Row, Panel } from "react-bootstrap"
 import { Link } from "react-router"
 import * as me from "../../actions/me"
-import * as zform from "../../components/zero/ZForm"
+import * as zform from "../../components/zero/zform/zform"
 import * as utilities from "../../utilities/random-coder"
 import { store, AppState } from "../../Store"
 import { UserProfile } from "../../reducers/me"
@@ -53,7 +53,7 @@ export class StaffLoginPage extends React.Component<Props, StaffLoginState>{
                 <Col xs={12} sm={4} md={3}>
                     <zform.Form action="me/auth" method="PUT" onSuccess={this.onSuccess.bind(this)}>
                         <zform.Hidden name="userTypeName" value="staff" />
-                        <zform.Hidden name="userPlatformName" notNull={true} value={this.state.userPlatformName} />
+                        <zform.Hidden name="userPlatformName" value={this.state.userPlatformName} />
                         <zform.TextField name="username" label="Username" />
                         <zform.Password name="password" label="Password" enterSubmit={true} />
                         <zform.Submit value="Login" />

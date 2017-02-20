@@ -4,7 +4,7 @@ import { store, AppState } from "../../Store"
 import { UserProfile } from "../../reducers/me"
 import * as me from "../../actions/me"
 import { Button, ButtonToolbar, Row, Col, Panel, Alert } from "react-bootstrap";
-import * as zform from "../../components/zero/ZForm"
+import * as zform from "../../components/zero/zform/zform"
 import * as ztable from "../../components/zero/ZTable"
 import { http, RestErrorDto } from "../../utilities/http"
 
@@ -72,7 +72,7 @@ class AdminUserAdminComponent extends React.Component<Props, State>{
                 <Col sm={4}>
                     <Panel header="Reset Admin Password" bsStyle="danger">
                         <zform.Form action="admin-users/{username}/password" method="PUT" successMessage="reset password" onSuccess={this.updateData.bind(this)}>
-                            <zform.TextField label="username" name="username" place="pathAndDto" notNull={true} />
+                            <zform.TextField label="username" name="username" place="pathAndDto" />
                             <zform.Password label="password" name="password" enterSubmit={true} />
                             <zform.Submit value="reset" />
                         </zform.Form>
@@ -81,7 +81,7 @@ class AdminUserAdminComponent extends React.Component<Props, State>{
                 <Col sm={4}>
                     <Panel header="Add root Permission" bsStyle="danger">
                         <zform.Form action="admin-users/{username}/root" method="PUT" successMessage="add root permission" onSuccess={this.updateData.bind(this)}>
-                            <zform.TextField label="username" name="username" place="pathAndDto" notNull={true} enterSubmit={true} />
+                            <zform.TextField label="username" name="username" place="pathAndDto" enterSubmit={true} />
                             <zform.Submit value="add" />
                         </zform.Form>
                     </Panel>
@@ -89,7 +89,7 @@ class AdminUserAdminComponent extends React.Component<Props, State>{
                 <Col sm={4}>
                     <Panel header="Delete root Permission" bsStyle="danger">
                         <zform.Form action="admin-users/{username}/root" method="DELETE" successMessage="add root permission" onSuccess={this.updateData.bind(this)}>
-                            <zform.TextField label="username" name="username" place="pathAndDto" notNull={true} enterSubmit={true} />
+                            <zform.TextField label="username" name="username" place="pathAndDto" enterSubmit={true} />
                             <zform.Submit value="delete" />
                         </zform.Form>
                     </Panel>

@@ -11,6 +11,7 @@ import robertli.zero.dto.ChatMessageDto;
 
 /**
  *
+ * @version v1.0 2017-01-27
  * @author Robert Li
  */
 public interface ChatService {
@@ -22,4 +23,5 @@ public interface ChatService {
     public List<ChatMessageDto> fetchChatChannel(int channelId, int max);
 
     public void postMessage(ChatMessageDto chatMessageDto);
+    
 }

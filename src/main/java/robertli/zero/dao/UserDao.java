@@ -11,12 +11,14 @@ import robertli.zero.dto.SearchResult;
 
 /**
  *
- * @version 1.0 2017-01-05
+ * @version 1.0.1 2017-01-27
  * @author Robert Li
  */
 public interface UserDao extends GenericDao<User, Integer> {
 
     public User saveUser(String name, String password, String passwordSalt);
+
+    public User getUserByUid(String uid);
 
     public SearchResult<User> paging(int pageId, int max);
 

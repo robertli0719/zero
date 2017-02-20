@@ -3,7 +3,7 @@ import { connect } from "react-redux"
 import { hashHistory } from 'react-router'
 import { store, AppState } from "../../Store"
 import { Button, ButtonToolbar, Row, Col, Panel } from "react-bootstrap";
-import * as zform from "../../components/zero/ZForm"
+import * as zform from "../../components/zero/zform/zform"
 import * as ztable from "../../components/zero/ZTable"
 import { http } from "../../utilities/http"
 

@@ -2,7 +2,7 @@ import * as React from "react";
 import { connect } from "react-redux"
 import { store, AppState } from "../../Store"
 import { Button, ButtonToolbar, Row, Col, Panel } from "react-bootstrap";
-import * as zform from "../../components/zero/ZForm"
+import * as zform from "../../components/zero/zform/zform"
 import * as ztable from "../../components/zero/ZTable"
 import { http, RestErrorDto } from "../../utilities/http"
 
@@ -69,7 +69,7 @@ class AdminUserStaffComponent extends React.Component<Props, State>{
                     <Col sm={3}>
                         <Panel header="Add Staff" bsStyle="primary">
                             <zform.Form action="user-platforms/{userPlatformName}/staffs" method="POST" onSuccess={this.onAddSuccess.bind(this)}>
-                                <zform.Hidden place="path" notNull={true} name="userPlatformName" value={this.state.platform} />
+                                <zform.Hidden place="path" name="userPlatformName" value={this.state.platform} />
                                 <zform.TextField label="username" name="username" enterSubmit={false} />
                                 <zform.Password label="password" name="password" enterSubmit={true} />
                                 <zform.Hidden name="locked" value="false" />
@@ -91,8 +91,8 @@ class AdminUserStaffComponent extends React.Component<Props, State>{
                     <Col sm={4}>
                         <Panel header="Reset Staff Password" bsStyle="danger">
                             <zform.Form action="user-platforms/{userPlatformName}/staffs/{username}/password" method="PUT" successMessage="reset password">
-                                <zform.Hidden place="path" notNull={true} name="userPlatformName" value={this.state.platform} />
-                                <zform.TextField label="username" name="username" place="pathAndDto" notNull={true} />
+                                <zform.Hidden place="path"  name="userPlatformName" value={this.state.platform} />
+                                <zform.TextField label="username" name="username" place="pathAndDto" />
                                 <zform.Password label="password" name="password" enterSubmit={true} />
                                 <zform.Submit value="reset" />
                             </zform.Form>
@@ -101,17 +101,17 @@ class AdminUserStaffComponent extends React.Component<Props, State>{
                     <Col sm={4}>
                         <Panel header="Add root Permission" bsStyle="danger">
                             <zform.Form action="user-platforms/{userPlatformName}/staffs/{username}/root" method="PUT" successMessage="add root permission" onSuccess={this.updateData.bind(this)}>
-                                <zform.Hidden place="path" notNull={true} name="userPlatformName" value={this.state.platform} />
-                                <zform.TextField label="username" name="username" place="pathAndDto" notNull={true} enterSubmit={true} />
+                                <zform.Hidden place="path" name="userPlatformName" value={this.state.platform} />
+                                <zform.TextField label="username" name="username" place="pathAndDto"  enterSubmit={true} />
                                 <zform.Submit value="add" />
                             </zform.Form>
                         </Panel>
                     </Col>
                     <Col sm={4}>
                         <Panel header="Delete root Permission" bsStyle="danger">
-                            <zform.Form action="user-platforms/{userPlatformName}/staffs/{username}/root" method="DELETE" successMessage="add root permission" onSuccess={this.updateData.bind(this)}>
-                                <zform.Hidden place="path" notNull={true} name="userPlatformName" value={this.state.platform} />
-                                <zform.TextField label="username" name="username" place="pathAndDto" notNull={true} enterSubmit={true} />
+                            <zform.Form action="user-platforms/{userPlatformName}/staffs/{username}/root" method="DELETE" successMessage="delete root permission" onSuccess={this.updateData.bind(this)}>
+                                <zform.Hidden place="path" name="userPlatformName" value={this.state.platform} />
+                                <zform.TextField label="username" name="username" place="pathAndDto" enterSubmit={true} />
                                 <zform.Submit value="delete" />
                             </zform.Form>
                         </Panel>
@@ -126,4 +126,4 @@ function select(state: AppState): ReduxProp {
     return {};
 }
 
-export let AdminUserStaff = connect(select)(AdminUserStaffComponent);
+export let AdminUserStaff = connect(select)(AdminUserStaffComponent)

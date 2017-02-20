@@ -12,6 +12,8 @@ package temp;
 public class MyTest {
 
     public static void main(String args[]) {
-
+        int i=9;
+        int a= i++ +i++ +i++;
+        System.out.println(a);
     }
 }

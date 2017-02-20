@@ -83,8 +83,9 @@ public class TestController {
             throw new RestException("POST_ERROR", "can't include id when post", "can't include id when post");
         }
         System.out.println("\npost demo:");
-        System.out.println("name" + demoDto.getName());
+        System.out.println("name:" + demoDto.getName());
         System.out.println("datetime:" + demoDto.getDateTime());
+        System.out.println("subItem:" + demoDto.getSubItem());
     }
 
     @RequestMapping(path = "error", method = RequestMethod.GET)

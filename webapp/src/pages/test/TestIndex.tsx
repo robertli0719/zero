@@ -3,7 +3,7 @@ import * as ReactDOM from "react-dom"
 import { store } from "../../Store"
 import { Button, ButtonToolbar, FormControl, FormGroup, Col } from "react-bootstrap"
 import * as test from "../../actions/test"
-import * as zform from "../../components/zero/ZForm"
+import * as zform from "../../components/zero/zform/zform"
 import { http, RestErrorDto } from "../../utilities/http"
 
 interface TestState {
@@ -37,7 +37,6 @@ export class TestIndex extends React.Component<{}, TestState>{
     }
 
     render() {
-        let options = { "1": "apple", "2": "orange" }
         return (
             <div className="container">
                 <h1>Test</h1>
@@ -49,27 +48,29 @@ export class TestIndex extends React.Component<{}, TestState>{
                         <zform.Password label="password" name="password" />
                         <zform.CheckBox label="I like it" name="like" />
                         <zform.CheckBox label="agree to get email" name="agree" />
-                        <hr />
-                        <zform.Radio label="item1" name="item" value="v1" />
-                        <zform.Radio label="item2" name="item" value="v2" />
-                        <zform.Radio label="item3" name="item" value="v3" />
-                        <hr />
-                        <zform.Select label="Select Type" name="type" options={options} />
+                        <zform.Radios name="item" value="v1" selections={[
+                            {label:"item1",value:"v1"},
+                            {label:"item2",value:"v2"},
+                            {label:"item3",value:"v3"}
+                        ]} />
+                        <zform.Select name="item" value="v1" selections={[
+                            {label:"item1",value:"v1"},
+                            {label:"item2",value:"v2"},
+                            {label:"item3",value:"v3"}
+                        ]} />
                         <zform.Textarea label="your feedback" name="feedback" />
-                        <hr />
-                        <zform.Image label="imgUrl" name="imgUrl" />
+                        {/*<zform.Image label="imgUrl" name="imgUrl" />*/}
                         <zform.Submit />
                     </zform.Form>
                     <hr />
 
-                    <zform.Form action="test/demos" method="POST" onSuccess={this.onSuccess.bind(this)}>
-                        <p>POST Demo</p>
+                    {/*<zform.Form action="test/demos" method="POST" onSuccess={this.onSuccess.bind(this)}>
                         <zform.TextField label="name" name="name" />
                         <zform.TextField label="name1" name="name1" />
                         <zform.TextField label="name2" name="name2" />
                         <zform.TextField label="name3" name="name3" enterSubmit={true} />
                         <zform.Submit />
-                    </zform.Form>
+                    </zform.Form>*/}
                 </Col>
                 <Col sm={9}></Col>
             </div>

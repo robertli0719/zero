@@ -36,6 +36,19 @@ public class UserDaoImpl extends GenericHibernateDao<User, Integer> implements U
     }
 
     @Override
+    public User getUserByUid(String uid) {
+        Session session = sessionFactory.getCurrentSession();
+        TypedQuery query = session.createQuery("select u from User u where u.uid = :uid");
+        query.setParameter("uid", uid);
+        query.setMaxResults(1);
+        List<User> userList = query.getResultList();
+        if (userList.size() != 1) {
+            return null;
+        }
+        return userList.get(0);
+    }
+
+    @Override
     public SearchResult<User> paging(int pageId, int max) {
         SearchResult<User> result = query("from User", pageId, max);
         for (User user : result.getList()) {
@@ -48,12 +61,12 @@ public class UserDaoImpl extends GenericHibernateDao<User, Integer> implements U
     public SearchResult<User> searchByName(String keyword, int pageId, int max) {
         Session session = sessionFactory.getCurrentSession();
         keyword = "%" + keyword + "%";
-        TypedQuery countQuery = session.createQuery("select count(*) from User where name like :keyword");
+        TypedQuery countQuery = session.createQuery("select count(u) from User u where u.name like :keyword");
         countQuery.setParameter("keyword", keyword);
         Number number = (Number) countQuery.getSingleResult();
         int count = number.intValue();
         int start = (pageId - 1) * max;
-        TypedQuery query = session.createQuery("from User where name like :keyword");
+        TypedQuery query = session.createQuery("select u from User u where u.name like :keyword");
         query.setParameter("keyword", keyword);
         query.setFirstResult(start);
         query.setMaxResults(max);
@@ -68,7 +81,7 @@ public class UserDaoImpl extends GenericHibernateDao<User, Integer> implements U
     public SearchResult<User> searchByAuthId(String authId, int pageId, int max) {
         Session session = sessionFactory.getCurrentSession();
         authId = "%" + authId + "%";
-        TypedQuery countQuery = session.createQuery("select count(*) from UserAuth as ua where ua.authId like :authId");
+        TypedQuery countQuery = session.createQuery("select count(ua) from UserAuth as ua where ua.authId like :authId");
         countQuery.setParameter("authId", authId);
         Number number = (Number) countQuery.getSingleResult();
         int count = number.intValue();

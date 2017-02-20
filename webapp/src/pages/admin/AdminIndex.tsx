@@ -3,7 +3,7 @@ import { connect } from "react-redux"
 import { store, AppState } from "../../Store"
 import { UserProfile } from "../../reducers/me"
 import { Button, ButtonToolbar, Row, Col, Panel, Alert } from "react-bootstrap";
-import * as zform from "../../components/zero/ZForm"
+import * as zform from "../../components/zero/zform/zform"
 
 interface Props {
     me: UserProfile
