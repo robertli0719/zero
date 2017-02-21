@@ -8,7 +8,7 @@
  * can implements ZFormTag to make a component, and invoke
  * registerTagRender() to set the new component to zform.
  * 
- * version 1.1.0 2017-02-19
+ * version 1.1.1 2017-02-20
  */
 import * as React from "react";
 import { TagSchema, FormValue, TagTypeOption, FormError } from "./zform_schema"
@@ -49,3 +49,5 @@ export function showTag(tagAttr: ZFormTagAttr): JSX.Element {
     }
     return tagView(tagAttr)
 }
+
+export const nopicUrl = "https://raw.githubusercontent.com/robertli0719/ZeroSSH/master/src/main/webapp/img/common/nopic.jpg"

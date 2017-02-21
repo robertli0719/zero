@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.1.0 2017-02-19
+ * version 1.1.1 2017-02-20
  */
 
 import "./object_tag"
@@ -14,3 +14,5 @@ import "./radios_tag"
 import "./hidden_tag"
 import "./submit_tag"
 import "./select_tag"
+import "./image_tag"
+import "./image_shower_tag"

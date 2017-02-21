@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.1.0 2017-02-19
+ * version 1.1.1 2017-02-20
  */
 import * as React from "react"
 import { Alert } from "react-bootstrap"
@@ -17,7 +17,7 @@ import "./zform_tags/tags_importer"
 
 export * from "./zform_child"
 export * from "./zform_utilities"
-export type TagSchema = TagSchema;
+export type TagSchema = TagSchema
 
 type FormProps = {
     schema?: TagSchema

@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.1.0 2017-02-19
+ * version 1.1.1 2017-02-20
  */
 import * as React from "react";
 import { TagSchema, FieldPlaceOption, Selection } from "./zform_schema"
@@ -76,5 +76,22 @@ type SubmitProps = {
     block?: boolean
     bsStyle?: string
 }
+
+type ImageUploadOption = 'default' | 'cropped' | 'fixed'
+
+type ImageProps = {
+    label: string
+    name: string
+    value?: string
+    option?: ImageUploadOption
+}
+
+export class Image extends React.Component<ImageProps, {}> { }
+
+type ImageShowerProps = {
+    name: string
+}
+
+export class ImageShower extends React.Component<ImageShowerProps, {}> { }
 
 export class Submit extends React.Component<SubmitProps, {}> { }

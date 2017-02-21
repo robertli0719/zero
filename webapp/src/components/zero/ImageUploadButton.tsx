@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 2017-01-09 1.0.1
+ * version 2017-02-20 1.0.2
  */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
@@ -32,7 +32,7 @@ interface Props {
     block?: boolean
     bsStyle?: string
     bsSize?: Sizes
-    onSuccess: (imgUrl: string) => {}
+    onSuccess: (imgUrl: string) => void
 }
 
 export class ImageUploadButton extends React.Component<Props, ModalState>{

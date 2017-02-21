@@ -87,12 +87,15 @@ export class TestFormPage extends React.Component<Prop, {}>{
                 <h1>Test zform</h1>
                 <Col xs={6} md={3}>
                     {/*<zform.Form schema={testForm2} />*/}
-                    <zform.Form action="test/demos">
+                    <zform.Form action="test/demos" >
                         <zform.TextField name="name" label="Username" />
                         <zform.Object name="subItem" label="SubItem">
                             <zform.TextField name="num" label="Number" />
                             <zform.TextField name="language" label="Language" />
                         </zform.Object>
+                        <zform.Object name="aaa" schema={testForm2} />
+                        <zform.ImageShower name="imgUrl" />
+                        <zform.Image label="Product Image" name="imgUrl" />
                         <zform.Submit value="Add" />
                     </zform.Form>
                 </Col>

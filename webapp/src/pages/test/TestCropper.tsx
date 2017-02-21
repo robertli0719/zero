@@ -19,11 +19,12 @@ export class TestCropper extends React.Component<{}, {}>{
         return (
             <div className="container">
                 <h1>Test Cropper</h1>
+                <p className="test">hello</p>
                 <Cropper
                     onChange={this.onChange.bind(this)}
                     aspectRatio={10 / 5}
                     src="https://fengyuanchen.github.io/cropperjs/images/picture.jpg"
-                    />
+                />
             </div>
         );
     }

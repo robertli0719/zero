@@ -3,12 +3,12 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.1.0 2017-02-19
+ * version 1.1.1 2017-02-20
  */
 import * as React from "react";
 
 export type FieldPlaceOption = 'default' | 'path' | 'pathAndDto';
-export type TagTypeOption = "object" | "textfield" | "password" | "textarea" | "file" | "checkbox" | "radios" | "hidden" | "select" | "image" | "submit"
+export type TagTypeOption = "object" | "textfield" | "password" | "textarea" | "file" | "checkbox" | "radios" | "hidden" | "select" | "image" | "imageshower" | "submit"
 
 export type ValueMap = { [key: string]: FormValue }
 export type FormError = { errors: string[], children: { [key: string]: any } }
@@ -28,6 +28,7 @@ export type TagSchema = {
     enterSubmit?: boolean
     block?: boolean
     bsStyle?: string
+    option?: string
     multiple?: boolean
     selections?: Selection[]
     children?: TagSchema[]
