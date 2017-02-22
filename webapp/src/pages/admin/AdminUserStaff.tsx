@@ -41,8 +41,7 @@ class AdminUserStaffComponent extends React.Component<Props, State>{
         const url = "user-platforms/" + this.state.platform + "/staffs"
         return http.get(url)
             .then((staffUserList: StaffUserDto[]) => {
-                this.state.staffUserList = staffUserList;
-                this.setState(this.state);
+                this.setState({ staffUserList: staffUserList });
             });
     }
 
@@ -91,7 +90,7 @@ class AdminUserStaffComponent extends React.Component<Props, State>{
                     <Col sm={4}>
                         <Panel header="Reset Staff Password" bsStyle="danger">
                             <zform.Form action="user-platforms/{userPlatformName}/staffs/{username}/password" method="PUT" successMessage="reset password">
-                                <zform.Hidden place="path"  name="userPlatformName" value={this.state.platform} />
+                                <zform.Hidden place="path" name="userPlatformName" value={this.state.platform} />
                                 <zform.TextField label="username" name="username" place="pathAndDto" />
                                 <zform.Password label="password" name="password" enterSubmit={true} />
                                 <zform.Submit value="reset" />
@@ -102,7 +101,7 @@ class AdminUserStaffComponent extends React.Component<Props, State>{
                         <Panel header="Add root Permission" bsStyle="danger">
                             <zform.Form action="user-platforms/{userPlatformName}/staffs/{username}/root" method="PUT" successMessage="add root permission" onSuccess={this.updateData.bind(this)}>
                                 <zform.Hidden place="path" name="userPlatformName" value={this.state.platform} />
-                                <zform.TextField label="username" name="username" place="pathAndDto"  enterSubmit={true} />
+                                <zform.TextField label="username" name="username" place="pathAndDto" enterSubmit={true} />
                                 <zform.Submit value="add" />
                             </zform.Form>
                         </Panel>

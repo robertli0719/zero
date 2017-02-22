@@ -3,10 +3,10 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.1.1 2017-02-20
+ * version 1.1.2 2017-02-21
  */
 
-import "./object_tag"
+import "./map_tag"
 import "./textfield_tag"
 import "./textarea_tag"
 import "./checkbox_tag"

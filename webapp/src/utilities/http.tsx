@@ -10,7 +10,7 @@ import * as fetch from 'isomorphic-fetch'
     I create this code for using REST API for Zero.
     
     author: robert li
-    version: 2017-01-06 1.0.1
+    version: 2017-02-21 1.0.2
 */
 
 export type RestErrorItemDto = {
@@ -25,12 +25,12 @@ export type RestErrorDto = {
     errors: RestErrorItemDto[]
 }
 
-function is2xx(res: IResponse): boolean {
+function is2xx(res: ResponseInterface): boolean {
     let status = res.status;
     return status >= 200 && status < 300
 }
 
-function isJsonBody(res: IResponse): boolean {
+function isJsonBody(res: ResponseInterface): boolean {
     var contentType = res.headers.get("content-type");
     return contentType && contentType.indexOf("application/json") !== -1
 }
@@ -47,9 +47,13 @@ class HttpService {
     private prefix: string = "api/v1/";
 
     public get(url: string) {
+
+        fetch(this.prefix + url, {}).then()
+
+
         return fetch(this.prefix + url, {
             credentials: 'include'
-        }).then((res: IResponse) => {
+        }).then((res: ResponseInterface) => {
             if (isJsonBody(res)) {
                 return res.json().then((json) => {
                     if (is2xx(res)) {
@@ -70,7 +74,7 @@ class HttpService {
             credentials: 'include',
             headers: { "Content-Type": "application/json;charset=UTF-8" },
             body: json
-        }).then((res: IResponse) => {
+        }).then((res: ResponseInterface) => {
             if (is2xx(res)) {
                 return;
             } else if (isJsonBody(res)) {
@@ -88,7 +92,7 @@ class HttpService {
             method: "POST",
             credentials: 'include',
             body: params
-        }).then((res: IResponse) => {
+        }).then((res: ResponseInterface) => {
             if (is2xx(res)) {
                 return res.text();
             } else if (isJsonBody(res)) {
@@ -108,7 +112,7 @@ class HttpService {
             credentials: 'include',
             headers: { "Content-Type": "application/json;charset=UTF-8" },
             body: json
-        }).then((res: IResponse) => {
+        }).then((res: ResponseInterface) => {
             if (is2xx(res)) {
                 return;
             } else if (isJsonBody(res)) {

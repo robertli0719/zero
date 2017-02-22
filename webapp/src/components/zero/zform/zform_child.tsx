@@ -8,12 +8,12 @@
 import * as React from "react";
 import { TagSchema, FieldPlaceOption, Selection } from "./zform_schema"
 
-type ObjectProps = {
+type MapProps = {
     name: string
     label?: string
 }
 
-export class Object extends React.Component<ObjectProps, {}> { }
+export class Map extends React.Component<MapProps, {}> { }
 
 type TextFieldProps = {
     name: string

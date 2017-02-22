@@ -177,16 +177,12 @@ export class Form extends React.Component<FormProps, FormState>{
     }
 
     afterSubmit() {
-        this.state.errorMap = {}
-        this.state.valMap = {}
-        this.state.actionErrors = [];
-        this.setState(this.state);
+        this.setState({ errorMap: {}, valMap: {}, actionErrors: [] })
     }
 
     onSuccess(dto: any) {
         if (this.props.successMessage) {
-            this.state.successAlertDisplay = true;
-            this.setState(this.state)
+            this.setState({ successAlertDisplay: true })
         }
         if (!this.props.onSuccess) {
             return;
@@ -235,10 +231,7 @@ export class Form extends React.Component<FormProps, FormState>{
     }
 
     onSubmit() {
-        this.state.errorMap = {}
-        this.state.actionErrors = []
-        this.state.successAlertDisplay = false
-        this.setState(this.state)
+        this.setState({ errorMap: {}, actionErrors: [], successAlertDisplay: false })
         if (this.validateForm() == false) {
             return;
         }
@@ -284,8 +277,7 @@ export class Form extends React.Component<FormProps, FormState>{
     }
 
     handleAlertDismiss() {
-        this.state.successAlertDisplay = false
-        this.setState(this.state)
+        this.setState({ successAlertDisplay: false })
     }
 
     makeSuccessAlert() {
@@ -332,7 +324,7 @@ export class TextField extends React.Component<FieldProps, {}>{
                     value={this.props.valMap[this.props.name]}
                     onChange={this.props.onChange}
                     onKeyUp={this.onKeyUp.bind(this)}
-                    />
+                />
                 <FormControl.Feedback />
                 <HelpBlock>{error}</HelpBlock>
             </FormGroup>
@@ -359,7 +351,7 @@ export class Password extends React.Component<FieldProps, {}>{
                     value={this.props.valMap[this.props.name]}
                     onChange={this.props.onChange}
                     onKeyUp={this.onKeyUp.bind(this)}
-                    />
+                />
                 <FormControl.Feedback />
                 <HelpBlock>{error}</HelpBlock>
             </FormGroup>
@@ -381,7 +373,7 @@ export class Textarea extends React.Component<FieldProps, {}>{
                     name={this.props.name}
                     value={this.props.valMap[this.props.name]}
                     onChange={this.props.onChange}
-                    />
+                />
                 <HelpBlock>{error}</HelpBlock>
             </FormGroup>
         )
@@ -400,7 +392,7 @@ export class File extends React.Component<FieldProps, {}>{
                     value={this.props.valMap[this.props.name]}
                     onChange={this.props.onChange}
                     multiple={this.props.multiple}
-                    />
+                />
                 <FormControl.Feedback />
                 <HelpBlock>{error}</HelpBlock>
             </FormGroup>
@@ -415,7 +407,7 @@ export class CheckBox extends React.Component<FieldProps, {}>{
                 name={this.props.name}
                 checked={this.props.valMap[this.props.name]}
                 onChange={this.props.onChange}
-                >
+            >
                 {this.props.label}
             </Checkbox>
         )
@@ -454,9 +446,9 @@ export class Select extends React.Component<SelectFieldProps, {}>{
     render() {
         const error = this.props.errorMap[this.props.name];
         const validateState = error ? "error" : null;
+        const options = this.props.options ? this.props.options : []
         if (this.props.options == null) {
             console.warn("Zform.Select.options is null now.")
-            this.props.options = {};
         }
         return (
             <FormGroup validationState={validateState} controlId={this.controlId}>
@@ -466,13 +458,13 @@ export class Select extends React.Component<SelectFieldProps, {}>{
                     onChange={this.props.onChange}
                     multiple={this.props.multiple}
                     value={this.props.valMap[this.props.name]}
-                    >
+                >
                     <option value="">
                         <span>-- please select --</span>
                     </option>
                     {
-                        Object.keys(this.props.options).map((value) => {
-                            var label = this.props.options[value];
+                        Object.keys(options).map((value) => {
+                            var label = options[value];
                             return <option value={value}>{label}</option>
                         })
                     }
@@ -568,15 +560,15 @@ export class TextMap extends React.Component<TextMapProps, {}>{
                     name={name}
                     value={val}
                     onChange={this.onChange.bind(this)}
-                    />
+                />
                 <FormControl.Feedback />
             </FormGroup>
         )
     }
 
     render() {
+        const keyList = this.props.keyList ? this.props.keyList : []
         if (this.props.keyList == null) {
-            this.props.keyList = []
             console.warn("ZForm.TextMap.keyList is null")
         }
         const error = this.props.errorMap[this.props.name];
@@ -585,7 +577,7 @@ export class TextMap extends React.Component<TextMapProps, {}>{
         return (
             <div>
                 {
-                    this.props.keyList.map((key) => {
+                    keyList.map((key) => {
                         const label: string = key
                         const name: string = this.makeSubInputName(key)
                         let value: string = this.getValMap()[key]

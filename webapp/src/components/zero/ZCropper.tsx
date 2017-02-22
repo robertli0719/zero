@@ -4,7 +4,7 @@
  * https://opensource.org/licenses/MIT
  * 
  * dependencies: react-cropper 0.10.0
- * version 1.0.2 2017-01-09
+ * version 1.0.3 2017-02-21
  */
 import * as React from "react"
 import * as ReactDOM from "react-dom"
@@ -32,7 +32,7 @@ export type CropResult = {
 class MyCropper extends ReactCropper {
 
     constructor(props: Props) {
-        super(props)
+        super()
         let anyProps: any = props;
         if (anyProps.resetFunThief) {
             anyProps.resetFunThief(super.reset.bind(this));

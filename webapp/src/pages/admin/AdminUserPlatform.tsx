@@ -30,8 +30,7 @@ class AdminUserPlatformComponent extends React.Component<Prop, State>{
     updateData() {
         return http.get("user-platforms")
             .then((userPlatformList: UserPlatformDto[]) => {
-                this.state.userPlatformList = userPlatformList;
-                this.setState(this.state);
+                this.setState({ userPlatformList: userPlatformList });
             })
     }
 

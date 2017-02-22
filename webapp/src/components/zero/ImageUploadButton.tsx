@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 2017-02-20 1.0.2
+ * version 1.0.3 2017-02-21
  */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
@@ -56,15 +56,11 @@ export class ImageUploadButton extends React.Component<Props, ModalState>{
     }
 
     close() {
-        this.state.showModal = false;
-        this.state.imgURL = null;
-        this.state.files = null;
-        this.setState(this.state);
+        this.setState({ showModal: false, imgURL: null, files: null });
     }
 
     open() {
-        this.state.showModal = true;
-        this.setState(this.state);
+        this.setState({ showModal: true });
     }
 
     use() {
@@ -96,8 +92,7 @@ export class ImageUploadButton extends React.Component<Props, ModalState>{
                 }
                 return json[0];
             }).then((imgUrl: string) => {
-                this.state.imgURL = imgUrl;
-                this.setState(this.state);
+                this.setState({ imgURL: imgUrl });
             })
     }
 
@@ -144,7 +139,8 @@ export class ImageUploadButton extends React.Component<Props, ModalState>{
     }
 
     fileInputOnChange(event: React.FormEvent<HTMLInputElement>) {
-        this.state.files = event.currentTarget.files;
+        const files = event.currentTarget.files;
+        this.setState({ files: files })
         this.upload();
     }
 
@@ -153,8 +149,7 @@ export class ImageUploadButton extends React.Component<Props, ModalState>{
     }
 
     resetFunBack(reset: () => void) {
-        this.state.reset = reset;
-        this.setState(this.state);
+        this.setState({ reset: reset });
     }
 
     render() {
@@ -198,7 +193,7 @@ export class ImageUploadButton extends React.Component<Props, ModalState>{
                         onChange={this.onChange.bind(this)}
                         src={this.state.imgURL}
                         style={{ width: "100%", height: MODAL_HEIHT }}
-                        />
+                    />
                     break;
                 case "fixed":
                     modalBody = <Cropper
@@ -207,7 +202,7 @@ export class ImageUploadButton extends React.Component<Props, ModalState>{
                         aspectRatio={this.props.fixedWidth / this.props.fixedHeight}
                         src={this.state.imgURL}
                         style={{ width: "100%", height: MODAL_HEIHT }}
-                        />
+                    />
                     break;
             }
         }
@@ -225,7 +220,7 @@ export class ImageUploadButton extends React.Component<Props, ModalState>{
                     block={this.props.block}
                     active={this.props.active}
                     onClick={this.open.bind(this)}
-                    >
+                >
                     {this.props.children}
                 </Button>
 

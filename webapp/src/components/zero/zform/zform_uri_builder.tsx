@@ -6,7 +6,7 @@
  * warning: can't support nested value in path.
  * warning: FieldPlaceOption.path == FieldPlaceOption.pathAndDto
  * 
- * version 1.1.0 2017-02-19
+ * version 1.1.1 2017-02-21
  */
 import { TagSchema, FormError, FormValue, ValueMap } from "./zform_schema"
 
@@ -15,7 +15,7 @@ export function buildUri(action: string, schema: TagSchema, data: FormValue): st
         return action
     } else if (action.indexOf('{') < 0) {
         return action
-    } else if (schema.type != 'object') {
+    } else if (schema.type != 'map') {
         return action
     }
 

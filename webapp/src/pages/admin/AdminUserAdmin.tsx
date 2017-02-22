@@ -35,8 +35,7 @@ class AdminUserAdminComponent extends React.Component<Props, State>{
     updateData() {
         return http.get("admin-users")
             .then((adminUserList: AdminUserDto[]) => {
-                this.state.adminUserList = adminUserList;
-                this.setState(this.state);
+                this.setState({ adminUserList: adminUserList });
             });
     }
 

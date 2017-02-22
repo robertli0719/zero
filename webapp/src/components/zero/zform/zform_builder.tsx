@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.1.1 2017-02-20
+ * version 1.1.2 2017-02-21
  */
 import * as React from "react";
 import * as _ from "lodash"
@@ -25,7 +25,7 @@ function buildSchema(schema: TagSchema, node: React.ReactNode) {
 }
 
 export function buildTagSchema(children: React.ReactNode): TagSchema {
-    const root: TagSchema = { type: "object", children: [] }
+    const root: TagSchema = { type: "map", children: [] }
     buildSchema(root, children)
     return root
 }

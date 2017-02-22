@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.1.1 2017-02-20
+ * version 1.1.2 2017-02-21
  */
 import * as React from "react"
 import { Alert } from "react-bootstrap"
@@ -57,8 +57,7 @@ export class Form extends React.Component<FormProps, FormState>{
             uri = buildUri(this.props.action, this.state.schema, this.state.value)
         } catch (error) {
             console.error(error)
-            this.state.error = error
-            this.setState(this.state)
+            this.setState({ error: error })
             return
         }
         const request: submitter.Request = {
@@ -66,9 +65,8 @@ export class Form extends React.Component<FormProps, FormState>{
             method: this.props.method,
             data: dto
         }
-        this.state.error = { errors: [], children: {} }
-        this.state.successAlertDisplay = false
-        this.setState(this.state)
+        const error: FormError = { errors: [], children: {} }
+        this.setState({ error: error, successAlertDisplay: false })
         new Promise((resolve, reject) => { resolve() })
             .then(() => {
                 if (this.props.onSubmit) {
@@ -78,16 +76,14 @@ export class Form extends React.Component<FormProps, FormState>{
                 return submitter.submit(request)
             }).then((data: any) => {
                 if (this.props.successMessage) {
-                    this.state.successAlertDisplay = true;
-                    this.setState(this.state)
+                    this.setState({ successAlertDisplay: true })
                 }
                 if (this.props.onSuccess) {
                     return this.props.onSuccess(data)
                 }
             }).catch((errorDto: any) => {
                 const error = builder.buildErrorMap(errorDto, this.state.schema)
-                this.state.error = error
-                this.setState(this.state)
+                this.setState({ error: error })
             })
     }
 
@@ -101,13 +97,11 @@ export class Form extends React.Component<FormProps, FormState>{
 
     onChange(key: string, value: any) {
         //key is undefined for zfrom
-        this.state.value = value
-        this.setState(this.state)
+        this.setState({ value: value })
     }
 
     handleAlertDismiss() {
-        this.state.successAlertDisplay = false
-        this.setState(this.state)
+        this.setState({ successAlertDisplay: false })
     }
 
     makeSuccessAlert() {

@@ -8,7 +8,7 @@
 import * as React from "react";
 
 export type FieldPlaceOption = 'default' | 'path' | 'pathAndDto';
-export type TagTypeOption = "object" | "textfield" | "password" | "textarea" | "file" | "checkbox" | "radios" | "hidden" | "select" | "image" | "imageshower" | "submit"
+export type TagTypeOption = "map" | "textfield" | "password" | "textarea" | "file" | "checkbox" | "radios" | "hidden" | "select" | "image" | "imageshower" | "submit"
 
 export type ValueMap = { [key: string]: FormValue }
 export type FormError = { errors: string[], children: { [key: string]: any } }

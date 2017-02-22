@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.1.0 2017-02-19
+ * version 1.1.0 2017-02-21
  */
 import * as _ from "lodash"
 import * as React from "react";
@@ -11,21 +11,21 @@ import { Alert } from "react-bootstrap"
 import { ZFormTagProps, ZFormTag, ZFormTagAttr, registerTagRender, showTag } from "../zform_tag"
 import { TagSchema } from "../zform_schema"
 
-registerTagRender("object", (tagAttr: ZFormTagAttr) => {
-    return <ObjectTag attr={tagAttr} />
+registerTagRender("map", (tagAttr: ZFormTagAttr) => {
+    return <MapTag attr={tagAttr} />
 })
 
-class ObjectTag extends ZFormTag {
+class MapTag extends ZFormTag {
 
     constructor(props: ZFormTagProps) {
         super(props)
         const attr = this.props.attr
         const tag = attr.schema
-        if (tag.type != 'object') {
+        if (tag.type != 'map') {
             console.error(tag)
-            throw "ObjectTag get a wrong schema which is not an object tag."
+            throw "MapTag get a wrong schema which is not an object tag."
         } else if (!props.attr.value) {
-            throw "ObjectTag doesn't get value in props."
+            throw "MapTag doesn't get value in props."
         }
     }
 
