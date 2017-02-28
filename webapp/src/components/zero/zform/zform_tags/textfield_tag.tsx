@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.1.0 2017-02-19
+ * version 1.1.1 2017-02-22
  */
 import * as React from "react";
 import { FormControl, FormGroup, ControlLabel, HelpBlock } from "react-bootstrap";
@@ -54,7 +54,7 @@ class TextFieldTag extends ZFormTag {
         const validateState = error ? "error" : null
         const tag = attr.schema
         const type = this.checkType(tag.type)
-        const value = attr.value ? attr.value.toString() : null
+        const value = attr.value ? attr.value.toString() : ""
         return (
             <FormGroup controlId={this.controlId} validationState={validateState}>
                 <ControlLabel>{tag.label}</ControlLabel>

@@ -16,10 +16,16 @@ import java.io.IOException;
  * implementing delete, the file may not be delete at once.
  *
  *
- * @version 1.0 2016-08-16
+ * @version 1.0.1 2017-02-27
  * @author Robert Li
  */
 public interface FileManager {
+
+    /**
+     * set the location for storage,such as file path or bucket name
+     * @param basePath
+     */
+    public void setBasePath(String basePath);
 
     /**
      * Read a file from the file system. If the file is not found, return null.

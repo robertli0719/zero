@@ -156,6 +156,13 @@
         </dependency>
         
         <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>1.11.97</version>
+            <type>jar</type>
+        </dependency>
+        
+        <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-websocket</artifactId>
             <version>8.0.23</version>

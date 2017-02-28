@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.1.2 2017-02-21
+ * version 1.1.3 2017-02-22
  */
 import * as React from "react"
 import { Alert } from "react-bootstrap"
@@ -48,6 +48,15 @@ export class Form extends React.Component<FormProps, FormState>{
         const value: FormValue = props.value ? props.value : buildDefaultValue(schema)
         const error: FormError = props.error ? props.error : { errors: [], children: {} }
         this.state = { schema: schema, value: value, error: error, successAlertDisplay: false }
+    }
+
+    componentWillReceiveProps(nextProps: any, nextContext: any): void {
+        let schema: TagSchema = nextProps.schema;
+        if (schema == null) {
+            schema = builder.buildTagSchema(nextProps.children)
+        }
+        const value: FormValue = nextProps.value ? nextProps.value : buildDefaultValue(schema)
+        this.setState({ schema: schema, value: value })
     }
 
     submit(): void {

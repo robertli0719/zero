@@ -23,13 +23,14 @@ import robertli.zero.core.FileManager;
  * new file. User is not allowed to update a file after write. After
  * implementing delete, the file may not be delete at once.
  *
- * @version 1.0.1 2016-09-29
+ * @version 1.0.2 2017-02-27
  * @author Robert Li
  */
 public final class FileManagerImpl implements FileManager {
 
     private String basePath;
 
+    @Override
     public void setBasePath(String basePath) {
         this.basePath = basePath;
     }
