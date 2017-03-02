@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.0.3 2017-02-21
+ * version 1.0.4 2017-02-28
  */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
@@ -92,64 +92,64 @@ export class ImageUploadButton extends React.Component<Props, ModalState>{
                 }
                 return json[0];
             }).then((imgUrl: string) => {
-                this.setState({ imgURL: imgUrl });
+                this.setState({ imgURL: imgUrl })
             })
     }
 
     createCropForm(data: CropResult): FormData {
-        let formData = new FormData();
-        formData.append("x", Math.round(data.x));
-        formData.append("y", Math.round(data.y));
-        formData.append("width", Math.round(data.width));
-        formData.append("height", Math.round(data.height));
+        let formData = new FormData()
+        formData.append("x", Math.round(data.x))
+        formData.append("y", Math.round(data.y))
+        formData.append("width", Math.round(data.width))
+        formData.append("height", Math.round(data.height))
         return formData;
     }
 
     createFixForm(data: CropResult): FormData {
         let formData = new FormData();
-        formData.append("x", Math.round(data.x));
-        formData.append("y", Math.round(data.y));
-        formData.append("width", Math.round(data.width));
-        formData.append("height", Math.round(data.height));
-        formData.append("fixedHeight", this.props.fixedHeight);
-        formData.append("fixedWidth", this.props.fixedWidth);
+        formData.append("x", Math.round(data.x))
+        formData.append("y", Math.round(data.y))
+        formData.append("width", Math.round(data.width))
+        formData.append("height", Math.round(data.height))
+        formData.append("fixedHeight", this.props.fixedHeight)
+        formData.append("fixedWidth", this.props.fixedWidth)
         return formData;
     }
 
     crop() {
-        const id = this.state.imgURL.slice(-36);
+        const id = this.state.imgURL.slice(-36)
         let url = "images/cropper/" + id
         http.postParams(url, this.createCropForm(this.cropResult))
             .then((response) => {
-                const imgURL = response;
-                this.props.onSuccess(imgURL);
-                this.close();
+                const imgURL = response
+                this.props.onSuccess(imgURL)
+                this.close()
             })
     }
 
     fix() {
-        const id = this.state.imgURL.slice(-36);
+        const id = this.state.imgURL.slice(-36)
         let url = "images/fixer/" + id
         http.postParams(url, this.createFixForm(this.cropResult))
             .then((response) => {
-                const imgURL = response;
-                this.props.onSuccess(imgURL);
-                this.close();
+                const imgURL = response
+                this.props.onSuccess(imgURL)
+                this.close()
             })
     }
 
     fileInputOnChange(event: React.FormEvent<HTMLInputElement>) {
-        const files = event.currentTarget.files;
+        const files = event.currentTarget.files
         this.setState({ files: files })
-        this.upload();
+        setTimeout(this.upload.bind(this), 0)
     }
 
     onChange(result: CropResult) {
-        this.cropResult = result;
+        this.cropResult = result
     }
 
     resetFunBack(reset: () => void) {
-        this.setState({ reset: reset });
+        this.setState({ reset: reset })
     }
 
     render() {
@@ -157,20 +157,21 @@ export class ImageUploadButton extends React.Component<Props, ModalState>{
         switch (this.state.option) {
             case "default":
                 btnBar = <div>
-                    <Button bsStyle="success" disabled={!this.state.files} onClick={this.use.bind(this)}>Use</Button>
+                    <Button bsStyle="success" disabled={!this.state.imgURL} onClick={this.use.bind(this)}>Use</Button>
                     <Button onClick={this.close.bind(this)}>Close</Button>
                 </div>
                 break;
             case "cropped":
                 btnBar = <div>
-                    <Button bsStyle="success" disabled={!this.state.files} onClick={this.crop.bind(this)}>Crop</Button>
+                    <p>uml:{this.state.imgURL}</p>
+                    <Button bsStyle="success" disabled={!this.state.imgURL} onClick={this.crop.bind(this)}>Crop</Button>
                     <Button onClick={this.reset.bind(this)}>Reset</Button>
                     <Button onClick={this.close.bind(this)}>Close</Button>
                 </div>
                 break;
             case "fixed":
                 btnBar = <div>
-                    <Button bsStyle="success" disabled={!this.state.files} onClick={this.fix.bind(this)}>Fix</Button>
+                    <Button bsStyle="success" disabled={!this.state.imgURL} onClick={this.fix.bind(this)}>Fix</Button>
                     <Button onClick={this.reset.bind(this)}>Reset</Button>
                     <Button onClick={this.close.bind(this)}>Close</Button>
                 </div>

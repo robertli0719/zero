@@ -21,7 +21,7 @@ import java.util.UUID;
 
 public class S3Test {
 
-    private final static String BUCKET_NAME = "sandbox.checkshop";
+    private final static String BUCKET_NAME = "test.zero";
     private final static String FILE_PATH = "C:\\Users\\liliu\\Desktop\\img\\b.jpg";
 
     public static void main(String args[]) {

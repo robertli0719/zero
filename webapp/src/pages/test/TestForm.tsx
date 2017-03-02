@@ -88,21 +88,20 @@ export class TestFormPage extends React.Component<Prop, {}>{
     render() {
         return (
             <div className="container">
-                <h1>Test zform 2</h1>
+                <h1>Test zform</h1>
                 <Col xs={6} md={3}>
                     {/*<zform.Form schema={testForm2} />*/}
-                    <zform.Form schema={testForm2} />
-                    {/*<zform.Form action="test/demos" >
+                    {/*<zform.Form schema={testForm2} />*/}
+                    <zform.Form action="test/demos" >
                         <zform.TextField name="name" label="Username" />
                         <zform.Map name="subItem" label="SubItem">
                             <zform.TextField name="num" label="Number" />
                             <zform.TextField name="language" label="Language" />
                         </zform.Map>
-                        <zform.Map name="aaa" />
                         <zform.ImageShower name="imgUrl" />
                         <zform.Image label="Product Image" name="imgUrl" />
                         <zform.Submit value="Add" />
-                    </zform.Form>*/}
+                    </zform.Form>
                 </Col>
                 <div>{this.props.val}</div>
             </div>

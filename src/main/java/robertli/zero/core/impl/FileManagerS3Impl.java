@@ -11,7 +11,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
+import com.amazonaws.util.IOUtils;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,12 +24,11 @@ import robertli.zero.core.FileManager;
  * AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY from system environment variable.
  *
  *
- * @version 1.0.0 2017-02-27
+ * @version 1.0.1 2017-02-28
  * @author Robert Li
  */
 public class FileManagerS3Impl implements FileManager {
 
-    private final long MAX_FILE_SIZE = 100 * 1024 * 1024;//100M 
     private final AmazonS3 s3;
     private String bucketName;
 
@@ -49,13 +48,7 @@ public class FileManagerS3Impl implements FileManager {
         byte[] readBuf = null;
         try {
             S3Object o = s3.getObject(bucketName, uuid);
-            S3ObjectInputStream s3is = o.getObjectContent();
-            if (s3is.available() > MAX_FILE_SIZE) {
-                return null;
-            }
-            readBuf = new byte[s3is.available()];
-            s3is.read(readBuf);
-            s3is.close();
+            readBuf = IOUtils.toByteArray(o.getObjectContent());
         } catch (AmazonServiceException e) {
             System.err.println(e.getErrorMessage());
         } catch (IOException e) {

@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.1.3 2017-02-22
+ * version 1.1.4 2017-02-28
  */
 import * as React from "react"
 import { Alert } from "react-bootstrap"
