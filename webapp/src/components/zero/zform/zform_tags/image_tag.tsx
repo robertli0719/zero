@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.1.0 2017-02-20
+ * version 1.1.1 2017-03-03
  */
 
 import * as React from "react";
@@ -44,8 +44,8 @@ class ImageTag extends ZFormTag {
     render() {
         const attr = this.props.attr
         const src = attr.value ? attr.value.toString() : nopicUrl
-        const error = attr.error
-        const validateState = (error && error.errors.length > 0) ? "error" : null
+        const error = (attr.error && attr.error.errors.length > 0) ? attr.error.errors : null
+        const validateState = error ? "error" : null
         const option = this.pickOption(attr.schema.option)
 
         return (

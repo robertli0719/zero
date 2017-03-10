@@ -9,7 +9,7 @@ package robertli.zero.core;
  * WebConfiguration is a singleton object to storage configuration information
  * in presentation layer. This object can be use over business layer.
  *
- * @version 1.0.1 2016-09-29
+ * @version 1.0.2 2017-03-07
  * @author Robert Li
  */
 public interface WebConfiguration {
@@ -19,5 +19,7 @@ public interface WebConfiguration {
     public String getImageActionUrl();
 
     public String getGoogleSigninClientId();
+    
+    public boolean isSslEnabled();
 
 }

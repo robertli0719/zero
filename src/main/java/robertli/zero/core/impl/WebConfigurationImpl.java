@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Robert Li.
+ * Copyright 2017 Robert Li.
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
@@ -12,6 +12,7 @@ public class WebConfigurationImpl implements WebConfiguration {
     private String domain;
     private String imageActionUrl;
     private String googleSigninClientId;
+    private boolean sslEnabled;
 
     @Override
     public String getDomain() {
@@ -38,6 +39,15 @@ public class WebConfigurationImpl implements WebConfiguration {
 
     public void setGoogleSigninClientId(String googleSigninClientId) {
         this.googleSigninClientId = googleSigninClientId;
+    }
+
+    @Override
+    public boolean isSslEnabled() {
+        return sslEnabled;
+    }
+
+    public void setSslEnabled(boolean sslEnabled) {
+        this.sslEnabled = sslEnabled;
     }
 
 }

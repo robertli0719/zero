@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.1.0 2017-02-19
+ * version 1.1.1 2017-03-03
  */
 import * as React from "react";
 import { FormControl, FormGroup, ControlLabel, HelpBlock } from "react-bootstrap";
@@ -37,8 +37,8 @@ class SelectTag extends ZFormTag {
 
     render() {
         const attr = this.props.attr
-        const error = attr.error
-        const validateState = error ? "error" : null;
+        const error = (attr.error && attr.error.errors.length > 0) ? attr.error.errors : null
+        const validateState = error ? "error" : null
         const schema = attr.schema
         const options = attr.schema.selections
 
@@ -56,8 +56,8 @@ class SelectTag extends ZFormTag {
                     {
                         options.map((option) => {
                             const label = option.label
-                            const value = option.value
-                            return <option value={value}>{label}</option>
+                            const tagValue = option.value
+                            return <option value={tagValue} selected={attr.value == tagValue} >{label}</option>
                         })
                     }
                 </FormControl>

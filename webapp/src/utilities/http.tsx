@@ -10,7 +10,7 @@ import * as fetch from 'isomorphic-fetch'
     I create this code for using REST API for Zero.
     
     author: robert li
-    version: 2017-02-21 1.0.2
+    version: 2017-03-02 1.0.3
 */
 
 export type RestErrorItemDto = {
@@ -47,10 +47,6 @@ class HttpService {
     private prefix: string = "api/v1/";
 
     public get(url: string) {
-
-        fetch(this.prefix + url, {}).then()
-
-
         return fetch(this.prefix + url, {
             credentials: 'include'
         }).then((res: ResponseInterface) => {

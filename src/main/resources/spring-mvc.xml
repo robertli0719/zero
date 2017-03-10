@@ -16,6 +16,11 @@
     <mvc:interceptors>
         
         <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="robertli.zero.interceptor.SSLRedirectInterceptor"></bean>
+        </mvc:interceptor>
+        
+        <mvc:interceptor>
             <mvc:mapping path="/api/v1/**"/>
             <bean class="robertli.zero.interceptor.AuthInterceptor"></bean>
         </mvc:interceptor>
@@ -59,7 +64,6 @@
 
         <!-- max size of file in memory (in bytes) -->
         <property name="maxInMemorySize" value="1048576" /> <!-- 1MB -->
-
     </bean>
    
 </beans>
