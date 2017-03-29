@@ -11,6 +11,7 @@ import static org.junit.Assert.assertTrue;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import robertli.zero.core.RandomCodeCreater;
+import robertli.zero.service.UserService;
 
 /**
  *
@@ -45,7 +46,7 @@ public class UserRoleItemDaoTest {
         String userRoleName = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
         userRoleDao.addUserRole(userRoleName);
 
-        int userId = userDao.getLast("id").getId();
+        int userId = userDao.getUserListByPlatform(UserService.USER_PLATFORM_ADMIN, 0, 100).get(0).getId();
         assertRoleNotExist(userId, userRoleName);
 
         userRoleItemDao.put(userId, userRoleName);
@@ -59,7 +60,7 @@ public class UserRoleItemDaoTest {
     private void test2() {
         String userRoleName = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
         userRoleDao.addUserRole(userRoleName);
-        int userId = userDao.getLast("id").getId();
+        int userId = userDao.getUserListByPlatform(UserService.USER_PLATFORM_ADMIN, 0, 1).get(0).getId();
         assertRoleNotExist(userId, userRoleName);
 
         userRoleItemDao.put(userId, userRoleName);
@@ -80,8 +81,8 @@ public class UserRoleItemDaoTest {
         String userRoleName1 = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
         String userRoleName2 = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
         String userRoleName3 = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
-        int userId = userDao.getLast("id").getId();
-        
+        int userId = userDao.getUserListByPlatform(UserService.USER_PLATFORM_ADMIN, 0, 1).get(0).getId();
+
         userRoleDao.addUserRole(userRoleName1);
         userRoleDao.addUserRole(userRoleName2);
         userRoleDao.addUserRole(userRoleName3);

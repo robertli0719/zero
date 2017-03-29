@@ -34,7 +34,7 @@ public class UserServiceTest {
     }
 
     private boolean existUserType(String typeName) {
-        List<UserTypeDto> userTypeList = userService.getUserTypeList();
+        List<UserTypeDto> userTypeList = userService.getUserTypeList(0, 10000).getResultList();
         for (UserTypeDto t : userTypeList) {
             if (t.getName().equals(typeName)) {
                 return true;
@@ -44,7 +44,7 @@ public class UserServiceTest {
     }
 
     private boolean existUserPlatform(String platformName) {
-        List<UserPlatformDto> userPlatformList = userService.getUserPlatformList();
+        List<UserPlatformDto> userPlatformList = userService.getUserPlatformList(0, 10000).getResultList();
         for (UserPlatformDto t : userPlatformList) {
             if (t.getName().equals(platformName)) {
                 return true;
@@ -54,7 +54,7 @@ public class UserServiceTest {
     }
 
     private boolean existUserRole(String roleName) {
-        List<UserRoleDto> userPlatformList = userService.getUserRoleList();
+        List<UserRoleDto> userPlatformList = userService.getUserRoleList(0, 10000).getResultList();
         for (UserRoleDto t : userPlatformList) {
             if (t.getName().equals(roleName)) {
                 return true;
@@ -63,22 +63,30 @@ public class UserServiceTest {
         return false;
     }
 
+    private long countUserTypeList() {
+        return userService.getUserTypeList(0, 1).getCount();
+    }
+
     //test UserType
     public void test1() {
         String userTypeName = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
 
-        int beforeListSize = userService.getUserTypeList().size();
+        long beforeListSize = countUserTypeList();
         assertFalse(existUserType(userTypeName));
 
         userService.addUserType(userTypeName);
-        int afterListSize = userService.getUserTypeList().size();
+        long afterListSize = countUserTypeList();
         assertTrue(existUserType(userTypeName));
         assertTrue(afterListSize - beforeListSize == 1);
 
         userService.deleteUserType(userTypeName);
-        int finalListSize = userService.getUserTypeList().size();
+        long finalListSize = countUserTypeList();
         assertFalse(existUserType(userTypeName));
         assertTrue(beforeListSize == finalListSize);
+    }
+
+    private long countUserPlatform() {
+        return userService.getUserPlatformList(0, 1).getCount();
     }
 
     //test UserPlatform
@@ -87,34 +95,38 @@ public class UserServiceTest {
         String userPlatformName = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
         userService.addUserType(userTypeName);
 
-        int beforeListSize = userService.getUserPlatformList().size();
+        long beforeListSize = countUserPlatform();
         assertFalse(existUserPlatform(userPlatformName));
 
         userService.addUserPlatform(userTypeName, userPlatformName);
-        int afterListSize = userService.getUserPlatformList().size();
+        long afterListSize = countUserPlatform();
         assertTrue(existUserPlatform(userPlatformName));
         assertTrue(afterListSize - beforeListSize == 1);
 
         userService.deleteUserPlatform(userPlatformName);
-        int finalListSize = userService.getUserPlatformList().size();
+        long finalListSize = countUserPlatform();
         assertFalse(existUserPlatform(userPlatformName));
         assertTrue(beforeListSize == finalListSize);
+    }
+
+    private long countUserRole() {
+        return userService.getUserRoleList(0, 1).getCount();
     }
 
     //test UserRole
     public void test3() {
         String userRoleName = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
 
-        int beforeListSize = userService.getUserRoleList().size();
+        long beforeListSize = countUserRole();
         assertFalse(existUserRole(userRoleName));
 
         userService.addUserRole(userRoleName);
-        int afterListSize = userService.getUserRoleList().size();
+        long afterListSize = countUserRole();
         assertTrue(existUserRole(userRoleName));
         assertTrue(afterListSize - beforeListSize == 1);
 
         userService.deleteUserRole(userRoleName);
-        int finalListSize = userService.getUserRoleList().size();
+        long finalListSize = countUserRole();
         assertFalse(existUserRole(userRoleName));
         assertTrue(beforeListSize == finalListSize);
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Robert Li.
+ * Copyright 2017 Robert Li.
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
@@ -7,11 +7,10 @@ package robertli.zero.dao;
 
 import java.io.Serializable;
 import java.util.List;
-import robertli.zero.dto.SearchResult;
 
 /**
  *
- * @version 1.0.2 2016-12-29
+ * @version 1.0.3 2017-03-28
  * @author Robert Li
  * @param <T> The Entity Class
  * @param <PK> The Type of ID
@@ -19,8 +18,6 @@ import robertli.zero.dto.SearchResult;
 public interface GenericDao<T extends Serializable, PK extends Serializable> {
 
     public T get(PK id);
-
-    public T getLast(String colName);
 
     public T getForUpdate(PK id);
 
@@ -34,19 +31,18 @@ public interface GenericDao<T extends Serializable, PK extends Serializable> {
 
     public void deleteById(PK id);
 
-    public long count();
+    public int count();
 
     public List<T> list();
 
-    public List<T> list(int max);
+    public List<T> list(int limit);
 
-    public List<T> list(int first, int max);
+    public List<T> list(int offset, int limit);
 
     public List<T> listDesc(String colName);
 
-    public List<T> listDesc(String colName, int max);
+    public List<T> listDesc(String colName, int limit);
 
-    public List<T> listDesc(String colName, int first, int max);
+    public List<T> listDesc(String colName, int offset, int limit);
 
-    public SearchResult<T> query(String hql, int pageId, int max);
 }

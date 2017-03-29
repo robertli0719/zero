@@ -65,7 +65,6 @@ public class StorageServiceTest {
             }
         }
         Thread.sleep(rand.nextInt(1000));
-        storageService.delete(uuid);
     }
 
     private void stressTest() throws InterruptedException {

@@ -1,18 +1,15 @@
 /*
- * Copyright 2016 Robert Li.
+ * Copyright 2017 Robert Li.
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
 package robertli.zero.entity;
 
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Index;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
 
 /**
  * This is a Hibernate entity class which is mapped to a relevant database
@@ -20,22 +17,21 @@ import javax.persistence.Temporal;
  *
  * Each line of this table is a file for StorageService
  *
+ * You can only use FileRecordDao to create it, but you can delete fileRecord
+ * directly. Deleting fileRecord will set fileRecordToken's reference to null
+ * automatically.
+ *
  * @see robertli.zero.service.StorageService
- * @version 1.0.1 2016-11-19
+ * @see robertli.zero.entity.FileRecordToken
+ * @version 1.0.2 2017-03-15
  * @author Robert Li
  */
 @Entity
-@Table(name = "file_record", indexes = {
-    @Index(name = "createdDate", columnList = "createdDate")
-})
+@Table(name = "file_record")
 public class FileRecord implements Serializable {
 
     private String uuid;
-    private String name;
-    private String type;
-    private boolean temp;
-    private Date createdDate;
-    private Date lastAccessDate;
+    private String url;
 
     @Id
     @Column(length = 36)
@@ -47,50 +43,13 @@ public class FileRecord implements Serializable {
         this.uuid = uuid;
     }
 
-    @Column(nullable = false, length = 50)
-    public String getName() {
-        return name;
+    @Column(nullable = false, length = 150)
+    public String getUrl() {
+        return url;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Column(nullable = false, length = 50)
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public boolean isTemp() {
-        return temp;
-    }
-
-    public void setTemp(boolean temp) {
-        this.temp = temp;
-    }
-
-    @Column(nullable = false)
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    @Column(nullable = false)
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    public Date getLastAccessDate() {
-        return lastAccessDate;
-    }
-
-    public void setLastAccessDate(Date lastAccessDate) {
-        this.lastAccessDate = lastAccessDate;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
 }

@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import robertli.zero.controller.RestException;
 import robertli.zero.dto.DemoDto;
+import robertli.zero.dto.PagingModal;
 import robertli.zero.dto.user.UserProfileDto;
 
 /**
@@ -28,24 +30,25 @@ import robertli.zero.dto.user.UserProfileDto;
 @RestController
 @RequestMapping("api/v1/test")
 public class TestController {
-
+    
     @RequestMapping(path = "demos/{id}", method = RequestMethod.GET)
     public DemoDto getDemo(@PathVariable int id, HttpServletRequest request) {
         System.out.println("\n\ngetDemo:");
+        
         Enumeration<String> names = request.getHeaderNames();
         while (names.hasMoreElements()) {
             String name = names.nextElement();
             String header = request.getHeader(name);
             System.out.println(name + " : " + header);
         }
-
+        
         DemoDto demo = new DemoDto();
         demo.setId(id);
         demo.setDateTime(new Date());
         demo.setName("testName:" + id);
         return demo;
     }
-
+    
     @RequestMapping(path = "demos/{id}", method = RequestMethod.PUT)
     public void putDemos(@PathVariable int id, @Valid @RequestBody DemoDto demoDto) {
         if (demoDto.getId() == null) {
@@ -55,14 +58,16 @@ public class TestController {
         System.out.println("name" + demoDto.getName());
         System.out.println("datetime:" + demoDto.getDateTime());
     }
-
+    
     @RequestMapping(path = "demos/{id}", method = RequestMethod.DELETE)
     public void deleteDemos(@PathVariable int id) {
         System.out.println("delete demo:" + id);
     }
-
+    
     @RequestMapping(path = "demos", method = RequestMethod.GET)
-    public List<DemoDto> getDemos(Integer max) {
+    public List<DemoDto> getDemos(@RequestAttribute PagingModal pagingModal) {
+        pagingModal.placeHeaders(100);
+        
         List<DemoDto> demoDtoList = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
             DemoDto demo = new DemoDto();
@@ -70,13 +75,13 @@ public class TestController {
             demo.setDateTime(new Date());
             demo.setName("testName:" + i);
             demoDtoList.add(demo);
-            if (max != null && i + 1 >= max) {
+            if (pagingModal.getLimit() != 0 && i + 1 >= pagingModal.getLimit()) {
                 break;
             }
         }
         return demoDtoList;
     }
-
+    
     @RequestMapping(path = "demos", method = RequestMethod.POST)
     public void postDemos(@Valid @RequestBody DemoDto demoDto) {
         if (demoDto.getId() != null) {
@@ -87,7 +92,7 @@ public class TestController {
         System.out.println("datetime:" + demoDto.getDateTime());
         System.out.println("subItem:" + demoDto.getSubItem());
     }
-
+    
     @RequestMapping(path = "error", method = RequestMethod.GET)
     public UserProfileDto getError() {
         String status = "ERROR_TEST";

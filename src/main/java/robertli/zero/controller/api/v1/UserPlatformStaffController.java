@@ -10,11 +10,14 @@ import javax.annotation.Resource;
 import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import robertli.zero.controller.RestException;
+import robertli.zero.dto.PagingModal;
+import robertli.zero.dto.QueryResult;
 import robertli.zero.dto.user.StaffUserDto;
 import robertli.zero.dto.user.StaffUserPasswordDto;
 import robertli.zero.service.StaffUserService;
@@ -31,11 +34,18 @@ public class UserPlatformStaffController {
     private StaffUserService staffUserService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<StaffUserDto> getStaffs(@PathVariable String userPlatformName, Boolean root) {
+    public List<StaffUserDto> getStaffs(@PathVariable String userPlatformName, Boolean root, @RequestAttribute PagingModal pagingModal) {
+        final int offset = pagingModal.getOffset();
+        final int limit = pagingModal.getLimit();
+        QueryResult queryResult;
         if (root != null && root) {
-            return staffUserService.getStaffRootUserList(userPlatformName);
+            queryResult = staffUserService.getStaffRootUserList(userPlatformName, offset, limit);
+        } else {
+            queryResult = staffUserService.getStaffUserList(userPlatformName, offset, limit);
         }
-        return staffUserService.getStaffUserList(userPlatformName);
+        final int count = queryResult.getCount();
+        pagingModal.placeHeaders(count);
+        return queryResult.getResultList();
     }
 
     @RequestMapping(method = RequestMethod.POST)

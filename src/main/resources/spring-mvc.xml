@@ -25,6 +25,11 @@
             <bean class="robertli.zero.interceptor.AuthInterceptor"></bean>
         </mvc:interceptor>
         
+        <mvc:interceptor>
+            <mvc:mapping path="/api/v1/**"/>
+            <bean class="robertli.zero.interceptor.PagingLinkInterceptor"></bean>
+        </mvc:interceptor>
+        
         <!--For Admin GET-->
         <mvc:interceptor>
             <mvc:mapping path="/api/v1/**"/>

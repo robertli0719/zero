@@ -6,7 +6,6 @@
 package robertli.zero.service;
 
 import java.io.IOException;
-import robertli.zero.entity.FileRecord;
 
 /**
  * This interface is designed for implementing object storage service in
@@ -33,25 +32,35 @@ import robertli.zero.entity.FileRecord;
  *
  * Each object can be identity by UUID. Because of CDN and web cache, our system
  * always need to use new UUID to write write new object. User is not allowed to
- * update a object after write. After implementing delete, the object may not be
- * delete at once.<br>
+ * update a object after write. After implementing delete FileRecord, the object
+ * may not be delete at once.<br>
  *
  * The file uploading process should be: 1.register 2.store 3.fix
  *
- * @version 1.02 2016-09-29
+ * @version 1.0.3 2017-03-15
  * @author Robert Li
  */
 public interface StorageService {
 
     /**
-     * get FileRecord from the storage by id<br>
+     * get getContentType from the storage by id<br>
      *
      * If the record is not found, return null.<br>
      *
      * @param uuid the identifier of the object or file
-     * @return FileRecord entity of the ID or null if not found
+     * @return content-type of the ID or null if not found
      */
-    public FileRecord getFileRecord(String uuid);
+    public String getContentType(String uuid);
+
+    /**
+     * get getFileName from the storage by id<br>
+     *
+     * If the record is not found, return null.<br>
+     *
+     * @param uuid the identifier of the object or file
+     * @return the file name of the ID or null if not found
+     */
+    public String getFileName(String uuid);
 
     /**
      * get object from the storage by id<br>
@@ -109,15 +118,6 @@ public interface StorageService {
      * @param uuid which is the identifier of the object or file
      */
     public void fix(String uuid);
-
-    /**
-     * delete the object from the system<br>
-     * guarantee eventual consistency rather than consistency within a database
-     * transaction.
-     *
-     * @param uuid the identifier of the object or file
-     */
-    public void delete(String uuid);
 
     /**
      * remove the files which should be delete from file system.

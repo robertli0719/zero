@@ -1,10 +1,11 @@
 /*
- * Copyright 2016 Robert Li.
+ * Copyright 2017 Robert Li.
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
 package robertli.zero.dao;
 
+import robertli.zero.entity.FileRecord;
 import robertli.zero.entity.Link;
 
 /**
@@ -13,5 +14,5 @@ import robertli.zero.entity.Link;
  */
 public interface LinkDao extends GenericDao<Link, Integer> {
 
-    public Link saveLink(String title, String url, String imgUrl, String imgId, String comment, int linkGroupId);
+    public Link saveLink(String title, String url, FileRecord img, String comment, int linkGroupId);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Robert Li.
+ * Copyright 2017 Robert Li.
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
@@ -15,11 +15,10 @@ import org.hibernate.LockOptions;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import robertli.zero.dao.GenericDao;
-import robertli.zero.dto.SearchResult;
 
 /**
  *
- * @version 1.0.3 2016-12-29
+ * @version 1.0.4 2017-03-28
  * @author Robert Li
  * @param <T> The Entity Class
  * @param <PK> The Type of ID
@@ -60,15 +59,6 @@ public class GenericHibernateDao<T extends Serializable, PK extends Serializable
     }
 
     @Override
-    public T getLast(String colName) {
-        List<T> resultList = makeTypedQueryDesc(colName).setMaxResults(1).getResultList();
-        if (resultList.isEmpty()) {
-            return null;
-        }
-        return resultList.get(0);
-    }
-
-    @Override
     public T getForUpdate(PK id) {
         return (T) getSession().get(entityClass, id, LockOptions.UPGRADE);
     }
@@ -102,9 +92,9 @@ public class GenericHibernateDao<T extends Serializable, PK extends Serializable
     }
 
     @Override
-    public long count() {
+    public int count() {
         Number number = (Number) getSession().createQuery("select count(u) from " + entityClass.getName() + " u").getSingleResult();
-        return number.longValue();
+        return number.intValue();
     }
 
     @Override
@@ -113,17 +103,17 @@ public class GenericHibernateDao<T extends Serializable, PK extends Serializable
     }
 
     @Override
-    public List<T> list(int max) {
+    public List<T> list(int limit) {
         return makeTypedQuery()
-                .setMaxResults(max)
+                .setMaxResults(limit)
                 .getResultList();
     }
 
     @Override
-    public List<T> list(int first, int max) {
+    public List<T> list(int offset, int limit) {
         return makeTypedQuery()
-                .setFirstResult(first)
-                .setMaxResults(max)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
                 .getResultList();
     }
 
@@ -133,34 +123,18 @@ public class GenericHibernateDao<T extends Serializable, PK extends Serializable
     }
 
     @Override
-    public List<T> listDesc(String colName, int max) {
+    public List<T> listDesc(String colName, int limit) {
         return makeTypedQueryDesc(colName)
-                .setMaxResults(max)
+                .setMaxResults(limit)
                 .getResultList();
     }
 
     @Override
-    public List<T> listDesc(String colName, int first, int max) {
+    public List<T> listDesc(String colName, int offset, int limit) {
         return makeTypedQueryDesc(colName)
-                .setFirstResult(first)
-                .setMaxResults(max)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
                 .getResultList();
-    }
-
-    @Override
-    public SearchResult<T> query(String hql, int pageId, int max) {
-        Session session = getSession();
-        TypedQuery countQuery = session.createQuery("select count(*) " + hql);
-        Number number = (Number) countQuery.getSingleResult();
-        int count = number.intValue();
-
-        int start = (pageId - 1) * max;
-        TypedQuery query = session.createQuery(hql);
-        query.setFirstResult(start);
-        query.setMaxResults(max);
-        List<T> list = query.getResultList();
-
-        return new SearchResult<>(start, max, count, list);
     }
 
 }

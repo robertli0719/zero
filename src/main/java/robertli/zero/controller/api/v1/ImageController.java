@@ -23,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import robertli.zero.controller.RestException;
 import robertli.zero.core.ImagePathService;
 import robertli.zero.core.ImageService;
-import robertli.zero.entity.FileRecord;
 import robertli.zero.service.StorageService;
 
 /**
@@ -58,8 +57,8 @@ public class ImageController {
             response.flushBuffer();
             return;
         }
-        FileRecord record = storageService.getFileRecord(id);
-        if (record == null) {
+        String contentType = storageService.getContentType(id);
+        if (contentType == null) {
             String errorDetail = "can't found image id:" + id;
             throw new RestException("NOT_FOUND", "Image not found", errorDetail, HttpStatus.NOT_FOUND);
         }
@@ -68,7 +67,7 @@ public class ImageController {
         response.setDateHeader("Retry-After", expire);
         response.setHeader("Cache-Control", "public");
         response.setDateHeader("Last-Modified", lastModifiedMillis);
-        response.setContentType(record.getType());
+        response.setContentType(contentType);
 
         byte[] data = storageService.get(id);
         response.getOutputStream().write(data);
@@ -99,9 +98,9 @@ public class ImageController {
 
     @RequestMapping(path = "cropper/{id}", method = RequestMethod.POST)
     public String cropper(@PathVariable String id, int x, int y, int width, int height) throws IOException {
-        FileRecord record = storageService.getFileRecord(id);
+        final String name = storageService.getFileName(id);
         byte[] oldData = storageService.get(id);
-        String uuid = storageService.register(record.getName(), "image/jpeg");
+        String uuid = storageService.register(name, "image/jpeg");
         storageService.store(uuid, cropImageData(oldData, "jpg", x, y, width, height));
         String url = imagePathService.makeImageUrl(uuid);
         return url;
@@ -116,9 +115,9 @@ public class ImageController {
 
     @RequestMapping(path = "fixer/{id}", method = RequestMethod.POST)
     public String fixer(@PathVariable String id, int x, int y, int width, int height, int fixedWidth, int fixedHeight) throws IOException {
-        FileRecord record = storageService.getFileRecord(id);
+        final String name = storageService.getFileName(id);
         byte[] oldData = storageService.get(id);
-        String uuid = storageService.register(record.getName(), "image/jpeg");
+        String uuid = storageService.register(name, "image/jpeg");
         storageService.store(uuid, fixImageData(oldData, "jpg", x, y, width, height, fixedWidth, fixedHeight));
         String url = imagePathService.makeImageUrl(uuid);
         return url;

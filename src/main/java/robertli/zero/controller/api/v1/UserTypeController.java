@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Robert Li.
+ * Copyright 2017 Robert Li.
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
@@ -9,10 +9,13 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import robertli.zero.dto.PagingModal;
+import robertli.zero.dto.QueryResult;
 import robertli.zero.dto.user.UserTypeDto;
 import robertli.zero.service.UserService;
 
@@ -28,8 +31,13 @@ public class UserTypeController {
     private UserService userService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<UserTypeDto> getUserTypes() {
-        return userService.getUserTypeList();
+    public List<UserTypeDto> getUserTypes(@RequestAttribute PagingModal pagingModal) {
+        final int offset = pagingModal.getOffset();
+        final int limit = pagingModal.getLimit();
+        final QueryResult queryResult = userService.getUserTypeList(offset, limit);
+        final int count = queryResult.getCount();
+        pagingModal.placeHeaders(count);
+        return queryResult.getResultList();
     }
 
     @RequestMapping(method = RequestMethod.POST)

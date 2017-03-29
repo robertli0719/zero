@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Robert Li.
+ * Copyright 2017 Robert Li.
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
@@ -12,11 +12,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
  *
- * @version 1.0 2016-10-04
+ * @version 1.0.1 2017-03-15
  * @author Robert Li
  */
 @Entity
@@ -26,8 +27,7 @@ public class Link implements Serializable {
     private int id;
     private String title;
     private String url;
-    private String imgUrl;
-    private String imgId;
+    private FileRecord img;
     private String comment;
     private LinkGroup linkGroup;
 
@@ -59,22 +59,13 @@ public class Link implements Serializable {
         this.url = url;
     }
 
-    @Column(length = 190)
-    public String getImgUrl() {
-        return imgUrl;
+    @OneToOne(orphanRemoval = true)
+    public FileRecord getImg() {
+        return img;
     }
 
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
-    }
-
-    @Column(length = 36)
-    public String getImgId() {
-        return imgId;
-    }
-
-    public void setImgId(String imgId) {
-        this.imgId = imgId;
+    public void setImg(FileRecord img) {
+        this.img = img;
     }
 
     @Column(nullable = false, length = 190)

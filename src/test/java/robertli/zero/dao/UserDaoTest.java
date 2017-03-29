@@ -10,7 +10,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import robertli.zero.core.RandomCodeCreater;
 import robertli.zero.entity.User;
-import robertli.zero.dto.SearchResult;
 import robertli.zero.service.UserService;
 import robertli.zero.test.StressTest;
 
@@ -29,19 +28,6 @@ public class UserDaoTest {
         randomCodeCreater = (RandomCodeCreater) context.getBean("randomCodeCreater");
     }
 
-    public void testRegister1() {
-        SearchResult<User> result = userDao.paging(2, 10);
-        System.out.println(result.getCount());
-        System.out.println(result.getMax());
-        System.out.println(result.getPageId());
-        System.out.println(result.getPageSize());
-        System.out.println(result.getStart());
-        for (User user : result.getList()) {
-            System.out.println(user.getId() + "\t" + user.getName());
-        }
-
-    }
-
     public void testList() {
 //        userDao.list().size();
 //        userDao.list(3, 40).size();
@@ -53,7 +39,7 @@ public class UserDaoTest {
 //        System.out.println("error id user:" + userDao.get(9999999));
 //        System.out.println("count user:" + userDao.count());
 
-        List<User> userList = userDao.getUserListByPlatform(UserService.USER_PLATFORM_ADMIN);
+        List<User> userList = userDao.getUserListByPlatform(UserService.USER_PLATFORM_ADMIN, 0, 100);
         System.out.println("size:" + userList.size());
 //        userDao.getUserListByRole(UserService.USER_ROLE_ADMIN_ROOT);
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Robert Li.
+ * Copyright 2017 Robert Li.
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Component;
 import robertli.zero.dao.LinkDao;
 import robertli.zero.dao.LinkGroupDao;
+import robertli.zero.entity.FileRecord;
 import robertli.zero.entity.Link;
 import robertli.zero.entity.LinkGroup;
 
@@ -23,14 +24,13 @@ public class LinkDaoImpl extends GenericHibernateDao<Link, Integer> implements L
     private LinkGroupDao linkGroupDao;
 
     @Override
-    public Link saveLink(String title, String url, String imgUrl, String imgId, String comment, int linkGroupId) {
+    public Link saveLink(String title, String url, FileRecord img, String comment, int linkGroupId) {
         LinkGroup linkGroup = linkGroupDao.get(linkGroupId);
 
         Link link = new Link();
         link.setTitle(title);
         link.setUrl(url);
-        link.setImgId(imgId);
-        link.setImgUrl(imgUrl);
+        link.setImg(img);
         link.setComment(comment);
         link.setLinkGroup(linkGroup);
         this.save(link);

@@ -5,19 +5,19 @@
  */
 package robertli.zero.service;
 
-import java.util.List;
+import robertli.zero.dto.QueryResult;
 import robertli.zero.dto.user.StaffUserDto;
 
 /**
  *
- * @version 1.0.2 2017-01-10
+ * @version 1.0.3 2017-03-28
  * @author Robert Li
  */
 public interface StaffUserService {
 
-    public List<StaffUserDto> getStaffUserList(String userPlatformName);
+    public QueryResult<StaffUserDto> getStaffUserList(String userPlatformName, int offset, int limit);
 
-    public List<StaffUserDto> getStaffRootUserList(String userPlatformName);
+    public QueryResult<StaffUserDto> getStaffRootUserList(String userPlatformName, int offset, int limit);
 
     public StaffUserDto getStaffUser(String userPlatformName, String username);
 
@@ -25,7 +25,7 @@ public interface StaffUserService {
 
     public boolean isPlatformRoot(String userPlatformName, String username);
 
-    public void addStaffUser(String userPlatformName,StaffUserDto staffUserDto);
+    public void addStaffUser(String userPlatformName, StaffUserDto staffUserDto);
 
     public void deleteStaffUser(String userPlatformName, String username);
 

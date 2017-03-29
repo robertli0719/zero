@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Robert Li.
+ * Copyright 2017 Robert Li.
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
@@ -27,14 +27,14 @@ public class LinkGroupDaoImpl extends GenericHibernateDao<LinkGroup, Integer> im
     @Override
     public List<String> getNamespaceList() {
         Session session = sessionFactory.getCurrentSession();
-        TypedQuery query = session.createQuery("select namespace from LinkGroup group by namespace");
+        TypedQuery query = session.createQuery("select lg.namespace from LinkGroup lg group by lg.namespace");
         return query.getResultList();
     }
 
     @Override
     public List<String> getPageNameList(String namespace) {
         Session session = sessionFactory.getCurrentSession();
-        TypedQuery query = session.createQuery("select pageName from LinkGroup where namespace=:namespace group by pageName");
+        TypedQuery query = session.createQuery("select lg.pageName from LinkGroup lg where lg.namespace=:namespace group by lg.pageName");
         query.setParameter("namespace", namespace);
         return query.getResultList();
     }
@@ -42,7 +42,7 @@ public class LinkGroupDaoImpl extends GenericHibernateDao<LinkGroup, Integer> im
     @Override
     public List<LinkGroup> getLinkGroupList(String namespace, String pageName) {
         Session session = sessionFactory.getCurrentSession();
-        TypedQuery query = session.createQuery("from LinkGroup where namespace=:namespace and pageName=:pageName");
+        TypedQuery query = session.createQuery("select lg from LinkGroup lg where lg.namespace=:namespace and lg.pageName=:pageName");
         query.setParameter("namespace", namespace);
         query.setParameter("pageName", pageName);
         return query.getResultList();
@@ -51,7 +51,7 @@ public class LinkGroupDaoImpl extends GenericHibernateDao<LinkGroup, Integer> im
     @Override
     public List<String> getNameList(String namespace, String pageName) {
         Session session = sessionFactory.getCurrentSession();
-        TypedQuery query = session.createQuery("select name from LinkGroup where namespace=:namespace and pageName=:pageName");
+        TypedQuery query = session.createQuery("select lg.name from LinkGroup lg where lg.namespace=:namespace and lg.pageName=:pageName");
         query.setParameter("namespace", namespace);
         query.setParameter("pageName", pageName);
         return query.getResultList();
@@ -60,7 +60,7 @@ public class LinkGroupDaoImpl extends GenericHibernateDao<LinkGroup, Integer> im
     @Override
     public LinkGroup getLinkGroup(String namespace, String pageName, String name) {
         Session session = sessionFactory.getCurrentSession();
-        TypedQuery query = session.createQuery("from LinkGroup where namespace=:namespace and pageName=:pageName and name=:name");
+        TypedQuery query = session.createQuery("select lg from LinkGroup lg where lg.namespace=:namespace and lg.pageName=:pageName and lg.name=:name");
         query.setParameter("namespace", namespace);
         query.setParameter("pageName", pageName);
         query.setParameter("name", name);
@@ -80,19 +80,19 @@ public class LinkGroupDaoImpl extends GenericHibernateDao<LinkGroup, Integer> im
         linkGroup.setPageName(pageName);
         linkGroup.setName(name);
         linkGroup.setComment(comment);
-        linkGroup.setPicWidth(picWidth);
-        linkGroup.setPicHeight(picHeight);
         save(linkGroup);
     }
 
     @Override
     public void deleteLinkGroup(String namespace, String pageName, String name) {
         Session session = sessionFactory.getCurrentSession();
-        TypedQuery delete_query = session.createQuery("delete from LinkGroup where namespace=:namespace and pageName=:pageName and name=:name");
-        delete_query.setParameter("namespace", namespace);
-        delete_query.setParameter("pageName", pageName);
-        delete_query.setParameter("name", name);
-        delete_query.executeUpdate();
+        TypedQuery query = session.createQuery("select lg from LinkGroup lg where lg.namespace=:namespace and lg.pageName=:pageName and lg.name=:name");
+        query.setParameter("namespace", namespace);
+        query.setParameter("pageName", pageName);
+        query.setParameter("name", name);
+        query.setMaxResults(1);
+        LinkGroup linkGroup = (LinkGroup) query.getSingleResult();
+        delete(linkGroup);
     }
 
 }

@@ -12,12 +12,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
  *
  * @see Page
- * @version 1.0 2016-10-02
+ * @version 1.0.1 2017-03-15
  * @author Robert Li
  */
 @Entity
@@ -26,8 +27,7 @@ public class PageImage implements Serializable {
 
     private int id;
     private Page page;
-    private String imgId;
-    private String imgUrl;
+    private FileRecord img;
 
     @Id
     @GeneratedValue
@@ -49,22 +49,13 @@ public class PageImage implements Serializable {
         this.page = page;
     }
 
-    @Column(nullable = false, length = 36)
-    public String getImgId() {
-        return imgId;
+    @OneToOne(orphanRemoval = true)
+    public FileRecord getImg() {
+        return img;
     }
 
-    public void setImgId(String imgId) {
-        this.imgId = imgId;
-    }
-
-    @Column(nullable = false, length = 190)
-    public String getImgUrl() {
-        return imgUrl;
-    }
-
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
+    public void setImg(FileRecord img) {
+        this.img = img;
     }
 
 }

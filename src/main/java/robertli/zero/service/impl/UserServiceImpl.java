@@ -20,6 +20,7 @@ import robertli.zero.dao.UserPlatformDao;
 import robertli.zero.dao.UserRoleDao;
 import robertli.zero.dao.UserRoleItemDao;
 import robertli.zero.dao.UserTypeDao;
+import robertli.zero.dto.QueryResult;
 import robertli.zero.dto.user.UserPlatformDto;
 import robertli.zero.dto.user.UserRoleDto;
 import robertli.zero.dto.user.UserTypeDto;
@@ -182,35 +183,44 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserTypeDto> getUserTypeList() {
-        List<UserType> userTypeList = userTypeDao.list();
-        return modelMapper.map(userTypeList, new TypeToken<List<UserTypeDto>>() {
+    public QueryResult<UserTypeDto> getUserTypeList(int offset, int limit) {
+        final List<UserType> userTypeList = userTypeDao.list(offset, limit);
+        final List<UserTypeDto> resultList = modelMapper.map(userTypeList, new TypeToken<List<UserTypeDto>>() {
         }.getType());
+        final int count = userTypeDao.count();
+        return new QueryResult<>(offset, limit, count, resultList);
     }
 
     @Override
-    public List<UserPlatformDto> getUserPlatformList() {
-        List<UserPlatform> userPlatformList = userPlatformDao.list();
-        return modelMapper.map(userPlatformList, new TypeToken<List<UserPlatformDto>>() {
+    public QueryResult<UserPlatformDto> getUserPlatformList(int offset, int limit) {
+        final List<UserPlatform> userPlatformList = userPlatformDao.list(offset, limit);
+        final List<UserPlatformDto> resultList = modelMapper.map(userPlatformList, new TypeToken<List<UserPlatformDto>>() {
         }.getType());
+        final int count = userPlatformDao.count();
+        return new QueryResult<>(offset, limit, count, resultList);
     }
 
     @Override
-    public List<User> getUserListByPlatform(String userPlatformName) {
-        UserPlatform userPlatform = userPlatformDao.get(userPlatformName);
-        return userPlatform.getUserList();
+    public QueryResult<User> getUserListByPlatform(String userPlatformName, int offset, int limit) {
+        final List<User> userList = userDao.getUserListByPlatform(userPlatformName, offset, limit);
+        final int count = userDao.countUserByPlatform(userPlatformName);
+        return new QueryResult<>(offset, limit, count, userList);
     }
 
     @Override
-    public List<User> getUserListByRole(String roleName) {
-        return userDao.getUserListByRole(roleName);
+    public QueryResult<User> getUserListByRole(String roleName, int offset, int limit) {
+        final List<User> userList = userDao.getUserListByRole(roleName, offset, limit);
+        final int count = userDao.countUserByRole(roleName);
+        return new QueryResult<>(offset, limit, count, userList);
     }
 
     @Override
-    public List<UserRoleDto> getUserRoleList() {
-        List<UserRole> userRoleList = userRoleDao.list();
-        return modelMapper.map(userRoleList, new TypeToken<List<UserRoleDto>>() {
+    public QueryResult<UserRoleDto> getUserRoleList(int offset, int limit) {
+        final List<UserRole> userRoleList = userRoleDao.list(offset, limit);
+        final List<UserRoleDto> resultList = modelMapper.map(userRoleList, new TypeToken<List<UserRoleDto>>() {
         }.getType());
+        final int count = userRoleDao.count();
+        return new QueryResult<>(offset, limit, count, resultList);
     }
 
 }

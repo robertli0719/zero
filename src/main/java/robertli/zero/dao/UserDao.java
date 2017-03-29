@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Robert Li.
+ * Copyright 2017 Robert Li.
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
@@ -7,11 +7,10 @@ package robertli.zero.dao;
 
 import java.util.List;
 import robertli.zero.entity.User;
-import robertli.zero.dto.SearchResult;
 
 /**
  *
- * @version 1.0.1 2017-01-27
+ * @version 1.0.2 2017-03-28
  * @author Robert Li
  */
 public interface UserDao extends GenericDao<User, Integer> {
@@ -20,13 +19,12 @@ public interface UserDao extends GenericDao<User, Integer> {
 
     public User getUserByUid(String uid);
 
-    public SearchResult<User> paging(int pageId, int max);
+    public int countUserByPlatform(String userPlatformName);
 
-    public SearchResult<User> searchByName(String name, int pageId, int max);
+    public int countUserByRole(String userRoleName);
 
-    public SearchResult<User> searchByAuthId(String authId, int pageId, int max);
+    public List<User> getUserListByPlatform(String userPlatformName, int offset, int limit);
 
-    public List<User> getUserListByPlatform(String userPlatformName);
+    public List<User> getUserListByRole(String userRoleName, int offset, int limit);
 
-    public List<User> getUserListByRole(String userRoleName);
 }

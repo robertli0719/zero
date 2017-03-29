@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Robert Li.
+ * Copyright 2017 Robert Li.
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
@@ -17,7 +17,7 @@ import javax.persistence.UniqueConstraint;
 
 /**
  *
- * @version 1.0 2016-10-04
+ * @version 1.0.1 2017-03-15
  * @author Robert Li
  */
 @Entity
@@ -30,8 +30,6 @@ public class LinkGroup implements Serializable {
     private String pageName;
     private String name;
     private String comment;
-    private int picWidth;
-    private int picHeight;
     private List<Link> linkList;
 
     @Id
@@ -80,23 +78,7 @@ public class LinkGroup implements Serializable {
         this.comment = comment;
     }
 
-    public int getPicWidth() {
-        return picWidth;
-    }
-
-    public void setPicWidth(int picWidth) {
-        this.picWidth = picWidth;
-    }
-
-    public int getPicHeight() {
-        return picHeight;
-    }
-
-    public void setPicHeight(int picHeight) {
-        this.picHeight = picHeight;
-    }
-
-    @OneToMany(mappedBy = "linkGroup")
+    @OneToMany(mappedBy = "linkGroup", orphanRemoval = true)
     public List<Link> getLinkList() {
         return linkList;
     }

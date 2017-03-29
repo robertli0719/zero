@@ -15,6 +15,7 @@ import org.modelmapper.TypeToken;
 import org.modelmapper.spi.MappingContext;
 import org.springframework.stereotype.Component;
 import robertli.zero.dao.UserRoleItemDao;
+import robertli.zero.dto.QueryResult;
 import robertli.zero.dto.user.StaffUserDto;
 import robertli.zero.entity.User;
 import robertli.zero.entity.UserPlatform;
@@ -64,18 +65,26 @@ public class StaffUserServiceImpl implements StaffUserService {
         });
     }
 
-    @Override
-    public List<StaffUserDto> getStaffUserList(final String userPlatformName) {
-        List<User> userList = userService.getUserListByPlatform(userPlatformName);
-        return modelMapper.map(userList, new TypeToken<List<StaffUserDto>>() {
+    private QueryResult<StaffUserDto> convert(QueryResult<User> userQueryResult) {
+        final int offset = userQueryResult.getOffset();
+        final int limit = userQueryResult.getLimit();
+        final List<User> userList = userQueryResult.getResultList();
+        final List<StaffUserDto> resultList = modelMapper.map(userList, new TypeToken<List<StaffUserDto>>() {
         }.getType());
+        final int count = userQueryResult.getCount();
+        return new QueryResult<>(offset, limit, count, resultList);
     }
 
     @Override
-    public List<StaffUserDto> getStaffRootUserList(String userPlatformName) {
-        List<User> userList = userService.getUserListByRole(UserService.USER_ROLE_PLATFORM_ROOT);
-        return modelMapper.map(userList, new TypeToken<List<StaffUserDto>>() {
-        }.getType());
+    public QueryResult<StaffUserDto> getStaffUserList(final String userPlatformName, int offset, int limit) {
+        final QueryResult<User> userQueryResult = userService.getUserListByPlatform(userPlatformName, offset, limit);
+        return convert(userQueryResult);
+    }
+
+    @Override
+    public QueryResult<StaffUserDto> getStaffRootUserList(String userPlatformName, int offset, int limit) {
+        final QueryResult<User> userQueryResult = userService.getUserListByRole(UserService.USER_ROLE_PLATFORM_ROOT, offset, limit);
+        return convert(userQueryResult);
     }
 
     @Override

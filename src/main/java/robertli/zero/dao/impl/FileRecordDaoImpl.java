@@ -5,52 +5,66 @@
  */
 package robertli.zero.dao.impl;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 import javax.annotation.Resource;
-import javax.persistence.TypedQuery;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
+import robertli.zero.core.ImagePathService;
 import robertli.zero.dao.FileRecordDao;
+import robertli.zero.dao.FileRecordTokenDao;
 import robertli.zero.entity.FileRecord;
+import robertli.zero.entity.FileRecordToken;
 
 /**
  *
+ * @version 2017-03-20 1.0.1
  * @author Robert Li
  */
 @Component("fileRecordDao")
 public class FileRecordDaoImpl extends GenericHibernateDao<FileRecord, String> implements FileRecordDao {
 
     @Resource
-    private SessionFactory sessionFactory;
+    private ImagePathService imagePathService;
+
+    @Resource
+    private FileRecordTokenDao fileRecordTokenDao;
 
     @Override
-    public FileRecord saveFileRecord(String name, String type) {
-        final String uuid = UUID.randomUUID().toString();
-        final Date now = new Date();
-        FileRecord fileRecord = new FileRecord();
-        fileRecord.setUuid(uuid);
-        fileRecord.setName(name);
-        fileRecord.setType(type);
-        fileRecord.setTemp(true);
-        fileRecord.setCreatedDate(now);
-        fileRecord.setLastAccessDate(now);
-        save(fileRecord);
-        return fileRecord;
+    public FileRecord saveFileRecord(String url) {
+        final String uuid = imagePathService.pickImageId(url);
+        FileRecordToken token = fileRecordTokenDao.get(uuid);
+        if (token == null) {
+            throw new RuntimeException("FileRecordDaoImpl saveFileRecord fail: can't found token for this uuid:" + uuid);
+        } else if (uuid.length() != 36) {
+            throw new RuntimeException("FileRecordDaoImpl saveFileRecord fail: wrong uuid:" + uuid);
+        }
+        FileRecord record = new FileRecord();
+        record.setUrl(url);
+        record.setUuid(uuid);
+        save(record);
+        token.setFileRecord(record);
+        return record;
+    }
+
+    private boolean isEqualsRecord(FileRecord currentRecord, String newUrl) {
+        if (currentRecord == null && newUrl == null) {
+            return true;
+        } else if (currentRecord != null && currentRecord.getUrl().equals(newUrl)) {
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public List<FileRecord> listOverdueFileRecord(final int lifeMinute) {
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.MINUTE, -lifeMinute);
-        Date endDate = cal.getTime();
-        Session session = sessionFactory.getCurrentSession();
-        TypedQuery query = session.createQuery("from FileRecord where createdDate<=:endDate and temp=true");
-        query.setParameter("endDate", endDate);
-        return query.getResultList();
+    public FileRecord replaceFileRecord(FileRecord currentRecord, String newUrl) {
+        if (isEqualsRecord(currentRecord, newUrl)) {
+            return currentRecord;
+        }
+        if (currentRecord != null) {
+            delete(currentRecord);
+        }
+        if (newUrl != null) {
+            return saveFileRecord(newUrl);
+        }
+        return null;
     }
 
 }

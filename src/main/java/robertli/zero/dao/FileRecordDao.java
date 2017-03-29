@@ -1,26 +1,29 @@
 /*
- * Copyright 2016 Robert Li.
+ * Copyright 2017 Robert Li.
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
 package robertli.zero.dao;
 
-import java.util.List;
 import robertli.zero.entity.FileRecord;
 
 /**
  *
+ * @version 2017-03-20 1.0.1
  * @author Robert Li
  */
 public interface FileRecordDao extends GenericDao<FileRecord, String> {
 
-    public FileRecord saveFileRecord(String name, String type);
+    public FileRecord saveFileRecord(String url);
 
     /**
-     * list the FileRecord which has been mark removed.
+     * This function is used to update the tables which has FileRecord. If the
+     * newUrl is equals to the currentRecord, it return currentRecord, else it
+     * delete currentRecord and return a new record.
      *
-     * @param lifeMinute the life time in minute
-     * @return List of FileRecord
+     * @param currentRecord
+     * @param newUrl
+     * @return
      */
-    public List<FileRecord> listOverdueFileRecord(final int lifeMinute);
+    public FileRecord replaceFileRecord(FileRecord currentRecord, String newUrl);
 }

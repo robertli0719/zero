@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Robert Li.
+ * Copyright 2017 Robert Li.
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
@@ -15,6 +15,7 @@ import org.modelmapper.TypeToken;
 import org.modelmapper.spi.MappingContext;
 import org.springframework.stereotype.Component;
 import robertli.zero.dao.UserRoleItemDao;
+import robertli.zero.dto.QueryResult;
 import robertli.zero.dto.user.AdminUserDto;
 import robertli.zero.entity.User;
 import robertli.zero.entity.UserPlatform;
@@ -64,18 +65,26 @@ public class AdminUserServiceImpl implements AdminUserService {
         });
     }
 
-    @Override
-    public List<AdminUserDto> getAdminUserList() {
-        List<User> userList = userService.getUserListByPlatform(UserService.USER_PLATFORM_ADMIN);
-        return modelMapper.map(userList, new TypeToken<List<AdminUserDto>>() {
+    private QueryResult<AdminUserDto> convert(QueryResult<User> userQueryResult) {
+        final int offset = userQueryResult.getOffset();
+        final int limit = userQueryResult.getLimit();
+        final List<User> userList = userQueryResult.getResultList();
+        final List<AdminUserDto> resultList = modelMapper.map(userList, new TypeToken<List<AdminUserDto>>() {
         }.getType());
+        final int count = userQueryResult.getCount();
+        return new QueryResult<>(offset, limit, count, resultList);
     }
 
     @Override
-    public List<AdminUserDto> getAdminRootUserList() {
-        List<User> userList = userService.getUserListByRole(UserService.USER_ROLE_ADMIN_ROOT);
-        return modelMapper.map(userList, new TypeToken<List<AdminUserDto>>() {
-        }.getType());
+    public QueryResult<AdminUserDto> getAdminUserList(int offset, int limit) {
+        final QueryResult<User> userQueryResult = userService.getUserListByPlatform(UserService.USER_PLATFORM_ADMIN, offset, limit);
+        return convert(userQueryResult);
+    }
+
+    @Override
+    public QueryResult<AdminUserDto> getAdminRootUserList(int offset, int limit) {
+        final QueryResult<User> userQueryResult = userService.getUserListByRole(UserService.USER_ROLE_ADMIN_ROOT, offset, limit);
+        return convert(userQueryResult);
     }
 
     @Override

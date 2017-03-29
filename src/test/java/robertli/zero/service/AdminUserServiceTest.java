@@ -7,6 +7,9 @@ package robertli.zero.service;
 
 import java.util.List;
 import java.util.Random;
+import javax.annotation.Resource;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.springframework.context.ApplicationContext;
@@ -63,13 +66,13 @@ public class AdminUserServiceTest {
     public void test1() {
         final String username = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
         final String password = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
-        final int adminListSize = adminUserService.getAdminUserList().size();
+        final long adminListSize = adminUserService.getAdminUserList(0, 100).getCount();
 
         assertFalse(adminUserService.isAdminUser(username));
         assertFalse(adminUserService.isRoot(username));
 
         addAdmin(username, password);
-        int listSizeAfterAdd = adminUserService.getAdminUserList().size();
+        long listSizeAfterAdd = adminUserService.getAdminUserList(0, 100).getCount();
         assertTrue(listSizeAfterAdd == adminListSize + 1);
         assertTrue(adminUserService.isAdminUser(username));
         assertFalse(adminUserService.isRoot(username));
@@ -83,7 +86,7 @@ public class AdminUserServiceTest {
         assertFalse(adminUserService.isRoot(username));
 
         adminUserService.deleteAdminUser(username);
-        int listSizeAfterDelete = adminUserService.getAdminUserList().size();
+        long listSizeAfterDelete = adminUserService.getAdminUserList(0, 100).getCount();
         assertTrue(listSizeAfterDelete == adminListSize);
         assertFalse(adminUserService.isAdminUser(username));
         assertFalse(adminUserService.isRoot(username));
@@ -93,10 +96,10 @@ public class AdminUserServiceTest {
     public void test2() {
         final String username = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
         final String password = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
-        final int adminListSize = adminUserService.getAdminUserList().size();
+        final long adminListSize = adminUserService.getAdminUserList(0, 100).getCount();
 
         addAdmin(username, password);
-        int listSizeAfterAdd = adminUserService.getAdminUserList().size();
+        long listSizeAfterAdd = adminUserService.getAdminUserList(0, 100).getCount();
         assertTrue(listSizeAfterAdd == adminListSize + 1);
 
         UserProfileDto userProfile = adminLogin(username, password);
@@ -108,17 +111,9 @@ public class AdminUserServiceTest {
         assertTrue(userProfile.getUserTypeName().equals(UserService.USER_TYPE_ADMIN));
     }
 
-    public void test3() {
-        List<AdminUserDto> adminUserList = adminUserService.getAdminUserList();
-        for (AdminUserDto user : adminUserList) {
-            System.out.println(user.getUsername() + " " + user.isRoot());
-        }
-    }
-
     public void test() {
         test1();
         test2();
-        test3();
     }
 
     public static void main(String args[]) {

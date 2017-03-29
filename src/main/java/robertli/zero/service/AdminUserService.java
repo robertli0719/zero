@@ -5,19 +5,19 @@
  */
 package robertli.zero.service;
 
-import java.util.List;
+import robertli.zero.dto.QueryResult;
 import robertli.zero.dto.user.AdminUserDto;
 
 /**
  *
- * @version 1.0.3 2017-01-11
+ * @version 1.0.4 2017-03-28
  * @author Robert Li
  */
 public interface AdminUserService {
 
-    public List<AdminUserDto> getAdminUserList();
+    public QueryResult<AdminUserDto> getAdminUserList(int offset, int limit);
 
-    public List<AdminUserDto> getAdminRootUserList();
+    public QueryResult<AdminUserDto> getAdminRootUserList(int offset, int limit);
 
     public AdminUserDto getAdminUser(String username);
 

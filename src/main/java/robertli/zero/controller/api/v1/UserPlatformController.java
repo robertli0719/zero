@@ -9,10 +9,13 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import robertli.zero.dto.PagingModal;
+import robertli.zero.dto.QueryResult;
 import robertli.zero.dto.user.UserPlatformDto;
 import robertli.zero.service.UserService;
 
@@ -28,8 +31,13 @@ public class UserPlatformController {
     private UserService userService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<UserPlatformDto> getUserPlatforms() {
-        return userService.getUserPlatformList();
+    public List<UserPlatformDto> getUserPlatforms(@RequestAttribute PagingModal pagingModal) {
+        final int offset = pagingModal.getOffset();
+        final int limit = pagingModal.getLimit();
+        final QueryResult queryResult = userService.getUserPlatformList(offset, limit);
+        final int count = queryResult.getCount();
+        pagingModal.placeHeaders(count);
+        return queryResult.getResultList();
     }
 
     @RequestMapping(method = RequestMethod.POST)

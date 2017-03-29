@@ -5,7 +5,7 @@
  */
 package robertli.zero.service;
 
-import java.util.List;
+import robertli.zero.dto.QueryResult;
 import robertli.zero.dto.user.UserPlatformDto;
 import robertli.zero.dto.user.UserRoleDto;
 import robertli.zero.dto.user.UserTypeDto;
@@ -17,7 +17,7 @@ import robertli.zero.entity.User;
  * Don't use this service in controller layer. This service is used for other
  * services.
  *
- * @version 1.0.5 2017-01-10
+ * @version 1.0.6 2017-03-28
  * @author Robert Li
  */
 public interface UserService {
@@ -63,14 +63,14 @@ public interface UserService {
 
     public void setLock(int userId, boolean locked);
 
-    public List<UserTypeDto> getUserTypeList();
+    public QueryResult<UserTypeDto> getUserTypeList(int offset, int limit);
 
-    public List<User> getUserListByPlatform(String userPlatformName);
+    public QueryResult<User> getUserListByPlatform(String userPlatformName, int offset, int limit);
 
-    public List<User> getUserListByRole(String roleName);
+    public QueryResult<User> getUserListByRole(String roleName, int offset, int limit);
 
-    public List<UserPlatformDto> getUserPlatformList();
+    public QueryResult<UserPlatformDto> getUserPlatformList(int offset, int limit);
 
-    public List<UserRoleDto> getUserRoleList();
+    public QueryResult<UserRoleDto> getUserRoleList(int offset, int limit);
 
 }
