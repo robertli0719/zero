@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.1.1 2017-02-20
+ * version 1.1.2 2017-03-24
  */
 import * as React from "react";
 import { TagSchema, FieldPlaceOption, Selection } from "./zform_schema"
@@ -51,6 +51,15 @@ type CheckBoxProps = {
 }
 
 export class CheckBox extends React.Component<CheckBoxProps, {}> { }
+
+type CheckBoxesProps = {
+    name: string
+    label: string
+    value?: string[]
+    selections: Selection[]
+}
+
+export class CheckBoxes extends React.Component<CheckBoxesProps, {}> { }
 
 type HiddenProps = {
     name: string

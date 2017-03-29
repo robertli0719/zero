@@ -3,16 +3,16 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.1.1 2017-02-20
+ * version 1.1.2 2017-03-24
  */
 import * as React from "react";
 
 export type FieldPlaceOption = 'default' | 'path' | 'pathAndDto';
-export type TagTypeOption = "map" | "textfield" | "password" | "textarea" | "file" | "checkbox" | "radios" | "hidden" | "select" | "image" | "imageshower" | "submit"
+export type TagTypeOption = "map" | "textfield" | "password" | "textarea" | "file" | "checkbox" | "checkboxes" | "radios" | "hidden" | "select" | "image" | "imageshower" | "submit"
 
 export type ValueMap = { [key: string]: FormValue }
 export type FormError = { errors: string[], children: { [key: string]: any } }
-export type FormValue = string | number | boolean | ValueMap | ValueMap[]
+export type FormValue = string | string[] | number | boolean | ValueMap | ValueMap[]
 
 export type Selection = {
     label: string

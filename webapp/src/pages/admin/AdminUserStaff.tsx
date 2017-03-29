@@ -3,8 +3,9 @@ import { connect } from "react-redux"
 import { store, AppState } from "../../Store"
 import { Button, ButtonToolbar, Row, Col, Panel } from "react-bootstrap";
 import * as zform from "../../components/zero/zform/zform"
-import * as ztable from "../../components/zero/ZTable"
+import * as zview from "../../components/zero/zview/zview"
 import { http, RestErrorDto } from "../../utilities/http"
+import { UpdateEventListener } from "../../components/zero/event/UpdateEventListener"
 
 type StaffUserDto = {
     id: number
@@ -25,7 +26,7 @@ type Props = ReduxProp & CommonProp;
 
 interface State {
     platform: string
-    staffUserList: StaffUserDto[]
+    updateEventListener: UpdateEventListener
 }
 
 class AdminUserStaffComponent extends React.Component<Props, State>{
@@ -33,16 +34,15 @@ class AdminUserStaffComponent extends React.Component<Props, State>{
     constructor(prop: Props) {
         super(prop);
         let platform = this.props.params['platform'];
-        this.state = { platform: platform, staffUserList: [] }
+        this.state = {
+            platform: platform,
+            updateEventListener: new UpdateEventListener()
+        }
         this.updateData();
     }
 
     updateData() {
-        const url = "user-platforms/" + this.state.platform + "/staffs"
-        return http.get(url)
-            .then((staffUserList: StaffUserDto[]) => {
-                this.setState({ staffUserList: staffUserList });
-            });
+        this.state.updateEventListener.trigger()
     }
 
     onAddSuccess() {
@@ -53,14 +53,15 @@ class AdminUserStaffComponent extends React.Component<Props, State>{
         const url = "user-platforms/" + this.state.platform + "/staffs/" + staffUser.username
         http.delete(url)
             .then(() => {
-                this.updateData();
+                this.updateData()
             })
             .catch((error: RestErrorDto) => {
-                console.log(error);
+                console.log(error)
             })
     }
 
     render() {
+        const uri = "user-platforms/" + this.state.platform + "/staffs"
         return (
             <div className="container">
                 <h1>Platform: {this.state.platform}</h1>
@@ -79,11 +80,9 @@ class AdminUserStaffComponent extends React.Component<Props, State>{
 
                     </Col>
                     <Col sm={9}>
-                        <Panel header="Staff List" bsStyle="primary">
-                            <ztable.Table dtoList={this.state.staffUserList} >
-                                <ztable.ColButton name="delete" bsStyle="danger" bsSize="xs" onAction={this.onDelete.bind(this)} />
-                            </ztable.Table>
-                        </Panel>
+                        <zview.View header="Staff List" bsStyle="primary" uri={uri} updateEventListener={this.state.updateEventListener} >
+                            <zview.ColButton name="delete" bsStyle="danger" bsSize="xs" onAction={this.onDelete.bind(this)} />
+                        </zview.View>
                     </Col>
                 </Row>
                 <Row>
@@ -122,7 +121,7 @@ class AdminUserStaffComponent extends React.Component<Props, State>{
 }
 
 function select(state: AppState): ReduxProp {
-    return {};
+    return {}
 }
 
 export let AdminUserStaff = connect(select)(AdminUserStaffComponent)

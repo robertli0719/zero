@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.0.4 2017-02-28
+ * version 1.0.5 2017-03-16
  */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
@@ -93,7 +93,7 @@ export class Table extends React.Component<ShowTableProps, ShowTableState>{
 
     makeBodyRow(dto: any) {
         return this.getNames().map((name) => {
-            if (name == "imgUrl") {
+            if (name == "imgUrl" || name == "logoUrl") {
                 return <td><img className="img-responsive" src={dto[name]} style={{ maxHeight: 200, maxWidth: 200 }} /></td>
             } else if (dto[name] instanceof String) {
                 return <td>{dto[name]}</td>

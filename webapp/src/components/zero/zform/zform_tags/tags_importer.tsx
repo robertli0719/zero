@@ -3,13 +3,14 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.1.2 2017-02-21
+ * version 1.1.3 2017-03-24
  */
 
 import "./map_tag"
 import "./textfield_tag"
 import "./textarea_tag"
 import "./checkbox_tag"
+import "./checkboxes_tag"
 import "./radios_tag"
 import "./hidden_tag"
 import "./submit_tag"

@@ -28,7 +28,7 @@ export function buildUri(action: string, schema: TagSchema, data: FormValue): st
 
         if (!dataMap[key] || dataMap[key].toString().trim().length == 0) {
             const errorChildren = {} as { [key: string]: any }
-            errorChildren[key] = { errors: ["may not be empty"], children: [] }
+            errorChildren[key] = { errors: [" may not be empty"], children: [] }
             throw { errors: [], children: errorChildren } as FormError
         }
         const searchString = "{" + encodeURIComponent(key) + "}"

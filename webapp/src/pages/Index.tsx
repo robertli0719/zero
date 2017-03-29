@@ -1,7 +1,6 @@
-import * as React from "react";
-import * as ReactDOM from "react-dom";
-import { Button, ButtonToolbar } from "react-bootstrap";
-import { ZPanel } from "../components/ZPanel"
+import * as React from "react"
+import * as ReactDOM from "react-dom"
+import { Button, ButtonToolbar } from "react-bootstrap"
 
 interface IndexState {
     num: number
@@ -51,9 +50,7 @@ export class Index extends React.Component<{}, IndexState>{
                     <Button onClick={this.fun3.bind(this)}>fun3</Button>
                     <Button bsStyle="success">hello</Button>
                 </ButtonToolbar>
-                <ZPanel title="Panel-1" />
-                <ZPanel title="Panel-2" />
             </div>
-        );
+        )
     }
 }

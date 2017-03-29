@@ -5,8 +5,9 @@ import { UserProfile } from "../../reducers/me"
 import * as me from "../../actions/me"
 import { Button, ButtonToolbar, Row, Col, Panel, Alert } from "react-bootstrap";
 import * as zform from "../../components/zero/zform/zform"
-import * as ztable from "../../components/zero/ZTable"
+import * as zview from "../../components/zero/zview/zview"
 import { http, RestErrorDto } from "../../utilities/http"
+import { UpdateEventListener } from "../../components/zero/event/UpdateEventListener"
 
 type AdminUserDto = {
     id: number
@@ -22,21 +23,19 @@ interface Props {
 
 interface State {
     adminUserList: AdminUserDto[]
+    updateEventListener: UpdateEventListener
 }
 
 class AdminUserAdminComponent extends React.Component<Props, State>{
 
     constructor(prop: Props) {
         super(prop);
-        this.state = { adminUserList: [] }
+        this.state = { adminUserList: [], updateEventListener: new UpdateEventListener() }
         this.updateData();
     }
 
     updateData() {
-        return http.get("admin-users")
-            .then((adminUserList: AdminUserDto[]) => {
-                this.setState({ adminUserList: adminUserList });
-            });
+        this.state.updateEventListener.trigger()
     }
 
     onAddSuccess() {
@@ -98,6 +97,7 @@ class AdminUserAdminComponent extends React.Component<Props, State>{
     }
 
     render() {
+
         return (
             <div className="container">
                 <h1>Admin Editor</h1>
@@ -114,13 +114,11 @@ class AdminUserAdminComponent extends React.Component<Props, State>{
                         </Panel>
                     </Col>
                     <Col sm={9}>
-                        <Panel header="Admin List" bsStyle="primary">
-                            <ztable.Table dtoList={this.state.adminUserList} >
-                                <ztable.ColButton name="delete" bsStyle="danger" bsSize="xs"
-                                    onAction={this.onDelete.bind(this)}
-                                    onRender={this.onTableButtonRender.bind(this)} />
-                            </ztable.Table>
-                        </Panel>
+                        <zview.View header="Admin List" bsStyle="primary" uri="admin-users" updateEventListener={this.state.updateEventListener}>
+                            <zview.ColButton name="delete" bsStyle="danger" bsSize="xs"
+                                onAction={this.onDelete.bind(this)}
+                                onRender={this.onTableButtonRender.bind(this)} />
+                        </zview.View>
                     </Col>
                 </Row>
                 {this.getUserEditorRow()}
