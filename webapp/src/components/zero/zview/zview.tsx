@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.0.0 2017-03-28
+ * version 1.0.1 2017-03-29
  */
 import * as React from "react"
 import * as rb from "react-bootstrap"
@@ -103,9 +103,10 @@ export class View extends React.Component<ViewProps, ViewState>{
         } else if (this.state.dtoList.length == 0) {
             return <ViewAlert bsStyle="warning" title="No Rows!" text="There is nothing in the table." />
         }
-        const names = dataPicker.pickNames(this.state.dtoList, this.props.select)
-        const heads = dataPicker.pickHeads(this.state.dtoList, this.props.select, this.props.heads)
-        const bodyData = dataPicker.pickBodyData(this.state.dtoList, this.props.select)
+        const dtoList = this.state.dtoList
+        const names = dataPicker.pickNames(dtoList, this.props.select)
+        const heads = dataPicker.pickHeads(dtoList, this.props.select, this.props.heads)
+        const bodyData = dataPicker.pickBodyData(dtoList, this.props.select)
         const additionalColNumber = this.state.additionalColElements.length
         const additionalColElements = this.state.additionalColElements
         return (
@@ -113,7 +114,7 @@ export class View extends React.Component<ViewProps, ViewState>{
                 {this.makeTotalView()}
                 <rb.Table responsive>
                     <ViewHead heads={heads} additionalColNumber={additionalColNumber} />
-                    <ViewBody names={names} data={bodyData} additionalColElements={additionalColElements} />
+                    <ViewBody names={names} dtoList={dtoList} data={bodyData} additionalColElements={additionalColElements} />
                 </rb.Table >
                 <ViewCounter pagination={this.state.pagination} />
                 <ViewLinkGroup links={this.state.links} updateUri={this.updateUri.bind(this)} />

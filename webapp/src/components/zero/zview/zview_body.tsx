@@ -3,11 +3,12 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.0.0 2017-03-28
+ * version 1.0.1 2017-03-29
  */
 import * as React from "react"
 
 export type Props = {
+    dtoList: any[]
     data: any[]
     names: string[]
     additionalColElements: JSX.Element[]
@@ -42,7 +43,7 @@ export class ViewBody extends React.Component<Props, {}>{
         return React.Children.map(additionColElements, (child: any) => {
             let ele = React.cloneElement(child, {
                 index: rowIndex,
-                dto: this.props.data[rowIndex]
+                dto: this.props.dtoList[rowIndex]
             })
             return <td>{ele}</td>
         })
