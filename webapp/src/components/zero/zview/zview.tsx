@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.0.1 2017-03-29
+ * version 1.0.2 2017-03-29
  */
 import * as React from "react"
 import * as rb from "react-bootstrap"
@@ -64,6 +64,13 @@ export class View extends React.Component<ViewProps, ViewState>{
 
     componentDidMount() {
         this.fetchContent()
+    }
+
+    componentWillReceiveProps(nextProps: ViewProps, nextContext: any): void {
+        if (this.props.uri != nextProps.uri) {
+            this.setState({ uri: nextProps.uri })
+            setTimeout(this.fetchContent.bind(this), 0)
+        }
     }
 
     fetchContent() {

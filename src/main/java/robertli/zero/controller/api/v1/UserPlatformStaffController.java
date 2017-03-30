@@ -38,12 +38,14 @@ public class UserPlatformStaffController {
         final int offset = pagingModal.getOffset();
         final int limit = pagingModal.getLimit();
         QueryResult queryResult;
+        int count;
         if (root != null && root) {
             queryResult = staffUserService.getStaffRootUserList(userPlatformName, offset, limit);
+            count = queryResult.getCount();
         } else {
             queryResult = staffUserService.getStaffUserList(userPlatformName, offset, limit);
+            count = queryResult.getCount();
         }
-        final int count = queryResult.getCount();
         pagingModal.placeHeaders(count);
         return queryResult.getResultList();
     }

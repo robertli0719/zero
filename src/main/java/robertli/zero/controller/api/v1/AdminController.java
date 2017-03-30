@@ -38,12 +38,14 @@ public class AdminController {
         final int offset = pagingModal.getOffset();
         final int limit = pagingModal.getLimit();
         QueryResult queryResult;
+        int count;
         if (root != null && root) {
             queryResult = adminUserService.getAdminRootUserList(offset, limit);
+            count = queryResult.getCount();
         } else {
             queryResult = adminUserService.getAdminUserList(offset, limit);
+            count = queryResult.getCount();
         }
-        final int count = queryResult.getCount();
         pagingModal.placeHeaders(count);
         return queryResult.getResultList();
     }
