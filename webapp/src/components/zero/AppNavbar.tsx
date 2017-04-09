@@ -5,11 +5,11 @@
  * 
  * version 1.0 2017-01-01
  */
-import * as React from "react";
-import * as ReactDOM from "react-dom";
-import { Button, ButtonToolbar, Navbar, Nav, NavItem, NavbarProps, NavItemProps, NavDropdown, MenuItem } from "react-bootstrap";
-import { Link } from 'react-router';
-import { LinkContainer } from 'react-router-bootstrap';
+import * as React from "react"
+import * as ReactDOM from "react-dom"
+import { Button, ButtonToolbar, Navbar, Nav, NavItem, NavbarProps, NavItemProps, NavDropdown, MenuItem } from "react-bootstrap"
+import { Link } from 'react-router'
+import { LinkContainer } from 'react-router-bootstrap'
 
 export interface NavbarItem {
     name: string
@@ -38,7 +38,7 @@ export class AppNavbar extends React.Component<AppNavbarProp, {}>{
         } else if (item.onClick) {
             return <MenuItem onClick={item.onClick} eventKey={index}>{item.name}</MenuItem>
         } else if (item.childs && item.childs.length > 0) {
-            throw "AppNavbar can't support submenu so far. -> " + item.name;
+            throw "AppNavbar can't support submenu so far. -> " + item.name
         } else {
             return <MenuItem disabled eventKey={index}>{item.name}</MenuItem>
         }
@@ -50,8 +50,8 @@ export class AppNavbar extends React.Component<AppNavbarProp, {}>{
             <NavDropdown eventKey={index + 1} title={item.name} id={navbarId}>
                 {
                     item.childs.map((item, subindex) => {
-                        let i = index + 1 + (subindex + 1) / 10;
-                        return this.createMenuItem(item, i);
+                        const i = index + 1 + (subindex + 1) / 10
+                        return this.createMenuItem(item, i)
                     })
                 }
             </NavDropdown>
@@ -68,7 +68,7 @@ export class AppNavbar extends React.Component<AppNavbarProp, {}>{
         } else if (item.onClick) {
             return <NavItem onClick={item.onClick} eventKey={index + 1}>{item.name}</NavItem>
         } else if (item.childs && item.childs.length > 0) {
-            return this.createMenu(item, index);
+            return this.createMenu(item, index)
         } else {
             return <NavItem disabled eventKey={index + 1}>{item.name}</NavItem>
         }
@@ -86,16 +86,16 @@ export class AppNavbar extends React.Component<AppNavbarProp, {}>{
                 <Navbar.Collapse>
                     <Nav>
                         {this.props.itemList.map((item, index) => {
-                            return this.createNavbarItem(item, index);
+                            return this.createNavbarItem(item, index)
                         })}
                     </Nav>
                     <Nav pullRight>
                         {this.props.rightItemList.map((item, index) => {
-                            return this.createNavbarItem(item, index);
+                            return this.createNavbarItem(item, index)
                         })}
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
-        );
+        )
     }
 }

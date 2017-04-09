@@ -5,7 +5,7 @@
  * 
  * version 1.1.2 2017-02-21
  */
-import * as React from "react";
+import * as React from "react"
 import * as _ from "lodash"
 import { TagSchema, FieldPlaceOption, Selection, FormError } from "./zform_schema"
 
@@ -41,7 +41,7 @@ function getSubTagSchemaByName(schema: TagSchema, name: string) {
 
 function getSubTagSchemaByKeyArray(schema: TagSchema, keyArray: string[]): TagSchema {
     if (keyArray.length == 0) {
-        return null;
+        return null
     }
     return getSubTagSchemaByName(schema, keyArray[0])
 }

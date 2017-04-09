@@ -11,13 +11,12 @@ interface IndexState {
 export class Index extends React.Component<{}, IndexState>{
 
     constructor() {
-        super();
+        super()
         //there are two variable in the state.
-        this.state = { name: "hello", num: 0, items: [] };
+        this.state = { name: "hello", num: 0, items: [] }
     }
 
     fun1() {
-        //For this.state.num++;
         this.setState({ num: this.state.num + 1 })
     }
 

@@ -11,20 +11,20 @@ type State = {
 export class TestWebsocket extends React.Component<{}, State>{
 
     constructor(props: {}) {
-        super(props);
+        super(props)
         this.state = { msg: [] }
     }
 
     log(str: string) {
         console.log(str)
         this.state.msg.push(str)
-        this.setState(this.state);
+        this.setState(this.state)
     }
 
     connect() {
-        let host = window.location.host;
+        const host = window.location.host
         this.log(host)
-        let ws: WebSocket = new WebSocket("ws://" + host + "/Zero/chat")
+        const ws: WebSocket = new WebSocket("ws://" + host + "/Zero/chat")
         ws.onopen = () => {
             this.log("open")
 
@@ -35,8 +35,8 @@ export class TestWebsocket extends React.Component<{}, State>{
         }
 
         ws.onerror = (error: any) => {
-            console.log(error);
-            this.log("Error: " + error);
+            console.log(error)
+            this.log("Error: " + error)
         }
 
         ws.onclose = () => {
@@ -45,14 +45,14 @@ export class TestWebsocket extends React.Component<{}, State>{
 
         setInterval(() => {
             if (!ws.readyState) {
-                return;
+                return
             }
             ws.send("hello,world~! " + (new Date()))
-        }, 10000);
+        }, 10000)
     }
 
     run() {
-        this.connect();
+        this.connect()
     }
 
     render() {

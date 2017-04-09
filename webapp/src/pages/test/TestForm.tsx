@@ -5,7 +5,7 @@ import { Button, ButtonToolbar, FormControl, FormGroup, Col } from "react-bootst
 import * as zform from "../../components/zero/zform/zform"
 
 
-let testForm: zform.TagSchema = {
+const testForm: zform.TagSchema = {
     type: "map", children: [
         { type: "textfield", label: "Username", name: "username" },
         { type: "password", label: "Password", name: "password" },
@@ -55,7 +55,7 @@ let testForm: zform.TagSchema = {
 
 }
 
-let testForm2: zform.TagSchema = {
+const testForm2: zform.TagSchema = {
     type: "map", children: [
         { type: "textfield", label: "Username", name: "username" },
         { type: "password", label: "Password", name: "password" },
@@ -71,7 +71,7 @@ let testForm2: zform.TagSchema = {
     ]
 }
 
-let testForm3: zform.TagSchema = {
+const testForm3: zform.TagSchema = {
     type: "map", children: []
 }
 
@@ -82,7 +82,7 @@ type Prop = {
 export class TestFormPage extends React.Component<Prop, {}>{
 
     constructor(props: Prop) {
-        super(props);
+        super(props)
     }
 
     render() {
@@ -100,19 +100,20 @@ export class TestFormPage extends React.Component<Prop, {}>{
                         </zform.Map>
                         <zform.ImageShower name="imgUrl" />
                         <zform.Image label="Product Image" name="imgUrl" />
+                        <zform.Video label="Product Video" name="imgUrl" />
                         <zform.Submit value="Add" />
                     </zform.Form>
                 </Col>
                 <div>{this.props.val}</div>
             </div>
-        );
+        )
     }
 }
 
 
 function select(state: AppState): Prop {
-    return { val: state.test.val };
+    return { val: state.test.val }
 }
 
-export let TestForm = connect(select)(TestFormPage);
+export const TestForm = connect(select)(TestFormPage)
 

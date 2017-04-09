@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.1.3 2017-03-24
+ * version 1.1.4 2017-04-08
  */
 
 import "./map_tag"
@@ -17,3 +17,4 @@ import "./submit_tag"
 import "./select_tag"
 import "./image_tag"
 import "./image_shower_tag"
+import "./video_tag"

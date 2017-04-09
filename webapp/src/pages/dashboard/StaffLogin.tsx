@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from "react"
 import { connect } from "react-redux"
 import { hashHistory } from "react-router"
 import { Button, ButtonToolbar, ControlLabel, FormControl, Form, FormGroup, Checkbox, Col, Row, Panel } from "react-bootstrap"
@@ -18,7 +18,7 @@ type CommonProps = {
     params: any
 }
 
-type Props = ReduxProps & CommonProps;
+type Props = ReduxProps & CommonProps
 
 type StaffLoginState = {
     userPlatformName: string
@@ -27,28 +27,28 @@ type StaffLoginState = {
 export class StaffLoginPage extends React.Component<Props, StaffLoginState>{
 
     constructor(props: Props) {
-        super(props);
-        let platform = this.props.params['platform'];
+        super(props)
+        const platform = this.props.params['platform']
         this.state = {
             userPlatformName: platform,
         }
-        console.log("staffLogin:", platform);
-        console.log("StaffLoginPage constructor");
+        console.log("staffLogin:", platform)
+        console.log("StaffLoginPage constructor")
     }
 
     onSuccess() {
-        store.dispatch(me.loadProfile());
+        store.dispatch(me.loadProfile())
     }
 
     logout() {
         store.dispatch(me.triggerLogout()).then(() => {
-            const loginPath = '/dashboard/' + this.state.userPlatformName + "/login";
-            hashHistory.replace(loginPath);
+            const loginPath = '/dashboard/' + this.state.userPlatformName + "/login"
+            hashHistory.replace(loginPath)
         })
     }
 
     render() {
-        let loginForm = (
+        const loginForm = (
             <Row>
                 <Col xs={12} sm={4} md={3}>
                     <zform.Form action="me/auth" method="PUT" onSuccess={this.onSuccess.bind(this)}>
@@ -61,23 +61,23 @@ export class StaffLoginPage extends React.Component<Props, StaffLoginState>{
                 </Col>
             </Row>
         )
-        const indexUrl = '/dashboard/' + this.state.userPlatformName + "/index";
-        let onlineRedirectPanel = (
+        const indexUrl = '/dashboard/' + this.state.userPlatformName + "/index"
+        const onlineRedirectPanel = (
             <Panel header="current logged in">
                 <Link to={indexUrl}>Click here to dashboard</Link>
             </Panel>
         )
-        let wrongUserTypePanel = (
+        const wrongUserTypePanel = (
             <Panel header="current logged in">
                 <p>You have logged in, but you are not a user of {this.state.userPlatformName}</p>
                 <a onClick={this.logout.bind(this)}>Click here to log out.</a>
             </Panel>
         )
-        let panel = null;
+        let panel = null
         if (me.isLogged() == false) {
-            panel = loginForm;
+            panel = loginForm
         } else if (me.isPlatformUser(this.state.userPlatformName)) {
-            panel = onlineRedirectPanel;
+            panel = onlineRedirectPanel
         } else {
             panel = wrongUserTypePanel
         }
@@ -86,12 +86,12 @@ export class StaffLoginPage extends React.Component<Props, StaffLoginState>{
                 <h1>{this.state.userPlatformName} User Login</h1>
                 {panel}
             </div>
-        );
+        )
     }
 }
 
 function select(state: AppState): ReduxProps {
-    return { me: state.me };
+    return { me: state.me }
 }
 
-export let StaffLogin = connect(select)(StaffLoginPage);
+export const StaffLogin = connect(select)(StaffLoginPage)

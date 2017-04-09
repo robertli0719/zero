@@ -11,7 +11,7 @@ export function pickNames(dtoList: any[], select: string[]) {
     if (select) {
         return select
     }
-    const array: Array<any> = dtoList;
+    const array: Array<any> = dtoList
     return Object.keys(array[0])
 }
 

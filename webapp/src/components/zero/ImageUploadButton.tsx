@@ -5,14 +5,14 @@
  * 
  * version 1.0.4 2017-02-28
  */
-import * as React from "react";
-import * as ReactDOM from "react-dom";
-import { Sizes, Button, ButtonToolbar, Image, Navbar, Nav, NavItem, NavbarProps, Popover, Tooltip, Modal, OverlayTrigger } from "react-bootstrap";
+import * as React from "react"
+import * as ReactDOM from "react-dom"
+import { Sizes, Button, ButtonToolbar, Image, Navbar, Nav, NavItem, NavbarProps, Popover, Tooltip, Modal, OverlayTrigger } from "react-bootstrap"
 import { Cropper, CropResult } from "../../components/zero/ZCropper"
 import { http, RestErrorDto } from "../../utilities/http"
 import "../../../node_modules/cropperjs/dist/cropper.css"
 
-export type UploadOption = 'default' | 'cropped' | 'fixed';
+export type UploadOption = 'default' | 'cropped' | 'fixed'
 
 const MODAL_HEIHT: string = "500px"
 
@@ -37,11 +37,11 @@ interface Props {
 
 export class ImageUploadButton extends React.Component<Props, ModalState>{
 
-    private cropResult: CropResult;
+    private cropResult: CropResult
 
     constructor(props: Props) {
-        super(props);
-        let option: UploadOption = props.option ? props.option : "default"
+        super(props)
+        const option: UploadOption = props.option ? props.option : "default"
         if (props.option != "fixed" && (props.fixedHeight || props.fixedWidth)) {
             throw "fixedHeight and fixedWidth can only use with option=fixed"
         }
@@ -49,33 +49,33 @@ export class ImageUploadButton extends React.Component<Props, ModalState>{
             throw "need fixedHeight and fixedWidth when using option=fixed"
         }
         this.state = { showModal: false, files: null, imgURL: null, reset: null, option: option }
-    };
+    }
 
     reset() {
-        this.state.reset();
+        this.state.reset()
     }
 
     close() {
-        this.setState({ showModal: false, imgURL: null, files: null });
+        this.setState({ showModal: false, imgURL: null, files: null })
     }
 
     open() {
-        this.setState({ showModal: true });
+        this.setState({ showModal: true })
     }
 
     use() {
-        this.props.onSuccess(this.state.imgURL);
-        this.close();
+        this.props.onSuccess(this.state.imgURL)
+        this.close()
     }
 
     createFormData(): FormData {
-        let files: FileList = this.state.files;
-        let formData = new FormData();
-        for (let i in files) {
-            let fe: File = files[i];
-            formData.append("file", fe);
+        const files: FileList = this.state.files
+        const formData = new FormData()
+        for (const i in files) {
+            const fe: File = files[i]
+            formData.append("file", fe)
         }
-        return formData;
+        return formData
     }
 
     upload() {
@@ -90,35 +90,35 @@ export class ImageUploadButton extends React.Component<Props, ModalState>{
                 if (json.length != 1) {
                     throw "Exception when get upload result, url list size is not 1."
                 }
-                return json[0];
+                return json[0]
             }).then((imgUrl: string) => {
                 this.setState({ imgURL: imgUrl })
             })
     }
 
     createCropForm(data: CropResult): FormData {
-        let formData = new FormData()
+        const formData = new FormData()
         formData.append("x", Math.round(data.x))
         formData.append("y", Math.round(data.y))
         formData.append("width", Math.round(data.width))
         formData.append("height", Math.round(data.height))
-        return formData;
+        return formData
     }
 
     createFixForm(data: CropResult): FormData {
-        let formData = new FormData();
+        const formData = new FormData()
         formData.append("x", Math.round(data.x))
         formData.append("y", Math.round(data.y))
         formData.append("width", Math.round(data.width))
         formData.append("height", Math.round(data.height))
         formData.append("fixedHeight", this.props.fixedHeight)
         formData.append("fixedWidth", this.props.fixedWidth)
-        return formData;
+        return formData
     }
 
     crop() {
         const id = this.state.imgURL.slice(-36)
-        let url = "images/cropper/" + id
+        const url = "images/cropper/" + id
         http.postParams(url, this.createCropForm(this.cropResult))
             .then((response) => {
                 const imgURL = response
@@ -129,7 +129,7 @@ export class ImageUploadButton extends React.Component<Props, ModalState>{
 
     fix() {
         const id = this.state.imgURL.slice(-36)
-        let url = "images/fixer/" + id
+        const url = "images/fixer/" + id
         http.postParams(url, this.createFixForm(this.cropResult))
             .then((response) => {
                 const imgURL = response
@@ -160,7 +160,7 @@ export class ImageUploadButton extends React.Component<Props, ModalState>{
                     <Button bsStyle="success" disabled={!this.state.imgURL} onClick={this.use.bind(this)}>Use</Button>
                     <Button onClick={this.close.bind(this)}>Close</Button>
                 </div>
-                break;
+                break
             case "cropped":
                 btnBar = <div>
                     <p>uml:{this.state.imgURL}</p>
@@ -168,14 +168,14 @@ export class ImageUploadButton extends React.Component<Props, ModalState>{
                     <Button onClick={this.reset.bind(this)}>Reset</Button>
                     <Button onClick={this.close.bind(this)}>Close</Button>
                 </div>
-                break;
+                break
             case "fixed":
                 btnBar = <div>
                     <Button bsStyle="success" disabled={!this.state.imgURL} onClick={this.fix.bind(this)}>Fix</Button>
                     <Button onClick={this.reset.bind(this)}>Reset</Button>
                     <Button onClick={this.close.bind(this)}>Close</Button>
                 </div>
-                break;
+                break
         }
 
         let modalBody = <div></div>
@@ -187,7 +187,7 @@ export class ImageUploadButton extends React.Component<Props, ModalState>{
             switch (this.state.option) {
                 case "default":
                     modalBody = <Image src={this.state.imgURL} responsive />
-                    break;
+                    break
                 case "cropped":
                     modalBody = <Cropper
                         resetFunBack={this.resetFunBack.bind(this)}
@@ -195,7 +195,7 @@ export class ImageUploadButton extends React.Component<Props, ModalState>{
                         src={this.state.imgURL}
                         style={{ width: "100%", height: MODAL_HEIHT }}
                     />
-                    break;
+                    break
                 case "fixed":
                     modalBody = <Cropper
                         resetFunBack={this.resetFunBack.bind(this)}
@@ -204,7 +204,7 @@ export class ImageUploadButton extends React.Component<Props, ModalState>{
                         src={this.state.imgURL}
                         style={{ width: "100%", height: MODAL_HEIHT }}
                     />
-                    break;
+                    break
             }
         }
 
@@ -237,7 +237,6 @@ export class ImageUploadButton extends React.Component<Props, ModalState>{
                     </Modal.Footer>
                 </Modal>
             </div>
-        );
+        )
     }
-};
-
+}

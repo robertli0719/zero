@@ -15,7 +15,7 @@ type TestDto = {}
 export class TestIndex extends React.Component<{}, TestState>{
 
     constructor(props: {}) {
-        super(props);
+        super(props)
         this.state = {}
     }
 
@@ -36,6 +36,6 @@ export class TestIndex extends React.Component<{}, TestState>{
                     <Button onClick={this.addOption.bind(this)}>add option</Button>
                 </ButtonToolbar>
             </div>
-        );
+        )
     }
 }

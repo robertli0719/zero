@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from "react"
 import { connect } from "react-redux"
 import { hashHistory } from "react-router"
 import { Button, ButtonToolbar, ControlLabel, FormControl, Form, FormGroup, Checkbox, Col, Row, Panel } from "react-bootstrap"
@@ -22,22 +22,22 @@ interface AdminLoginState {
 export class AdminLoginPage extends React.Component<Prop, AdminLoginState>{
 
     constructor() {
-        super();
-        console.log("AdminLoginPage constructor");
+        super()
+        console.log("AdminLoginPage constructor")
     }
 
     onSuccess() {
-        store.dispatch(me.loadProfile());
+        store.dispatch(me.loadProfile())
     }
 
     logout() {
         store.dispatch(me.triggerLogout()).then(() => {
-            hashHistory.replace("admin/login");
+            hashHistory.replace("admin/login")
         })
     }
 
     render() {
-        let loginForm = (
+        const loginForm = (
             <Row>
                 <Col xs={12} sm={4} md={3}>
                     <zform.Form action="me/auth" method="PUT" onSuccess={this.onSuccess.bind(this)}>
@@ -50,22 +50,22 @@ export class AdminLoginPage extends React.Component<Prop, AdminLoginState>{
                 </Col>
             </Row>
         )
-        let onlineRedirectPanel = (
+        const onlineRedirectPanel = (
             <Panel header="current logged in">
                 <Link to="admin/index">Click here to dashboard</Link>
             </Panel>
         )
-        let wrongUserTypePanel = (
+        const wrongUserTypePanel = (
             <Panel header="current logged in">
                 <p>You have logged in, but you are not admin</p>
                 <a onClick={this.logout.bind(this)}>Click here to log out.</a>
             </Panel>
         )
-        let panel = null;
+        let panel = null
         if (me.isLogged() == false) {
-            panel = loginForm;
+            panel = loginForm
         } else if (me.isAdmin()) {
-            panel = onlineRedirectPanel;
+            panel = onlineRedirectPanel
         } else {
             panel = wrongUserTypePanel
         }
@@ -79,7 +79,7 @@ export class AdminLoginPage extends React.Component<Prop, AdminLoginState>{
 }
 
 function select(state: AppState): Prop {
-    return { me: state.me };
+    return { me: state.me }
 }
 
-export let AdminLogin = connect(select)(AdminLoginPage);
+export const AdminLogin = connect(select)(AdminLoginPage)

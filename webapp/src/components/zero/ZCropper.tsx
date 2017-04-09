@@ -33,9 +33,9 @@ class MyCropper extends ReactCropper {
 
     constructor(props: Props) {
         super()
-        let anyProps: any = props;
+        const anyProps: any = props
         if (anyProps.resetFunThief) {
-            anyProps.resetFunThief(super.reset.bind(this));
+            anyProps.resetFunThief(super.reset.bind(this))
         }
     }
 }
@@ -43,19 +43,19 @@ class MyCropper extends ReactCropper {
 export class Cropper extends React.Component<Props, State> {
 
     constructor(props: Props) {
-        super(props);
-        let cropper: any = <MyCropper crop={this.onChange.bind(this)} />
+        super(props)
+        const cropper: any = <MyCropper crop={this.onChange.bind(this)} />
         if (this.props.resetFunBack) {
-            cropper.props = $.extend(cropper.props, this.props, { resetFunThief: this.props.resetFunBack });
+            cropper.props = $.extend(cropper.props, this.props, { resetFunThief: this.props.resetFunBack })
         } else {
-            cropper.props = $.extend(cropper.props, this.props);
+            cropper.props = $.extend(cropper.props, this.props)
         }
         this.state = { cropper: cropper }
     }
 
     onChange(event: any) {
         const data = event.detail
-        this.props.onChange(data);
+        this.props.onChange(data)
     }
 
     render() {

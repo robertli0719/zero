@@ -5,6 +5,7 @@
  */
 package robertli.zero.test;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Random;
 import javax.annotation.Resource;
@@ -36,8 +37,9 @@ public class TestTool {
         final Random rand = new Random();
         rand.nextBytes(data);
 
-        String uuid = storageService.register(filename, type);
-        storageService.store(uuid, data);
+        final String uuid = storageService.register(filename, type, data.length);
+        final ByteArrayInputStream bain = new ByteArrayInputStream(data);
+        storageService.store(uuid, bain, data.length);
         String imgUrl = imagePathService.makeImageUrl(uuid);
         return imgUrl;
     }

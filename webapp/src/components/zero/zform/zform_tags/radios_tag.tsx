@@ -5,8 +5,8 @@
  * 
  * version 1.1.0 2017-02-19
  */
-import * as React from "react";
-import { Radio, ControlLabel } from "react-bootstrap";
+import * as React from "react"
+import { Radio, ControlLabel } from "react-bootstrap"
 import { ZFormTag, ZFormTagAttr, registerTagRender } from "../zform_tag"
 
 registerTagRender("radios", (tagAttr: ZFormTagAttr) => {

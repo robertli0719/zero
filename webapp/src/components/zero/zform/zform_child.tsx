@@ -5,7 +5,7 @@
  * 
  * version 1.1.2 2017-03-24
  */
-import * as React from "react";
+import * as React from "react"
 import { TagSchema, FieldPlaceOption, Selection } from "./zform_schema"
 
 type MapProps = {
@@ -96,6 +96,14 @@ type ImageProps = {
 }
 
 export class Image extends React.Component<ImageProps, {}> { }
+
+type VideoProps = {
+    label: string
+    name: string
+    value?: string
+}
+
+export class Video extends React.Component<VideoProps, {}> { }
 
 type ImageShowerProps = {
     name: string

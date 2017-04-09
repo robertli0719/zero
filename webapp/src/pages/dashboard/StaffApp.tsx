@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from "react"
 import { connect } from "react-redux"
 import { hashHistory } from 'react-router'
 import { store, AppState } from "../../Store"
@@ -8,25 +8,25 @@ import * as me from "../../actions/me"
 
 function logout(redirect: string) {
     store.dispatch(me.triggerLogout()).then(() => {
-        hashHistory.replace(redirect);
-    });
+        hashHistory.replace(redirect)
+    })
 }
 
 function makeNavbarItemList(platform: string): NavbarItem[] {
-    let perfix = "dashboard/" + platform + "/";
+    const perfix = "dashboard/" + platform + "/"
     return [
         { name: "Index", url: perfix + "index" },
         { name: "Inventory", url: perfix + "inventory" },
         { name: "Report", url: perfix + "report" },
-    ];
+    ]
 }
 
 function makeRightNavbarItemList(platform: string): NavbarItem[] {
-    let redirect = "dashboard/" + platform + "/login";
+    const redirect = "dashboard/" + platform + "/login"
     return [
         // { name: "Logout", onClick: logout(platform) }
         { name: "Logout", onClick: () => { logout(redirect) } }
-    ];
+    ]
 }
 
 type ReduxProp = {
@@ -37,7 +37,7 @@ type CommonProp = {
     params: any
 }
 
-type Props = ReduxProp & CommonProp;
+type Props = ReduxProp & CommonProp
 type State = {
     platform: string
     navbarItemList: NavbarItem[]
@@ -48,13 +48,13 @@ type State = {
 class StaffAppComponent extends React.Component<Props, State>{
 
     constructor(props: Props) {
-        super(props);
-        let platform = this.props.params['platform'];
-        let navbarItemList = makeNavbarItemList(platform);
-        let rightNavbarItemList = makeRightNavbarItemList(platform);
-        let indexUrl = "dashboard/" + platform + "/index";
+        super(props)
+        const platform = this.props.params['platform']
+        const navbarItemList = makeNavbarItemList(platform)
+        const rightNavbarItemList = makeRightNavbarItemList(platform)
+        const indexUrl = "dashboard/" + platform + "/index"
         this.state = { platform: platform, navbarItemList: navbarItemList, rightNavbarItemList: rightNavbarItemList, indexUrl: indexUrl }
-        store.dispatch(me.loadProfile());
+        store.dispatch(me.loadProfile())
     }
 
     render() {
@@ -71,7 +71,7 @@ class StaffAppComponent extends React.Component<Props, State>{
 }
 
 function select(state: AppState): ReduxProp {
-    return { me: state.me };
+    return { me: state.me }
 }
 
-export let StaffApp = connect(select)(StaffAppComponent);
+export const StaffApp = connect(select)(StaffAppComponent)

@@ -1,7 +1,7 @@
-import * as React from "react";
+import * as React from "react"
 import { connect } from "react-redux"
 import { store, AppState } from "../../Store"
-import { Button, ButtonToolbar, Row, Col, Panel } from "react-bootstrap";
+import { Button, ButtonToolbar, Row, Col, Panel } from "react-bootstrap"
 import * as zform from "../../components/zero/zform/zform"
 import * as zview from "../../components/zero/zview/zview"
 import { http, RestErrorDto } from "../../utilities/http"
@@ -22,7 +22,7 @@ type CommonProp = {
     params: any
 }
 
-type Props = ReduxProp & CommonProp;
+type Props = ReduxProp & CommonProp
 
 interface State {
     platform: string
@@ -32,13 +32,13 @@ interface State {
 class AdminUserStaffComponent extends React.Component<Props, State>{
 
     constructor(prop: Props) {
-        super(prop);
-        let platform = this.props.params['platform'];
+        super(prop)
+        const platform = this.props.params['platform']
         this.state = {
             platform: platform,
             updateEventListener: new UpdateEventListener()
         }
-        this.updateData();
+        this.updateData()
     }
 
     updateData() {
@@ -116,7 +116,7 @@ class AdminUserStaffComponent extends React.Component<Props, State>{
                     </Col>
                 </Row>
             </div>
-        );
+        )
     }
 }
 
@@ -124,4 +124,4 @@ function select(state: AppState): ReduxProp {
     return {}
 }
 
-export let AdminUserStaff = connect(select)(AdminUserStaffComponent)
+export const AdminUserStaff = connect(select)(AdminUserStaffComponent)

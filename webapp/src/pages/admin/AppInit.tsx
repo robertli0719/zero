@@ -1,6 +1,6 @@
-import * as React from "react";
-import * as ReactDOM from "react-dom";
-import { Button, ButtonToolbar } from "react-bootstrap";
+import * as React from "react"
+import * as ReactDOM from "react-dom"
+import { Button, ButtonToolbar } from "react-bootstrap"
 import * as app from "../../actions/app"
 import { store } from "../../Store"
 import { http } from "../../utilities/http"
@@ -8,11 +8,11 @@ import { http } from "../../utilities/http"
 export class AppInit extends React.Component<{}, {}>{
 
     constructor() {
-        super();
+        super()
     }
 
     appInit() {
-        store.dispatch(app.initApp());
+        store.dispatch(app.initApp())
     }
 
     render() {
@@ -23,6 +23,6 @@ export class AppInit extends React.Component<{}, {}>{
                     <Button bsStyle="success" onClick={this.appInit.bind(this)}>Init</Button>
                 </ButtonToolbar>
             </div>
-        );
+        )
     }
 }

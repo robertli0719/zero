@@ -6,19 +6,21 @@
 package robertli.zero.service.impl;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Component;
 import robertli.zero.core.FileManager;
 import robertli.zero.dao.FileRecordDao;
 import robertli.zero.dao.FileRecordTokenDao;
+import robertli.zero.dto.FileRecordDto;
 import robertli.zero.entity.FileRecord;
 import robertli.zero.entity.FileRecordToken;
 import robertli.zero.service.StorageService;
 
 /**
  *
- * @version 1.0.3 2017-03-15
+ * @version 1.0.4 2017-04-07
  * @author Robert Li
  */
 @Component("storageService")
@@ -36,41 +38,42 @@ public class StorageServiceImpl implements StorageService {
     private FileRecordDao fileRecordDao;
 
     @Override
-    public String getContentType(String uuid) {
-        FileRecordToken token = fileRecordTokenDao.get(uuid);
+    public FileRecordDto getFileRecord(String uuid) {
+        final FileRecordToken token = fileRecordTokenDao.get(uuid);
         if (token == null) {
             return null;
         }
-        return token.getType();
+        FileRecordDto dto = new FileRecordDto();
+        dto.setContentType(token.getType());
+        dto.setFileName(token.getName());
+        dto.setSize(token.getLen());
+        return dto;
     }
 
     @Override
-    public String getFileName(String uuid) {
+    public InputStream getInputStream(String uuid, long start) {
         FileRecordToken token = fileRecordTokenDao.get(uuid);
         if (token == null) {
-            return null;
+            return new InputStream() {
+                @Override
+                public int read() throws IOException {
+                    return -1;
+                }
+            };
         }
-        return token.getName();
+        return fileManager.getInputStream(uuid, start);
+
     }
 
     @Override
-    public byte[] get(String uuid) {
-        FileRecordToken token = fileRecordTokenDao.get(uuid);
-        if (token == null) {
-            return new byte[0];
-        }
-        return fileManager.read(uuid);
-    }
-
-    @Override
-    public String register(String name, String type) {
-        FileRecordToken token = fileRecordTokenDao.saveFileRecord(name, type);
+    public String register(String name, String type, long length) {
+        FileRecordToken token = fileRecordTokenDao.saveFileRecord(name, type, length);
         return token.getUuid();
     }
 
     @Override
-    public void store(String uuid, byte[] data) throws IOException {
-        fileManager.write(uuid, data);
+    public void store(String uuid, InputStream in, long length) throws IOException {
+        fileManager.write(uuid, in, length);
     }
 
     @Override

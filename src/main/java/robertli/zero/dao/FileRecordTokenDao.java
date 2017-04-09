@@ -15,7 +15,7 @@ import robertli.zero.entity.FileRecordToken;
  */
 public interface FileRecordTokenDao extends GenericDao<FileRecordToken, String> {
 
-    public FileRecordToken saveFileRecord(String name, String type);
+    public FileRecordToken saveFileRecord(String name, String type, long length);
 
     /**
      * list the FileRecordToken which has been mark removed.

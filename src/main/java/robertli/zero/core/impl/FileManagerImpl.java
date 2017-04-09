@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Robert Li.
+ * Copyright 2017 Robert Li.
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
@@ -11,8 +11,13 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import robertli.zero.core.FileManager;
 
 /**
@@ -23,11 +28,12 @@ import robertli.zero.core.FileManager;
  * new file. User is not allowed to update a file after write. After
  * implementing delete, the file may not be delete at once.
  *
- * @version 1.0.2 2017-02-27
+ * @version 1.0.3 2017-04-07
  * @author Robert Li
  */
 public final class FileManagerImpl implements FileManager {
 
+    private final int BUFFER_SIZE = 1 * 1024 * 1024;
     private String basePath;
 
     @Override
@@ -36,26 +42,32 @@ public final class FileManagerImpl implements FileManager {
     }
 
     @Override
-    public byte[] read(String uuid) {
-        String path = basePath + "/" + uuid;
-        byte[] result;
-        try (DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(path)))) {
-            int size = in.available();
-            result = new byte[size];
-            in.read(result);
+    public InputStream getInputStream(String uuid, long start) {
+        final String path = basePath + "/" + uuid;
+        try {
+            DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(path)));
+            in.skipBytes((int) start);
+            return in;
+        } catch (FileNotFoundException ex) {
+            return null;
         } catch (IOException ex) {
-            result = null;
-            System.out.println("Can't found file uuid:" + uuid);
+            Logger.getLogger(FileManagerImpl.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
-        return result;
     }
 
     @Override
-    public void write(String uuid, byte[] data) throws IOException {
-        String path = basePath + "/" + uuid;
+    public void write(String uuid, InputStream in, long length) throws IOException {
+        final String path = basePath + "/" + uuid;
+        final byte[] buffer = new byte[BUFFER_SIZE];
+        int len;
         try (DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(path)))) {
-            out.write(data);
+            while ((len = in.read(buffer)) >= 0) {
+                out.write(buffer, 0, len);
+            }
             out.flush();
+        } finally {
+            in.close();
         }
     }
 

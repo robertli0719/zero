@@ -9,11 +9,11 @@ import { ImageUploadButton } from "../../components/zero/ImageUploadButton"
 export class TestImageUpload extends React.Component<{}, {}>{
 
     constructor(props: {}) {
-        super(props);
+        super(props)
     }
 
     onUploadSuccess(url: string) {
-        console.log("onUploadSuccess:", url);
+        console.log("onUploadSuccess:", url)
     }
 
     render() {
@@ -24,6 +24,6 @@ export class TestImageUpload extends React.Component<{}, {}>{
                     12345678
                 </ImageUploadButton>
             </div>
-        );
+        )
     }
 }

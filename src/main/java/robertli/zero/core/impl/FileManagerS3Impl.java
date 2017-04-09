@@ -5,15 +5,12 @@
  */
 package robertli.zero.core.impl;
 
-import com.amazonaws.AmazonServiceException;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.util.IOUtils;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import robertli.zero.core.FileManager;
 
@@ -24,7 +21,7 @@ import robertli.zero.core.FileManager;
  * AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY from system environment variable.
  *
  *
- * @version 1.0.1 2017-02-28
+ * @version 1.0.2 2017-04-07
  * @author Robert Li
  */
 public class FileManagerS3Impl implements FileManager {
@@ -44,26 +41,19 @@ public class FileManagerS3Impl implements FileManager {
     }
 
     @Override
-    public byte[] read(String uuid) {
-        byte[] readBuf = null;
-        try {
-            S3Object o = s3.getObject(bucketName, uuid);
-            readBuf = IOUtils.toByteArray(o.getObjectContent());
-        } catch (AmazonServiceException e) {
-            System.err.println(e.getErrorMessage());
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
-        return readBuf;
+    public InputStream getInputStream(String uuid, long start) {
+        GetObjectRequest gor = new GetObjectRequest(bucketName, uuid);
+        gor.setRange(start);
+        final S3Object obj = s3.getObject(gor);
+        return obj.getObjectContent();
     }
 
     @Override
-    public void write(String uuid, byte[] data) throws IOException {
-        InputStream stream = new ByteArrayInputStream(data);
+    public void write(String uuid, InputStream in, long length) {
         ObjectMetadata meta = new ObjectMetadata();
-        meta.setContentLength(data.length);
+        meta.setContentLength(length);
         meta.setContentType("application/x-binary");
-        s3.putObject(bucketName, uuid, stream, meta);
+        s3.putObject(bucketName, uuid, in, meta);
     }
 
     @Override

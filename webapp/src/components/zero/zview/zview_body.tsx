@@ -35,13 +35,13 @@ export class ViewBody extends React.Component<Props, {}>{
                 return <td className="text-center">-</td>
             }
             return <td>{dto[name]}</td>
-        });
+        })
     }
 
     makeAdditionalCol(rowIndex: number) {
         const additionColElements = this.props.additionalColElements
         return React.Children.map(additionColElements, (child: any) => {
-            let ele = React.cloneElement(child, {
+            const ele = React.cloneElement(child, {
                 index: rowIndex,
                 dto: this.props.dtoList[rowIndex]
             })

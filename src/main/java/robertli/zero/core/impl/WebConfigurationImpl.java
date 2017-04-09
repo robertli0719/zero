@@ -11,6 +11,7 @@ public class WebConfigurationImpl implements WebConfiguration {
 
     private String domain;
     private String imageActionUrl;
+    private String videoActionUrl;
     private String googleSigninClientId;
     private boolean sslEnabled;
 
@@ -30,6 +31,15 @@ public class WebConfigurationImpl implements WebConfiguration {
 
     public void setImageActionUrl(String imageActionUrl) {
         this.imageActionUrl = imageActionUrl;
+    }
+
+    @Override
+    public String getVideoActionUrl() {
+        return videoActionUrl;
+    }
+
+    public void setVideoActionUrl(String videoActionUrl) {
+        this.videoActionUrl = videoActionUrl;
     }
 
     @Override

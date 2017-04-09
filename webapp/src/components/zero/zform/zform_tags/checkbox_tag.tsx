@@ -5,7 +5,7 @@
  * 
  * version 1.1.0 2017-02-19
  */
-import * as React from "react";
+import * as React from "react"
 import { Checkbox } from "react-bootstrap"
 import { makeRandomString } from "../../../../utilities/random-coder"
 import { ZFormTagProps, ZFormTag, ZFormTagAttr, registerTagRender } from "../zform_tag"
@@ -17,9 +17,9 @@ registerTagRender("checkbox", (tagAttr: ZFormTagAttr) => {
 class CheckBoxTag extends ZFormTag {
 
     onChange(event: React.FormEvent<HTMLInputElement>) {
-        const key = event.currentTarget.name;
-        const value = event.currentTarget.checked;
-        this.props.attr.onChange(key, value);
+        const key = event.currentTarget.name
+        const value = event.currentTarget.checked
+        this.props.attr.onChange(key, value)
     }
 
     render() {

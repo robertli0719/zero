@@ -5,8 +5,8 @@
  * 
  * version 1.1.0 2017-02-20
  */
-import * as React from "react";
-import { Button } from "react-bootstrap";
+import * as React from "react"
+import { Button } from "react-bootstrap"
 import { ZFormTag, ZFormTagAttr, registerTagRender, nopicUrl } from "../zform_tag"
 
 registerTagRender("imageshower", (tagAttr: ZFormTagAttr) => {

@@ -1,11 +1,12 @@
 /*
- * Copyright 2016 Robert Li.
+ * Copyright 2017 Robert Li.
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
 package robertli.zero.core;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * This interface is designed for implementing file storage service.<br>
@@ -16,34 +17,37 @@ import java.io.IOException;
  * implementing delete, the file may not be delete at once.
  *
  *
- * @version 1.0.1 2017-02-27
+ * @version 1.0.2 2017-04-07
  * @author Robert Li
  */
 public interface FileManager {
 
     /**
      * set the location for storage,such as file path or bucket name
+     *
      * @param basePath
      */
     public void setBasePath(String basePath);
 
     /**
-     * Read a file from the file system. If the file is not found, return null.
+     * get a input stream for the file. If the file is not found, return null.
      *
      * @param uuid the identification of file
-     * @return the file if found. null if not found
+     * @param start the range offset
+     * @return InputStream for the file
      */
-    public byte[] read(String uuid);
+    public InputStream getInputStream(String uuid, long start);
 
     /**
      * Write a new file to the file system.<br>
      * Do NOT use this function to update an existing file.
      *
      * @param uuid the identification of file
-     * @param data the data of file
+     * @param in the input stream for the data of file
+     * @param length the size of the file
      * @throws java.io.IOException when writing failly
      */
-    public void write(String uuid, byte[] data) throws IOException;
+    public void write(String uuid, InputStream in, long length) throws IOException;
 
     /**
      * Delete an existing file.<br>

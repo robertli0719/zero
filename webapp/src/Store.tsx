@@ -11,8 +11,8 @@ export const MARK_FROM_AS_PROCESSING = "MARK_FROM_AS_PROCESSING"
 export const UNMARK_FROM_AS_PROCESSING = "UNMARK_FROM_AS_PROCESSING"
 
 export interface Action {
-    readonly type: string;
-    readonly payload?: any;
+    readonly type: string
+    readonly payload?: any
     readonly meta?: string
 }
 
@@ -26,4 +26,4 @@ const reducer = combineReducers<AppState>({
     test: testReducer
 })
 
-export let store: Store<AppState> = createStore<AppState>(reducer, applyMiddleware(thunkMiddleware));
+export const store: Store<AppState> = createStore<AppState>(reducer, applyMiddleware(thunkMiddleware))

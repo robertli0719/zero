@@ -3,19 +3,19 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.1.1 2017-03-03
+ * version 1.0.0 2017-04-08
  */
 
 import * as React from "react"
 import { FormGroup, FormControl, HelpBlock, Radio, ControlLabel } from "react-bootstrap"
 import { ZFormTag, ZFormTagAttr, registerTagRender, nopicUrl } from "../zform_tag"
-import { ImageUploadButton, UploadOption } from "../../ImageUploadButton"
+import { VideoUploadButton } from "../../VideoUploadButton"
 
-registerTagRender("image", (tagAttr: ZFormTagAttr) => {
-    return <ImageTag attr={tagAttr} />
+registerTagRender("video", (tagAttr: ZFormTagAttr) => {
+    return <VideoTag attr={tagAttr} />
 })
 
-class ImageTag extends ZFormTag {
+class VideoTag extends ZFormTag {
 
     onChange(event: React.FormEvent<HTMLInputElement>) {
         const name = this.props.attr.schema.name
@@ -28,38 +28,22 @@ class ImageTag extends ZFormTag {
         this.props.attr.onChange(name, imgUrl)
     }
 
-    pickOption(option: string): UploadOption {
-        switch (option) {
-            case "default":
-                return "default"
-            case "cropped":
-                return "cropped"
-            case "fixed":
-                return "fixed"
-            default:
-                return "default"
-        }
-    }
-
     render() {
         const attr = this.props.attr
         const src = attr.value ? attr.value.toString() : nopicUrl
         const error = (attr.error && attr.error.errors.length > 0) ? attr.error.errors : null
         const validateState = error ? "error" : null
-        const option = this.pickOption(attr.schema.option)
 
         return (
             <FormGroup validationState={validateState}>
-
-                <ImageUploadButton option={option} onSuccess={this.onSuccess.bind(this)}>
-                    <span>{attr.schema.label}</span>
-                    <img src={src} style={
-                        { width: "26px", "maxHeight": "26px", padding: "3px" }}
-                    />
-                </ImageUploadButton>
+                <VideoUploadButton onSuccess={this.onSuccess.bind(this)}>
+                    <span>{attr.schema.label} </span>
+                    <span className="glyphicon glyphicon-film"></span>
+                </VideoUploadButton>
                 <FormControl.Feedback />
                 <HelpBlock>{error}</HelpBlock>
             </FormGroup>
         )
     }
 }
+

@@ -1,10 +1,12 @@
 /*
- * Copyright 2016 Robert Li.
+ * Copyright 2017 Robert Li.
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
 package robertli.zero.core;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.UUID;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -19,10 +21,16 @@ public class FileManagerTest {
         ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
         FileManager fileManager = (FileManager) context.getBean("fileManager");
 
-        String uuid = UUID.randomUUID().toString();
-        String myData = "Hello,world~!";
-        fileManager.write(uuid, myData.getBytes());
-        String str = new String(fileManager.read(uuid));
+        final String uuid = UUID.randomUUID().toString();
+        final String myData = "Hello,world~!";
+        final byte data[] = myData.getBytes();
+        final ByteArrayInputStream bain = new ByteArrayInputStream(data);
+
+        fileManager.write(uuid, bain, data.length);
+        final InputStream in = fileManager.getInputStream(uuid, 0);
+        final byte[] buffer = new byte[myData.getBytes().length];
+        in.read(buffer);
+        final String str = new String(buffer);
 
         if (myData.equals(str) == false) {
             throw new Exception("Fail to get right data");

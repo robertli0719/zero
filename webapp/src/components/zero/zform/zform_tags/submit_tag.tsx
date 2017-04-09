@@ -5,8 +5,8 @@
  * 
  * version 1.1.0 2017-02-19
  */
-import * as React from "react";
-import { Button } from "react-bootstrap";
+import * as React from "react"
+import { Button } from "react-bootstrap"
 import { ZFormTag, ZFormTagAttr, registerTagRender } from "../zform_tag"
 
 registerTagRender("submit", (tagAttr: ZFormTagAttr) => {
@@ -22,7 +22,7 @@ class SubmitTag extends ZFormTag {
 
     render() {
         const schema = this.props.attr.schema
-        const label = schema.value ? schema.value : "Submit";
+        const label = schema.value ? schema.value : "Submit"
         return <Button type="submit" onClick={this.onClick.bind(this)} bsStyle={schema.bsStyle} block={schema.block}>{label}</Button>
     }
 }

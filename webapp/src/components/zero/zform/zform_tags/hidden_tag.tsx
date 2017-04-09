@@ -5,7 +5,7 @@
  * 
  * version 1.1.1 2017-02-28
  */
-import * as React from "react";
+import * as React from "react"
 import { ZFormTag, ZFormTagAttr, registerTagRender } from "../zform_tag"
 
 registerTagRender("hidden", (tagAttr: ZFormTagAttr) => {
@@ -14,7 +14,7 @@ registerTagRender("hidden", (tagAttr: ZFormTagAttr) => {
 
 class HiddenTag extends ZFormTag {
     render() {
-        let val = this.props.attr.value
+        const val = this.props.attr.value
         const name = this.props.attr.schema.name
         const value: string = val ? val.toString() : null
         return (

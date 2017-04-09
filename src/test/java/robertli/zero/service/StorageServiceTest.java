@@ -5,7 +5,10 @@
  */
 package robertli.zero.service;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.logging.Level;
@@ -24,6 +27,7 @@ public class StorageServiceTest {
     private final StorageService storageService;
     private final RandomCodeCreater randomCodeCreater;
     private final Random rand;
+    private final int BUFFER_SIZE = 1024 * 10;
 
     private StorageServiceTest() {
         ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
@@ -44,6 +48,17 @@ public class StorageServiceTest {
         return "bin";
     }
 
+    private byte[] readFile(InputStream in, final int FILE_SIZE) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        final byte[] buffer = new byte[BUFFER_SIZE];
+        int len;
+        while ((len = in.read(buffer)) >= 0) {
+            out.write(buffer, 0, len);
+        }
+        out.flush();
+        return out.toByteArray();
+    }
+
     private void testProcess() throws InterruptedException, IOException {
         final int FILE_SIZE = rand.nextInt(1024 * 1024 * 10);// file size between 0~10M
         final byte data[] = new byte[FILE_SIZE];
@@ -51,15 +66,16 @@ public class StorageServiceTest {
         final String name = randomCodeCreater.createRandomCode(5, RandomCodeCreater.CodeType.MIX) + "." + type;
         rand.nextBytes(data);
 
-        Thread.sleep(rand.nextInt(1000));
-        String uuid = storageService.register(name, type);
-        storageService.store(uuid, data);
+        final String uuid = storageService.register(name, type, FILE_SIZE);
+        final ByteArrayInputStream bain = new ByteArrayInputStream(data);
+        storageService.store(uuid, bain, data.length);
 
         while (rand.nextDouble() > 0.2) {
             if (rand.nextDouble() < 0.1) {
                 storageService.clean();
             }
-            byte result[] = storageService.get(uuid);
+            final InputStream in = storageService.getInputStream(uuid, 0);
+            final byte result[] = readFile(in, FILE_SIZE);
             if (Arrays.equals(data, result) == false) {
                 throw new RuntimeException("result is wrong!");
             }
@@ -69,7 +85,7 @@ public class StorageServiceTest {
 
     private void stressTest() throws InterruptedException {
         StressTest stressTest = new StressTest();
-        stressTest.setNumberOfGroup(10);
+        stressTest.setNumberOfGroup(100);
         stressTest.setThreadNumberPerGroup(8);
 
         stressTest.test("myTest", () -> {
@@ -81,9 +97,9 @@ public class StorageServiceTest {
         });
     }
 
-    public static void main(String args[]) throws InterruptedException {
+    public static void main(String args[]) throws InterruptedException, IOException {
         StorageServiceTest test = new StorageServiceTest();
-        //test.testProcess();
+//        test.testProcess();
         test.stressTest();
     }
 }

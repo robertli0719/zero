@@ -8,14 +8,14 @@ import { ImageUploadButton } from "../../components/zero/ImageUploadButton"
 export class TestCros extends React.Component<{}, {}>{
 
     constructor(props: {}) {
-        super(props);
+        super(props)
     }
 
     send(url: string) {
-        console.log("run:" + url);
+        console.log("run:" + url)
         fetch(url, { credentials: 'include' })
             .then((feedback) => {
-                console.log("feedback:", feedback);
+                console.log("feedback:", feedback)
                 return feedback.json()
             }).then((json) => {
                 console.log("json:", json)
@@ -24,10 +24,10 @@ export class TestCros extends React.Component<{}, {}>{
     }
 
     sendWithoutCookie(url: string) {
-        console.log("run:" + url);
+        console.log("run:" + url)
         fetch(url)
             .then((feedback) => {
-                console.log("feedback:", feedback);
+                console.log("feedback:", feedback)
                 return feedback.json()
             }).then((json) => {
                 console.log("json:", json)
@@ -49,6 +49,6 @@ export class TestCros extends React.Component<{}, {}>{
                     <Button onClick={this.send.bind(this, "https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY")}>nasa</Button>
                 </ButtonToolbar>
             </div>
-        );
+        )
     }
 }

@@ -1,11 +1,13 @@
 /*
- * Copyright 2016 Robert Li.
+ * Copyright 2017 Robert Li.
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
 package robertli.zero.service;
 
 import java.io.IOException;
+import java.io.InputStream;
+import robertli.zero.dto.FileRecordDto;
 
 /**
  * This interface is designed for implementing object storage service in
@@ -37,43 +39,33 @@ import java.io.IOException;
  *
  * The file uploading process should be: 1.register 2.store 3.fix
  *
- * @version 1.0.3 2017-03-15
+ * @version 1.0.4 2017-04-07
  * @author Robert Li
  */
 public interface StorageService {
 
     /**
-     * get getContentType from the storage by id<br>
+     * get FileRecordDto from the storage by id<br>
      *
      * If the record is not found, return null.<br>
      *
      * @param uuid the identifier of the object or file
      * @return content-type of the ID or null if not found
      */
-    public String getContentType(String uuid);
+    public FileRecordDto getFileRecord(String uuid);
 
     /**
-     * get getFileName from the storage by id<br>
-     *
-     * If the record is not found, return null.<br>
-     *
-     * @param uuid the identifier of the object or file
-     * @return the file name of the ID or null if not found
-     */
-    public String getFileName(String uuid);
-
-    /**
-     * get object from the storage by id<br>
-     *
+     * get InputStream from the storage by id<br>
      * If the object is not found, return null.<br>
      *
      * This function can only get the object which is added within the
      * transaction committed before current transaction start.
      *
      * @param uuid the identifier of the object or file
-     * @return the binary data of the object or file
+     * @param start the range offset
+     * @return InputStream for the object or file
      */
-    public byte[] get(String uuid);
+    public InputStream getInputStream(String uuid, long start);
 
     /**
      * When a user upload a file to this system, the system should register this
@@ -82,12 +74,13 @@ public interface StorageService {
      *
      * Do NOT executes register and store in same transaction.<br>
      *
+     * @param len the length of the file
      * @see robertli.zero.entity.FileRecord
      * @param name the name of the file or object or file
      * @param type the type of the file or object or file
      * @return UUID, which is the identifier of the object or file
      */
-    public String register(String name, String type);
+    public String register(String name, String type, long len);
 
     /**
      * store a new object to file system. we should register the file in
@@ -104,10 +97,11 @@ public interface StorageService {
      * transaction.
      *
      * @param uuid which is the identifier of the object or file
-     * @param data the binary data of the object or file
+     * @param in the input stream for the data of the object of file
+     * @param length the size of the file
      * @throws java.io.IOException when store failly
      */
-    public void store(String uuid, byte[] data) throws IOException;
+    public void store(String uuid, InputStream in, long length) throws IOException;
 
     /**
      * After store successful, the file will be in temp status. In temp status,

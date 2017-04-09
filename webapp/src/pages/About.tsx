@@ -1,5 +1,5 @@
-import * as React from "react";
-import * as ReactDOM from "react-dom";
+import * as React from "react"
+import * as ReactDOM from "react-dom"
 import { connect } from "react-redux"
 import { AppState } from "../Store"
 
@@ -10,22 +10,22 @@ interface Prop {
 class AboutPage extends React.Component<Prop, {}>{
 
     constructor() {
-        super();
+        super()
     }
 
     render() {
-        let num = this.props.val;
+        const num = this.props.val
         return (
             <div className="container">
                 <h1>About us</h1>
                 <p>{num}</p>
             </div>
-        );
+        )
     }
 }
 
 function select(state: AppState): Prop {
-    return { val: state.test.val };
+    return { val: state.test.val }
 }
 
-export let About = connect(select)(AboutPage);
+export const About = connect(select)(AboutPage)

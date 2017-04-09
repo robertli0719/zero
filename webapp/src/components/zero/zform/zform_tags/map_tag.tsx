@@ -6,7 +6,7 @@
  * version 1.1.0 2017-02-21
  */
 import * as _ from "lodash"
-import * as React from "react";
+import * as React from "react"
 import { Alert } from "react-bootstrap"
 import { ZFormTagProps, ZFormTag, ZFormTagAttr, registerTagRender, showTag } from "../zform_tag"
 import { TagSchema } from "../zform_schema"

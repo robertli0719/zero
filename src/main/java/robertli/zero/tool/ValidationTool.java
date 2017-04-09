@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  * This service is design for the common use of check or preprocess user's input
  * field.<br>
  *
- * @version 1.0 2016-08-11
+ * @version 1.0 2017-04-04
  * @author Robert Li
  */
 public class ValidationTool {
@@ -52,4 +52,42 @@ public class ValidationTool {
         return email;
     }
 
+    public static boolean checkEAN(String ean) {
+        if (ean == null || ean.isEmpty()) {
+            return false;
+        }
+        ean = ean.replaceAll("-", "").replaceAll(" ", "");
+        long code;
+        try {
+            code = Long.parseLong(ean);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        long num = 0;
+        boolean odd = true;
+
+        while (code > 0) {
+            long x = code % 10;
+            num += odd ? x : x * 3;
+            odd = !odd;
+            code /= 10;
+        }
+        return num % 10 == 0;
+    }
+
+    /**
+     *
+     * @param code the code could be ean or upc-a, whish is length 12.
+     * @return EAN-13
+     */
+    public static String preprocessEAN(String code) {
+        if (checkEAN(code) == false) {
+            return "0000000000000";
+        }
+        String ean = code.replaceAll("-", "").replaceAll(" ", "");
+        if (ean.length() == 12) {
+            return "0" + ean;
+        }
+        return ean;
+    }
 }

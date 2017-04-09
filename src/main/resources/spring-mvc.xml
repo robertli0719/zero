@@ -35,6 +35,7 @@
             <mvc:mapping path="/api/v1/**"/>
             <mvc:exclude-mapping path="/api/v1/me/**"/>
             <mvc:exclude-mapping path="/api/v1/images/**"/>
+            <mvc:exclude-mapping path="/api/v1/videos/**"/>
             <mvc:exclude-mapping path="/api/v1/test/**"/>
             <mvc:exclude-mapping path="/api/v1/user-types/**"/>
             <mvc:exclude-mapping path="/api/v1/user-platforms/**"/>
@@ -47,6 +48,7 @@
             <mvc:exclude-mapping path="/api/v1/app/**"/>
             <mvc:exclude-mapping path="/api/v1/me/**"/>
             <mvc:exclude-mapping path="/api/v1/images/**"/>
+            <mvc:exclude-mapping path="/api/v1/videos/**"/>
             <mvc:exclude-mapping path="/api/v1/test/**"/>
             <bean class="robertli.zero.interceptor.AdminEditPermissionInterceptor"></bean>
         </mvc:interceptor>
@@ -65,7 +67,8 @@
     
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <!-- max upload size in bytes -->
-        <property name="maxUploadSize" value="20971520" /> <!-- 20MB -->
+        <!--<property name="maxUploadSize" value="20971520" />  20MB -->
+        <property name="maxUploadSize" value="52428800" /> <!-- 50MB -->
 
         <!-- max size of file in memory (in bytes) -->
         <property name="maxInMemorySize" value="1048576" /> <!-- 1MB -->

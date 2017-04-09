@@ -5,11 +5,11 @@
  * 
  * version 1.0.5 2017-03-16
  */
-import * as React from "react";
-import * as ReactDOM from "react-dom";
-import * as bs from "react-bootstrap";
+import * as React from "react"
+import * as ReactDOM from "react-dom"
+import * as bs from "react-bootstrap"
 import * as rb from "react-bootstrap"
-import { LinkContainer } from 'react-router-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap'
 import { makeRandomString } from "../../utilities/random-coder"
 import { http, RestErrorDto, RestErrorItemDto } from "../../utilities/http"
 import * as _ from "lodash"
@@ -27,27 +27,26 @@ export type ShowTableState = {
 export class Table extends React.Component<ShowTableProps, ShowTableState>{
 
     constructor(props: ShowTableProps) {
-        super(props);
-        let a = this.getBodys();
+        super(props)
     }
 
     getNames(): string[] {
         if (this.props.select) {
             return this.props.select
         }
-        let array: Array<any> = this.props.dtoList;
+        const array: Array<any> = this.props.dtoList
         return Object.keys(array[0])
     }
 
     getHeads(): string[] {
-        let array: Array<any> = this.props.dtoList;
+        const array: Array<any> = this.props.dtoList
         if (array.length == 0) {
-            return [];
+            return []
         } else if (this.props.heads) {
-            return this.props.heads;
+            return this.props.heads
         }
         if (this.props.select) {
-            return this.props.select;
+            return this.props.select
         }
         return Object.keys(array[0])
     }
@@ -56,7 +55,7 @@ export class Table extends React.Component<ShowTableProps, ShowTableState>{
         if (this.props.select) {
             return _.map(this.props.dtoList, (dto) => _.pick(dto, this.props.select))
         }
-        return this.props.dtoList;
+        return this.props.dtoList
     }
 
     makeAdditionalHeads() {
@@ -67,7 +66,7 @@ export class Table extends React.Component<ShowTableProps, ShowTableState>{
 
     makeAdditionalCol(rowIndex: number) {
         return React.Children.map(this.props.children, (child: any) => {
-            let ele = React.cloneElement(child, {
+            const ele = React.cloneElement(child, {
                 index: rowIndex,
                 dto: this.props.dtoList[rowIndex]
             })
@@ -80,7 +79,7 @@ export class Table extends React.Component<ShowTableProps, ShowTableState>{
             <bs.Alert bsStyle={bsStyle}>
                 <strong>Info</strong> {text}
             </bs.Alert>
-        );
+        )
     }
 
     makeHeader(heads: string[]) {
@@ -88,7 +87,7 @@ export class Table extends React.Component<ShowTableProps, ShowTableState>{
             heads.map((text) => {
                 return <th>{text}</th>
             })
-        );
+        )
     }
 
     makeBodyRow(dto: any) {
@@ -103,7 +102,7 @@ export class Table extends React.Component<ShowTableProps, ShowTableState>{
                 return <td className="text-center">-</td>
             }
             return <td>{dto[name]}</td>
-        });
+        })
     }
 
     makeBody() {
@@ -114,18 +113,18 @@ export class Table extends React.Component<ShowTableProps, ShowTableState>{
                     {this.makeAdditionalCol(rowIndex)}
                 </tr>
             )
-        });
+        })
     }
 
     render() {
         if (!this.props.dtoList) {
-            return this.makeAlert("warning", "No data!", "There is no data in this table.");
+            return this.makeAlert("warning", "No data!", "There is no data in this table.")
         } else if (this.props.dtoList instanceof Array == false) {
-            return this.makeAlert("alert", "Error!", "Fail to show the table");
+            return this.makeAlert("alert", "Error!", "Fail to show the table")
         } else if (this.props.dtoList.length == 0) {
-            return this.makeAlert("warning", "No Rows!", "There is nothing in the table.");
+            return this.makeAlert("warning", "No Rows!", "There is nothing in the table.")
         }
-        let heads = this.getHeads();
+        const heads = this.getHeads()
         return (
             <bs.Table responsive>
                 <thead>
@@ -146,10 +145,10 @@ export type ColButtonProps = {
     name: string
     onAction: (dto: any, index: number) => {}
     onRender?: (dto: any, index: number) => boolean
-    active?: boolean;
-    block?: boolean;
-    bsStyle?: string;
-    bsSize?: bs.Sizes;
+    active?: boolean
+    block?: boolean
+    bsStyle?: string
+    bsSize?: bs.Sizes
     index?: number
     dto?: any
 }
@@ -157,7 +156,7 @@ export type ColButtonProps = {
 export class ColButton extends React.Component<ColButtonProps, {}>{
 
     onAction() {
-        this.props.onAction(this.props.dto, this.props.index);
+        this.props.onAction(this.props.dto, this.props.index)
     }
 
     render() {

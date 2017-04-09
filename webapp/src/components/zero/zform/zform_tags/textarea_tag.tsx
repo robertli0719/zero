@@ -5,8 +5,8 @@
  * 
  * version 1.1.1 2017-03-03
  */
-import * as React from "react";
-import { FormControl, FormGroup, ControlLabel, HelpBlock } from "react-bootstrap";
+import * as React from "react"
+import { FormControl, FormGroup, ControlLabel, HelpBlock } from "react-bootstrap"
 import { makeRandomString } from "../../../../utilities/random-coder"
 import { ZFormTag, ZFormTagAttr, registerTagRender } from "../zform_tag"
 
@@ -16,12 +16,12 @@ registerTagRender("textarea", (tagAttr: ZFormTagAttr) => {
 
 class TextAreaTag extends ZFormTag {
 
-    private controlId = makeRandomString(32);
+    private controlId = makeRandomString(32)
 
     onChange(event: React.FormEvent<HTMLInputElement>) {
-        const key = event.currentTarget.name;
-        const value = event.currentTarget.value;
-        this.props.attr.onChange(key, value);
+        const key = event.currentTarget.name
+        const value = event.currentTarget.value
+        this.props.attr.onChange(key, value)
     }
 
     onKeyUp(event: KeyboardEvent) {

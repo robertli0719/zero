@@ -13,10 +13,7 @@ export type Request = {
 }
 
 function getSumbitMethod(request: Request) {
-    let method = "POST";
-    if (request.method) {
-        method = request.method
-    }
+    const method = request.method ? request.method : "POST"
     return method.toUpperCase()
 }
 
@@ -29,13 +26,13 @@ export function submit(request: Request): Promise<never> {
     }
     switch (method) {
         case "GET":
-            return http.get(uri);
+            return http.get(uri)
         case "POST":
-            return http.post(uri, dto);
+            return http.post(uri, dto)
         case "PUT":
-            return http.put(uri, dto);
+            return http.put(uri, dto)
         case "DELETE":
-            return http.delete(uri);
+            return http.delete(uri)
     }
     throw "Error: Can't support method: " + method
 }

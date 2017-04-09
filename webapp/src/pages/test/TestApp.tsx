@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from "react"
 import { connect } from "react-redux"
 import { hashHistory } from 'react-router'
 import { store, AppState } from "../../Store"
@@ -8,21 +8,21 @@ import * as me from "../../actions/me"
 
 function logout() {
     store.dispatch(me.triggerLogout()).then(() => {
-        hashHistory.replace("admin/login");
-    });
+        hashHistory.replace("admin/login")
+    })
 }
 
-let navBarItemList = [
+const navBarItemList = [
     { name: "Cropper", url: "test/cropper" },
     { name: "Items2" },
     { name: "Items3" }
-] as NavbarItem[];
+] as NavbarItem[]
 
-let rightNavBarItemList = [
+const rightNavBarItemList = [
     { name: "Logout", onClick: logout }
     // { name: "Link", url: "/" },
     // { name: "Link", url: "/" }
-] as NavbarItem[];
+] as NavbarItem[]
 
 interface Prop {
     me: UserProfile
@@ -31,12 +31,12 @@ interface Prop {
 class TestAppComponent extends React.Component<Prop, {}>{
 
     constructor() {
-        super();
-        store.dispatch(me.loadProfile());
+        super()
+        store.dispatch(me.loadProfile())
     }
 
     render() {
-        let navbar = <AppNavbar name="Test" brandUrl="test/index" itemList={navBarItemList} rightItemList={rightNavBarItemList} />
+        const navbar = <AppNavbar name="Test" brandUrl="test/index" itemList={navBarItemList} rightItemList={rightNavBarItemList} />
         return (
             <div>
                 {navbar}
@@ -47,7 +47,7 @@ class TestAppComponent extends React.Component<Prop, {}>{
 }
 
 function select(state: AppState): Prop {
-    return { me: state.me };
+    return { me: state.me }
 }
 
-export let TestApp = connect(select)(TestAppComponent);
+export const TestApp = connect(select)(TestAppComponent)

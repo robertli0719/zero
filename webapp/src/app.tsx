@@ -1,7 +1,7 @@
-import * as React from "react";
-import * as ReactDOM from "react-dom";
-import { Provider } from "react-redux";
-import { Router, Route, hashHistory, IndexRoute, RouterState, RedirectFunction } from 'react-router';
+import * as React from "react"
+import * as ReactDOM from "react-dom"
+import { Provider } from "react-redux"
+import { Router, Route, hashHistory, IndexRoute, RouterState, RedirectFunction } from 'react-router'
 import { store, AppState } from "./Store"
 import { AppNavbar, NavbarItem } from "./components/zero/AppNavbar"
 import * as me from "./actions/me"
@@ -39,21 +39,21 @@ import { TestImageUpload } from "./pages/test/TestImageUpload"
 import { TestCros } from "./pages/test/TestCros"
 import { TestWebsocket } from "./pages/test/TestWebsocket"
 
-let navBarItemList = [
+const navBarItemList = [
     { name: "Index", url: "/index" },
     { name: "About", url: "/about" },
     { name: "Test", url: "/test/index" }
-];
+]
 
-let rightNavBarItemList = [
+const rightNavBarItemList = [
     // { name: "Link", url: "/" },
     // { name: "Link", url: "/" }
-] as NavbarItem[];
+] as NavbarItem[]
 
 class App extends React.Component<{}, {}>{
 
     constructor() {
-        super();
+        super()
     }
 
     render() {
@@ -67,7 +67,7 @@ class App extends React.Component<{}, {}>{
 }
 
 function requireRoleAdmin(nextState: RouterState, replace: RedirectFunction) {
-    let loginPath = '/admin/login';
+    const loginPath = '/admin/login'
     if (me.isAdmin() == false) {
         replace({
             pathname: loginPath
@@ -76,8 +76,8 @@ function requireRoleAdmin(nextState: RouterState, replace: RedirectFunction) {
 }
 
 function requireRoleStaff(nextState: RouterState, replace: RedirectFunction) {
-    let platformName = nextState.params["platform"];
-    let loginPath = '/dashboard/' + platformName + "/login";
+    const platformName = nextState.params["platform"]
+    const loginPath = '/dashboard/' + platformName + "/login"
     if (me.isPlatformUser(platformName) == false) {
         replace({
             pathname: loginPath
@@ -85,7 +85,7 @@ function requireRoleStaff(nextState: RouterState, replace: RedirectFunction) {
     }
 }
 
-let template = (
+const template = (
     <Provider store={store}>
         <Router history={hashHistory}>
             <Route path="/" >
@@ -121,6 +121,6 @@ let template = (
             </Route>
         </Router>
     </Provider>
-);
+)
 
-ReactDOM.render(template, document.getElementById("context"));
+ReactDOM.render(template, document.getElementById("context"))

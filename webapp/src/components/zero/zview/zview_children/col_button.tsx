@@ -12,10 +12,10 @@ export type ColButtonProps = {
     name: string
     onAction: (dto: any, index: number) => {}
     onRender?: (dto: any, index: number) => boolean
-    active?: boolean;
-    block?: boolean;
-    bsStyle?: string;
-    bsSize?: bs.Sizes;
+    active?: boolean
+    block?: boolean
+    bsStyle?: string
+    bsSize?: bs.Sizes
     index?: number
     dto?: any
 }
@@ -23,7 +23,7 @@ export type ColButtonProps = {
 export class ColButton extends React.Component<ColButtonProps, {}>{
 
     onAction() {
-        this.props.onAction(this.props.dto, this.props.index);
+        this.props.onAction(this.props.dto, this.props.index)
     }
 
     render() {

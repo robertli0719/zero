@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Robert Li.
+ * Copyright 2017 Robert Li.
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  */
@@ -10,12 +10,11 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import javax.imageio.ImageIO;
 import org.springframework.stereotype.Component;
 import robertli.zero.core.ImageService;
@@ -24,7 +23,7 @@ import robertli.zero.core.ImageService;
  * Because we include com.twelvemonkeys.imageio in pom, ImageIO can support CMYK
  * for JPG.
  *
- * @version 1.0.1 2016-10-06
+ * @version 1.0.2 2017-04-07
  * @author Robert Li
  */
 @Component("imageService")
@@ -36,9 +35,8 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public BufferedImage readImage(byte[] data) throws IOException {
-        InputStream in = new ByteArrayInputStream(data);
-        return ImageIO.read(in);
+    public BufferedImage readImage(InputStream inputStream) throws IOException {
+        return ImageIO.read(inputStream);
     }
 
     @Override
@@ -49,11 +47,8 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public byte[] getImageData(BufferedImage image, String formatName) throws IOException {
-        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-            ImageIO.write(image, formatName, baos);
-            return baos.toByteArray();
-        }
+    public void writeImage(OutputStream outputStream, BufferedImage image, String formatName) throws IOException {
+        ImageIO.write(image, formatName, outputStream);
     }
 
     @Override

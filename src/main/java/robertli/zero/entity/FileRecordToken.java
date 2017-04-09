@@ -25,7 +25,7 @@ import javax.persistence.Temporal;
  *
  * @see robertli.zero.service.StorageService
  * @see robertli.zero.entity.FileRecord
- * @version 1.0.0 2017-03-15
+ * @version 1.0.1 2017-04-07
  * @author Robert Li
  */
 @Entity
@@ -38,6 +38,7 @@ public class FileRecordToken implements Serializable {
     private String name;
     private String type;
     private Date createdDate;
+    private long len;
     private FileRecord fileRecord;
 
     @Id
@@ -76,6 +77,14 @@ public class FileRecordToken implements Serializable {
 
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public long getLen() {
+        return len;
+    }
+
+    public void setLen(long len) {
+        this.len = len;
     }
 
     @ManyToOne

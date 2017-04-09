@@ -10,7 +10,7 @@
  * 
  * version 1.1.2 2017-02-21
  */
-import * as React from "react";
+import * as React from "react"
 import { TagSchema, FormValue, TagTypeOption, FormError } from "./zform_schema"
 
 export type ZFormTagAttr = {

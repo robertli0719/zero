@@ -1,9 +1,9 @@
-import * as React from "react";
+import * as React from "react"
 import { connect } from "react-redux"
 import { store, AppState } from "../../Store"
 import { UserProfile } from "../../reducers/me"
 import * as me from "../../actions/me"
-import { Button, ButtonToolbar, Row, Col, Panel, Alert } from "react-bootstrap";
+import { Button, ButtonToolbar, Row, Col, Panel, Alert } from "react-bootstrap"
 import * as zform from "../../components/zero/zform/zform"
 import * as zview from "../../components/zero/zview/zview"
 import { http, RestErrorDto } from "../../utilities/http"
@@ -29,9 +29,9 @@ interface State {
 class AdminUserAdminComponent extends React.Component<Props, State>{
 
     constructor(prop: Props) {
-        super(prop);
+        super(prop)
         this.state = { adminUserList: [], updateEventListener: new UpdateEventListener() }
-        this.updateData();
+        this.updateData()
     }
 
     updateData() {
@@ -46,15 +46,15 @@ class AdminUserAdminComponent extends React.Component<Props, State>{
         const url = "admin-users/" + adminUser.username
         http.delete(url)
             .then(() => {
-                this.updateData();
+                this.updateData()
             })
             .catch((error: RestErrorDto) => {
-                console.log(error);
+                console.log(error)
             })
     }
 
     onTableButtonRender(adminUser: AdminUserDto): boolean {
-        return adminUser.root == false;
+        return adminUser.root == false
     }
 
     getUserEditorRow() {
@@ -123,12 +123,12 @@ class AdminUserAdminComponent extends React.Component<Props, State>{
                 </Row>
                 {this.getUserEditorRow()}
             </div>
-        );
+        )
     }
 }
 
 function select(state: AppState): Props {
-    return { me: state.me };
+    return { me: state.me }
 }
 
-export let AdminUserAdmin = connect(select)(AdminUserAdminComponent);
+export const AdminUserAdmin = connect(select)(AdminUserAdminComponent)

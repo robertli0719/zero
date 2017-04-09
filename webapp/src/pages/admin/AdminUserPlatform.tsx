@@ -1,8 +1,8 @@
-import * as React from "react";
+import * as React from "react"
 import { connect } from "react-redux"
 import { hashHistory } from 'react-router'
 import { store, AppState } from "../../Store"
-import { Button, ButtonToolbar, Row, Col, Panel } from "react-bootstrap";
+import { Button, ButtonToolbar, Row, Col, Panel } from "react-bootstrap"
 import * as zform from "../../components/zero/zform/zform"
 import * as zview from "../../components/zero/zview/zview"
 import { http } from "../../utilities/http"
@@ -23,11 +23,11 @@ interface State {
 class AdminUserPlatformComponent extends React.Component<Prop, State>{
 
     constructor(prop: Prop) {
-        super(prop);
+        super(prop)
         this.state = {
             updateEventListener: new UpdateEventListener()
         }
-        this.updateData();
+        this.updateData()
     }
 
     updateData() {
@@ -42,12 +42,12 @@ class AdminUserPlatformComponent extends React.Component<Prop, State>{
         const url = "user-platforms/" + dto.name
         return http.delete(url)
             .then(() => {
-                return this.updateData();
+                return this.updateData()
             })
     }
 
     redirectToUserPage(dto: UserPlatformDto, index: number) {
-        hashHistory.push("admin/user-staff/" + dto.name);
+        hashHistory.push("admin/user-staff/" + dto.name)
     }
 
     onTableButtonRender(dto: UserPlatformDto): boolean {
@@ -80,12 +80,12 @@ class AdminUserPlatformComponent extends React.Component<Prop, State>{
                     </Col>
                 </Row>
             </div>
-        );
+        )
     }
 }
 
 function select(state: AppState): Prop {
-    return {};
+    return {}
 }
 
-export let AdminUserPlatform = connect(select)(AdminUserPlatformComponent);
+export const AdminUserPlatform = connect(select)(AdminUserPlatformComponent)

@@ -1,4 +1,4 @@
-var CopyWebpackPlugin = require('copy-webpack-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
     entry: "./src/app.tsx",
@@ -45,4 +45,4 @@ module.exports = {
         "react": "React",
         "react-dom": "ReactDOM"
     },
-};
+}

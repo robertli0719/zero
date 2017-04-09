@@ -40,8 +40,8 @@ type FormState = {
 export class Form extends React.Component<FormProps, FormState>{
 
     constructor(props: FormProps) {
-        super(props);
-        let schema: TagSchema = props.schema;
+        super(props)
+        let schema: TagSchema = props.schema
         if (schema == null) {
             schema = builder.buildTagSchema(this.props.children)
         }
@@ -51,7 +51,7 @@ export class Form extends React.Component<FormProps, FormState>{
     }
 
     componentWillReceiveProps(nextProps: any, nextContext: any): void {
-        let schema: TagSchema = nextProps.schema;
+        let schema: TagSchema = nextProps.schema
         if (schema == null) {
             schema = builder.buildTagSchema(nextProps.children)
         }
@@ -99,8 +99,8 @@ export class Form extends React.Component<FormProps, FormState>{
     onAction(name: string, payload: any) {
         switch (name) {
             case "submit":
-                this.submit();
-                break;
+                this.submit()
+                break
         }
     }
 
@@ -123,7 +123,7 @@ export class Form extends React.Component<FormProps, FormState>{
     }
 
     render() {
-        let attr: ZFormTagAttr = {
+        const attr: ZFormTagAttr = {
             schema: this.state.schema,
             value: this.state.value,
             error: this.state.error,

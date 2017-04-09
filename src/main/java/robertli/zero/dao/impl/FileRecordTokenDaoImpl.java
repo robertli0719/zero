@@ -29,7 +29,7 @@ public class FileRecordTokenDaoImpl extends GenericHibernateDao<FileRecordToken,
     private SessionFactory sessionFactory;
 
     @Override
-    public FileRecordToken saveFileRecord(String name, String type) {
+    public FileRecordToken saveFileRecord(String name, String type, long length) {
         final String uuid = UUID.randomUUID().toString();
         final Date now = new Date();
         FileRecordToken fileRecordToken = new FileRecordToken();
@@ -37,6 +37,7 @@ public class FileRecordTokenDaoImpl extends GenericHibernateDao<FileRecordToken,
         fileRecordToken.setName(name);
         fileRecordToken.setType(type);
         fileRecordToken.setCreatedDate(now);
+        fileRecordToken.setLen(length);
         fileRecordToken.setFileRecord(null);
         save(fileRecordToken);
         return fileRecordToken;

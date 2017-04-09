@@ -9,13 +9,13 @@
     version: 2016-12-21 1.0.0
 */
 
-const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 
 export function makeRandomString(length: number) {
-    let text = "";
+    let text = ""
     for (var i = 0; i < length; i++) {
-        text += CHARS.charAt(Math.floor(Math.random() * CHARS.length));
+        text += CHARS.charAt(Math.floor(Math.random() * CHARS.length))
     }
-    return text;
+    return text
 }
 

@@ -7,7 +7,7 @@ import { Cropper, CropResult } from "../../components/zero/ZCropper"
 export class TestCropper extends React.Component<{}, {}>{
 
     constructor(props: {}) {
-        super(props);
+        super(props)
     }
 
     onChange(result: CropResult) {
@@ -26,6 +26,6 @@ export class TestCropper extends React.Component<{}, {}>{
                     src="https://fengyuanchen.github.io/cropperjs/images/picture.jpg"
                 />
             </div>
-        );
+        )
     }
 }

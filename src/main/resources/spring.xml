@@ -25,8 +25,8 @@
     <!-- app.properties can be save at out of the app by system environment -->
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="location">
-            <!--<value>file:${ZERO_PROPERTIES}</value>-->
-            <value>classpath:app.properties</value>
+            <value>file:${ZERO_PROPERTIES}</value>
+            <!--<value>classpath:app.properties</value>-->
         </property>
     </bean>
     
@@ -71,6 +71,7 @@
         <property name="sslEnabled" value="${web.sslEnabled}"/>
         <property name="domain" value="${web.domain}"/>
         <property name="imageActionUrl" value="${web.image_action_url}"/>
+        <property name="videoActionUrl" value="${web.image_video_url}"/>
         <property name="googleSigninClientId" value="${web.google_signin_client_id}"/>
     </bean>
     

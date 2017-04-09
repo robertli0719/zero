@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from "react"
 import { connect } from "react-redux"
 import { hashHistory } from 'react-router'
 import { store, AppState } from "../../Store"
@@ -8,24 +8,24 @@ import * as me from "../../actions/me"
 
 function logout() {
     store.dispatch(me.triggerLogout()).then(() => {
-        hashHistory.replace("admin/login");
-    });
+        hashHistory.replace("admin/login")
+    })
 }
 
-let userMenuList = [
+const userMenuList = [
     { name: "Admin Editor", url: "admin/user-admin" },
     { name: "Platform Editor", url: "admin/user-platform" },
     { name: "Role", url: "admin/user-role" },
     { name: "Promission" },
-] as NavbarItem[];
+] as NavbarItem[]
 
-let navBarItemList = [
+const navBarItemList = [
     { name: "Index", url: "admin/index" },
     { name: "User", childs: userMenuList },
     { name: "Items1" },
     { name: "Items2" },
     { name: "Items3" }
-] as NavbarItem[];
+] as NavbarItem[]
 
 interface Prop {
     me: UserProfile
@@ -37,8 +37,8 @@ interface State {
 class AdminAppComponent extends React.Component<Prop, State>{
 
     constructor() {
-        super();
-        store.dispatch(me.loadProfile());
+        super()
+        store.dispatch(me.loadProfile())
     }
 
     makeRightNavbarItems(): NavbarItem[] {
@@ -52,7 +52,7 @@ class AdminAppComponent extends React.Component<Prop, State>{
     }
 
     render() {
-        let navbar = <AppNavbar name="Admin Dashboard" inverse={true} brandUrl="admin/index" itemList={navBarItemList} rightItemList={this.makeRightNavbarItems()} />
+        const navbar = <AppNavbar name="Admin Dashboard" inverse={true} brandUrl="admin/index" itemList={navBarItemList} rightItemList={this.makeRightNavbarItems()} />
         return (
             <div>
                 {navbar}
@@ -63,7 +63,7 @@ class AdminAppComponent extends React.Component<Prop, State>{
 }
 
 function select(state: AppState): Prop {
-    return { me: state.me };
+    return { me: state.me }
 }
 
-export let AdminApp = connect(select)(AdminAppComponent);
+export const AdminApp = connect(select)(AdminAppComponent)

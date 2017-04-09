@@ -5,10 +5,10 @@
  * 
  * version 1.1.2 2017-03-24
  */
-import * as React from "react";
+import * as React from "react"
 
-export type FieldPlaceOption = 'default' | 'path' | 'pathAndDto';
-export type TagTypeOption = "map" | "textfield" | "password" | "textarea" | "file" | "checkbox" | "checkboxes" | "radios" | "hidden" | "select" | "image" | "imageshower" | "submit"
+export type FieldPlaceOption = 'default' | 'path' | 'pathAndDto'
+export type TagTypeOption = "map" | "textfield" | "password" | "textarea" | "file" | "checkbox" | "checkboxes" | "radios" | "hidden" | "select" | "image" | "imageshower" | "video" | "submit"
 
 export type ValueMap = { [key: string]: FormValue }
 export type FormError = { errors: string[], children: { [key: string]: any } }
@@ -38,8 +38,8 @@ export function buildDefaultValue(tag: TagSchema): FormValue {
     if (!tag.children) {
         return tag.value
     }
-    let object: ValueMap = {}
-    for (let child of tag.children) {
+    const object: ValueMap = {}
+    for (const child of tag.children) {
         if (!child.name) {
             continue
         }

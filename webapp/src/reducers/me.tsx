@@ -10,7 +10,7 @@ export interface UserProfile {
     roleList: string[]
 }
 
-let initState: UserProfile = {
+const initState: UserProfile = {
     uid: null,
     authLabel: null,
     userTypeName: null,
@@ -23,8 +23,8 @@ let initState: UserProfile = {
 export function meReducer(state: UserProfile = initState, action: Action): any {
     switch (action.type) {
         case UPDATE_ME:
-            state = $.extend({}, state, action.payload);
+            state = $.extend({}, state, action.payload)
         default:
-            return state;
+            return state
     }
 }

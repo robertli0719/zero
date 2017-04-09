@@ -1,8 +1,8 @@
-import * as React from "react";
+import * as React from "react"
 import { connect } from "react-redux"
 import { store, AppState } from "../../Store"
 import { UserProfile } from "../../reducers/me"
-import { Button, ButtonToolbar, Row, Col, Panel, Alert } from "react-bootstrap";
+import { Button, ButtonToolbar, Row, Col, Panel, Alert } from "react-bootstrap"
 import * as zform from "../../components/zero/zform/zform"
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
 export class AdminIndexPage extends React.Component<Props, {}>{
 
     constructor() {
-        super();
+        super()
     }
 
     render() {
@@ -33,13 +33,13 @@ export class AdminIndexPage extends React.Component<Props, {}>{
                     </Col>
                 </Row>
             </div>
-        );
+        )
     }
 }
 
 function select(state: AppState): Props {
-    console.log("AdminLogin select", state);
-    return { me: state.me };
+    console.log("AdminLogin select", state)
+    return { me: state.me }
 }
 
-export let AdminIndex = connect(select)(AdminIndexPage);
+export const AdminIndex = connect(select)(AdminIndexPage)

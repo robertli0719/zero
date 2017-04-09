@@ -9,8 +9,8 @@ export function addNumber(val: number): Action {
 }
 
 export function demo() {
-    console.log("in demo");
+    console.log("in demo")
     return () => {
-        console.log("middleware");
+        console.log("middleware")
     }
 }

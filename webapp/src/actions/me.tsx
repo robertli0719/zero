@@ -22,23 +22,23 @@ export type UserProfileDto = {
 }
 
 export function isLogged() {
-    let state: AppState = store.getState();
+    const state: AppState = store.getState()
     if (state.me && state.me.userTypeName) {
-        return true;
+        return true
     }
-    return false;
+    return false
 }
 
 export function isAdmin() {
-    let state: AppState = store.getState();
+    const state: AppState = store.getState()
     if (state.me && state.me.userTypeName == "admin") {
-        return true;
+        return true
     }
-    return false;
+    return false
 }
 
 export function isAdminRoot() {
-    let state: AppState = store.getState();
+    const state: AppState = store.getState()
     if (state.me && state.me.roleList != null) {
         for (const roleName of state.me.roleList) {
             if (roleName == "admin_root") {
@@ -46,15 +46,15 @@ export function isAdminRoot() {
             }
         }
     }
-    return false;
+    return false
 }
 
 export function isPlatformUser(platformName: string) {
-    let state: AppState = store.getState();
+    const state: AppState = store.getState()
     if (state.me && state.me.userPlatformName) {
         return state.me.userPlatformName == platformName
     }
-    return false;
+    return false
 }
 
 export function updateMe(userProfile: UserProfile): Action {
@@ -69,14 +69,14 @@ export function loadProfile() {
     return (dispatch: Dispatch<AppState>) => {
         return http.get("me")
             .then((userProfileDto: UserProfileDto) => {
-                dispatch(updateMe(userProfileDto));
+                dispatch(updateMe(userProfileDto))
             })
             .catch((restError: RestErrorDto) => {
-                console.log("Error happened when loadProfile:", restError);
-                let nullUserProfile: UserProfile = { uid: null, authLabel: null, userTypeName: null, userPlatformName: null, name: null, telephone: null, roleList: null }
-                dispatch(updateMe(nullUserProfile));
-                throw restError;
-            });
+                console.log("Error happened when loadProfile:", restError)
+                const nullUserProfile: UserProfile = { uid: null, authLabel: null, userTypeName: null, userPlatformName: null, name: null, telephone: null, roleList: null }
+                dispatch(updateMe(nullUserProfile))
+                throw restError
+            })
     }
 }
 
@@ -84,11 +84,11 @@ export function triggerLogout() {
     return (dispatch: Dispatch<AppState>) => {
         return http.delete("me/auth")
             .then(() => {
-                return dispatch(loadProfile());
+                return dispatch(loadProfile())
             })
             .catch((restError: RestErrorDto) => {
-                document.cookie = 'access_token_p=; expires=Thu, 01-Jan-70 00:00:01 GMT;';
-                console.log("Error happened when deleteAuth:", restError);
-            });
+                document.cookie = 'access_token_p=; expires=Thu, 01-Jan-70 00:00:01 GMT;'
+                console.log("Error happened when deleteAuth:", restError)
+            })
     }
 }
