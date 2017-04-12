@@ -18,7 +18,7 @@ import robertli.zero.dao.GenericDao;
 
 /**
  *
- * @version 1.0.4 2017-03-28
+ * @version 1.0.5 2017-04-10
  * @author Robert Li
  * @param <T> The Entity Class
  * @param <PK> The Type of ID
@@ -95,6 +95,11 @@ public class GenericHibernateDao<T extends Serializable, PK extends Serializable
     public int count() {
         Number number = (Number) getSession().createQuery("select count(u) from " + entityClass.getName() + " u").getSingleResult();
         return number.intValue();
+    }
+
+    @Override
+    public void flush() {
+        getSession().flush();
     }
 
     @Override

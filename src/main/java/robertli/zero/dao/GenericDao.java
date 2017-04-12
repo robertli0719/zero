@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  *
- * @version 1.0.3 2017-03-28
+ * @version 1.0.4 2017-04-10
  * @author Robert Li
  * @param <T> The Entity Class
  * @param <PK> The Type of ID
@@ -32,6 +32,8 @@ public interface GenericDao<T extends Serializable, PK extends Serializable> {
     public void deleteById(PK id);
 
     public int count();
+
+    public void flush();
 
     public List<T> list();
 

@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.1.2 2017-03-24
+ * version 1.1.3 2017-04-11
  */
 import * as React from "react"
 import { TagSchema, FieldPlaceOption, Selection } from "./zform_schema"
@@ -69,6 +69,15 @@ type HiddenProps = {
 
 export class Hidden extends React.Component<HiddenProps, {}> { }
 
+type ConstantProps = {
+    name: string
+    label: string
+    value: string
+    place?: FieldPlaceOption
+}
+
+export class Constant extends React.Component<ConstantProps, {}> { }
+
 type RadiosProps = {
     name: string
     label?: string
@@ -80,11 +89,6 @@ export class Radios extends React.Component<RadiosProps, {}> { }
 
 export class Select extends React.Component<RadiosProps, {}> { }
 
-type SubmitProps = {
-    value?: string
-    block?: boolean
-    bsStyle?: string
-}
 
 type ImageUploadOption = 'default' | 'cropped' | 'fixed'
 
@@ -97,6 +101,20 @@ type ImageProps = {
 
 export class Image extends React.Component<ImageProps, {}> { }
 
+type ImagesProps = {
+    label: string
+    name: string
+    value?: string
+}
+
+export class Images extends React.Component<ImagesProps, {}> { }
+
+type ImageShowerProps = {
+    name: string
+}
+
+export class ImageShower extends React.Component<ImageShowerProps, {}> { }
+
 type VideoProps = {
     label: string
     name: string
@@ -105,10 +123,16 @@ type VideoProps = {
 
 export class Video extends React.Component<VideoProps, {}> { }
 
-type ImageShowerProps = {
+type VideoPlayerProps = {
     name: string
 }
 
-export class ImageShower extends React.Component<ImageShowerProps, {}> { }
+export class VideoPlayer extends React.Component<VideoPlayerProps, {}> { }
+
+type SubmitProps = {
+    value?: string
+    block?: boolean
+    bsStyle?: string
+}
 
 export class Submit extends React.Component<SubmitProps, {}> { }

@@ -3,30 +3,30 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.0.1 2017-04-10
+ * version 1.0.0 2017-04-11
  */
 import * as React from "react"
-import { Sizes, Button, Modal, FormControl, HelpBlock, ControlLabel } from "react-bootstrap"
+import { Sizes, Button, Modal, FormControl, HelpBlock, ControlLabel, Image } from "react-bootstrap"
 import { makeRandomString } from "../../utilities/random-coder"
 import { IF } from "./stl/IF"
 import { http, RestErrorDto } from "../../utilities/http"
 
-type VideoUploadButtonState = {
+type ImagesUploadButtonState = {
     showModal: boolean
-    videoUrl: string
+    imgUrlArray: string[]
     isUploading: boolean
     files: FileList
 }
 
-type VideoUploadButtonProps = {
+type ImagesUploadButtonProps = {
     active?: boolean
     block?: boolean
     bsStyle?: string
     bsSize?: Sizes
-    onSuccess: (videoUrl: string) => void
+    onSuccess: (imgUrlArray: string[]) => void
 }
 
-export class VideoUploadButton extends React.Component<VideoUploadButtonProps, VideoUploadButtonState>{
+export class ImagesUploadButton extends React.Component<ImagesUploadButtonProps, ImagesUploadButtonState>{
 
     private controlId = makeRandomString(32)
 
@@ -34,7 +34,7 @@ export class VideoUploadButton extends React.Component<VideoUploadButtonProps, V
         super()
         this.state = {
             showModal: false,
-            videoUrl: null,
+            imgUrlArray: [],
             isUploading: false,
             files: null
         }
@@ -45,11 +45,11 @@ export class VideoUploadButton extends React.Component<VideoUploadButtonProps, V
     }
 
     close() {
-        this.setState({ showModal: false })
+        this.setState({ showModal: false, imgUrlArray: [] })
     }
 
     use() {
-        this.props.onSuccess(this.state.videoUrl)
+        this.props.onSuccess(this.state.imgUrlArray)
         this.close()
     }
 
@@ -58,7 +58,6 @@ export class VideoUploadButton extends React.Component<VideoUploadButtonProps, V
         const formData = new FormData()
         for (const i in files) {
             const fe: File = files[i]
-            console.log("file size:", fe.size)
             formData.append("file", fe)
         }
         return formData
@@ -70,7 +69,7 @@ export class VideoUploadButton extends React.Component<VideoUploadButtonProps, V
         }
 
         this.setState({ isUploading: true })
-        return http.postParams("videos", this.createFormData())
+        return http.postParams("images", this.createFormData())
             .then((text: string) => {
                 return JSON.parse(text)
             }).then((json) => {
@@ -78,8 +77,10 @@ export class VideoUploadButton extends React.Component<VideoUploadButtonProps, V
                     throw "Exception when get upload result, url list size is not 1."
                 }
                 return json[0]
-            }).then((videoUrl: string) => {
-                this.setState({ videoUrl: videoUrl, isUploading: false })
+            }).then((imgUrl: string) => {
+                const imgUrlArray = this.state.imgUrlArray
+                imgUrlArray.push(imgUrl)
+                this.setState({ imgUrlArray: imgUrlArray, isUploading: false })
             })
     }
 
@@ -90,7 +91,7 @@ export class VideoUploadButton extends React.Component<VideoUploadButtonProps, V
     }
 
     render() {
-        const headerText = "Video Upload"
+        const headerText = "Images Upload"
         return (
             <div>
                 <Button
@@ -107,20 +108,18 @@ export class VideoUploadButton extends React.Component<VideoUploadButtonProps, V
                         <Modal.Title>{headerText}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
+                        {
+                            this.state.imgUrlArray.map((imgUrl) => {
+                                return <Image src={imgUrl} responsive />
+                            })
+                        }
                         <IF test={this.state.isUploading}>
                             <p>uploading...</p>
-                        </IF>
-                        <IF test={this.state.videoUrl != null && this.state.isUploading == false}>
-                            <p>videoUrl: {this.state.videoUrl}</p>
-                            <video width="100%" controls>
-                                <source src={this.state.videoUrl} type="video/mp4" />
-                                Your device does not support the video tag.
-                            </video>
                         </IF>
                         <FormControl type="file" onChange={this.onChange.bind(this)} />
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button bsStyle="success" disabled={!this.state.videoUrl} onClick={this.use.bind(this)}>Use</Button>
+                        <Button bsStyle="success" disabled={this.state.imgUrlArray.length == 0} onClick={this.use.bind(this)}>Use</Button>
                         <Button onClick={this.close.bind(this)}>Close</Button>
                     </Modal.Footer>
                 </Modal>

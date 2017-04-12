@@ -93,6 +93,7 @@ export class TestFormPage extends React.Component<Prop, {}>{
                     {/*<zform.Form schema={testForm2} />*/}
                     {/*<zform.Form schema={testForm2} />*/}
                     <zform.Form action="test/demos" >
+                        <zform.Constant name="contentId" label="Content Id" value="hello123" />
                         <zform.TextField name="name" label="Username" />
                         <zform.Map name="subItem" label="SubItem">
                             <zform.TextField name="num" label="Number" />
@@ -100,7 +101,10 @@ export class TestFormPage extends React.Component<Prop, {}>{
                         </zform.Map>
                         <zform.ImageShower name="imgUrl" />
                         <zform.Image label="Product Image" name="imgUrl" />
-                        <zform.Video label="Product Video" name="imgUrl" />
+                        <zform.ImageShower name="imgUrlList" />
+                        <zform.Images label="Ad Images" name="imgUrlList" />
+                        <zform.VideoPlayer name="videoUrl" />
+                        <zform.Video label="Product Video" name="videoUrl" />
                         <zform.Submit value="Add" />
                     </zform.Form>
                 </Col>

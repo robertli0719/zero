@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -60,14 +61,24 @@ public class VideoController {
         return urlString;
     }
 
-    private void setHeader(HttpServletResponse response, long now, String contentType) {
+    private String makeContentRangeHeader(long start, long size) {
+        return "bytes " + start + "-" + (size - 1) + "/" + size;
+    }
+
+    private void setHeader(HttpServletResponse response, long now, FileRecordDto fileRecord, long start) {
         final long expire = now + ONE_MONTH;
+        final String contentType = fileRecord.getContentType();
+        final long size = fileRecord.getSize();
+        final String contentRange = makeContentRangeHeader(start, size);
+        response.setStatus(206);
         response.setDateHeader("Date", now);
         response.setDateHeader("Expires", expire);
         response.setDateHeader("Retry-After", expire);
         response.setDateHeader("Last-Modified", now);
         response.setHeader("Cache-Control", "public");
         response.setHeader("Accept-Ranges", "bytes");
+        response.setHeader("Content-Range", contentRange);
+        response.setHeader("Content-Length", size + "");
         response.setContentType(contentType);
     }
 
@@ -80,19 +91,36 @@ public class VideoController {
         out.flush();
     }
 
+    private long pickRangeStart(HttpServletRequest request) {
+        final String rangeHeader = request.getHeader("range");
+        if (rangeHeader == null || rangeHeader.isEmpty()) {
+            return 0L;
+        }
+        final String part = rangeHeader.replace("bytes=", "");
+        final String numPart = part.split("-")[0];
+        return Long.parseLong(numPart);
+    }
+
+    private void showHeaders(HttpServletRequest request) {
+        final Enumeration<String> nameEnum = request.getHeaderNames();
+        while (nameEnum.hasMoreElements()) {
+            final String key = nameEnum.nextElement();
+            final String name = request.getHeader(key);
+            System.out.println("key:" + key + "\t name:" + name);
+        }
+    }
+
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
     public void get(@PathVariable String id, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        System.out.println("get video");
         final long now = (new Date()).getTime();
         final FileRecordDto fileRecord = storageService.getFileRecord(id);
         if (fileRecord == null) {
             String errorDetail = "can't found video id:" + id;
-            throw new RestException("NOT_FOUND", "Image not found", errorDetail, HttpStatus.NOT_FOUND);
+            throw new RestException("NOT_FOUND", "Video not found", errorDetail, HttpStatus.NOT_FOUND);
         }
-
-        final String contentType = fileRecord.getContentType();
-        setHeader(response, now, contentType);
-        final InputStream in = storageService.getInputStream(id, 0);
+        final long start = pickRangeStart(request);
+        setHeader(response, now, fileRecord, start);
+        final InputStream in = storageService.getInputStream(id, start);
         final OutputStream out = response.getOutputStream();
         try {
             sendData(in, out);
