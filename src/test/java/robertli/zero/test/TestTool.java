@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Random;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Component;
-import robertli.zero.core.ImagePathService;
+import robertli.zero.core.PathService;
 import robertli.zero.core.RandomCodeCreater;
 import robertli.zero.service.StorageService;
 
@@ -28,7 +28,7 @@ public class TestTool {
     private StorageService storageService;
 
     @Resource
-    private ImagePathService imagePathService;
+    private PathService pathService;
 
     public String imitateImageUpload() throws IOException {
         final byte data[] = new byte[1024 * 5];
@@ -40,7 +40,7 @@ public class TestTool {
         final String uuid = storageService.register(filename, type, data.length);
         final ByteArrayInputStream bain = new ByteArrayInputStream(data);
         storageService.store(uuid, bain, data.length);
-        String imgUrl = imagePathService.makeImageUrl(uuid);
+        String imgUrl = pathService.makeImageUrl(uuid);
         return imgUrl;
     }
 

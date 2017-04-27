@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import robertli.zero.controller.RestException;
-import robertli.zero.core.ImagePathService;
+import robertli.zero.core.PathService;
 import robertli.zero.core.ImageService;
 import robertli.zero.dto.FileRecordDto;
 import robertli.zero.service.StorageService;
@@ -49,7 +49,7 @@ public class ImageController {
     private ImageService imageService;
 
     @Resource
-    private ImagePathService imagePathService;
+    private PathService pathService;
 
     private boolean shouldFlushBuffer(HttpServletRequest request, long now) {
         final long ifModifiedSince = request.getDateHeader("If-Modified-Since");
@@ -111,7 +111,7 @@ public class ImageController {
             final String uuid = storageService.register(filename, type, size);
             final InputStream in = file.getInputStream();
             storageService.store(uuid, in, size);
-            String url = imagePathService.makeImageUrl(uuid);
+            String url = pathService.makeImageUrl(uuid);
             urlString.add(url);
         }
         storageService.clean();
@@ -136,7 +136,7 @@ public class ImageController {
         final ByteArrayInputStream in = new ByteArrayInputStream(data);
         final String uuid = storageService.register(name, "image/jpeg", size);
         storageService.store(uuid, in, data.length);
-        return imagePathService.makeImageUrl(uuid);
+        return pathService.makeImageUrl(uuid);
     }
 
     private byte[] fixImageData(InputStream inputStream, String fileType, int x, int y, int width, int height, int fixedWidth, int fixedHeight) throws IOException {
@@ -158,6 +158,6 @@ public class ImageController {
         final ByteArrayInputStream in = new ByteArrayInputStream(data);
         final String uuid = storageService.register(name, "image/jpeg", size);
         storageService.store(uuid, in, data.length);
-        return imagePathService.makeImageUrl(uuid);
+        return pathService.makeImageUrl(uuid);
     }
 }

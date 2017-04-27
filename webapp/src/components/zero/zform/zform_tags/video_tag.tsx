@@ -36,7 +36,7 @@ class VideoTag extends ZFormTag {
 
         return (
             <FormGroup validationState={validateState}>
-                <VideoUploadButton onSuccess={this.onSuccess.bind(this)}>
+                <VideoUploadButton videoUrl={attr.value as string} onSuccess={this.onSuccess.bind(this)}>
                     <span>{attr.schema.label} </span>
                     <span className="glyphicon glyphicon-film"></span>
                 </VideoUploadButton>

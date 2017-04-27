@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import robertli.zero.controller.RestException;
-import robertli.zero.core.VideoPathService;
+import robertli.zero.core.PathService;
 import robertli.zero.dto.FileRecordDto;
 import robertli.zero.service.StorageService;
 
@@ -42,7 +42,7 @@ public class VideoController {
     private StorageService storageService;
 
     @Resource
-    private VideoPathService videoPathService;
+    private PathService pathService;
 
     @RequestMapping(method = RequestMethod.POST)
     public List<String> post(@RequestParam("file") List<MultipartFile> fileList) throws IOException {
@@ -54,7 +54,7 @@ public class VideoController {
             final String uuid = storageService.register(filename, type, size);
             final InputStream in = file.getInputStream();
             storageService.store(uuid, in, size);
-            final String url = videoPathService.makeVideoUrl(uuid);
+            final String url = pathService.makeVideoUrl(uuid);
             urlString.add(url);
         }
         storageService.clean();

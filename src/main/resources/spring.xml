@@ -71,7 +71,7 @@
         <property name="sslEnabled" value="${web.sslEnabled}"/>
         <property name="domain" value="${web.domain}"/>
         <property name="imageActionUrl" value="${web.image_action_url}"/>
-        <property name="videoActionUrl" value="${web.image_video_url}"/>
+        <property name="videoActionUrl" value="${web.video_action_url}"/>
         <property name="googleSigninClientId" value="${web.google_signin_client_id}"/>
     </bean>
     

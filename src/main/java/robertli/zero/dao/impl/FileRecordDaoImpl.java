@@ -7,7 +7,6 @@ package robertli.zero.dao.impl;
 
 import javax.annotation.Resource;
 import org.springframework.stereotype.Component;
-import robertli.zero.core.ImagePathService;
 import robertli.zero.dao.FileRecordDao;
 import robertli.zero.dao.FileRecordTokenDao;
 import robertli.zero.entity.FileRecord;
@@ -15,21 +14,17 @@ import robertli.zero.entity.FileRecordToken;
 
 /**
  *
- * @version 2017-03-20 1.0.1
+ * @version 2017-04-12 1.0.2
  * @author Robert Li
  */
 @Component("fileRecordDao")
 public class FileRecordDaoImpl extends GenericHibernateDao<FileRecord, String> implements FileRecordDao {
 
     @Resource
-    private ImagePathService imagePathService;
-
-    @Resource
     private FileRecordTokenDao fileRecordTokenDao;
 
     @Override
-    public FileRecord saveFileRecord(String url) {
-        final String uuid = imagePathService.pickImageId(url);
+    public FileRecord saveFileRecord(String uuid, String url) {
         FileRecordToken token = fileRecordTokenDao.get(uuid);
         if (token == null) {
             throw new RuntimeException("FileRecordDaoImpl saveFileRecord fail: can't found token for this uuid:" + uuid);
@@ -44,25 +39,25 @@ public class FileRecordDaoImpl extends GenericHibernateDao<FileRecord, String> i
         return record;
     }
 
-    private boolean isEqualsRecord(FileRecord currentRecord, String newUrl) {
-        if (currentRecord == null && newUrl == null) {
+    private boolean isEqualsRecord(FileRecord currentRecord, String newUuid) {
+        if (currentRecord == null && newUuid == null) {
             return true;
-        } else if (currentRecord != null && currentRecord.getUrl().equals(newUrl)) {
+        } else if (currentRecord != null && currentRecord.getUuid().equals(newUuid)) {
             return true;
         }
         return false;
     }
 
     @Override
-    public FileRecord replaceFileRecord(FileRecord currentRecord, String newUrl) {
-        if (isEqualsRecord(currentRecord, newUrl)) {
+    public FileRecord replaceFileRecord(FileRecord currentRecord, String newUuid, String newUrl) {
+        if (isEqualsRecord(currentRecord, newUuid)) {
             return currentRecord;
         }
         if (currentRecord != null) {
             delete(currentRecord);
         }
-        if (newUrl != null) {
-            return saveFileRecord(newUrl);
+        if (newUuid != null) {
+            return saveFileRecord(newUuid, newUrl);
         }
         return null;
     }

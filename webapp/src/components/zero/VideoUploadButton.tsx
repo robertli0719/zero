@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.0.1 2017-04-10
+ * version 1.0.2 2017-04-12
  */
 import * as React from "react"
 import { Sizes, Button, Modal, FormControl, HelpBlock, ControlLabel } from "react-bootstrap"
@@ -23,6 +23,7 @@ type VideoUploadButtonProps = {
     block?: boolean
     bsStyle?: string
     bsSize?: Sizes
+    videoUrl: string
     onSuccess: (videoUrl: string) => void
 }
 
@@ -30,11 +31,11 @@ export class VideoUploadButton extends React.Component<VideoUploadButtonProps, V
 
     private controlId = makeRandomString(32)
 
-    constructor() {
-        super()
+    constructor(props: VideoUploadButtonProps) {
+        super(props)
         this.state = {
             showModal: false,
-            videoUrl: null,
+            videoUrl: props.videoUrl,
             isUploading: false,
             files: null
         }
@@ -51,6 +52,10 @@ export class VideoUploadButton extends React.Component<VideoUploadButtonProps, V
     use() {
         this.props.onSuccess(this.state.videoUrl)
         this.close()
+    }
+
+    remove() {
+        this.setState({ videoUrl: null })
     }
 
     createFormData(): FormData {
@@ -120,7 +125,8 @@ export class VideoUploadButton extends React.Component<VideoUploadButtonProps, V
                         <FormControl type="file" onChange={this.onChange.bind(this)} />
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button bsStyle="success" disabled={!this.state.videoUrl} onClick={this.use.bind(this)}>Use</Button>
+                        <Button bsStyle="danger" disabled={!this.state.videoUrl} onClick={this.remove.bind(this)}>Remove</Button>
+                        <Button bsStyle="success" disabled={this.state.isUploading} onClick={this.use.bind(this)}>Use</Button>
                         <Button onClick={this.close.bind(this)}>Close</Button>
                     </Modal.Footer>
                 </Modal>

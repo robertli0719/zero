@@ -1,13 +1,18 @@
-var CopyWebpackPlugin = require('copy-webpack-plugin')
+const webpack = require('webpack')
+const WebpackOnBuildPlugin = require('on-build-webpack')
+const fs = require('fs-extra')
 
 module.exports = {
-    entry: "./src/app.tsx",
+    entry: {
+        main: "./src/app.tsx",
+        vendor: ['cropperjs', 'es6-promise', 'history', 'isomorphic-fetch', 'jquery', 'lodash', 'react', 'react-bootstrap', 'react-cropper', 'react-dom', 'react-redux', 'react-router', 'react-router-bootstrap', 'redux', 'redux-thunk']
+    },
     output: {
-        filename: "./dist/bundle.js",
+        filename: "../src/main/webapp/js/[name].bundle.js",
     },
 
     // Enable sourcemaps for debugging webpack's output.
-    devtool: "source-map",
+    // devtool: "source-map",
 
     resolve: {
         // Add '.ts' and '.tsx' as resolvable extensions.
@@ -29,12 +34,9 @@ module.exports = {
     },
 
     plugins: [
-        new CopyWebpackPlugin([
-            {
-                from: 'dist/bundle.js',
-                to: '../src/main/webapp/js/app.js'
-            }
-        ])
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'vendor'
+        })
     ],
 
     // When importing a module whose path matches one of the following, just

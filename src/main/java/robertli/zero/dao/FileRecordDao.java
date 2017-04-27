@@ -9,12 +9,12 @@ import robertli.zero.entity.FileRecord;
 
 /**
  *
- * @version 2017-03-20 1.0.1
+ * @version 2017-04-12 1.0.2
  * @author Robert Li
  */
 public interface FileRecordDao extends GenericDao<FileRecord, String> {
 
-    public FileRecord saveFileRecord(String url);
+    public FileRecord saveFileRecord(String uuid, String url);
 
     /**
      * This function is used to update the tables which has FileRecord. If the
@@ -22,8 +22,9 @@ public interface FileRecordDao extends GenericDao<FileRecord, String> {
      * delete currentRecord and return a new record.
      *
      * @param currentRecord
+     * @param newUuid
      * @param newUrl
      * @return
      */
-    public FileRecord replaceFileRecord(FileRecord currentRecord, String newUrl);
+    public FileRecord replaceFileRecord(FileRecord currentRecord, String newUuid, String newUrl);
 }
