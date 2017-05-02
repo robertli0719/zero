@@ -16,6 +16,8 @@
         <property name="initialSize" value="3" />
         <property name="maxActive" value="10" />
         <property name="connectionInitSqls" value="set names utf8mb4;"/>
+        <property name="testOnBorrow" value="true"/>
+        <property name="validationQuery" value="SELECT 1"/>
     </bean>
 
     <!--Session Factory-->

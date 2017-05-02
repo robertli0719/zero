@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.0.1 2017-03-29
+ * version 1.0.2 2017-05-02
  */
 import * as React from "react"
 
@@ -33,6 +33,8 @@ export class ViewBody extends React.Component<Props, {}>{
                 return <td className="text-center">Yes</td>
             } else if (dto[name] === false) {
                 return <td className="text-center">-</td>
+            } else if(dto[name] instanceof Object){
+                return <td className="text-center">[Object]</td>
             }
             return <td>{dto[name]}</td>
         })
