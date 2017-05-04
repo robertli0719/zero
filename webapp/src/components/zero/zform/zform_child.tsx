@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.1.3 2017-04-11
+ * version 1.1.4 2017-05-03
  */
 import * as React from "react"
 import { TagSchema, FieldPlaceOption, Selection } from "./zform_schema"
@@ -42,6 +42,15 @@ type FileProps = {
     label: string
     // notNull?: boolean
 }
+
+type TextListProps = {
+    name: string
+    label: string
+    value?: string[]
+    // notNull?: boolean
+}
+
+export class TextList extends React.Component<TextListProps, {}> { }
 
 export class File extends React.Component<FileProps, {}> { }
 

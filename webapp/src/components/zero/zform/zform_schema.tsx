@@ -3,12 +3,12 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.1.3 2017-04-11
+ * version 1.1.4 2017-05-03
  */
 import * as React from "react"
 
 export type FieldPlaceOption = 'default' | 'path' | 'pathAndDto'
-export type TagTypeOption = "map" | "textfield" | "password" | "textarea" | "file" | "checkbox" | "checkboxes" | "radios" | "hidden" | "constant" | "select" | "image" | "imageshower" | "images" | "video" | "videoplayer" | "submit"
+export type TagTypeOption = "map" | "textfield" | "password" | "textarea" | "textlist" | "file" | "checkbox" | "checkboxes" | "radios" | "hidden" | "constant" | "select" | "image" | "imageshower" | "images" | "video" | "videoplayer" | "submit"
 
 export type ValueMap = { [key: string]: FormValue }
 export type FormError = { errors: string[], children: { [key: string]: any } }

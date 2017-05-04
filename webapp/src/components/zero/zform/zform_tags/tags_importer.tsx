@@ -9,6 +9,7 @@
 import "./map_tag"
 import "./textfield_tag"
 import "./textarea_tag"
+import "./textlist_tag"
 import "./checkbox_tag"
 import "./checkboxes_tag"
 import "./radios_tag"
