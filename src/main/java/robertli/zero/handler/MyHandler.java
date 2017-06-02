@@ -25,7 +25,6 @@ public class MyHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-
         List<String> cookieList = session.getHandshakeHeaders().get("Cookie");
         if (cookieList == null) {
             System.out.println("cookieList is null");

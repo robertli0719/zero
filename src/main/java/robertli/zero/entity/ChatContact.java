@@ -12,12 +12,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  *
  * @author Robert Li
  */
 @Entity
+@Table(name = "chat_contact", indexes = {})
 public class ChatContact implements Serializable {
 
     private int id;

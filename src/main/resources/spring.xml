@@ -54,6 +54,8 @@
         <property name="test" value="${email.test}" />
     </bean>
     
+    <bean id="smsSender" class="robertli.zero.core.impl.SmsSenderAwsImpl"/>
+    
     <bean id="fileManager" class="${file_storage.file_manager}">
         <property name="basePath" value="${file_storage.basepath}"/>
     </bean>
