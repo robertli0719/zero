@@ -18,6 +18,10 @@ import { StaffApp } from "./pages/dashboard/StaffApp"
 import { StaffIndex } from "./pages/dashboard/StaffIndex"
 import { StaffLogin } from "./pages/dashboard/StaffLogin"
 
+//auth pages
+import { Me } from "./pages/auth/Me"
+import { Login } from "./pages/auth/Login"
+
 //admin pages
 import { AdminApp } from "./pages/admin/AdminApp"
 import { AppInit } from "./pages/admin/AppInit"
@@ -93,6 +97,11 @@ const template = (
                     <IndexRoute component={Index} />
                     <Route path="index" component={Index} />
                     <Route path="about" component={About} />
+                </Route>
+                <Route path="auth">
+                    <IndexRoute component={Me} />
+                    <Route path="me" component={Me} />
+                    <Route path="login" component={Login} />
                 </Route>
                 <Route path="dashboard/:platform" component={StaffApp}>
                     <Route path="index" component={StaffIndex} onEnter={requireRoleStaff} />

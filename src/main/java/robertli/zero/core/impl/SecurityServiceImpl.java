@@ -25,23 +25,23 @@ public class SecurityServiceImpl implements SecurityService {
      * For security reason, there should be nobody can know the password except
      * users themselves, so we use three salts with MD5 or similar algorithm to
      * protect password.<br>
-     * orginealPassword is the real password which only the user know, and
+     * originalPassword is the real password which only the user know, and
      * password is what we exactly save in our database.<br>
      *
-     * password = MD5( MD5( MD5(orginealPassword) + salt ) + serverSalt)<br>
+     * password = MD5( MD5( MD5(originalPassword) + salt ) + serverSalt)<br>
      *
      * In my deign, only the server administrator can get the serverSalt, and
      * the administrator will never be allow to get the database access
      * permission.
      *
-     * @param orginealPassword the real password
+     * @param originalPassword the real password
      * @param salt each user should own a different salt for MD5 or similar
      * algorithm
      * @return password
      */
     @Override
-    public String uglifyPassoword(String orginealPassword, String salt) {
-        String password = MD5.count(orginealPassword);
+    public String uglifyPassoword(String originalPassword, String salt) {
+        String password = MD5.count(originalPassword);
         password = MD5.count(password + salt);
         String serverSalt = appConfiguration.getMd5Salt();
         password = MD5.count(password + serverSalt);

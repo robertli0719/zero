@@ -66,16 +66,16 @@ public class AuthServiceImpl implements AuthService {
         return userProfileDto;
     }
 
-    private boolean isValidPassword(User user, String orginealPassword) {
+    private boolean isValidPassword(User user, String originalPassword) {
         String salt = user.getPasswordSalt();
-        String password = securityService.uglifyPassoword(orginealPassword, salt);
+        String password = securityService.uglifyPassoword(originalPassword, salt);
         return password.equals(user.getPassword());
     }
 
     private boolean isValidPassword(UserAuthDto userAuthDto, UserAuth userAuth) {
-        String orginealPassword = userAuthDto.getPassword();
+        String originalPassword = userAuthDto.getPassword();
         User user = userAuth.getUser();
-        return isValidPassword(user, orginealPassword);
+        return isValidPassword(user, originalPassword);
     }
 
     private void recordAccessToken(String token, User user) {

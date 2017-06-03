@@ -17,7 +17,7 @@ import robertli.zero.entity.User;
  * Don't use this service in controller layer. This service is used for other
  * services.
  *
- * @version 1.0.6 2017-03-28
+ * @version 1.0.7 2017-06-02
  * @author Robert Li
  */
 public interface UserService {
@@ -31,6 +31,7 @@ public interface UserService {
 
     public static final String USERNAME_TYPE_STRING = "string";
     public static final String USERNAME_TYPE_EMAIL = "email";
+    public static final String USERNAME_TYPE_TELEPHONE = "telephone";
 
     public static final String USER_ROLE_ADMIN_ROOT = "admin_root";
     public static final String USER_ROLE_PLATFORM_ROOT = "platform_root";
@@ -50,12 +51,16 @@ public interface UserService {
     public User getUser(String userPlatformName, String username);
 
     public User addUser(String userPlatformName, String username,
-            String usernameType, String label, String orginealPassword,
-            String name, String telephone, boolean locked);
+            String usernameType, String label, String password, String passwordSalt,
+            String name, boolean locked);
+
+    public User addUser(String userPlatformName, String username,
+            String usernameType, String label, String originalPassword,
+            String name, boolean locked);
 
     public void deleteUser(String userPlatformName, String username);
 
-    public void resetPassword(String userPlatformName, String username, String orginealPassword);
+    public void resetPassword(String userPlatformName, String username, String originalPassword);
 
     public void putRoleForUser(int userId, String roleName);
 

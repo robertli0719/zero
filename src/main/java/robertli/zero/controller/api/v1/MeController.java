@@ -18,7 +18,9 @@ import robertli.zero.core.RandomCodeCreater;
 import robertli.zero.dto.user.UserAuthDto;
 import robertli.zero.dto.user.UserAuthPasswordDto;
 import robertli.zero.dto.user.UserProfileDto;
+import robertli.zero.dto.user.UserRegisterDto;
 import robertli.zero.service.AuthService;
+import robertli.zero.service.GeneralUserService;
 
 /**
  *
@@ -36,6 +38,9 @@ public class MeController {
 
     @Resource
     private ClientAccessTokenManager clientAccessTokenManager;
+
+    @Resource
+    private GeneralUserService generalUserService;
 
     @RequestMapping(method = RequestMethod.GET)
     public UserProfileDto getMe(@RequestAttribute(required = false) String accessToken) {
@@ -63,6 +68,13 @@ public class MeController {
     @RequestMapping(path = "auth/password", method = RequestMethod.PUT)
     public void putAuthPassword(@RequestAttribute(required = false) String accessToken, @Valid @RequestBody UserAuthPasswordDto userAuthPasswordDto) {
         authService.resetPassword(accessToken, userAuthPasswordDto);
+    }
+
+    @RequestMapping(path = "register", method = RequestMethod.POST)
+    public void postRegister(@Valid @RequestBody UserRegisterDto userRegisterDto) {
+        generalUserService.registerByEmail(userRegisterDto);
+        final String email = userRegisterDto.getEmail();
+        generalUserService.sendRegisterVerificationEmail(email);
     }
 
 }

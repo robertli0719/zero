@@ -37,6 +37,14 @@ export function isAdmin() {
     return false
 }
 
+export function isGeneralUser() {
+    const state: AppState = store.getState()
+    if (state.me && state.me.userTypeName == "general") {
+        return true
+    }
+    return false
+}
+
 export function isAdminRoot() {
     const state: AppState = store.getState()
     if (state.me && state.me.roleList != null) {

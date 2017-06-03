@@ -23,7 +23,14 @@ public interface UserRegisterDao extends GenericDao<UserRegister, String> {
     /**
      *
      * @param code verifiedCode
-     * @return the UserRegister for verifiedCode or null if not found
+     * @return true if verifiedCode is exist.
+     */
+    public boolean isExistVerifiedCode(String code);
+
+    /**
+     *
+     * @param code verifiedCode
+     * @return the UserRegister for verifiedCode
      */
     public UserRegister getByVerifiedCode(String code);
 }

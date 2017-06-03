@@ -120,13 +120,13 @@ public class StaffUserServiceImpl implements StaffUserService {
 
     @Override
     public void addStaffUser(String userPlatformName, final StaffUserDto staffUserDto) {
-        String orginealPassword = staffUserDto.getPassword();
+        String originalPassword = staffUserDto.getPassword();
         String username = staffUserDto.getUsername();
         boolean locked = staffUserDto.isLocked();
         String usernameType = UserService.USERNAME_TYPE_STRING;
         String name = username;
         String label = username;
-        userService.addUser(userPlatformName, username, usernameType, label, orginealPassword, name, null, locked);
+        userService.addUser(userPlatformName, username, usernameType, label, originalPassword, name, locked);
     }
 
     @Override
@@ -156,11 +156,11 @@ public class StaffUserServiceImpl implements StaffUserService {
     }
 
     @Override
-    public void resetPassword(final String userPlatformName, final String username, final String orginealPassword) {
+    public void resetPassword(final String userPlatformName, final String username, final String originalPassword) {
         if (isStaffUser(userPlatformName, username) == false) {
             throw new RuntimeException("this user is not in this platform");
         }
-        userService.resetPassword(userPlatformName, username, orginealPassword);
+        userService.resetPassword(userPlatformName, username, originalPassword);
     }
 
     @Override

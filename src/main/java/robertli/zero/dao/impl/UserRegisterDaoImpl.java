@@ -27,23 +27,33 @@ public class UserRegisterDaoImpl extends GenericHibernateDao<UserRegister, Strin
 
     @Override
     public void clear(int lifeMinute) {
-        Calendar cal = Calendar.getInstance();
+        final Calendar cal = Calendar.getInstance();
         cal.add(Calendar.MINUTE, -lifeMinute);
-        Date endDate = cal.getTime();
+        final Date endDate = cal.getTime();
 
-        Session session = sessionFactory.getCurrentSession();
-        TypedQuery<UserRegister> query = session.createQuery("delete from UserRegister where signDate<=:endDate");
+        final Session session = sessionFactory.getCurrentSession();
+        final TypedQuery<UserRegister> query = session.createQuery("delete from UserRegister where signDate<=:endDate");
         query.setParameter("endDate", endDate);
         query.executeUpdate();
     }
 
     @Override
     public UserRegister getByVerifiedCode(String code) {
-        Session session = sessionFactory.getCurrentSession();
-        TypedQuery<UserRegister> query = session.createQuery("from UserRegister where verifiedCode=:verifiedCode");
+        final Session session = sessionFactory.getCurrentSession();
+        final TypedQuery<UserRegister> query = session.createQuery("select r from UserRegister r where r.verifiedCode=:verifiedCode");
         query.setMaxResults(1);
         query.setParameter("verifiedCode", code);
         return (UserRegister) query.getSingleResult();
+    }
+
+    @Override
+    public boolean isExistVerifiedCode(String code) {
+        final Session session = sessionFactory.getCurrentSession();
+        final TypedQuery<Long> query = session.createQuery("select count(r) from UserRegister r where r.verifiedCode=:verifiedCode");
+        query.setMaxResults(1);
+        query.setParameter("verifiedCode", code);
+        final Long num = query.getSingleResult();
+        return num.intValue() != 0;
     }
 
 }

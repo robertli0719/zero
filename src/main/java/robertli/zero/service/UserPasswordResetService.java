@@ -17,7 +17,7 @@ package robertli.zero.service;
  * password. The token is single use, and each token has a one day long life.
  * user can own more than one token at the same time.
  *
- * @version 1.0 2016-09-19
+ * @version 1.0.1 2017-06-02
  * @author Robert Li
  */
 public interface UserPasswordResetService {
@@ -53,9 +53,9 @@ public interface UserPasswordResetService {
      * User use their own token to reset password
      *
      * @param tokenCode the token for reset password
-     * @param orginealPassword the input of new password
+     * @param originalPassword the input of new password
      * @param passwordAgain user should type the password twice
      * @return A status set of running result.
      */
-    public ResetPasswordResult resetPassword(String tokenCode, String orginealPassword, String passwordAgain);
+    public ResetPasswordResult resetPassword(String tokenCode, String originalPassword, String passwordAgain);
 }

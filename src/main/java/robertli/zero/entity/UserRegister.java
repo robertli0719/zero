@@ -23,7 +23,7 @@ import javax.persistence.Temporal;
  *
  * authLabel is for showing authId. ex: email address can include point
  *
- * @version 1.0.3 2016-11-19
+ * @version 1.0.4 2017-06-02
  * @author Robert Li
  */
 @Entity
@@ -42,7 +42,7 @@ public class UserRegister implements Serializable {
     private Date signDate;
 
     @Id
-    @Column(length = 50)
+    @Column(length = 150)
     public String getAuthId() {
         return authId;
     }

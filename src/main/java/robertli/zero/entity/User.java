@@ -35,7 +35,6 @@ public class User implements Serializable {
     private String password;
     private String passwordSalt;
     private String name;
-    private String telephone;
     private boolean locked;
     private List<UserAuth> userAuthList;
     private List<UserRoleItem> userRoleItemList;
@@ -96,15 +95,6 @@ public class User implements Serializable {
         this.name = name;
     }
 
-    @Column(length = 20)
-    public String getTelephone() {
-        return telephone;
-    }
-
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
-    }
-
     public boolean isLocked() {
         return locked;
     }
@@ -133,7 +123,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", userPlatform=" + userPlatform + ", password=" + password + ", passwordSalt=" + passwordSalt + ", name=" + name + ", telephone=" + telephone + '}';
+        return "User{" + "id=" + id + ", userPlatform=" + userPlatform + ", password=" + password + ", passwordSalt=" + passwordSalt + ", name=" + name + '}';
     }
 
 }

@@ -120,7 +120,7 @@ public class AdminUserServiceImpl implements AdminUserService {
 
     @Override
     public int addAdminUser(AdminUserDto adminUserDto) {
-        String orginealPassword = adminUserDto.getPassword();
+        String originalPassword = adminUserDto.getPassword();
         String username = adminUserDto.getUsername();
         boolean locked = adminUserDto.isLocked();
         String userPlatformName = UserService.USER_PLATFORM_ADMIN;
@@ -128,7 +128,7 @@ public class AdminUserServiceImpl implements AdminUserService {
         String name = username;
         String label = username;
 
-        User adminUser = userService.addUser(userPlatformName, username, usernameType, label, orginealPassword, name, null, locked);
+        User adminUser = userService.addUser(userPlatformName, username, usernameType, label, originalPassword, name, locked);
         return adminUser.getId();
     }
 
@@ -159,11 +159,11 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
 
     @Override
-    public void resetPassword(String username, String orginealPassword) {
+    public void resetPassword(String username, String originalPassword) {
         if (isAdminUser(username) == false) {
             throw new RuntimeException("this user is not adminUser");
         }
-        userService.resetPassword(UserService.USER_PLATFORM_ADMIN, username, orginealPassword);
+        userService.resetPassword(UserService.USER_PLATFORM_ADMIN, username, originalPassword);
     }
 
     @Override

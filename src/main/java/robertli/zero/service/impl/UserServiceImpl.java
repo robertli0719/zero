@@ -112,9 +112,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void resetPassword(String userPlatformName, String username, String orginealPassword) {
+    public void resetPassword(String userPlatformName, String username, String originalPassword) {
         String salt = securityService.createPasswordSalt();
-        String password = securityService.uglifyPassoword(orginealPassword, salt);
+        String password = securityService.uglifyPassoword(originalPassword, salt);
         User user = getUser(userPlatformName, username);
         user.setPassword(password);
         user.setPasswordSalt(salt);
@@ -146,24 +146,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User addUser(String userPlatformName, String username, String usernameType, String label, String orginealPassword, String name, String telephone, boolean locked) {
-        String salt = securityService.createPasswordSalt();
-        String password = securityService.uglifyPassoword(orginealPassword, salt);
-
-        UserPlatform userPlatform = userPlatformDao.get(userPlatformName);
-        User user = new User();
+    public User addUser(String userPlatformName, String username, String usernameType, String label, String password, String passwordSalt, String name, boolean locked) {
+        final UserPlatform userPlatform = userPlatformDao.get(userPlatformName);
+        final User user = new User();
         user.setName(name);
         user.setPassword(password);
-        user.setPasswordSalt(salt);
+        user.setPasswordSalt(passwordSalt);
         user.setUserPlatform(userPlatform);
         user.setLocked(locked);
-        user.setTelephone(telephone);
         user.setUid(UUID.randomUUID().toString());
         userDao.save(user);
-        String uid = generatUid(user.getId());
+        final String uid = generatUid(user.getId());
         user.setUid(uid);
         userAuthDao.saveUserAuth(userPlatformName, username, label, usernameType, user);
         return user;
+    }
+
+    @Override
+    public User addUser(String userPlatformName, String username, String usernameType, String label, String originalPassword, String name, boolean locked) {
+        final String salt = securityService.createPasswordSalt();
+        final String password = securityService.uglifyPassoword(originalPassword, salt);
+        return this.addUser(userPlatformName, username, usernameType, label, password, salt, name, locked);
     }
 
     @Override

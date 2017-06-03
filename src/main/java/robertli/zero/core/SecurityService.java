@@ -7,7 +7,7 @@ package robertli.zero.core;
 
 /**
  *
- * @version 1.0 2016-09-19
+ * @version 1.0.1 2017-06-02
  * @author Robert Li
  */
 public interface SecurityService {
@@ -16,21 +16,21 @@ public interface SecurityService {
      * For security reason, there should be nobody can know the password except
      * users themselves, so we use three salts with MD5 or similar algorithm to
      * protect password.<br>
-     * orginealPassword is the real password which only the user know, and
+     * originalPassword is the real password which only the user know, and
      * password is what we exactly save in our database.<br>
      *
-     * password = processFun(orginealPassword, salt, serverSalt)<br>
+     * password = processFun(originalPassword, salt, serverSalt)<br>
      *
      * In my deign, only the server administrator can get the serverSalt, and
      * the administrator will never be allow to get the database access
      * permission.
      *
-     * @param orginealPassword the real password
+     * @param originalPassword the real password
      * @param salt each user should own a different salt for MD5 or similar
      * algorithm
      * @return password
      */
-    public String uglifyPassoword(String orginealPassword, String salt);
+    public String uglifyPassoword(String originalPassword, String salt);
 
     /**
      * create a password salt for uglifyPassoword

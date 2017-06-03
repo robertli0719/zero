@@ -46,7 +46,7 @@ public class ValidationTool {
     public static String preprocessEmail(String email) {
         email = (email == null) ? "" : email.trim().toLowerCase();
         String part[] = email.split("@");
-        if (part.length == 2) {
+        if (part.length == 2 && part[1].equals("gmail.com")) {
             return part[0].replaceAll("\\.", "") + "@" + part[1];
         }
         return email;

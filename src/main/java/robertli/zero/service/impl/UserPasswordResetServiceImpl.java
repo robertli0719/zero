@@ -99,10 +99,10 @@ public class UserPasswordResetServiceImpl implements UserPasswordResetService {
     }
 
     @Override
-    public ResetPasswordResult resetPassword(String tokenCode, String orginealPassword, String passwordAgain) {
-        if (orginealPassword == null || orginealPassword.length() < 8) {
+    public ResetPasswordResult resetPassword(String tokenCode, String originalPassword, String passwordAgain) {
+        if (originalPassword == null || originalPassword.length() < 8) {
             return ResetPasswordResult.PASSWORD_SHORTER_THAN_8;
-        } else if (orginealPassword.equals(passwordAgain) == false) {
+        } else if (originalPassword.equals(passwordAgain) == false) {
             return ResetPasswordResult.PASSWORD_AGAIN_ERROR;
         }
         try {
@@ -112,7 +112,7 @@ public class UserPasswordResetServiceImpl implements UserPasswordResetService {
                 return ResetPasswordResult.CODE_WORING;
             }
             final String passwordSalt = securityService.createPasswordSalt();
-            final String password = securityService.uglifyPassoword(orginealPassword, passwordSalt);
+            final String password = securityService.uglifyPassoword(originalPassword, passwordSalt);
 
             token.getUser().setPassword(password);
             token.getUser().setPasswordSalt(passwordSalt);
