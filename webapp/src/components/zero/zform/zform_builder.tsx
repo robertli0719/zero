@@ -3,7 +3,7 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.1.2 2017-02-21
+ * version 1.1.3 2017-06-05
  */
 import * as React from "react"
 import * as _ from "lodash"
@@ -56,13 +56,16 @@ function appenedError(error: FormError, schema: TagSchema, type: string, message
         appenedError(error.children[inputName], subSchema, type, message, keyArray.slice(1))
         return
     }
-    const errorMsg = (keyArray.length > 0 ? keyArray : "") + message
+    const errorMsg = (keyArray.length > 0 ? keyArray + ":" : "") + message
     error.errors.push(errorMsg)
 }
 
 export function buildErrorMap(errorDto: any, schema: TagSchema): FormError {
     const error: FormError = { errors: [], children: {} }
     const errorList = errorDto.errors
+    if (errorList === undefined) {
+        return error
+    }
     for (const item of errorList) {
         const type = item.type
         const message = item.message

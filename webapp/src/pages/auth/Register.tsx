@@ -8,7 +8,7 @@ import * as zform from "../../components/zero/zform/zform"
 import * as utilities from "../../utilities/random-coder"
 import { store, AppState } from "../../Store"
 import { UserProfile } from "../../reducers/me"
-import { RestErrorDto } from "../../utilities/http"
+import { http, RestErrorDto } from "../../utilities/http"
 
 
 interface Prop {
@@ -16,22 +16,39 @@ interface Prop {
 }
 
 interface State {
+    verifyEmail: string
+    submitEmail: string
 }
 
 export class RegisterPage extends React.Component<Prop, State>{
 
     constructor() {
         super()
-        console.log("Register constructor")
+        this.state = { verifyEmail: null, submitEmail: null }
     }
 
-    onSuccess() {
-        store.dispatch(me.loadProfile())
+    beforeSubmitRegister(dto: any) {
+        let email = dto.email
+        this.setState({ submitEmail: email })
+    }
+
+    afterSubmitRegister() {
+        this.setState({ verifyEmail: this.state.submitEmail, submitEmail: null })
+    }
+
+    resendVerfiyEmail() {
+        if (!this.state.verifyEmail) {
+            return
+        }
+        let uri = "me/registers/verifications/sender?email=" + this.state.verifyEmail
+        http.post(uri, null).then(() => {
+            this.setState({})
+        })
     }
 
     logout() {
         store.dispatch(me.triggerLogout()).then(() => {
-            hashHistory.replace("admin/login")
+            hashHistory.replace("auth/login")
         })
     }
 
@@ -39,21 +56,29 @@ export class RegisterPage extends React.Component<Prop, State>{
         const registerForm = (
             <Row>
                 <Col xs={12} sm={4} md={3}>
-                    <zform.Form action="me/register" method="POST" onSuccess={this.onSuccess.bind(this)}>
+                    <zform.Form action="me/registers" method="POST" onSubmit={this.beforeSubmitRegister.bind(this)} onSuccess={this.afterSubmitRegister.bind(this)}>
                         <zform.TextField name="email" label="Email" />
                         <zform.Password name="password" label="Password" enterSubmit={true} />
                         <zform.Password name="reenterPassword" label="Re-enter Password" />
-                        <zform.Password name="name" label="Name" enterSubmit={true} />
+                        <zform.TextField name="name" label="Name" enterSubmit={true} />
                         <zform.Submit value="Submit" />
                     </zform.Form>
+                    <h1></h1>
+                    <Link to="auth/login">Login</Link>
                 </Col>
             </Row>
         )
-        const onlineRedirectPanel = (
-            <Panel header="current logged in">
-                <Link to="admin/index">Click here to dashboard</Link>
+        const verifyRegisterPanel = (
+            <Panel header="Verify Panel">
+                <p>Please check your email to activate your account. </p>
+                <p>Your email is {this.state.verifyEmail}</p>
+                <p>If you can't get the email, please click
+                    <a onClick={this.resendVerfiyEmail.bind(this)}> here </a>
+                    to resend it again.
+                </p>
             </Panel>
         )
+
         const logoutPanel = (
             <Panel header="current logged in">
                 <p>You have logged in</p>
@@ -61,7 +86,9 @@ export class RegisterPage extends React.Component<Prop, State>{
             </Panel>
         )
         let panel = null
-        if (me.isLogged()) {
+        if (this.state.verifyEmail != null) {
+            panel = verifyRegisterPanel
+        } else if (me.isLogged()) {
             panel = logoutPanel
         } else {
             panel = registerForm

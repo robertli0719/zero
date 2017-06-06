@@ -3,11 +3,11 @@ import * as ReactDOM from "react-dom"
 import { connect } from "react-redux"
 import { AppState } from "../Store"
 
-interface Prop {
+interface Props {
     val: number
 }
 
-class AboutPage extends React.Component<Prop, {}>{
+class AboutPage extends React.Component<Props, {}>{
 
     constructor() {
         super()
@@ -24,7 +24,7 @@ class AboutPage extends React.Component<Prop, {}>{
     }
 }
 
-function select(state: AppState): Prop {
+function select(state: AppState): Props {
     return { val: state.test.val }
 }
 

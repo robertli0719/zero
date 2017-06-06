@@ -21,6 +21,7 @@ import robertli.zero.dao.UserDao;
 import robertli.zero.dao.UserRegisterDao;
 import robertli.zero.dto.QueryResult;
 import robertli.zero.dto.user.GeneralUserDto;
+import robertli.zero.dto.user.ResetPasswordByTokenDto;
 import robertli.zero.dto.user.UserRegisterDto;
 import robertli.zero.entity.User;
 import robertli.zero.entity.UserAuth;
@@ -158,7 +159,7 @@ public class GeneralUserServiceImpl implements GeneralUserService {
             throw new RestException("USER_EXIST", "This user is registered before.", errorDetail, HttpStatus.CONFLICT);
         } else if (userRegisterDao.isExist(authId)) {
             String errorDetail = "this register is exist:" + authId;
-            throw new RestException("REGISTER_EXIST", "Please check your email to verifiy your register.", errorDetail, HttpStatus.CONFLICT);
+            throw new RestException("REGISTER_EXIST", "Please check your email to verify your register.", errorDetail, HttpStatus.CONFLICT);
         }
         final UserRegister userRegister = createUserRegister(registerDto);
         userRegisterDao.save(userRegister);
@@ -194,7 +195,7 @@ public class GeneralUserServiceImpl implements GeneralUserService {
     }
 
     @Override
-    public void verifiyRegister(String verifiedCode) {
+    public void verifyRegister(String verifiedCode) {
         if (userRegisterDao.isExistVerifiedCode(verifiedCode) == false) {
             String errorDetail = "this register is not exist for code:" + verifiedCode;
             throw new RestException("REGISTER_NOT_EXIST", "Can't found any register for this verified code", errorDetail, HttpStatus.FORBIDDEN);
@@ -208,6 +209,23 @@ public class GeneralUserServiceImpl implements GeneralUserService {
         }
         addGeneralUser(userRegister);
         userRegisterDao.delete(userRegister);
+    }
+
+    @Override
+    public void applyPasswordResetToken(String email) {
+        email = ValidationTool.preprocessEmail(email);
+        final String authId = makeAuthId(email);
+        if (userAuthDao.isExist(authId) == false) {
+            String errorDetail = "this user is not exist:" + authId;
+            throw new RestException("USER_NOT_EXIST", "This user is not exist", errorDetail, HttpStatus.CONFLICT);
+        }
+        final User user = userService.getUser(UserService.USER_PLATFORM_GENERAL, email);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void resetPasswordByToken(ResetPasswordByTokenDto resetDto) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

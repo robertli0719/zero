@@ -8,11 +8,13 @@ package robertli.zero.controller.api.v1;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestAttribute;
+import robertli.zero.controller.RestException;
 import robertli.zero.core.ClientAccessTokenManager;
 import robertli.zero.core.RandomCodeCreater;
 import robertli.zero.dto.user.UserAuthDto;
@@ -21,6 +23,7 @@ import robertli.zero.dto.user.UserProfileDto;
 import robertli.zero.dto.user.UserRegisterDto;
 import robertli.zero.service.AuthService;
 import robertli.zero.service.GeneralUserService;
+import robertli.zero.tool.ValidationTool;
 
 /**
  *
@@ -70,11 +73,26 @@ public class MeController {
         authService.resetPassword(accessToken, userAuthPasswordDto);
     }
 
-    @RequestMapping(path = "register", method = RequestMethod.POST)
+    @RequestMapping(path = "registers", method = RequestMethod.POST)
     public void postRegister(@Valid @RequestBody UserRegisterDto userRegisterDto) {
         generalUserService.registerByEmail(userRegisterDto);
         final String email = userRegisterDto.getEmail();
         generalUserService.sendRegisterVerificationEmail(email);
+    }
+
+    @RequestMapping(path = "registers/verifications/sender", method = RequestMethod.POST)
+    public void resendRegisterVerificationEmail(String email) {
+        email = ValidationTool.preprocessEmail(email);
+        if (ValidationTool.checkEmail(email) == false) {
+            String errorDetail = "ValidationTool.checkEmail(email) == false";
+            throw new RestException("FORBIDDEN", "email format is wrong", errorDetail, HttpStatus.FORBIDDEN);
+        }
+        generalUserService.sendRegisterVerificationEmail(email);
+    }
+
+    @RequestMapping(path = "registers/verifications/verifier", method = RequestMethod.POST)
+    public void verifyRegisterVerification(String code) {
+        generalUserService.verifyRegister(code);
     }
 
 }

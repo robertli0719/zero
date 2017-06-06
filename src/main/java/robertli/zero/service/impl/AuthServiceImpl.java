@@ -26,6 +26,7 @@ import robertli.zero.entity.UserRoleItem;
 import robertli.zero.entity.UserType;
 import robertli.zero.service.AuthService;
 import robertli.zero.service.UserService;
+import robertli.zero.tool.ValidationTool;
 
 @Component("authService")
 public class AuthServiceImpl implements AuthService {
@@ -92,12 +93,20 @@ public class AuthServiceImpl implements AuthService {
         accessTokenDao.save(accessToken);
     }
 
+    private String preprocessUsername(String username) {
+        if (ValidationTool.checkEmail(username)) {
+            return ValidationTool.preprocessEmail(username);
+        }
+        return username;
+    }
+
     @Override
     public void putAuth(String token, UserAuthDto userAuthDto) {
-        String userTypeName = userAuthDto.getUserTypeName();
-        String username = userAuthDto.getUsername().trim();
-        String userPlatformName = userAuthDto.getUserPlatformName();
-        String authId = userAuthDao.makeAuthId(userTypeName, userPlatformName, username);
+        final String userTypeName = userAuthDto.getUserTypeName();
+        final String usernameInput = userAuthDto.getUsername().trim();
+        final String username = preprocessUsername(usernameInput);
+        final String userPlatformName = userAuthDto.getUserPlatformName();
+        final String authId = userAuthDao.makeAuthId(userTypeName, userPlatformName, username);
         UserAuth userAuth = userAuthDao.get(authId);
         switch (userTypeName) {
             case UserService.USER_TYPE_ADMIN:

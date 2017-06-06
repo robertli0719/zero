@@ -56,6 +56,7 @@ public class UserRegisterDto {
         this.reenterPassword = reenterPassword;
     }
 
+    @NotBlank
     public String getName() {
         return name;
     }

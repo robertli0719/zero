@@ -8,6 +8,7 @@ import * as me from "./actions/me"
 
 // -- Pages --
 // defalt pages
+import { App } from "./pages/App"
 import { Index } from "./pages/Index"
 import { About } from "./pages/About"
 
@@ -21,6 +22,8 @@ import { StaffLogin } from "./pages/dashboard/StaffLogin"
 //auth pages
 import { Me } from "./pages/auth/Me"
 import { Login } from "./pages/auth/Login"
+import { Register } from "./pages/auth/Register"
+import { RegisterVerify } from "./pages/auth/RegisterVerify"
 
 //admin pages
 import { AdminApp } from "./pages/admin/AdminApp"
@@ -42,33 +45,6 @@ import { TestForm } from "./pages/test/TestForm"
 import { TestImageUpload } from "./pages/test/TestImageUpload"
 import { TestCros } from "./pages/test/TestCros"
 import { TestWebsocket } from "./pages/test/TestWebsocket"
-
-const navBarItemList = [
-    { name: "Index", url: "/index" },
-    { name: "About", url: "/about" },
-    { name: "Test", url: "/test/index" }
-]
-
-const rightNavBarItemList = [
-    // { name: "Link", url: "/" },
-    // { name: "Link", url: "/" }
-] as NavbarItem[]
-
-class App extends React.Component<{}, {}>{
-
-    constructor() {
-        super()
-    }
-
-    render() {
-        return (
-            <div>
-                <AppNavbar name="React-Bootstrap" brandUrl="/" itemList={navBarItemList} rightItemList={rightNavBarItemList} />
-                {this.props.children}
-            </div>
-        )
-    }
-}
 
 function requireRoleAdmin(nextState: RouterState, replace: RedirectFunction) {
     const loginPath = '/admin/login'
@@ -102,6 +78,8 @@ const template = (
                     <IndexRoute component={Me} />
                     <Route path="me" component={Me} />
                     <Route path="login" component={Login} />
+                    <Route path="register" component={Register} />
+                    <Route path="register/verify/:code" component={RegisterVerify} />
                 </Route>
                 <Route path="dashboard/:platform" component={StaffApp}>
                     <Route path="index" component={StaffIndex} onEnter={requireRoleStaff} />

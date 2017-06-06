@@ -1,8 +1,7 @@
 import * as React from "react"
 import { connect } from "react-redux"
-import { hashHistory } from "react-router"
+import { hashHistory, Link } from "react-router"
 import { Button, ButtonToolbar, ControlLabel, FormControl, Form, FormGroup, Checkbox, Col, Row, Panel } from "react-bootstrap"
-import { Link } from "react-router"
 import * as me from "../../actions/me"
 import * as zform from "../../components/zero/zform/zform"
 import * as utilities from "../../utilities/random-coder"
@@ -32,7 +31,7 @@ export class LoginPage extends React.Component<Prop, LoginState>{
 
     logout() {
         store.dispatch(me.triggerLogout()).then(() => {
-            hashHistory.replace("admin/login")
+            hashHistory.replace("auth/login")
         })
     }
 
@@ -43,16 +42,18 @@ export class LoginPage extends React.Component<Prop, LoginState>{
                     <zform.Form action="me/auth" method="PUT" onSuccess={this.onSuccess.bind(this)}>
                         <zform.Hidden name="userTypeName" value="general" />
                         <zform.Hidden name="userPlatformName" value="general" />
-                        <zform.TextField name="username" label="Username" />
+                        <zform.TextField name="username" label="Username (Email)" />
                         <zform.Password name="password" label="Password" enterSubmit={true} />
                         <zform.Submit value="Login" />
                     </zform.Form>
+                    <h1></h1>
+                    <Link to="auth/register">New User Register</Link>
                 </Col>
             </Row>
         )
         const onlineRedirectPanel = (
             <Panel header="current logged in">
-                <Link to="admin/index">Click here to dashboard</Link>
+                <Link to="/">Click here to Index</Link>
             </Panel>
         )
         const wrongUserTypePanel = (
