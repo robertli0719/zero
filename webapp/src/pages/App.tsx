@@ -9,7 +9,6 @@ import { store, AppState } from "../Store"
 const navBarItemList = [
     { name: "Index", url: "/index" },
     { name: "About", url: "/about" },
-    { name: "Test", url: "/test/index" }
 ]
 
 type ReduxProps = {
@@ -42,15 +41,15 @@ class AppPage extends React.Component<Props, {}>{
 
         if (me.isGeneralUser()) {
             rightNavBarItemList = [
-                { name: this.props.me.authLabel, url: "/" },
+                { name: this.props.me.authLabel, url: "me" },
                 { name: "logout", onClick: this.logout.bind(this) }
             ]
         } else if (me.isAdmin()) {
 
         } else if (me.isLogged() == false) {
             rightNavBarItemList = [
-                { name: "register", url: "auth/register" },
-                { name: "login", url: "auth/login" }
+                { name: "Register", url: "auth/register" },
+                { name: "Login", url: "auth/login" }
             ]
         }
 

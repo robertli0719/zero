@@ -76,7 +76,7 @@ class ScrollView extends React.Component<ScrollViewProps, {}>{
         super(props)
     }
 
-    componentDidUpdate(e: Event) {
+    componentDidUpdate() {
         ReactDOM.findDOMNode(this).scrollTop = ReactDOM.findDOMNode(this).scrollHeight
     }
 

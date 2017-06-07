@@ -8,11 +8,13 @@ package robertli.zero.service;
 import robertli.zero.dto.QueryResult;
 import robertli.zero.dto.user.UserRegisterDto;
 import robertli.zero.dto.user.GeneralUserDto;
-import robertli.zero.dto.user.ResetPasswordByTokenDto;
+import robertli.zero.dto.user.MobilePhoneBindingApplicationDto;
+import robertli.zero.dto.user.PasswordResetApplicationDto;
+import robertli.zero.dto.user.PasswordResetterDto;
 
 /**
  *
- * @version 1.0.2 2017-06-05
+ * @version 1.0.3 2017-06-06
  * @author Robert Li
  */
 public interface GeneralUserService {
@@ -27,8 +29,12 @@ public interface GeneralUserService {
 
     public void verifyRegister(String verifiedCode);
 
-    public void applyPasswordResetToken(String email);
+    public void applyPasswordResetToken(PasswordResetApplicationDto applicationDto);
 
-    public void resetPasswordByToken(ResetPasswordByTokenDto resetDto);
+    public void resetPasswordByToken(PasswordResetterDto resetterDto);
+
+    public void applyToBindingMobilePhone(String accessToken, MobilePhoneBindingApplicationDto applicationDto);
+
+    public void bindingMobilePhone();
 
 }

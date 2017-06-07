@@ -16,15 +16,21 @@ import robertli.zero.core.EmailMessage;
 import robertli.zero.core.EmailSender;
 import robertli.zero.core.RandomCodeCreater;
 import robertli.zero.core.SecurityService;
+import robertli.zero.core.SmsSender;
 import robertli.zero.dao.UserAuthDao;
 import robertli.zero.dao.UserDao;
+import robertli.zero.dao.UserMobileBindingTokenDao;
+import robertli.zero.dao.UserPasswordResetTokenDao;
 import robertli.zero.dao.UserRegisterDao;
 import robertli.zero.dto.QueryResult;
 import robertli.zero.dto.user.GeneralUserDto;
-import robertli.zero.dto.user.ResetPasswordByTokenDto;
+import robertli.zero.dto.user.MobilePhoneBindingApplicationDto;
+import robertli.zero.dto.user.PasswordResetApplicationDto;
+import robertli.zero.dto.user.PasswordResetterDto;
 import robertli.zero.dto.user.UserRegisterDto;
 import robertli.zero.entity.User;
 import robertli.zero.entity.UserAuth;
+import robertli.zero.entity.UserPasswordResetToken;
 import robertli.zero.entity.UserRegister;
 import robertli.zero.service.GeneralUserService;
 import robertli.zero.service.UserEmailBuilder;
@@ -34,7 +40,9 @@ import robertli.zero.tool.ValidationTool;
 @Component("generalUserService")
 public class GeneralUserServiceImpl implements GeneralUserService {
 
-    public final int REGISTER_LIFE_MINUTE = 60 * 24;
+    private final int REGISTER_LIFE_MINUTE = 60 * 24;
+    private final int RESETPASSWORD_TOKEN_LIFE_MINUTE = 5;
+    private final int MOBILE_BINDING_TOKEN_LIFE_MINUTE = 5;
 
     @Resource
     private RandomCodeCreater randomCodeCreater;
@@ -49,6 +57,9 @@ public class GeneralUserServiceImpl implements GeneralUserService {
     private EmailSender emailSender;
 
     @Resource
+    private SmsSender smsSender;
+
+    @Resource
     private UserService userService;
 
     @Resource
@@ -59,6 +70,12 @@ public class GeneralUserServiceImpl implements GeneralUserService {
 
     @Resource
     private UserRegisterDao userRegisterDao;
+
+    @Resource
+    private UserPasswordResetTokenDao userPasswordResetTokenDao;
+
+    @Resource
+    private UserMobileBindingTokenDao userMobileBindingTokenDao;
 
     private GeneralUserDto convert(User user) {
         final String uid = user.getUid();
@@ -212,19 +229,66 @@ public class GeneralUserServiceImpl implements GeneralUserService {
     }
 
     @Override
-    public void applyPasswordResetToken(String email) {
-        email = ValidationTool.preprocessEmail(email);
+    public void applyPasswordResetToken(PasswordResetApplicationDto applicationDto) {
+        final String inputEmail = applicationDto.getEmail();
+        final String email = ValidationTool.preprocessEmail(inputEmail);
         final String authId = makeAuthId(email);
         if (userAuthDao.isExist(authId) == false) {
             String errorDetail = "this user is not exist:" + authId;
             throw new RestException("USER_NOT_EXIST", "This user is not exist", errorDetail, HttpStatus.CONFLICT);
         }
         final User user = userService.getUser(UserService.USER_PLATFORM_GENERAL, email);
+        final String code = randomCodeCreater.createRandomCode(32, RandomCodeCreater.CodeType.MIX);
+        final String name = user.getName();
+
+        final UserPasswordResetToken token = new UserPasswordResetToken();
+        token.setCode(code);
+        token.setCreateDate(new Date());
+        token.setUser(user);
+        userPasswordResetTokenDao.clear(RESETPASSWORD_TOKEN_LIFE_MINUTE);
+        userPasswordResetTokenDao.save(token);
+        final EmailMessage msg = userEmailBuilder.buildPasswordResetTokenEmail(email, name, code);
+        emailSender.send(msg);
+    }
+
+    @Override
+    public void resetPasswordByToken(PasswordResetterDto resetterDto) {
+        final String code = resetterDto.getCode();
+        final String originalPassword = resetterDto.getPassword();
+        userPasswordResetTokenDao.clear(RESETPASSWORD_TOKEN_LIFE_MINUTE);
+        if (userPasswordResetTokenDao.isExist(code) == false) {
+            String errorDetail = "This is a invalid code: " + code;
+            throw new RestException("FORBIDDEN", "This link is invalide or timeout.", errorDetail, HttpStatus.FORBIDDEN);
+        }
+        final UserPasswordResetToken token = userPasswordResetTokenDao.get(code);
+        final User user = token.getUser();
+        final String passwordSalt = securityService.createPasswordSalt();
+        final String password = securityService.uglifyPassoword(originalPassword, passwordSalt);
+        user.setPassword(password);
+        user.setPasswordSalt(passwordSalt);
+    }
+
+    @Override
+    public void applyToBindingMobilePhone(String accessToken, MobilePhoneBindingApplicationDto applicationDto) {
+        final String uid = applicationDto.getUid();
+        final int countryCode = applicationDto.getCountryCode();
+        final String phoneNumber = applicationDto.getPhoneNumber();
+
+        if (userDao.isExistUid(uid) == false) {
+            String errorDetail = "This is a invalid uid: " + uid;
+            throw new RestException("FORBIDDEN", "This is a invalid user id", errorDetail, HttpStatus.FORBIDDEN);
+        }
+
+        userDao.getUserByUid(uid);
+
+        userMobileBindingTokenDao.clear(MOBILE_BINDING_TOKEN_LIFE_MINUTE);
+
+        applicationDto.getUid();
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void resetPasswordByToken(ResetPasswordByTokenDto resetDto) {
+    public void bindingMobilePhone() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

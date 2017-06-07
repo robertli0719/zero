@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestAttribute;
 import robertli.zero.controller.RestException;
 import robertli.zero.core.ClientAccessTokenManager;
 import robertli.zero.core.RandomCodeCreater;
+import robertli.zero.dto.user.PasswordResetApplicationDto;
+import robertli.zero.dto.user.PasswordResetterDto;
 import robertli.zero.dto.user.UserAuthDto;
 import robertli.zero.dto.user.UserAuthPasswordDto;
 import robertli.zero.dto.user.UserProfileDto;
@@ -95,4 +97,13 @@ public class MeController {
         generalUserService.verifyRegister(code);
     }
 
+    @RequestMapping(path = "password-reset-applications", method = RequestMethod.POST)
+    public void applyPasswordResetToken(@Valid @RequestBody PasswordResetApplicationDto applicationDto) {
+        generalUserService.applyPasswordResetToken(applicationDto);
+    }
+
+    @RequestMapping(path = "password-resetter", method = RequestMethod.POST)
+    public void resetPassword(@Valid @RequestBody PasswordResetterDto resetterDto) {
+        generalUserService.resetPasswordByToken(resetterDto);
+    }
 }

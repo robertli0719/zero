@@ -47,13 +47,15 @@ export class LoginPage extends React.Component<Prop, LoginState>{
                         <zform.Submit value="Login" />
                     </zform.Form>
                     <h1></h1>
-                    <Link to="auth/register">New User Register</Link>
+                    <p><Link to="auth/register">New User Register</Link></p>
+                    <p><Link to="auth/forgot-password">Forgot your password?</Link></p>
+                    <p><Link to="/">Back To Home Page</Link></p>
                 </Col>
             </Row>
         )
         const onlineRedirectPanel = (
             <Panel header="current logged in">
-                <Link to="/">Click here to Index</Link>
+                <Link to="me">Click here to Home</Link>
             </Panel>
         )
         const wrongUserTypePanel = (

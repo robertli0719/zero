@@ -25,6 +25,15 @@ public class UserDaoImpl extends GenericHibernateDao<User, Integer> implements U
     private SessionFactory sessionFactory;
 
     @Override
+    public boolean isExistUid(String uid) {
+        Session session = sessionFactory.getCurrentSession();
+        TypedQuery query = session.createQuery("select u from User u where u.uid = :uid");
+        query.setParameter("uid", uid);
+        query.setMaxResults(1);
+        return query.getResultList().isEmpty() == false;
+    }
+
+    @Override
     public User saveUser(String name, String password, String passwordSalt) {
         User user = new User();
         user.setName(name);
@@ -37,14 +46,10 @@ public class UserDaoImpl extends GenericHibernateDao<User, Integer> implements U
     @Override
     public User getUserByUid(String uid) {
         Session session = sessionFactory.getCurrentSession();
-        TypedQuery query = session.createQuery("select u from User u where u.uid = :uid");
+        TypedQuery<User> query = session.createQuery("select u from User u where u.uid = :uid");
         query.setParameter("uid", uid);
         query.setMaxResults(1);
-        List<User> userList = query.getResultList();
-        if (userList.size() != 1) {
-            return null;
-        }
-        return userList.get(0);
+        return query.getSingleResult();
     }
 
     @Override

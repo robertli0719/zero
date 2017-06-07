@@ -11,6 +11,7 @@ import * as me from "./actions/me"
 import { App } from "./pages/App"
 import { Index } from "./pages/Index"
 import { About } from "./pages/About"
+import { Me } from "./pages/Me"
 
 //dashboard pages
 import { InventoryView } from "./pages/dashboard/InventoryView"
@@ -20,10 +21,11 @@ import { StaffIndex } from "./pages/dashboard/StaffIndex"
 import { StaffLogin } from "./pages/dashboard/StaffLogin"
 
 //auth pages
-import { Me } from "./pages/auth/Me"
 import { Login } from "./pages/auth/Login"
 import { Register } from "./pages/auth/Register"
 import { RegisterVerify } from "./pages/auth/RegisterVerify"
+import { ForgotPassword } from "./pages/auth/ForgotPassword"
+import { ResetPassword } from "./pages/auth/ResetPassword"
 
 //admin pages
 import { AdminApp } from "./pages/admin/AdminApp"
@@ -47,7 +49,7 @@ import { TestCros } from "./pages/test/TestCros"
 import { TestWebsocket } from "./pages/test/TestWebsocket"
 
 function requireRoleAdmin(nextState: RouterState, replace: RedirectFunction) {
-    const loginPath = '/admin/login'
+    const loginPath = 'admin/login'
     if (me.isAdmin() == false) {
         replace({
             pathname: loginPath
@@ -57,10 +59,18 @@ function requireRoleAdmin(nextState: RouterState, replace: RedirectFunction) {
 
 function requireRoleStaff(nextState: RouterState, replace: RedirectFunction) {
     const platformName = nextState.params["platform"]
-    const loginPath = '/dashboard/' + platformName + "/login"
+    const loginPath = 'dashboard/' + platformName + "/login"
     if (me.isPlatformUser(platformName) == false) {
         replace({
             pathname: loginPath
+        })
+    }
+}
+
+function requireRoleGeneral(nextState: RouterState, replace: RedirectFunction) {
+    if (me.isGeneralUser() == false) {
+        replace({
+            pathname: "auth/login"
         })
     }
 }
@@ -73,13 +83,15 @@ const template = (
                     <IndexRoute component={Index} />
                     <Route path="index" component={Index} />
                     <Route path="about" component={About} />
+                    <Route path="me" component={Me} onEnter={requireRoleGeneral} />
                 </Route>
                 <Route path="auth">
                     <IndexRoute component={Me} />
-                    <Route path="me" component={Me} />
                     <Route path="login" component={Login} />
                     <Route path="register" component={Register} />
                     <Route path="register/verify/:code" component={RegisterVerify} />
+                    <Route path="forgot-password" component={ForgotPassword} />
+                    <Route path="reset-password/:code" component={ResetPassword} />
                 </Route>
                 <Route path="dashboard/:platform" component={StaffApp}>
                     <Route path="index" component={StaffIndex} onEnter={requireRoleStaff} />

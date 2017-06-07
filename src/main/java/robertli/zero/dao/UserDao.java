@@ -10,10 +10,12 @@ import robertli.zero.entity.User;
 
 /**
  *
- * @version 1.0.2 2017-03-28
+ * @version 1.0.3 2017-06-06
  * @author Robert Li
  */
 public interface UserDao extends GenericDao<User, Integer> {
+
+    public boolean isExistUid(String uid);
 
     public User saveUser(String name, String password, String passwordSalt);
 

@@ -64,7 +64,8 @@ export class RegisterPage extends React.Component<Prop, State>{
                         <zform.Submit value="Submit" />
                     </zform.Form>
                     <h1></h1>
-                    <Link to="auth/login">Login</Link>
+                    <p><Link to="auth/login">Login</Link></p>
+                    <p><Link to="/">Back To Home Page</Link></p>
                 </Col>
             </Row>
         )
