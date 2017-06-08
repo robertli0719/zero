@@ -21,6 +21,7 @@ public class UserProfileDto {
     private String userPlatformName;
     private String name;
     private String telephone;
+    private String email;
     private List<String> roleList;
 
     public String getUid() {
@@ -69,6 +70,14 @@ public class UserProfileDto {
 
     public void setTelephone(String telephone) {
         this.telephone = telephone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public List<String> getRoleList() {

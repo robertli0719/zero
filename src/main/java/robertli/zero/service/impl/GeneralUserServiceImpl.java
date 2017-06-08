@@ -17,6 +17,7 @@ import robertli.zero.core.EmailSender;
 import robertli.zero.core.RandomCodeCreater;
 import robertli.zero.core.SecurityService;
 import robertli.zero.core.SmsSender;
+import robertli.zero.dao.AccessTokenDao;
 import robertli.zero.dao.UserAuthDao;
 import robertli.zero.dao.UserDao;
 import robertli.zero.dao.UserMobileBindingTokenDao;
@@ -24,12 +25,15 @@ import robertli.zero.dao.UserPasswordResetTokenDao;
 import robertli.zero.dao.UserRegisterDao;
 import robertli.zero.dto.QueryResult;
 import robertli.zero.dto.user.GeneralUserDto;
-import robertli.zero.dto.user.MobilePhoneBindingApplicationDto;
+import robertli.zero.dto.user.MobileBindingApplicationDto;
+import robertli.zero.dto.user.MobileBindingDto;
 import robertli.zero.dto.user.PasswordResetApplicationDto;
 import robertli.zero.dto.user.PasswordResetterDto;
 import robertli.zero.dto.user.UserRegisterDto;
+import robertli.zero.entity.AccessToken;
 import robertli.zero.entity.User;
 import robertli.zero.entity.UserAuth;
+import robertli.zero.entity.UserMobileBindingToken;
 import robertli.zero.entity.UserPasswordResetToken;
 import robertli.zero.entity.UserRegister;
 import robertli.zero.service.GeneralUserService;
@@ -58,6 +62,9 @@ public class GeneralUserServiceImpl implements GeneralUserService {
 
     @Resource
     private SmsSender smsSender;
+
+    @Resource
+    private AccessTokenDao accessTokenDao;
 
     @Resource
     private UserService userService;
@@ -268,28 +275,81 @@ public class GeneralUserServiceImpl implements GeneralUserService {
         user.setPasswordSalt(passwordSalt);
     }
 
-    @Override
-    public void applyToBindingMobilePhone(String accessToken, MobilePhoneBindingApplicationDto applicationDto) {
-        final String uid = applicationDto.getUid();
-        final int countryCode = applicationDto.getCountryCode();
-        final String phoneNumber = applicationDto.getPhoneNumber();
-
-        if (userDao.isExistUid(uid) == false) {
-            String errorDetail = "This is a invalid uid: " + uid;
-            throw new RestException("FORBIDDEN", "This is a invalid user id", errorDetail, HttpStatus.FORBIDDEN);
+    private void validateAccessToken(String accessToken) {
+        if (accessToken == null || accessTokenDao.isExist(accessToken) == false) {
+            final String errorMsg = "For reset your password, you should login first";
+            final String errorDetail = "accessToken is null or not exist";
+            throw new RestException("UNAUTHORIZED", errorMsg, errorDetail, HttpStatus.UNAUTHORIZED);
         }
+    }
 
-        userDao.getUserByUid(uid);
-
-        userMobileBindingTokenDao.clear(MOBILE_BINDING_TOKEN_LIFE_MINUTE);
-
-        applicationDto.getUid();
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private User pickUser(String accessToken) {
+        validateAccessToken(accessToken);
+        final AccessToken token = accessTokenDao.get(accessToken);
+        return token.getUser();
     }
 
     @Override
-    public void bindingMobilePhone() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void applyToBindingMobilePhone(String accessToken, MobileBindingApplicationDto applicationDto) {
+        final User user = pickUser(accessToken);
+        final int countryCode = applicationDto.getCountryCode();
+        final String phoneNumber = applicationDto.getPhoneNumber();
+        final String combinedPhoneNumber = "+" + countryCode + phoneNumber;
+        final String code = randomCodeCreater.createRandomCode(7, RandomCodeCreater.CodeType.NUMBERS);
+
+        final UserMobileBindingToken bindingToken = new UserMobileBindingToken();
+        bindingToken.setCode(code);
+        bindingToken.setCreateDate(new Date());
+        bindingToken.setPhoneNumber(combinedPhoneNumber);
+        bindingToken.setUser(user);
+
+        userMobileBindingTokenDao.clear(MOBILE_BINDING_TOKEN_LIFE_MINUTE);
+        userMobileBindingTokenDao.save(bindingToken);
+        smsSender.send(combinedPhoneNumber, "Your verification code for validation is: " + code + ".");
+    }
+
+    private void validateBindingToken(User user, UserMobileBindingToken bindingToken) {
+        final String accessUserUid = user.getUid();
+        final String bindingTokenUid = bindingToken.getUser().getUid();
+        if (accessUserUid == null || accessUserUid.equals(bindingTokenUid) == false) {
+            final String errorMsg = "This verified code is not belong to you.";
+            final String errorDetail = "accessToken.user.uid!=bindingToken.user.uid";
+            throw new RestException("FORBIDDEN", errorMsg, errorDetail, HttpStatus.FORBIDDEN);
+        }
+    }
+
+    private void bindingMobilePhone(User user, UserMobileBindingToken bindingToken) {
+        final String userPlatform = UserService.USER_PLATFORM_GENERAL;
+        final String userType = UserService.USERNAME_TYPE_TELEPHONE;
+        final String username = bindingToken.getPhoneNumber();
+        final String label = username;
+
+        final String authId = userAuthDao.makeAuthId(userType, username, username);
+        if (userAuthDao.isExist(authId)) {
+            final String errorMsg = "This phoneNumber has been registered.";
+            final String errorDetail = "authId is exist: " + authId;
+            throw new RestException("CONFLICT", errorMsg, errorDetail, HttpStatus.CONFLICT);
+        }
+        userAuthDao.saveUserAuth(userPlatform, username, label, userType, user);
+    }
+
+    @Override
+    public void bindingMobilePhone(String accessToken, MobileBindingDto bindingDto) {
+        final User user = pickUser(accessToken);
+        final int countryCode = bindingDto.getCountryCode();
+        final String phoneNumber = bindingDto.getPhoneNumber();
+        final String combinedPhoneNumber = "+" + countryCode + phoneNumber;
+
+        final String verifiedCode = bindingDto.getVerifiedCode();
+        userMobileBindingTokenDao.clear(MOBILE_BINDING_TOKEN_LIFE_MINUTE);
+        if (userMobileBindingTokenDao.isExist(combinedPhoneNumber, verifiedCode) == false) {
+            final String errorMsg = "Your verified code is timeout, please check again.";
+            final String errorDetail = "can't found this code in database.";
+            throw new RestException("FORBIDDEN", errorMsg, errorDetail, HttpStatus.FORBIDDEN);
+        }
+        final UserMobileBindingToken bindingToken = userMobileBindingTokenDao.get(combinedPhoneNumber, verifiedCode);
+        validateBindingToken(user, bindingToken);
+        bindingMobilePhone(user, bindingToken);
     }
 
 }

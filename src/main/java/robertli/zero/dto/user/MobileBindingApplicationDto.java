@@ -13,20 +13,10 @@ import org.hibernate.validator.constraints.NotBlank;
  *
  * @author Robert Li
  */
-public class MobilePhoneBindingApplicationDto {
+public class MobileBindingApplicationDto {
 
-    private String uid;
     private Integer countryCode;
     private String phoneNumber;
-
-    @NotBlank
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
 
     @NotNull
     @Min(1)

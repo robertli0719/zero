@@ -20,5 +20,7 @@ public interface UserMobileBindingTokenDao extends GenericDao<UserMobileBindingT
      */
     public void clear(final int lifeMinute);
 
+    public boolean isExist(String phoneNumber, String code);
+
     public UserMobileBindingToken get(String phoneNumber, String code);
 }

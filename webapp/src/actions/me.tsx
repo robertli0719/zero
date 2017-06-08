@@ -17,6 +17,7 @@ export type UserProfileDto = {
     userTypeName: string
     userPlatformName: string
     name: string
+    email: string
     telephone: string
     roleList: string[]
 }

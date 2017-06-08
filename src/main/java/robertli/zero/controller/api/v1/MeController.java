@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestAttribute;
 import robertli.zero.controller.RestException;
 import robertli.zero.core.ClientAccessTokenManager;
 import robertli.zero.core.RandomCodeCreater;
+import robertli.zero.dto.user.MobileBindingApplicationDto;
+import robertli.zero.dto.user.MobileBindingDto;
 import robertli.zero.dto.user.PasswordResetApplicationDto;
 import robertli.zero.dto.user.PasswordResetterDto;
 import robertli.zero.dto.user.UserAuthDto;
@@ -105,5 +107,15 @@ public class MeController {
     @RequestMapping(path = "password-resetter", method = RequestMethod.POST)
     public void resetPassword(@Valid @RequestBody PasswordResetterDto resetterDto) {
         generalUserService.resetPasswordByToken(resetterDto);
+    }
+
+    @RequestMapping(path = "mobile-binding-applications", method = RequestMethod.POST)
+    public void applyToBindingMobilePhone(@RequestAttribute(required = false) String accessToken, @Valid @RequestBody MobileBindingApplicationDto dto) {
+        generalUserService.applyToBindingMobilePhone(accessToken, dto);
+    }
+
+    @RequestMapping(path = "mobile-bindings", method = RequestMethod.POST)
+    public void bindMobilePhone(@RequestAttribute(required = false) String accessToken, @Valid @RequestBody MobileBindingDto bindingDto) {
+        generalUserService.bindingMobilePhone(accessToken, bindingDto);
     }
 }

@@ -7,7 +7,6 @@ package robertli.zero.dao.impl;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import javax.annotation.Resource;
 import javax.persistence.TypedQuery;
 import org.hibernate.Session;
@@ -37,15 +36,25 @@ public class UserMobileBindingTokenDaoImpl extends GenericHibernateDao<UserMobil
         query.executeUpdate();
     }
 
-    @Override
-    public UserMobileBindingToken get(String phoneNumber, String code) {
+    private TypedQuery<UserMobileBindingToken> makeSingleResultQuery(String phoneNumber, String code) {
         Session session = sessionFactory.getCurrentSession();
         TypedQuery query = session.createQuery("select t from UserMobileBindingToken t where t.phoneNumber=:phoneNumber and t.code=:code");
         query.setParameter("phoneNumber", phoneNumber);
         query.setParameter("code", code);
         query.setMaxResults(1);
-        final List<UserMobileBindingToken> tokenList = query.getResultList();
-        return tokenList.isEmpty() ? null : tokenList.get(0);
+        return query;
+    }
+
+    @Override
+    public boolean isExist(String phoneNumber, String code) {
+        final TypedQuery<UserMobileBindingToken> query = makeSingleResultQuery(phoneNumber, code);
+        return query.getResultList().isEmpty() == false;
+    }
+
+    @Override
+    public UserMobileBindingToken get(String phoneNumber, String code) {
+        final TypedQuery<UserMobileBindingToken> query = makeSingleResultQuery(phoneNumber, code);
+        return query.getSingleResult();
     }
 
 }

@@ -8,6 +8,7 @@ import * as utilities from "../utilities/random-coder"
 import { store, AppState } from "../Store"
 import { UserProfile } from "../reducers/me"
 import { RestErrorDto } from "../utilities/http"
+import { MobileBindingPanel } from "../components/auth/MobileBindingPanel"
 
 
 interface Prop {
@@ -29,14 +30,14 @@ export class MePage extends React.Component<Prop, State>{
     }
 
     render() {
-        let me = this.props.me
+        const me = this.props.me
         return (
             <div className="container">
                 <h1>Welcome back, {me.name}</h1>
                 <p>account: {me.authLabel}</p>
                 <p>user Id: {me.uid}</p>
-                <p>Telephone: {me.telephone}</p>
-            </div>
+                <MobileBindingPanel me={me} />
+            </div >
         )
     }
 }

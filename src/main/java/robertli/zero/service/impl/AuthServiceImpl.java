@@ -41,19 +41,29 @@ public class AuthServiceImpl implements AuthService {
     @Resource
     private SecurityService securityService;
 
+    private String pickAuthLabel(User user, String usernameType) {
+        final List<UserAuth> authList = user.getUserAuthList();
+        if (authList == null) {
+            return null;
+        }
+        for (final UserAuth auth : authList) {
+            if (auth.getUsernameType().equals(usernameType)) {
+                return auth.getLabel();
+            }
+        }
+        return null;
+    }
+
     private String pickAuthLabel(User user) {
         final List<UserAuth> authList = user.getUserAuthList();
         if (authList == null || authList.isEmpty()) {
             return user.getName();
         }
-        for (final UserAuth auth : authList) {
-            if (auth.getUsernameType().equals(UserService.USERNAME_TYPE_EMAIL)) {
-                return auth.getLabel();
-            }
-        }
-        for (final UserAuth auth : authList) {
-            if (auth.getUsernameType().equals(UserService.USERNAME_TYPE_TELEPHONE)) {
-                return auth.getLabel();
+        final String priorityType[] = new String[]{UserService.USERNAME_TYPE_EMAIL, UserService.USERNAME_TYPE_TELEPHONE};
+        for (final String usernameType : priorityType) {
+            final String label = pickAuthLabel(user, usernameType);
+            if (label != null) {
+                return label;
             }
         }
         return authList.get(0).getLabel();
@@ -72,10 +82,14 @@ public class AuthServiceImpl implements AuthService {
         }
         final User user = accessToken.getUser();
         final String authLabel = pickAuthLabel(user);
+        final String email = pickAuthLabel(user, UserService.USERNAME_TYPE_EMAIL);
+        final String telephone = pickAuthLabel(user, UserService.USERNAME_TYPE_TELEPHONE);
         UserProfileDto userProfileDto = new UserProfileDto();
         userProfileDto.setUid(user.getUid());
         userProfileDto.setName(user.getName());
         userProfileDto.setAuthLabel(authLabel);
+        userProfileDto.setEmail(email);
+        userProfileDto.setTelephone(telephone);
         userProfileDto.setUserPlatformName(user.getUserPlatform().getName());
         userProfileDto.setUserTypeName(user.getUserPlatform().getUserType().getName());
         ArrayList<String> roleList = new ArrayList<>();
