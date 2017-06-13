@@ -22,6 +22,8 @@ public interface GeneralUserService {
 
     public QueryResult<GeneralUserDto> getGeneralUserList(int offset, int limit);
 
+    public QueryResult<GeneralUserDto> searchUser(String words, int offset, int limit);
+
     public GeneralUserDto getGeneralUser(String uid);
 
     public void registerByEmail(UserRegisterDto registerDto);

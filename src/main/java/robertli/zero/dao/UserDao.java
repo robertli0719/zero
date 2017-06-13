@@ -25,8 +25,12 @@ public interface UserDao extends GenericDao<User, Integer> {
 
     public int countUserByRole(String userRoleName);
 
+    public int countSearch(String userPlatformName, String words);
+
     public List<User> getUserListByPlatform(String userPlatformName, int offset, int limit);
 
     public List<User> getUserListByRole(String userRoleName, int offset, int limit);
+
+    public List<User> search(String userPlatformName, String words, int offset, int limit);
 
 }

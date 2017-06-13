@@ -352,4 +352,13 @@ public class GeneralUserServiceImpl implements GeneralUserService {
         bindingMobilePhone(user, bindingToken);
     }
 
+    @Override
+    public QueryResult<GeneralUserDto> searchUser(String words, int offset, int limit) {
+        final String platformName = UserService.USER_PLATFORM_GENERAL;
+        final int count = userDao.countSearch(platformName, words);
+        final List<User> userList = userDao.search(platformName, words, offset, limit);
+        final List<GeneralUserDto> dtoList = convert(userList);
+        return new QueryResult<>(offset, limit, count, dtoList);
+    }
+
 }

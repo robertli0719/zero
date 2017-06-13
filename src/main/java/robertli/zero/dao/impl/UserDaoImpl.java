@@ -69,6 +69,15 @@ public class UserDaoImpl extends GenericHibernateDao<User, Integer> implements U
     }
 
     @Override
+    public int countSearch(String userPlatformName, String words) {
+        Session session = sessionFactory.getCurrentSession();
+        TypedQuery<Long> query = session.createQuery("select count(ua.user) from UserAuth ua where ua.user.userPlatform.name = :userPlatformName and (ua.label like :words or ua.user.name like :words)", Long.class);
+        query.setParameter("userPlatformName", userPlatformName);
+        query.setParameter("words", "%" + words + "%");
+        return query.getSingleResult().intValue();
+    }
+
+    @Override
     public List<User> getUserListByPlatform(String userPlatformName, int offset, int limit) {
         Session session = sessionFactory.getCurrentSession();
         TypedQuery<User> query = session.createQuery("select u from User u where u.userPlatform.name= :userPlatformName", User.class);
@@ -83,6 +92,17 @@ public class UserDaoImpl extends GenericHibernateDao<User, Integer> implements U
         Session session = sessionFactory.getCurrentSession();
         TypedQuery<User> query = session.createQuery("select uri.user from UserRoleItem uri where uri.userRole.name=:userRoleName group by uri.user.id", User.class);
         query.setParameter("userRoleName", userRoleName);
+        query.setFirstResult(offset);
+        query.setMaxResults(limit);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<User> search(String userPlatformName, String words, int offset, int limit) {
+        Session session = sessionFactory.getCurrentSession();
+        TypedQuery<User> query = session.createQuery("select ua.user from UserAuth ua where ua.user.userPlatform.name =  :userPlatformName and (ua.label like :words or ua.user.name like :words)", User.class);
+        query.setParameter("userPlatformName", userPlatformName);
+        query.setParameter("words", "%" + words + "%");
         query.setFirstResult(offset);
         query.setMaxResults(limit);
         return query.getResultList();
