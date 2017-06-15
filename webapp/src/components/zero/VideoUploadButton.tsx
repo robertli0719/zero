@@ -7,7 +7,7 @@
  */
 import * as React from "react"
 import { Sizes, Button, Modal, FormControl, HelpBlock, ControlLabel } from "react-bootstrap"
-import { makeRandomString } from "../../utilities/random-coder"
+import { makeRandomString } from "../../utilities/coder"
 import { IF } from "./stl/IF"
 import { http, RestErrorDto } from "../../utilities/http"
 

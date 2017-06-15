@@ -5,7 +5,7 @@ import { Button, ButtonToolbar, ControlLabel, FormControl, Form, FormGroup, Chec
 import { Link } from "react-router"
 import * as me from "../../actions/me"
 import * as zform from "../../components/zero/zform/zform"
-import * as utilities from "../../utilities/random-coder"
+import * as utilities from "../../utilities/coder"
 import { store, AppState } from "../../Store"
 import { UserProfile } from "../../reducers/me"
 import { http, RestErrorDto } from "../../utilities/http"

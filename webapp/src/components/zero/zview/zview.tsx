@@ -3,11 +3,11 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.0.2 2017-03-29
+ * version 1.0.3 2017-06-14
  */
 import * as React from "react"
 import * as rb from "react-bootstrap"
-import { makeRandomString } from "../../../utilities/random-coder"
+import { makeRandomString } from "../../../utilities/coder"
 import { http, RestErrorDto, RestErrorItemDto, Pagination, HttpContent } from "../../../utilities/http"
 import * as _ from "lodash"
 import * as dataPicker from "./zview_data_picker"
@@ -17,8 +17,10 @@ import { ViewBody } from "./zview_body"
 import { ViewCounter } from "./zview_counter"
 import { ViewLinkGroup } from "./zview_Link_group"
 import { UpdateEventListener } from "../event/UpdateEventListener"
+import { DataType } from "./zview_schema"
 
 export * from "./zview_children/col_button"
+export type DataType = DataType
 
 export type ViewProps = {
     header?: string
@@ -26,6 +28,7 @@ export type ViewProps = {
     uri: string
     heads?: string[]
     select?: string[]
+    types?: DataType[]
     updateEventListener?: UpdateEventListener
 }
 
@@ -114,14 +117,15 @@ export class View extends React.Component<ViewProps, ViewState>{
         const names = dataPicker.pickNames(dtoList, this.props.select)
         const heads = dataPicker.pickHeads(dtoList, this.props.select, this.props.heads)
         const bodyData = dataPicker.pickBodyData(dtoList, this.props.select)
+        const types = dataPicker.pickTypes(dtoList, this.props.select, this.props.types)
         const additionalColNumber = this.state.additionalColElements.length
         const additionalColElements = this.state.additionalColElements
         return (
             <rb.Panel header={this.props.header} bsStyle={this.props.bsStyle}>
                 {this.makeTotalView()}
-                <rb.Table responsive>
+                <rb.Table className="table-bordered" responsive>
                     <ViewHead heads={heads} additionalColNumber={additionalColNumber} />
-                    <ViewBody names={names} dtoList={dtoList} data={bodyData} additionalColElements={additionalColElements} />
+                    <ViewBody names={names} dtoList={dtoList} data={bodyData} types={types} additionalColElements={additionalColElements} />
                 </rb.Table >
                 <ViewCounter pagination={this.state.pagination} />
                 <ViewLinkGroup links={this.state.links} updateUri={this.updateUri.bind(this)} />

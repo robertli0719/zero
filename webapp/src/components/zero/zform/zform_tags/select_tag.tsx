@@ -7,7 +7,7 @@
  */
 import * as React from "react"
 import { FormControl, FormGroup, ControlLabel, HelpBlock } from "react-bootstrap"
-import { makeRandomString } from "../../../../utilities/random-coder"
+import { makeRandomString } from "../../../../utilities/coder"
 import { ZFormTag, ZFormTagAttr, registerTagRender } from "../zform_tag"
 
 registerTagRender("select", (tagAttr: ZFormTagAttr) => {

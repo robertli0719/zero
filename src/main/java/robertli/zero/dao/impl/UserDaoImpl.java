@@ -71,7 +71,7 @@ public class UserDaoImpl extends GenericHibernateDao<User, Integer> implements U
     @Override
     public int countSearch(String userPlatformName, String words) {
         Session session = sessionFactory.getCurrentSession();
-        TypedQuery<Long> query = session.createQuery("select count(ua.user) from UserAuth ua where ua.user.userPlatform.name = :userPlatformName and (ua.label like :words or ua.user.name like :words)", Long.class);
+        TypedQuery<Long> query = session.createQuery("select count(distinct ua.user.id) from UserAuth ua where ua.user.userPlatform.name = :userPlatformName and (ua.label like :words or ua.user.name like :words)", Long.class);
         query.setParameter("userPlatformName", userPlatformName);
         query.setParameter("words", "%" + words + "%");
         return query.getSingleResult().intValue();
@@ -100,7 +100,7 @@ public class UserDaoImpl extends GenericHibernateDao<User, Integer> implements U
     @Override
     public List<User> search(String userPlatformName, String words, int offset, int limit) {
         Session session = sessionFactory.getCurrentSession();
-        TypedQuery<User> query = session.createQuery("select ua.user from UserAuth ua where ua.user.userPlatform.name =  :userPlatformName and (ua.label like :words or ua.user.name like :words)", User.class);
+        TypedQuery<User> query = session.createQuery("select ua.user from UserAuth ua where ua.user.userPlatform.name = :userPlatformName and (ua.label like :words or ua.user.name like :words) group by ua.user.id", User.class);
         query.setParameter("userPlatformName", userPlatformName);
         query.setParameter("words", "%" + words + "%");
         query.setFirstResult(offset);

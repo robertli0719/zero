@@ -7,7 +7,7 @@ import { store, AppState } from "../../Store"
 import { UserProfile } from "../../reducers/me"
 import * as zform from "../zero/zform/zform"
 import { Selection } from "../zero/zform/zform_schema"
-import * as utilities from "../../utilities/random-coder"
+import * as utilities from "../../utilities/coder"
 import { RestErrorDto } from "../../utilities/http"
 import { IF } from "../zero/stl/IF"
 

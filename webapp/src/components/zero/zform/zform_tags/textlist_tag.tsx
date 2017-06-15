@@ -8,7 +8,7 @@
 
 import * as React from "react"
 import { FormControl, FormGroup, ControlLabel, HelpBlock, ButtonToolbar, Button } from "react-bootstrap"
-import { makeRandomString } from "../../../../utilities/random-coder"
+import { makeRandomString } from "../../../../utilities/coder"
 import { ZFormTag, ZFormTagAttr, registerTagRender } from "../zform_tag"
 
 registerTagRender("textlist", (tagAttr: ZFormTagAttr) => {

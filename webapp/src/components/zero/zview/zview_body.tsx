@@ -3,40 +3,62 @@
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  * 
- * version 1.0.2 2017-05-02
+ * version 1.0.3 2017-06-14
  */
 import * as React from "react"
+import { DataType } from "./zview_schema"
+import { ImgUrlCol } from "./zview_col/img_url_col"
+import { NormalCol } from "./zview_col/normal_col"
+import { CurrencyCol } from "./zview_col/currency_col"
+import { AccountingCol } from "./zview_col/accounting_col"
+import { DateCol } from "./zview_col/date_col"
+import { DatetimeCol } from "./zview_col/datetime_col"
+import { TimeCol } from "./zview_col/time_col"
+import { PercentageCol } from "./zview_col/percentage_col"
+import { AccountCol } from "./zview_col/account_col"
 
 export type Props = {
     dtoList: any[]
     data: any[]
     names: string[]
+    types: DataType[]
     additionalColElements: JSX.Element[]
 }
 
 export class ViewBody extends React.Component<Props, {}>{
 
     makeDataRow(dto: any) {
-        return this.props.names.map((name) => {
-            if (name == "imgUrl" || name == "logoUrl") {
-                return (
-                    <td>
-                        <img className="img-responsive"
-                            src={dto[name]}
-                            style={{ maxHeight: 200, maxWidth: 200 }}
-                        />
-                    </td>
-                )
-            } else if (dto[name] instanceof String) {
-                return <td>{dto[name]}</td>
-            } else if (dto[name] === true) {
-                return <td className="text-center">Yes</td>
-            } else if (dto[name] === false) {
-                return <td className="text-center">-</td>
-            } else if(dto[name] instanceof Object){
-                return <td className="text-center">[Object]</td>
+        const types = this.props.types
+        return this.props.names.map((name, rowIndex: number) => {
+            const val = dto[name]
+            switch (types[rowIndex]) {
+                case "normal":
+                    return <NormalCol dto={dto} name={name} />
+                case "string":
+                    return <td>{"" + val}</td>
+                case "integer":
+                    return <td>{parseInt(val)}</td>
+                case "float":
+                    return <td>{parseFloat(val)}</td>
+                case "currency":
+                    return <CurrencyCol val={val} />
+                case "accounting":
+                    return <AccountingCol val={val} />
+                case "date":
+                    return <DateCol val={val} />
+                case "time":
+                    return <TimeCol val={val} />
+                case "datetime":
+                    return <DatetimeCol val={val} />
+                case "percentage":
+                    return <PercentageCol val={val} />
+                case "account":
+                    return <AccountCol val={val} />
+                case "img-url":
+                    return <ImgUrlCol val={dto[name]} />
+
             }
-            return <td>{dto[name]}</td>
+            return <td style={{ color: "red" }}>#NAME?</td>
         })
     }
 

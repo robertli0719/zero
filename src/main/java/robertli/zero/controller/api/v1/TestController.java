@@ -5,6 +5,7 @@
  */
 package robertli.zero.controller.api.v1;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
@@ -30,25 +31,25 @@ import robertli.zero.dto.user.UserProfileDto;
 @RestController
 @RequestMapping("api/v1/test")
 public class TestController {
-    
+
     @RequestMapping(path = "demos/{id}", method = RequestMethod.GET)
     public DemoDto getDemo(@PathVariable int id, HttpServletRequest request) {
         System.out.println("\n\ngetDemo:");
-        
+
         Enumeration<String> names = request.getHeaderNames();
         while (names.hasMoreElements()) {
             String name = names.nextElement();
             String header = request.getHeader(name);
             System.out.println(name + " : " + header);
         }
-        
+
         DemoDto demo = new DemoDto();
         demo.setId(id);
         demo.setDateTime(new Date());
         demo.setName("testName:" + id);
         return demo;
     }
-    
+
     @RequestMapping(path = "demos/{id}", method = RequestMethod.PUT)
     public void putDemos(@PathVariable int id, @Valid @RequestBody DemoDto demoDto) {
         if (demoDto.getId() == null) {
@@ -58,21 +59,22 @@ public class TestController {
         System.out.println("name" + demoDto.getName());
         System.out.println("datetime:" + demoDto.getDateTime());
     }
-    
+
     @RequestMapping(path = "demos/{id}", method = RequestMethod.DELETE)
     public void deleteDemos(@PathVariable int id) {
         System.out.println("delete demo:" + id);
     }
-    
+
     @RequestMapping(path = "demos", method = RequestMethod.GET)
     public List<DemoDto> getDemos(@RequestAttribute PagingModal pagingModal) {
         pagingModal.placeHeaders(100);
-        
+
         List<DemoDto> demoDtoList = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
-            DemoDto demo = new DemoDto();
+            final DemoDto demo = new DemoDto();
             demo.setId(i);
             demo.setDateTime(new Date());
+            demo.setDecimal(new BigDecimal((i - 10) + "." + i));
             demo.setName("testName:" + i);
             demoDtoList.add(demo);
             if (pagingModal.getLimit() != 0 && i + 1 >= pagingModal.getLimit()) {
@@ -81,7 +83,7 @@ public class TestController {
         }
         return demoDtoList;
     }
-    
+
     @RequestMapping(path = "demos", method = RequestMethod.POST)
     public void postDemos(@Valid @RequestBody DemoDto demoDto) {
         if (demoDto.getId() != null) {
@@ -92,7 +94,7 @@ public class TestController {
         System.out.println("datetime:" + demoDto.getDateTime());
         System.out.println("subItem:" + demoDto.getSubItem());
     }
-    
+
     @RequestMapping(path = "error", method = RequestMethod.GET)
     public UserProfileDto getError() {
         String status = "ERROR_TEST";

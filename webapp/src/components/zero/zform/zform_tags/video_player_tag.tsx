@@ -7,7 +7,7 @@
  */
 import * as React from "react"
 import { Button } from "react-bootstrap"
-import { makeRandomString } from "../../../../utilities/random-coder"
+import { makeRandomString } from "../../../../utilities/coder"
 import { ZFormTag, ZFormTagProps, ZFormTagAttr, registerTagRender, nopicUrl } from "../zform_tag"
 
 registerTagRender("videoplayer", (tagAttr: ZFormTagAttr) => {

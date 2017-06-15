@@ -5,6 +5,7 @@
  */
 package robertli.zero.dto;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -22,6 +23,7 @@ public class DemoDto {
     private Integer id;
     private String name;
     private Date dateTime;
+    private BigDecimal decimal;
     private DemoSubItem subItem;
 
     @Range(min = 0, max = 30)
@@ -50,6 +52,14 @@ public class DemoDto {
 
     public void setDateTime(Date dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public BigDecimal getDecimal() {
+        return decimal;
+    }
+
+    public void setDecimal(BigDecimal decimal) {
+        this.decimal = decimal;
     }
 
     @NotNull

@@ -7,7 +7,7 @@
  */
 import * as React from "react"
 import { Checkbox } from "react-bootstrap"
-import { makeRandomString } from "../../../../utilities/random-coder"
+import { makeRandomString } from "../../../../utilities/coder"
 import { ZFormTagProps, ZFormTag, ZFormTagAttr, registerTagRender } from "../zform_tag"
 
 registerTagRender("checkbox", (tagAttr: ZFormTagAttr) => {

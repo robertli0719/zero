@@ -5,6 +5,7 @@ import { store } from "../../Store"
 import { Button, ButtonToolbar, FormControl, FormGroup, Col } from "react-bootstrap"
 import * as test from "../../actions/test"
 import * as zform from "../../components/zero/zform/zform"
+import * as zview from "../../components/zero/zview/zview"
 import * as zformSchema from "../../components/zero/zform/zform_schema"
 import { http, RestErrorDto, HttpContent } from "../../utilities/http"
 
@@ -30,7 +31,11 @@ export class TestIndex extends React.Component<{}, TestState>{
     render() {
         return (
             <div className="container">
-                <h1>Test</h1>
+                <h1>Test !</h1>
+
+                <zview.View uri="test/demos"
+                    types={["integer", "account", "datetime", "percentage", "normal"]}
+                />
 
                 <ButtonToolbar>
                     <Button onClick={this.addOption.bind(this)}>add option</Button>
