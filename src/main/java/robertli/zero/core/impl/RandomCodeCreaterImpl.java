@@ -12,7 +12,7 @@ import robertli.zero.core.RandomCodeCreater;
 /**
  * RandomCodeCreater can create random string
  *
- * @version 1.0.1 2016-12-13
+ * @version 1.0.2 2017-07-05
  * @author Robert Li
  */
 @Component("randomCodeCreater")
@@ -26,6 +26,7 @@ public class RandomCodeCreaterImpl implements RandomCodeCreater {
     private final String HEXADECIMAL = "0123456789ABCDEF";
     private final String LETTERS = LOWER_LETTERS + UPPER_LETTERS;
     private final String MIX = LETTERS + NUMBERS;
+    private final String LOWER_LETTERS_AND_NUMBERS = LOWER_LETTERS + NUMBERS;
 
     private String getPatternString(CodeType type) {
         if (null != type) {
@@ -46,6 +47,8 @@ public class RandomCodeCreaterImpl implements RandomCodeCreater {
                     return LETTERS;
                 case MIX:
                     return MIX;
+                case LOWER_LETTERS_AND_NUMBERS:
+                    return LOWER_LETTERS_AND_NUMBERS;
                 default:
                     throw new RuntimeException("RandomCodeCreater can't support the CodeType:" + type);
             }

@@ -41,9 +41,11 @@ public class AppServiceImpl implements AppService {
         userService.addUserType(UserService.USER_TYPE_GENERAL);
         userService.addUserType(UserService.USER_TYPE_ADMIN);
         userService.addUserType(UserService.USER_TYPE_STAFF);
+        userService.addUserType(UserService.USER_TYPE_MERCHANT);
 
         userService.addUserPlatform(UserService.USER_TYPE_GENERAL, UserService.USER_PLATFORM_GENERAL);
         userService.addUserPlatform(UserService.USER_TYPE_ADMIN, UserService.USER_PLATFORM_ADMIN);
+        userService.addUserPlatform(UserService.USER_TYPE_MERCHANT, UserService.USER_PLATFORM_MERCHANT);
 
         userService.addUserRole(UserService.USER_ROLE_ADMIN_ROOT);
         userService.addUserRole(UserService.USER_ROLE_PLATFORM_ROOT);

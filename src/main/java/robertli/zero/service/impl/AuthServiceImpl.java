@@ -146,6 +146,7 @@ public class AuthServiceImpl implements AuthService {
             case UserService.USER_TYPE_ADMIN:
             case UserService.USER_TYPE_GENERAL:
             case UserService.USER_TYPE_STAFF:
+            case UserService.USER_TYPE_MERCHANT:
                 if (userAuth == null) {
                     throw new RestException("WRONG_AUTH_ID", "username or password wrong", "for this authId, the userAuth is null", HttpStatus.FORBIDDEN);
                 }

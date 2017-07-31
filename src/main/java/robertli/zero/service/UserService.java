@@ -17,16 +17,18 @@ import robertli.zero.entity.User;
  * Don't use this service in controller layer. This service is used for other
  * services.
  *
- * @version 1.0.7 2017-06-02
+ * @version 1.0.7 2017-07-31
  * @author Robert Li
  */
 public interface UserService {
 
     public static final String USER_TYPE_GENERAL = "general";
+    public static final String USER_TYPE_MERCHANT = "merchant";
     public static final String USER_TYPE_STAFF = "staff";
     public static final String USER_TYPE_ADMIN = "admin";
 
     public static final String USER_PLATFORM_GENERAL = "general";
+    public static final String USER_PLATFORM_MERCHANT = "merchant";
     public static final String USER_PLATFORM_ADMIN = "admin";
 
     public static final String USERNAME_TYPE_STRING = "string";
