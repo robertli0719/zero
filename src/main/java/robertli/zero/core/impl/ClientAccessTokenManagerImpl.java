@@ -8,8 +8,6 @@ package robertli.zero.core.impl;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +21,7 @@ import robertli.zero.tool.MD5;
 /**
  *
  * @see ClientAccessTokenManager
- * @version 2017-01-26 1.0.1
+ * @version 2017-08-23 1.0.2
  * @author Robert Li
  */
 @Component("clientAccessTokenManager")
@@ -56,15 +54,13 @@ public class ClientAccessTokenManagerImpl implements ClientAccessTokenManager {
         if (cookieValues == null || cookieValues.isEmpty()) {
             return cookieMap;
         }
-        if (cookieMap.size() > 1) {
-            Logger logger = Logger.getLogger("ClientAccessTokenManager");
-            logger.log(Level.WARNING, "The 'Cookie' lines within Headers are more than one.");
-        }
-        String cookies[] = cookieValues.get(0).split(";");
-        for (String cookie : cookies) {
-            cookie = cookie.trim();
-            String parts[] = cookie.split("=");
-            cookieMap.put(parts[0], parts[1]);
+        for (String cookieLine : cookieValues) {
+            final String cookies[] = cookieLine.split(";");
+            for (String cookie : cookies) {
+                cookie = cookie.trim();
+                String parts[] = cookie.split("=");
+                cookieMap.put(parts[0], parts[1]);
+            }
         }
         return cookieMap;
     }
