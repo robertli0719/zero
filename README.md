@@ -1,20 +1,8 @@
 # Zero Java Framework Demo
 
-这是一个Zero Framework的使用Demo
-参见 [Github: https://github.com/robertli0719/zero-framework](https://github.com/robertli0719/zero-framework)
-为了让程序员们更轻松的创建项目，降低Java项目的开发门槛，我将可复用的Java代码整理出来，写成可通过Spring装配的组件，开放给所有写Java Web Application的小伙伴们。
-
-## 我的设计目标
-* 让开发者将主要精力用于业务逻辑，而不是软件架构和功能实现
-* 联合众多小伙伴共同讨论和提升编程技术
-* 多项目共享同一软件架构和编程约定，实现代码复用
-
-## 最新动态
-* 我计划彻底放弃JSP,改用React重造前端
-* 前端的所有代码放置在了/webapp下
-* 初次运行程序前，请先进入/webapp目录下，通过npm install按照需要的文件
-* 建议同时开启netbeans和vs code，分别编写前后端内容。
-* 开发时使用webpack --watch可以实现前端的保存后自动更新
+* 这是一个Zero Framework的使用Demo
+* 参见 [Github: https://github.com/robertli0719/zero-framework](https://github.com/robertli0719/zero-framework)
+* 为了让程序员们更轻松的创建项目，降低Java项目的开发门槛，我将可复用的Java代码整理出来，写成可通过Spring装配的组件，开放给所有写Java Web Application的小伙伴们。
 
 ## 当前结构
 * 前端基于 React + Redux + Boostrap
@@ -26,42 +14,21 @@
 * 前后端通过REST API解耦
 * [点击查看API设计原则](docs/ApiDesign.md)
 
-## 系统分层
-### 表现层
-* 前端完全采用webapp方式实现
-* 通过SpringMVC为前端提供REST API Service
-*  robertli.zero.interceptor.* 提供各种Interceptor功能
-
-### 业务逻辑层
-* robertli.zero.service.* 提供各种服务的接口
-* robertli.zero.service.impl.* 提供各种接口的具体实现
-* robertli.zero.core.* 提供高复用性且与数据库结构无关的服务的接口
-* robertli.zero.core.impl.*为core下的接口提供实现
-
-### 数据访问层
-* robertli.zero.dao.* 提供数据访问对象的DAO的接口通常与entity一一对应
-* robertli.zero.dao.impl.* 提供DAO的具体实现
-
-### 数据对象
-* robertli.zero.entity.* 实体类，与数据库表对应，封装在业务逻辑层以下
-* robertli.zero.dto.* 数据传输对象，由业务逻辑层向上提供
-* DTO上采用hibernate-validator 来进行数据验证
-* 基于ModelMapper来帮助实现DTO与Entity的相互转化
-
 ## 使用指南
 
 ### 使用步骤
 
-1. clone到本地
-2. 打开MySQL创建数据库
-3. 用Netbeans打开工程文件
-4. 修改app.properties内的jdbc信息到自己的数据库
-5. 修改app.properties内的email邮件服务器信息到自己的
-6. 修改app.properties内的file_storage.basepath到自己新建立的一个空文件夹
-7. 打开spring.xml注释掉“<value>file:${ZERO_PROPERTIES}</value>”
-8. 解开注释掉的行“<value>classpath:app.properties</value>”
-7. Clean and Build Project (Shift + F11)
-8. 完成，一切正常后开始编写自己的业务逻辑
+1. clone https://github.com/robertli0719/zero-framework 到本地后Clean and Build Project (Shift + F11)
+2. clone https://github.com/robertli0719/zero 到本地
+3. 打开MySQL创建数据库
+4. 用Netbeans打开工程文件
+5. 修改app.properties内的jdbc信息到自己的数据库
+6. 修改app.properties内的email邮件服务器信息到自己的
+7. 修改app.properties内的file_storage.basepath到自己新建立的一个空文件夹
+8. 打开spring.xml注释掉“<value>file:${ZERO_PROPERTIES}</value>”
+9. 解开注释掉的行“<value>classpath:app.properties</value>”
+10. Clean and Build Project (Shift + F11)
+11. 完成，一切正常后开始编写自己的业务逻辑
 
 ### 数据库的创建
 建库语句：
@@ -71,49 +38,12 @@ create database zero default character set utf8mb4 default collate utf8mb4_gener
 * 我们的设计原则是不通过mysqld修改数据库默认设置来实现所有需求
 * 由于系统基于Hibernate Entity自动建表，因此无须执行额外的建表语句
 
-### 包的修改
-1. 利用NetBeans将所有的robertli.zero开头的包修改为你自己的包名
-2. 全文检索robertli.zero，并替换为你自己的包名
-3. 修改META-INF/context.xml 下的path到你的项目名称
 
 ## 编程指南
 ### 建立新页面
 （文档尚未完成）
 
-### 建立数据库entity
-当ER图画好后，按如下方式快速建立数据库（纯Hibernate知识）
-
-1. 在robertli.zero.entity包下创建实体类，类名和数据库表名对应
-2. 在class前添加@Entity
-3. 考虑到MySQL在windows上不支持大写表名称，添加@Table(name="your_table_name")以保障未来迁移数据库时的一致性
-4. 添加private成员，每一行对应数据库一个列
-5. 用Netbeans快捷键自动生成全部getter setter
-6. 在用于primary key的字段的setter前添加@Id，必要时添加@GeneratedValue实现自增
-7. 通过@ManyToOne设置外键关系，必要时对应添加@OneToMany
-8. 必要时通过@Column对列的非空、唯一、默认值进行具体设置
-9. 必要时通过@Index追加索引以优化性能
-10.  在Test包中随便执行一个会读写数据库的Service，Hibernate会自动扫描entity包下所有class并自动创建好所有的数据库表。
-
 ## 其他功能项
-
-### 目前支持的功能组件
-* [用户管理系统](docs/UserManagement.md)
-* 结合事务回滚的文件存储服务
-
-### 目前支持的小组件
-* 邮件发送器 emailSender
-* 文件管理器 fileManager
-* URL抓取服务 WebService
-* 随机字串生成器 RandomCodeCreater
-* 图片处理服务 ImageService
-
-（所有小组件全可通过Spring依赖注入到需要的地方）
-
-### 目前包括的小工具
-* AES
-* Luhn
-* MD5
-* 邮箱格式验证工具
 
 ## 其他分支项目
 * 我还另外提供了一个采用传统的Struts2（不采用SpringMVC）的解决方案，适用于传统JSP开发者
