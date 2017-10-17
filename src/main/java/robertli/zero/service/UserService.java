@@ -44,6 +44,8 @@ public interface UserService {
 
     public void addUserPlatform(String userTypeName, String name);
 
+    public void putUserPlatform(String userTypeName, String name);
+
     public void deleteUserPlatform(String name);
 
     public void addUserRole(String name);

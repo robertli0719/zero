@@ -87,6 +87,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void putUserPlatform(String userTypeName, String name) {
+        if (userTypeDao.isExist(userTypeName) == false) {
+            addUserType(userTypeName);
+        }
+        if (userPlatformDao.isExist(name) == false) {
+            addUserPlatform(userTypeName, name);
+        }
+    }
+
+    @Override
     public void deleteUserPlatform(String name) {
         userPlatformDao.deleteById(name);
     }
