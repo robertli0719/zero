@@ -1,5 +1,7 @@
-# Zero Java Framework 1.0-SNAPSHOT
+# Zero Java Framework Demo
 
+这是一个Zero Framework的使用Demo
+参见 [Github: https://github.com/robertli0719/zero-framework](https://github.com/robertli0719/zero-framework)
 为了让程序员们更轻松的创建项目，降低Java项目的开发门槛，我将可复用的Java代码整理出来，写成可通过Spring装配的组件，开放给所有写Java Web Application的小伙伴们。
 
 ## 我的设计目标
@@ -126,5 +128,5 @@ create database zero default character set utf8mb4 default collate utf8mb4_gener
 * wechat: robertli0719
 * [Github: https://github.com/robertli0719/zero](https://github.com/robertli0719/zero)
 
-2016-12-10
+2017-10-16
 Robert Li
