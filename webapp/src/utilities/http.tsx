@@ -2,213 +2,137 @@
  * Copyright 2017 Robert Li.
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
+ * 
+ * version 1.0.4 2018-08-17
  */
-import { Promise } from "es6-promise"
-import * as fetch from 'isomorphic-fetch'
+import * as React from "react"
+import * as rb from "react-bootstrap"
+import { makeRandomString } from "../../../utilities/coder"
+import { http, RestErrorDto, RestErrorItemDto, Pagination, HttpContent } from "../../../utilities/http"
+import * as _ from "lodash"
+import * as dataPicker from "./zview_data_picker"
+import { ViewAlert } from "./zview_alert"
+import { ViewHead } from "./zview_head"
+import { ViewBody } from "./zview_body"
+import { ViewCounter } from "./zview_counter"
+import { ViewLinkGroup } from "./zview_Link_group"
+import { UpdateEventListener } from "../event/UpdateEventListener"
+import { DataType } from "./zview_schema"
 
-/*
-    I create this code for using REST API for Zero.
-    
-    author: robert li
-    version: 2017-03-29 1.0.4
-*/
+export * from "./zview_children/col_button"
+export type DataType = DataType
 
-type map = { [key: string]: string }
-
-export type RestErrorItemDto = {
-    type: string
-    source: string
-    message: string
-    detail: string
+export type ViewProps = {
+    header?: string
+    bsStyle?: string
+    uri: string
+    heads?: string[]
+    select?: string[]
+    types?: DataType[]
+    updateEventListener?: UpdateEventListener
 }
 
-export type RestErrorDto = {
-    status: string
-    errors: RestErrorItemDto[]
-}
-
-export type HttpContent = {
-    body: any
-    links: map
+export type ViewState = {
+    additionalColElements: JSX.Element[]
+    uri: string
+    dtoList: any[]
     pagination: Pagination
+    links: { [key: string]: string }
 }
 
-export type Pagination = {
-    count: number
-    limit: number
-    offset: number
-}
+export class View extends React.Component<ViewProps, ViewState>{
 
-function getLinks(res: ResponseInterface): map {
-    const link = res.headers.get("Link")
-    if (link == undefined) {
-        return {}
-    }
-    const links = {} as map
-    const array = link.split(",")
-    for (const str of array) {
-        const url = str.match(/<(.+)>/)[1]
-        const rel = str.match(/rel="(.+)"/)[1]
-        links[rel] = url
-    }
-    return links
-}
+    constructor(props: ViewProps) {
+        super(props)
 
-function getPagination(res: ResponseInterface): Pagination {
-    const count = res.headers.get("X-Pagination-Count")
-    const limit = res.headers.get("X-Pagination-Limit")
-    const offset = res.headers.get("X-Pagination-Offset")
-    if (count == undefined) {
-        return undefined
-    }
-    return { count: +count, limit: +limit, offset: +offset }
-}
+        const additionalColElements = [] as JSX.Element[]
+        React.Children.map(this.props.children, (child: any) => {
+            const ele: JSX.Element = React.cloneElement(child)
+            additionalColElements.push(ele)
+        })
 
-
-function is2xx(res: ResponseInterface): boolean {
-    const status = res.status
-    return status >= 200 && status < 300
-}
-
-function isJsonBody(res: ResponseInterface): boolean {
-    const contentType = res.headers.get("content-type")
-    return contentType && contentType.indexOf("application/json") !== -1
-}
-
-function createErrorDto(status: string) {
-    const restError: RestErrorDto = {
-        status: status,
-        errors: []
-    }
-}
-
-class HttpService {
-
-    private prefix: string = "api/v1/"
-
-    private processUrl(url: string) {
-        if (url.substring(0, 4) == "http") {
-            return url
+        this.state = {
+            additionalColElements: additionalColElements,
+            uri: this.props.uri,
+            dtoList: [],
+            pagination: undefined,
+            links: {}
         }
-        return this.prefix + url
+
+        const eventListener = this.props.updateEventListener
+        if (eventListener) {
+            eventListener.addAction(this.componentDidMount.bind(this))
+        }
     }
 
-    public get(url: string) {
-        const realUrl = this.processUrl(url)
-        return fetch(realUrl, {
-            credentials: 'include'
-        }).then((res: ResponseInterface) => {
-            if (isJsonBody(res)) {
-                return res.json().then((json) => {
-                    if (is2xx(res)) {
-                        return json
-                    }
-                    throw json
-                })
-            }
-            console.log("Oops, we haven't got JSON!")
-            throw createErrorDto("RESULT_IS_NOT_JSON")
-        })
+    componentDidMount() {
+        this.fetchContent()
     }
 
-    public getContent(url: string) {
-        const realUrl = this.processUrl(url)
-        return fetch(realUrl, {
-            credentials: 'include'
-        }).then((res: ResponseInterface) => {
-            if (isJsonBody(res)) {
-                return res.json().then((json) => {
-                    if (is2xx(res)) {
-                        const links = getLinks(res)
-                        const pagination = getPagination(res)
-                        return { body: json, links: links, pagination: pagination } as HttpContent
-                    }
-                    throw json
-                })
-            }
-            console.log("Oops, we haven't got JSON!")
-            throw createErrorDto("RESULT_IS_NOT_JSON")
-        })
+
+    componentWillReceiveProps(nextProps: ViewProps, nextContext: any): void {
+        if (this.props.uri != nextProps.uri) {
+            this.setState({ uri: nextProps.uri })
+            setTimeout(this.fetchContent.bind(this), 0)
+        }
     }
 
-    public post(url: string, dto: any) {
-        const json = JSON.stringify(dto)
-        const realUrl = this.processUrl(url)
-        return fetch(realUrl, {
-            method: "POST",
-            credentials: 'include',
-            headers: { "Content-Type": "application/json;charset=UTF-8" },
-            body: json
-        }).then((res: ResponseInterface) => {
-            if (is2xx(res)) {
-                return
-            } else if (isJsonBody(res)) {
-                return res.json().then((json) => {
-                    throw json
+    fetchContent() {
+        console.log("fetchContent uri:",this.state.uri)
+        http.getContent(this.state.uri)
+            .then((content: HttpContent) => {
+                console.log("getContent:",content)
+                this.setState({
+                    dtoList: content.body,
+                    pagination: content.pagination,
+                    links: content.links
                 })
-            }
-            console.log("Oops, we haven't got JSON!")
-            throw createErrorDto("RESULT_IS_NOT_JSON")
-        })
+            })
     }
 
-    public postParams(url: string, params: any) {
-        const realUrl = this.processUrl(url)
-        return fetch(realUrl, {
-            method: "POST",
-            credentials: 'include',
-            body: params
-        }).then((res: ResponseInterface) => {
-            if (is2xx(res)) {
-                return res.text()
-            } else if (isJsonBody(res)) {
-                return res.json().then((json) => {
-                    throw json
-                })
-            }
-            console.log("Oops, we haven't got JSON!")
-            throw createErrorDto("RESULT_IS_NOT_JSON")
-        })
+    updateUri(uri: string) {
+        this.setState({ uri: uri })
+        setTimeout(this.fetchContent.bind(this), 0)
     }
 
-    public put(url: string, dto: any) {
-        const realUrl = this.processUrl(url)
-        const json = JSON.stringify(dto)
-        return fetch(realUrl, {
-            method: "PUT",
-            credentials: 'include',
-            headers: { "Content-Type": "application/json;charset=UTF-8" },
-            body: json
-        }).then((res: ResponseInterface) => {
-            if (is2xx(res)) {
-                return
-            } else if (isJsonBody(res)) {
-                return res.json().then((json) => {
-                    throw json
-                })
-            }
-            console.log("Oops, we haven't got JSON!")
-            throw createErrorDto("RESULT_IS_NOT_JSON")
-        })
+    makeTotalView() {
+        const pagination = this.state.pagination
+        if (pagination) {
+            return (
+                <div>
+                    <h3>Total items found: {pagination.count}</h3>
+                    <p></p>
+                </div>
+            )
+        }
+        return null
     }
 
-    public delete(url: string) {
-        const realUrl = this.processUrl(url)
-        return fetch(realUrl, {
-            method: "DELETE",
-            credentials: 'include'
-        }).then((res) => {
-            if (is2xx(res)) {
-                return
-            } else if (isJsonBody(res)) {
-                return res.json().then((json) => {
-                    throw json
-                })
-            }
-            console.log("Oops, we haven't got JSON!")
-            throw createErrorDto("RESULT_IS_NOT_JSON")
-        })
+    render() {
+        if (!this.state.dtoList) {
+            return <ViewAlert bsStyle="warning" title="No data!" text="There is no data in this table." />
+        } else if (this.state.dtoList instanceof Array == false) {
+            return <ViewAlert bsStyle="alert" title="Error!" text="Fail to show the table." />
+        } else if (this.state.dtoList.length == 0) {
+            return <ViewAlert bsStyle="warning" title="No Rows!" text="There is nothing in the table." />
+        }
+        const dtoList = this.state.dtoList
+        const names = dataPicker.pickNames(dtoList, this.props.select)
+        const heads = dataPicker.pickHeads(dtoList, this.props.select, this.props.heads)
+        const bodyData = dataPicker.pickBodyData(dtoList, this.props.select)
+        const types = dataPicker.pickTypes(dtoList, this.props.select, this.props.types)
+        const additionalColNumber = this.state.additionalColElements.length
+        const additionalColElements = this.state.additionalColElements
+        return (
+            <rb.Panel header={this.props.header} bsStyle={this.props.bsStyle}>
+                {this.makeTotalView()}
+                <rb.Table className="table-bordered" responsive>
+                    <ViewHead heads={heads} additionalColNumber={additionalColNumber} />
+                    <ViewBody names={names} dtoList={dtoList} data={bodyData} types={types} additionalColElements={additionalColElements} />
+                </rb.Table >
+                <ViewCounter pagination={this.state.pagination} />
+                <ViewLinkGroup links={this.state.links} updateUri={this.updateUri.bind(this)} />
+            </rb.Panel>
+        )
     }
 }
-
-export const http = new HttpService()
